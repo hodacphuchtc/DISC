@@ -1,0 +1,51 @@
+#!/bin/sh
+# Chặn ngay lúc COMMIT — rẻ hơn nhiều so với chặn lúc push, và rẻ hơn RẤT nhiều so với
+# phải dọn lịch sử git sau khi đã lỡ đẩy khóa lên.
+#
+# Nằm trong `.githooks/` chứ không phải `.git/hooks/` để nó ĐƯỢC THEO DÕI trong repo:
+# hook trong `.git/hooks` không đi theo bản clone, nên máy mới là mất hàng rào mà không
+# ai biết. Bật bằng:  git config core.hooksPath .githooks
+#
+# Bỏ qua một lần khi thật sự cần:  git commit --no-verify
+
+set -e
+
+# ── 1. gitleaks — BẮT BUỘC, fail-closed ────────────────────────────────────
+echo "› gitleaks (khóa/token trong phần đã stage)…"
+# FAIL-CLOSED có cửa thoát HỮU DANH: nếu thiếu binary mà chỉ cảnh báo rồi exit 0 thì
+# hàng rào tự tắt đúng lúc cần nó nhất ("thoái hoá âm thầm"). Nay: thiếu là CHẶN; kẹt
+# thật một lần thì DISC_CHO_QUA_GITLEAKS=1 — grep được trong lịch sử shell, khác hẳn
+# --no-verify vô danh.
+GITLEAKS_BIN="$(command -v gitleaks || true)"
+[ -z "$GITLEAKS_BIN" ] && [ -x "$HOME/.local/bin/gitleaks" ] && GITLEAKS_BIN="$HOME/.local/bin/gitleaks"
+if [ -n "$GITLEAKS_BIN" ]; then
+  "$GITLEAKS_BIN" protect --staged --no-banner --redact --config .gitleaks.toml
+elif [ "${DISC_CHO_QUA_GITLEAKS:-0}" = "1" ]; then
+  echo "  ⚠️  KHÔNG có gitleaks mà vẫn commit (DISC_CHO_QUA_GITLEAKS=1) — CI sẽ soi lại."
+else
+  echo "  🔴 CHƯA CÀI gitleaks — CHẶN commit. Dự án này giữ dữ liệu cá nhân của trẻ em."
+  echo "     Cài:  brew install gitleaks   (hoặc binary về ~/.local/bin)"
+  echo "     Kẹt một lần thật sự:  DISC_CHO_QUA_GITLEAKS=1 git commit …"
+  exit 1
+fi
+
+# ── 2. Các cửa kiểm TÙY CHỌN — chỉ chạy khi script THỰC SỰ đã khai ─────────
+# Vì sao phải dò trước: dự án mới chưa có package.json, mà `npm run <script>` không tồn
+# tại thì exit khác 0 → `set -e` chặn MỌI commit. Một hàng rào chặn cả những commit sạch
+# là hàng rào sẽ bị gỡ trong tuần đầu. Khai script trong package.json là nó tự bật.
+chay_neu_co() {
+  [ -f package.json ] || return 0
+  node -e "process.exit(require('./package.json').scripts?.['$1'] ? 0 : 1)" 2>/dev/null || return 0
+  echo "› $1…"
+  npm run --silent "$1"
+}
+
+# check:pii   — soi dữ liệu cá nhân (họ tên/trường lớp/SĐT học sinh) lọt vào tài liệu,
+#               seed, fixture. Viết script này khi bắt đầu có dữ liệu thật.
+# check:plan  — chặn commit mang theo bảng tiến độ LỆCH số thật: bảng % là thứ người
+#               ngoài đọc để ra quyết định, quên cập nhật thì nó vẫn hiện một con số
+#               trông hoàn toàn bình thường — chỉ là của tuần trước, không dòng lỗi nào.
+chay_neu_co check:pii
+chay_neu_co check:plan
+
+echo "✅ Qua cửa pre-commit."

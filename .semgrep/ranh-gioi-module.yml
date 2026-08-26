@@ -1,0 +1,50 @@
+# Máy canh rule 2 của .claude/rules/module-boundaries.md — luật "CẤM import trực tiếp
+# modules/A → modules/B" từ VĂN BẢN thành thứ CI chặn được.
+#
+# Dùng pattern-regex (không qua parser AST): khuôn `import ... from "$SRC"` cho TypeScript
+# từng gây Parse_error ở semgrep 1.136 — regex bắt cả `import/export … from "…"` LẪN
+# dynamic `import("…")`, và không vỡ theo phiên bản parser.
+# Mỗi module một rule vì semgrep không so được "$MOD ≠ thư-mục-hiện-tại" trong một rule.
+#
+# ⚠️ Rule này giả định alias `@modules/*` trỏ vào `modules/*` (khai trong tsconfig.json
+# khi bắt đầu code). Thêm module mới = thêm MỘT rule ở đây + cập nhật allowlist của
+# `core-chi-duoc-doc-manifest` bên dưới.
+
+rules:
+  - id: test-khong-import-module-khac
+    languages: [generic]
+    severity: ERROR
+    message: >
+      modules/test chỉ được import @modules/core hoặc chính nó. Cần dữ liệu module khác
+      → gọi service của core hoặc event bus (.claude/rules/module-boundaries.md rule 2).
+    paths:
+      include: ["**/modules/test/**/*.ts", "**/modules/test/**/*.tsx"]
+    pattern-regex: '(from\s+|import\()\s*["'']@modules/(?!core["''/]|test["''/])[^"'']+["'']'
+
+  - id: report-khong-import-module-khac
+    languages: [generic]
+    severity: ERROR
+    message: >
+      modules/report chỉ được import @modules/core hoặc chính nó. Cần bộ câu hỏi / bài
+      làm của modules/test → đi qua service core hoặc event, KHÔNG import thẳng
+      (.claude/rules/module-boundaries.md rule 2).
+    paths:
+      include: ["**/modules/report/**/*.ts", "**/modules/report/**/*.tsx"]
+    pattern-regex: '(from\s+|import\()\s*["'']@modules/(?!core["''/]|report["''/])[^"'']+["'']'
+
+  # Core là module NỀN TẢNG: nó được phép biết module nghiệp vụ TỒN TẠI, nhưng chỉ qua
+  # ĐÚNG MỘT CỬA ĐĂNG KÝ — `<mod>/module.config`. Import sâu vào ruột module nghiệp vụ
+  # là "mìn ranh giới": kiểu dùng chung ở nhờ module con, sau này gỡ ra rất đắt.
+  # Kiểu/khai báo dùng chung phải NÂNG LÊN core.
+  # File *.test.ts của core được miễn: test liên-module cố ý đọc chéo để KIỂM đăng ký.
+  - id: core-chi-duoc-doc-manifest
+    languages: [generic]
+    severity: ERROR
+    message: >
+      modules/core import sâu vào module nghiệp vụ — core chỉ được đọc
+      <mod>/module.config (cửa đăng ký duy nhất). Kiểu/khai báo dùng chung phải NÂNG LÊN
+      core, không ở nhờ module con.
+    paths:
+      include: ["**/modules/core/**/*.ts", "**/modules/core/**/*.tsx"]
+      exclude: ["**/modules/core/**/*.test.ts"]
+    pattern-regex: '(from\s+|import\()\s*["'']@modules/(?!core["''/])(?!(test|report)/module\.config["''])[^"'']+["'']'

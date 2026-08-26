@@ -1,0 +1,39 @@
+# .repomixignore — repomix đọc từ ĐĨA (không phải từ git), nên phải chặn CẢ những thứ đã
+# gitignore: file nào nằm trên đĩa là nó nén được. Với DISC, thứ tuyệt đối không được rời
+# vòng kiểm soát là DỮ LIỆU BÀI LÀM VÀ THÔNG TIN HỌC SINH (trẻ em — Nghị định 13/2023).
+# Thiếu file này thì một lệnh nén codebase là PII rời máy. Gói nén CHỈ dùng trong máy —
+# không gửi ra dịch vụ ngoài.
+#
+# Dự án vừa khởi tạo: phần lớn đường dẫn dưới đây là CHẶN TRƯỚC (chưa tồn tại). Đó là
+# chủ đích — thư mục sinh ra sau đã có rào sẵn, không phải nhớ quay lại thêm.
+
+# ── PII / nhạy cảm — KHÔNG BAO GIỜ vào gói context ──
+data/
+database/seed-private/
+docs/du-lieu-that/
+scripts/fixtures/
+tests/**/fixtures/
+uploads/
+exports/
+logs/
+*.csv
+*.xlsx
+.env*
+
+# ── Sổ & tiến độ — to, đổi mỗi phiên, KHÔNG phải kiến trúc ──
+Plan/
+**/OVERVIEW.md
+CLAUDE.md
+
+# ── Máy sinh / build / rác ──
+node_modules/
+.next/
+out/
+dist/
+coverage/
+test-results/
+playwright-report/
+package-lock.json
+tsconfig.tsbuildinfo
+public/
+*.log

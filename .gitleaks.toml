@@ -1,0 +1,62 @@
+# .gitleaks.toml — luật soi khóa RIÊNG của DISC, NỐI THÊM vào bộ luật mặc định.
+# Vì sao cần file riêng: bộ mặc định của gitleaks không biết service_role JWT nguy hiểm
+# hơn anon JWT, và không biết biến bí mật tự đặt của dự án trông ra sao.
+# Với DISC, lộ service_role = lộ toàn bộ bài làm và thông tin học sinh (trẻ em, NĐ 13).
+#
+# Miễn trừ TỪNG PHÁT HIỆN bằng fingerprint trong `.gitleaksignore` kèm lý do + ngày —
+# KHÔNG nới regex ở đây (nới regex là tắt hàng rào cho mọi trường hợp về sau).
+# File này nằm trong requiredFiles của `.claude/scaffold.json` — xóa là check-structure đỏ.
+
+[extend]
+useDefault = true
+
+# ── Supabase ──────────────────────────────────────────────────────────────
+[[rules]]
+id = "disc-supabase-jwt"
+description = "JWT Supabase (service_role bỏ qua RLS = lộ TOÀN BỘ DB, gồm dữ liệu trẻ em)"
+# Bắt MỌI JWT 3 khúc; anon key nếu cố ý nằm trong tài liệu thì miễn trừ bằng fingerprint.
+regex = '''eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}'''
+keywords = ["eyJ"]
+
+[[rules]]
+id = "disc-supabase-secret-key-moi"
+description = "Supabase secret key định dạng mới"
+regex = '''sb_secret_[A-Za-z0-9_-]{20,}'''
+keywords = ["sb_secret_"]
+
+# ── Cloudflare R2 (lưu file báo cáo / ảnh câu hỏi) ───────────────────────
+[[rules]]
+id = "disc-r2-secret"
+description = "Gán GIÁ TRỊ thật cho khóa R2"
+regex = '''(?i)(R2_SECRET_ACCESS_KEY|R2_ACCESS_KEY_ID)\s*[=:]\s*["']?[A-Za-z0-9+/=_\-]{20,}'''
+keywords = ["R2_SECRET_ACCESS_KEY", "R2_ACCESS_KEY_ID"]
+
+# ── Nhà cung cấp ngoài ───────────────────────────────────────────────────
+[[rules]]
+id = "disc-anthropic-key"
+description = "Anthropic API key"
+regex = '''sk-ant-[A-Za-z0-9_\-]{24,}'''
+keywords = ["sk-ant-"]
+
+# ── Bí mật TỰ ĐẶT của dự án (bộ mặc định KHÔNG thể biết) ─────────────────
+# Thêm biến bí mật mới của DISC vào ĐÂY cùng lúc thêm vào docs/architecture/env-vars.md.
+[[rules]]
+id = "disc-bien-bi-mat-noi-bo"
+description = "Gán GIÁ TRỊ thật cho biến bí mật nội bộ (đọc process.env thì không sao)"
+regex = '''(?i)(CRON_SECRET|REPORT_LINK_SECRET|SESSION_SECRET|ENCRYPTION_KEY|ADMIN_PASSWORD)\s*[=:]\s*["']?[A-Za-z0-9+/=_\-]{16,}'''
+keywords = [
+  "CRON_SECRET",
+  "REPORT_LINK_SECRET",
+  "SESSION_SECRET",
+  "ENCRYPTION_KEY",
+  "ADMIN_PASSWORD",
+]
+
+[allowlist]
+description = "Chỗ được nói TÊN biến chứ không phải GIÁ TRỊ"
+paths = ['''\.env\.example$''', '''package-lock\.json$''']
+regexes = [
+  # Mã nguồn ĐỌC biến — không phải giá trị. Thiếu dòng này thì mọi chỗ
+  # process.env.SUPABASE_SERVICE_ROLE_KEY báo oan — hàng rào báo oan là hàng rào chết.
+  '''process\.env\.[A-Z_]+''',
+]
