@@ -59,7 +59,7 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **48/48 hạng mục PLAN.md · 796 test xanh ·
+Ứng dụng chạy được đầu-cuối trên local. **48/48 hạng mục PLAN.md · 805 test xanh ·
 `npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
 Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
 ✅ **HẾT SẠCH VIỆC MÁY TRONG PLAN.** Không còn hạng mục nào chưa tick. Mọi việc còn lại
@@ -67,7 +67,7 @@ Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (REA
 
 ⚠️ **Máy này đang bị Docker chiếm ~200% CPU** (6 container, không của dự án). Load average
 đo được 32,6 lúc chạy kiểm. Ở mức tải đó `waitFor` của Testing Library đói CPU và **19–20
-test đỏ giả**; chạy `npx vitest run --maxWorkers=2` thì 796/796 xanh. Thấy test đỏ hàng
+test đỏ giả**; chạy `npx vitest run --maxWorkers=2` thì 805/805 xanh. Thấy test đỏ hàng
 loạt mà lỗi toàn là hết giờ chờ thì soi `uptime` trước khi soi code.
 
 - **GĐ0–GĐ8** — dựng xong sản phẩm chạy đầu-cuối: khung Next 16 · 104 câu hỏi + lõi chấm
@@ -101,11 +101,9 @@ chặng và cho làm trọn một lượt. Việc còn lại đều nằm ở CH
    (gói B, 1.537 từ). Gói A chặn ngày ra người dùng thật; gói B chỉ chặn phần của chính nó.
 3. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
-3. **Đọc `docs/noi-dung-cho-ky-duyet.md`** rồi đưa cho người có chuyên môn tâm lý/giáo dục.
-   Đây là việc gỡ khoá ngày ra người dùng thật.
 4. **Gọi đội dev 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu ·
    nhận dạng nào. Bốn câu này quyết định phần giao diện có dùng lại được không.
-5. Ba việc còn lại ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
+5. Các việc còn lại ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
 
 ### CHỜ NGOÀI (thiếu key/env/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
 
@@ -161,6 +159,16 @@ toán. Ba việc đầu nên làm ngay tuần này.
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
 
+- 🔴 **Script sửa hàng loạt dò khoá bằng `indexOf("  D: {")` đã đổ CẢ TÁM câu vào riêng một
+  trục** (27/08/2026, `10.7`). `LOI_KHUYEN`, `TU_MINH` và `LECH_PHONG_CACH` **đều** có khoá
+  `D:`/`I:`/`S:`/`C:` trong CÙNG một file, nên `indexOf` khớp khối đầu tiên và mọi lần chèn
+  rơi về đó; ba trục còn lại không nhận gì. **Không cửa nào bắt được**: độ dài vẫn > 60, và
+  luật "không trùng giữa các TRƯỜNG" vẫn thoả vì các câu bị dồn nằm chung một trường. Lỗi
+  chỉ lộ ra khi NHÌN ảnh chụp trang — đọc thấy bốn câu *"Dấu hiệu nó có tác dụng"* nối đuôi.
+  **Hai bài học:** (1) sửa hàng loạt thì neo vào TÊN HẰNG (`export const X`) rồi cắt khối ra
+  trước, đừng neo vào tên khoá — tên khoá trùng nhau khắp file; (2) test trùng lặp phải soi
+  ĐỦ HAI CHIỀU: giữa các trường VÀ giữa các khoá. Đã có
+  `tests/ba-ban-noi-dung.test.ts` canh chiều thứ hai.
 - **Một thay đổi đặc tả làm BỐN file test cùng đỏ, vì mỗi file tự gõ lại đường đi màn 1**
   (27/08/2026, `10.6`). Sắp lại M1 thành hai nhánh làm **34 cửa đỏ** ở `m1-chon-doi-tuong` ·
   `m2-truoc-khi-bat-dau` · `m3-lam-bai` · `luu-boi-canh`. Bản thân việc đỏ là ĐÚNG — đặc tả

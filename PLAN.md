@@ -22,7 +22,7 @@
 **Phiên 27/08/2026 (tối, chặng 3) — GĐ10 XONG TRỌN: 48/48, hết việc trong sổ**
 
 **1. Vừa xong.** `10.4` (ba dải + in tách bản) · `10.6` (M1 hai nhánh) · `10.7` (nội dung
-ba bản, chặng 2). **796 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật,
+ba bản, chặng 2). **805 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật,
 0 lỗi JS.** Đã tick hết 48/48 hạng mục.
 
 **2. ĐANG DỞ — không còn gì trong PLAN.md.** Mọi việc còn lại ở mục CHỜ NGOÀI của
@@ -57,7 +57,7 @@ ra **796/796 xanh**. Thấy test đỏ hàng loạt mà lỗi toàn là hết gi
 
 **6. Lệnh phiên sau nên chạy.**
 ```bash
-npx vitest run --maxWorkers=2    # 796 test — dùng cờ này khi máy đang tải nặng
+npx vitest run --maxWorkers=2    # 805 test — dùng cờ này khi máy đang tải nặng
 npm run xem-thu                  # bản phát hành thật, cổng 3100
 node scripts/xuat-noi-dung-ky-duyet.mjs   # sinh lại HAI hồ sơ ký duyệt
 ```

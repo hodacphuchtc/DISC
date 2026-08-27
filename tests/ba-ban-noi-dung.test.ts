@@ -147,3 +147,52 @@ describe("🔴 hai gói ký duyệt phải tách rời", () => {
     }
   });
 });
+
+describe("🔴 tám khoá phải KHÁC NHAU — mỗi chỗ vênh một câu chuyện riêng", () => {
+  /**
+   * 🔴 CỬA NÀY SINH RA TỪ MỘT LỖI THẬT, 27/08/2026.
+   *
+   * Một script sửa hàng loạt dò khoá bằng `indexOf("  D: {")` — mà `LOI_KHUYEN`, `TU_MINH`
+   * và `LECH_PHONG_CACH` đều có khoá `D:`/`I:`/`S:`/`C:` trong CÙNG một file. Nó khớp nhầm
+   * khối đầu tiên, và **cả tám câu đổ dồn vào riêng trục D**, ba trục còn lại không nhận gì.
+   *
+   * Không cửa nào đang có bắt được: độ dài vẫn > 60, và luật "không trùng giữa các TRƯỜNG"
+   * vẫn thoả vì các câu bị dồn nằm chung một trường. Lỗi chỉ lộ ra khi NHÌN ảnh chụp trang.
+   * Cửa dưới đây soi đúng chiều còn thiếu: trùng nhau GIỮA CÁC KHOÁ.
+   */
+  const KHOA = MA_TRUC.flatMap((t) => HUONG.map((h) => ({ ma: `${t}.${h}`, k: LECH_PHONG_CACH[t][h] })));
+
+  it.each(TRUONG_LECH)("trường %s: không khoá nào chép của khoá khác", (f) => {
+    const thay = new Map<string, string>();
+    for (const { ma, k } of KHOA) {
+      for (const c of cauDai(k[f])) {
+        const cu = thay.get(c);
+        expect(cu, `"${ma}" và "${cu}" dùng chung câu: "${c.slice(0, 70)}…"`).toBeUndefined();
+        thay.set(c, ma);
+      }
+    }
+  });
+
+  it.each(TRUONG_LECH)("trường %s: không đoạn nào lặp lại chính mở đầu của mình", (f) => {
+    // Cách hỏng thật: cùng một câu dẫn ("Dấu hiệu nó có tác dụng:") xuất hiện bốn lần trong
+    // MỘT đoạn, vì bốn lần chèn cùng rơi vào một chỗ.
+    for (const { ma, k } of KHOA) {
+      const dan = k[f].match(/(?:^|\s)([A-ZĐÂÊÔƯ][^.:!?]{8,40}):/gu) ?? [];
+      const dem = new Map<string, number>();
+      for (const d of dan) {
+        const t = d.trim();
+        dem.set(t, (dem.get(t) ?? 0) + 1);
+      }
+      for (const [t, n] of dem) {
+        expect(n, `${ma}.${f} lặp câu dẫn "${t}" ${n} lần`).toBe(1);
+      }
+    }
+  });
+
+  it("mỗi khoá có đúng MỘT nhịp 'làm sao biết có tác dụng' và MỘT nhịp 'việc thử được ngay'", () => {
+    for (const { ma, k } of KHOA) {
+      expect((k.choCon.match(/Dấu hiệu nó có tác dụng/gu) ?? []).length, `${ma}.choCon`).toBe(1);
+      expect((k.boMeTuNhin.match(/Việc thử được ngay/gu) ?? []).length, `${ma}.boMeTuNhin`).toBe(1);
+    }
+  });
+});
