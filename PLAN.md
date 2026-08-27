@@ -84,7 +84,7 @@ và **Bài đã làm**. Bấm qua lại hai mục thấy nền tím nhạt di ch
   - (c) `node scripts/check-structure.mjs` in ✅ toàn bộ, exit 0.
   - (d) 0,1 ngày.
 
-- [ ] **0.2 — BRD chốt phạm vi bản 1**
+- [x] **0.2 — BRD chốt phạm vi bản 1** ✅ (27/08/2026 — viết muộn ở cuối GĐ8 nên nó phản ánh thứ ĐÃ xây xong, không phải thứ định xây; `docs/brd/disc-mvp.md`)
   - (a) Viết `docs/brd/disc-mvp.md`: bài toán, 4 nhóm người dùng, 5 bộ đề, phạm vi
     TRONG/NGOÀI (chép mục "KHÔNG LÀM Ở BẢN NÀY" cuối file này), 12 tiêu chí nghiệm thu.
   - (b) Người dùng mở `docs/brd/disc-mvp.md`, đọc hết trong 10 phút, và **chỉ ra được**
@@ -92,7 +92,7 @@ và **Bài đã làm**. Bấm qua lại hai mục thấy nền tím nhạt di ch
   - (c) (tài liệu — không có test tự động.)
   - (d) 0,25 ngày.
 
-- [ ] **0.3 — Bốn bản ADR + sửa lại mục Stack đang sai**
+- [x] **0.3 — Bốn bản ADR + sửa lại mục Stack đang sai** ✅ (27/08/2026 — làm muộn ở GĐ8 vì tài liệu bàn giao trỏ tới; ADR-001..004 đã viết, mục Stack trong `CLAUDE.md` và `tech-defaults.md` đã bỏ Supabase)
   - (a) Viết `docs/decisions/ADR-001-khong-backend.md` (vì sao bỏ Supabase — gồm cả lý do
     pháp lý: không giữ dữ liệu thì không phát sinh nghĩa vụ NĐ 13/2023),
     `ADR-002-tuoi-tu-danh-gia.md` (trẻ < 8 tuổi không tự đánh giá — `DISC_BA.md` §3.2),
@@ -104,7 +104,7 @@ và **Bài đã làm**. Bấm qua lại hai mục thấy nền tím nhạt di ch
   - (c) `node scripts/check-structure.mjs` exit 0.
   - (d) 0,25 ngày.
 
-- [ ] **0.4 — Dựng khung Next.js + bộ cổng `npm run kiem`**
+- [x] **0.4 — Dựng khung Next.js + bộ cổng `npm run kiem`** ✅ (26/08/2026 — Next 16.3.3 · React 19.2.8 · Tailwind 4.3.3 · Vitest 4.1.11)
   - (a) `create-next-app` (App Router, TypeScript, Tailwind) + `output: 'export'` trong
     `next.config.mjs` + Vitest + alias `@modules/*` → `modules/*` trong `tsconfig.json`.
     Khai đủ script trong `package.json` mà rule và hook đang trông chờ — **thiếu cái nào
@@ -116,7 +116,7 @@ và **Bài đã làm**. Bấm qua lại hai mục thấy nền tím nhạt di ch
   - (c) `npm run kiem` chính nó — bốn cửa đều phải xanh.
   - (d) 0,5 ngày.
 
-- [ ] **0.5 🔴 — Hàng rào hai tầng: lõi không được đụng React/DOM**
+- [x] **0.5 🔴 — Hàng rào hai tầng: lõi không được đụng React/DOM** ✅ (26/08/2026 — đã thử phá 2 lần, cắn đúng)
   - (a) Viết `tests/ranh-gioi-hai-tang.test.ts`: quét mọi file trong `modules/core/bo-de/`,
     `modules/report/cham.ts`, `modules/report/kiem-hop-le.ts`, `modules/report/doi-chieu.ts`
     — nếu thấy `from "react"`, `window.`, `document.`, hay `localStorage` thì test đỏ.
@@ -128,7 +128,7 @@ và **Bài đã làm**. Bấm qua lại hai mục thấy nền tím nhạt di ch
   - (c) `tests/ranh-gioi-hai-tang.test.ts`.
   - (d) 0,25 ngày.
 
-- [ ] **0.6 — Thanh bên + khung ngoài + nhớ mục đang mở**
+- [x] **0.6 — Thanh bên + khung ngoài + nhớ mục đang mở** ✅ (27/08/2026 — 8 test điều hướng xanh, đã soi ảnh chụp desktop + điện thoại)
   - (a) Viết `app/components/thanh-ben.tsx` theo đặc tả `DISC_BA.md` §5.1 (viết mới, không
     có repo TAO_ANH để chép): `<aside>` rộng 264px, logo `SATA` `#FF6F00` + `ROBO`
     `#800080`, mỗi mục là `<button>` bo `rounded-xl` có icon SVG 19px, mục đang mở nền
@@ -158,7 +158,7 @@ về một file PNG. Mở file đó lên: chữ **"Rô Tỉ Mỉ — Bé để �
 hiện **đủ dấu tiếng Việt**, câu dài **tự xuống dòng**, **không có chữ nào bị cụt** hay tràn
 ra ngoài mép ảnh.
 
-- [ ] **1.1 🔴 — Spike Canvas 2D: vẽ chữ tiếng Việt vừa khung**
+- [x] **1.1 🔴 — Spike Canvas 2D: vẽ chữ tiếng Việt vừa khung** ✅ (27/08/2026 — 13 test đo chữ xanh; đã soi ảnh cả ca chữ ngắn lẫn ca chữ dài gấp ba)
   - (a) Viết `modules/report/xuat-anh.ts` với ba hàm dùng lại được về sau:
     `doChuVuaKhung(ctx, chuoi, rongToiDa): boolean` · `ngatDong(ctx, chuoi, rongToiDa):
     string[]` · `veTamAnh(duLieu): Promise<Blob>` vẽ khổ `1080×1350`. Bắt buộc `await
@@ -182,7 +182,7 @@ lời → thấy ngay **bốn con số D/I/S/C** và tên kiểu (vd *"Kiểu ph
 Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con số**, mà ra câu *"Bài này chưa
 đủ để kết luận…"*.
 
-- [ ] **2.1 — Ngân hàng 104 câu + thứ tự hiển thị chốt cứng**
+- [x] **2.1 — Ngân hàng 104 câu + thứ tự hiển thị chốt cứng** ✅ (27/08/2026 — bóc thẳng từ bảng BA doc, không gõ tay; ⚠️ dòng (b) HOÃN tới GĐ3 vì màn làm bài chưa tồn tại)
   - (a) Đưa trọn 104 câu ở `DISC_BA.md` §6 vào `config/disc-cau-hoi.ts` (5 bộ: MN 20 ·
     TH 20 · THCS 24 · PH 24 · QS 16), mỗi câu có `ma`, `truc`, `dao`, `noiDung`; riêng bộ
     QS thêm `soiGuong`. Chạy một lần `scripts/sinh-thu-tu.mjs` sinh thứ tự theo luật §6.6
@@ -195,7 +195,7 @@ Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con s
   - (c) (dữ liệu — test nằm ở 2.4.)
   - (d) 0,5 ngày.
 
-- [ ] **2.2 — Kiểu dùng chung + loader bộ đề (nâng lên `core`)**
+- [x] **2.2 — Kiểu dùng chung + loader bộ đề (nâng lên `core`)** ✅ (27/08/2026 — 8 test; loader ghép nội dung câu với thứ tự đã chốt cứng)
   - (a) Viết `modules/core/bo-de/kieu.ts` khai `MaTruc = "D"|"I"|"S"|"C"`, `MaBoDe =
     "MN"|"TH"|"THCS"|"PH"|"QS"`, `CauHoi`, `BoDe`, `KetQua` (theo hợp đồng `DISC_BA.md`
     §7.5), và `BaiLam` gồm `id`, `boDe`, `maTre?`, `lop?`, `nguoiTraLoi`, `batDau`,
@@ -207,7 +207,7 @@ Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con s
     trả `undefined`.
   - (d) 0,5 ngày.
 
-- [ ] **2.3 🔴 — Hàm chấm điểm thuần + năm hàng rào hợp lệ**
+- [x] **2.3 🔴 — Hàm chấm điểm thuần + năm hàng rào hợp lệ** ✅ (27/08/2026 — 22 test chấm + 18 test hợp lệ; đã soi ảnh DEMO 4: toàn mức giữa ⇒ KHÔNG ra kết quả)
   - (a) Viết `modules/report/cham.ts` (hàm THUẦN — không đụng DOM, không đụng localStorage)
     và `modules/report/kiem-hop-le.ts`. Bốn bước: **đảo chiều**
     `giaTri = dao ? (mucToiDa+1)-raw : raw` → **chuẩn hoá**
@@ -225,7 +225,7 @@ Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con s
     chặn không cho xem kết quả.
   - (d) 1 ngày.
 
-- [ ] **2.4 — Test canh cấu trúc ngân hàng câu**
+- [x] **2.4 — Test canh cấu trúc ngân hàng câu** ✅ (27/08/2026 — 55 test; đã thử gỡ câu đảo cuối của trục D bộ THCS, cắn đúng)
   - (a) Viết `tests/cau-hoi.test.ts` đọc `config/disc-cau-hoi.ts` và khẳng định các bất
     biến: **mỗi trục có ≥ 1 câu đảo chiều** · số câu mỗi trục bằng nhau trong cùng bộ · mã
     câu không trùng · trong thứ tự hiển thị không có 2 câu cùng trục đứng liền nhau · câu
@@ -236,7 +236,7 @@ Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con s
   - (c) `tests/cau-hoi.test.ts`.
   - (d) 0,5 ngày.
 
-- [ ] **2.5 — Khoá ngân hàng câu bằng checksum**
+- [x] **2.5 — Khoá ngân hàng câu bằng checksum** ✅ (27/08/2026 — 8 test; đã thử sửa 1 chữ không tăng phiên bản ⇒ đỏ, tăng phiên bản + sinh lại ⇒ xanh)
   - (a) Viết `scripts/sinh-checksum.mjs` băm nội dung ngân hàng câu và ghi vào
     `config/disc-checksum.json` cùng `phienBanBoDe`. Viết `tests/checksum.test.ts` so lại.
     Sửa nội dung câu **là đổi ý nghĩa của điểm số** — bài cũ và bài mới không còn so được
@@ -248,7 +248,7 @@ Rồi thử **chọn mức giữa cho cả 24 câu** → **KHÔNG ra bốn con s
   - (c) `tests/checksum.test.ts`.
   - (d) 0,25 ngày.
 
-- [ ] **2.6 — Script phân tích item (đầu vào cho việc kiểm chứng bộ câu)**
+- [x] **2.6 — Script phân tích item (đầu vào cho việc kiểm chứng bộ câu)** ✅ (27/08/2026 — 16 test thống kê; chạy thật trên 40 dòng dữ liệu BỊA, bắt đúng câu cố tình làm hỏng)
   - (a) Viết `scripts/phan-tich-item.mjs` (bằng `node`, không dùng `python3` — R10): đọc
     file CSV phản hồi thô, in ra cho từng trục — **tương quan của từng câu với tổng trục đã
     trừ chính nó**, hệ số **Cronbach's alpha**, và **danh sách câu đề nghị vứt** (tương quan
@@ -270,7 +270,7 @@ giải thích** rồi vào bản **người lớn trả lời** (KHÔNG phải b
 **Lớp 4** → vào bản bé tự làm, **một câu một màn**, ba nút mặt cười to. Làm dở **8 câu**,
 **tắt hẳn tab**, mở lại → quay đúng **câu 9**, 8 câu cũ còn nguyên.
 
-- [ ] **3.1 — M1 chọn đối tượng + luật định tuyến**
+- [x] **3.1 — M1 chọn đối tượng + luật định tuyến** ✅ (27/08/2026 — 22 test luật + 8 test giao diện; đã lái trình duyệt thật bấm Tiểu học→Lớp 2, hộp giải thích hiện đúng)
   - (a) Viết `modules/test/dinh-tuyen.ts` (hàm thuần) theo luật `DISC_BA.md` §4.2 và
     `app/components/the-doi-tuong.tsx` (khai ở **cấp module**, không khai trong thân
     `disc.tsx` — nếu không ô nhập biệt danh sẽ mất chữ mỗi lần gõ). Bốn thẻ lớn. Chọn Tiểu
@@ -282,7 +282,7 @@ giải thích** rồi vào bản **người lớn trả lời** (KHÔNG phải b
     **lớp 1 và lớp 2 KHÔNG BAO GIỜ ra bộ TH**.
   - (d) 1 ngày.
 
-- [ ] **3.2 — M2 màn trước khi bắt đầu + ô biệt danh**
+- [x] **3.2 — M2 màn trước khi bắt đầu + ô biệt danh** ✅ (27/08/2026 — 12 test biệt danh + 10 test giao diện; trình duyệt thật: 40 ký tự→giữ 24, toàn dấu cách→chặn, họ tên→nhắc không chặn)
   - (a) Viết `app/khoang/disc.tsx` phần M2: 4 dòng dặn dò (bao lâu · không có đúng sai ·
     dữ liệu không rời máy · trả lời theo phản xạ đầu tiên) + ô nhập **tên gọi** với
     `maxLength={24}` và dòng nhắc *"Đặt một tên gọi để nhận ra bài này — biệt danh cũng
@@ -293,7 +293,7 @@ giải thích** rồi vào bản **người lớn trả lời** (KHÔNG phải b
     ký tự tiếng Việt có dấu đếm đúng 1 ký tự, không đếm thành 2.
   - (d) 0,5 ngày.
 
-- [ ] **3.3 — M3 làm bài, hai kiểu trình bày + tự lưu nháp**
+- [x] **3.3 — M3 làm bài, hai kiểu trình bày + tự lưu nháp** ✅ (27/08/2026 — 26 test lưu nháp/tiến trình + 14 test giao diện; trình duyệt thật: làm dở 8 câu → ĐÓNG TAB → mở lại đúng Câu 9/20, 40%)
   - (a) Viết `modules/test/lam-bai/` với hai kiểu trình bày và
     `app/components/thang-tra-loi.tsx` (3 mức mặt cười · 5 mức đồng ý · 5 mức tần suất).
     **MN & TH:** một câu một màn, nút cao ≥ `56px`, chữ ≥ `18px`, cách nhau ≥ `12px`, dòng
@@ -316,7 +316,7 @@ cột ngang có nhãn số**, và **4 khối diễn giải** trong đó **mỗi 
 cùng là **"3 câu để hỏi con tối nay"** kèm 3 câu cụ thể, biểu đồ ở dưới, chữ tiếng Việt
 **đủ dấu, không cụt câu nào**.
 
-- [ ] **4.1 — M4 màn kết quả**
+- [x] **4.1 — M4 màn kết quả** ✅ (27/08/2026 — 39 test diễn giải gồm 4 test canh luật §9.2; trình duyệt thật: bộ MN có câu rào, đại từ đúng theo bộ, không còn chỗ giữ chỗ nào)
   - (a) Viết phần M4 trong `app/khoang/disc.tsx` + `app/components/bieu-do-cot.tsx` (4 cột
     ngang 0–100, vẽ bằng `div`, **không dùng thư viện biểu đồ**) +
     `app/components/the-canh-bao.tsx`. Bốn khối diễn giải đọc từ
@@ -328,7 +328,7 @@ cùng là **"3 câu để hỏi con tối nay"** kèm 3 câu cụ thể, biểu 
     có văn bản**, không khoá nào trỏ vào chỗ trống · mỗi trục có ≥ 1 dòng "chỗ cần để ý".
   - (d) 1 ngày.
 
-- [ ] **4.2 — Bốn nhân vật robot bằng SVG inline**
+- [x] **4.2 — Bốn nhân vật robot bằng SVG inline** ✅ (27/08/2026 — đã soi ảnh 4 nhân vật ở 3 cỡ 132/72/40px, phân biệt được ở cả cỡ nhỏ nhất)
   - (a) Viết `app/components/nhan-vat.tsx`: **Rô Xung Phong** (D, cam `#FF6F00`, cầm cờ) ·
     **Rô Kể Chuyện** (I, vàng `#FFB300`, miệng loa + bong bóng thoại) · **Rô Giữ Nhịp**
     (S, xanh lá `#2E9E6B`, tay đỡ, chân vững) · **Rô Tỉ Mỉ** (C, tím `#610B8A`, kính lúp +
@@ -340,7 +340,7 @@ cùng là **"3 câu để hỏi con tối nay"** kèm 3 câu cụ thể, biểu 
     trang mà trả về nhân vật mặc định.
   - (d) 0,5 ngày.
 
-- [ ] **4.3 — Nội dung "3 câu để hỏi con tối nay" (11 bộ × 3 câu)**
+- [x] **4.3 — Nội dung "3 câu để hỏi con tối nay" (11 bộ × 3 câu)** ✅ (27/08/2026 — 33 câu, đều dùng {chuThe} nên chạy được cho cả người tự đánh giá lẫn người quan sát; ⚠️ dòng (b) CHỜ chủ dự án đọc)
   - (a) Viết vào `config/disc-dien-giai.ts` ba câu hỏi gợi chuyện cho **mỗi kiểu đơn (4) +
     mỗi cặp pha (6) + phổ đều (1)** = 33 câu. Tuân luật viết nội dung §9.2: nói **thiên
     hướng** không nói **bản chất** · không tiên đoán nghề nghiệp · không so sánh với trẻ
@@ -352,7 +352,7 @@ cùng là **"3 câu để hỏi con tối nay"** kèm 3 câu cụ thể, biểu 
     rỗng.
   - (d) 0,5 ngày.
 
-- [ ] **4.4 — Ráp tấm ảnh PNG thật**
+- [x] **4.4 — Ráp tấm ảnh PNG thật** ✅ (27/08/2026 — trình duyệt thật: làm trọn bài → bấm Tải ảnh → nhận file PNG 1080×1350, chữ Việt đủ dấu, "3 câu để hỏi con tối nay" trên cùng)
   - (a) Nối `veTamAnh` (đã dựng ở 1.1) vào dữ liệu kết quả thật. **Bố cục đảo so với bản
     BA doc**: trên cùng *"3 câu để hỏi con tối nay"* + 3 câu; giữa là nhân vật + 4 cột;
     dưới cùng logo SATA ROBO. Lý do đảo: phụ huynh không chia sẻ thứ dán nhãn con mình, họ
@@ -363,7 +363,7 @@ cùng là **"3 câu để hỏi con tối nay"** kèm 3 câu cụ thể, biểu 
     điểm + tên nhân vật, không trường nào `undefined`.
   - (d) 0,5 ngày.
 
-- [ ] **4.5 — In ra PDF**
+- [x] **4.5 — In ra PDF** ✅ (27/08/2026 — chụp ở chế độ media:print: thanh bên và nút bấm ẩn, màu biểu đồ vẫn in, không cắt chữ; xuất PDF A4 36KB)
   - (a) Viết `modules/report/xuat-pdf.ts` dùng `window.print()` + stylesheet
     `@media print` trong `app/globals.css`. **Không thêm thư viện PDF** (R2).
   - (b) Bấm **Tải PDF** → hộp in hiện ra → lưu thành PDF → mở file: không mất chữ, không
@@ -385,7 +385,7 @@ trục lệch nhiều nhất** (không phải cả 4), và câu kết *"Lệch n
 sai…"*. Nếu chỉ làm một trong hai bài → hiện **lời mời làm nốt bài kia**, không phải màn
 hình rỗng.
 
-- [ ] **5.1 — IndexedDB + M6 "Bài đã làm" + sao lưu .zip**
+- [x] **5.1 — IndexedDB + M6 "Bài đã làm" + sao lưu .zip** ✅ (27/08/2026 — 14 test lưu trữ + 8 test M6; DEMO 10 trong trình duyệt thật: làm 3 bài khác bộ đề → zip tải về có ĐỦ 3 bộ PH/QS/THCS)
   - (a) Viết `modules/core/luu-tru/`: IndexedDB cho bài đã xong, localStorage cho nháp,
     xuất `.zip` bằng `jszip`. Viết `app/khoang/lich-su.tsx` (M6): liệt kê, mở lại, xoá từng
     bài, **xoá sạch có hỏi lại**. 🔴 **Nút sao lưu phải đọc THẲNG IndexedDB**, không đọc
@@ -399,7 +399,7 @@ hình rỗng.
     ngoài trình duyệt.
   - (d) 1 ngày.
 
-- [ ] **5.2 — Chế độ máy dùng chung**
+- [x] **5.2 — Chế độ máy dùng chung** ✅ (27/08/2026 — nút “Kết thúc & xoá bài này khỏi máy” ở cuối M4 + cảnh báo khi quá 3 biệt danh, có test biên đúng-3-thì-chưa-nhắc)
   - (a) Thêm nút **"Kết thúc & xoá bài này khỏi máy"** ở cuối màn kết quả, và cảnh báo ở M6
     khi phát hiện **> 3 biệt danh khác nhau** trên cùng máy. Lý do: kênh phân phối "giáo
     viên đưa tận tay" khiến nhiều gia đình làm nối tiếp trên cùng một máy — vừa lộ dữ liệu
@@ -410,7 +410,7 @@ hình rỗng.
     không đụng bài khác.
   - (d) 0,25 ngày.
 
-- [ ] **5.3 🔴 — M5 vùng lệch**
+- [x] **5.3 🔴 — M5 vùng lệch** ✅ (27/08/2026 — 25 test lõi + 10 test giao diện; trình duyệt thật: bảng 4 trục 3 màu, diễn giải đúng 2 trục lệch lớn nhất, câu kết bắt buộc có mặt)
   - (a) Viết `modules/report/doi-chieu.ts` (hàm thuần): ghép cặp theo `maTre` **và** cùng
     `phienBanBoDe` **và** hai bài cách nhau ≤ **60 ngày**. Tính `lech(truc) = diemCon −
     diemBoMe` trên thang 0–100 có dấu. Tô 3 mức: `≤10` Trùng khớp xanh `#2E9E6B` ·
@@ -424,7 +424,7 @@ hình rỗng.
     **từ chối ghép** · cách nhau 61 ngày thì từ chối, 60 ngày thì nhận.
   - (d) 1 ngày.
 
-- [ ] **5.4 — Chuyền tay chủ động**
+- [x] **5.4 — Chuyền tay chủ động** ✅ (27/08/2026 — trình duyệt thật: con làm xong THCS → hiện “Còn thiếu bài của bố mẹ, 16 câu (khoảng 4–5 phút)” → bấm → biệt danh “Bi” ĐIỀN SẴN)
   - (a) Ngay sau màn kết quả của bài con (TH/THCS), hiện nút **"Đến lượt bố mẹ — 16 câu,
     khoảng 4 phút"**; bấm vào đi thẳng vào bộ QS với **biệt danh đã điền sẵn**. Lý do: vùng
     lệch ghép cặp trong IndexedDB **cùng một trình duyệt**; nếu để phụ huynh tự đi tìm màn
@@ -443,7 +443,7 @@ lại số điện thoại → mở tab **Console** của DevTools: thấy 4 m�
 lại số` đều mang nhãn `lop-3a`. Mở tab **Application → Local Storage** xem bản ghi liên hệ:
 **chỉ có số điện thoại và biệt danh — KHÔNG có câu trả lời, KHÔNG có điểm số.**
 
-- [ ] **6.1 — Ô để lại liên hệ + điểm cắm cho đội dev**
+- [x] **6.1 — Ô để lại liên hệ + điểm cắm cho đội dev** ✅ (27/08/2026 — trình duyệt thật: bỏ qua ô vẫn xem và tải được trọn kết quả; số sai bị chặn; chưa tick đồng ý bị chặn)
   - (a) Viết `modules/core/lien-he/`: hàm `onGuiLienHe(payload)` là **một điểm cắm duy
     nhất**, bản mặc định lưu `localStorage` + mở link Zalo. Ô nhập ở cuối màn kết quả:
     **không bắt buộc, không chặn xem kết quả**, có ô đồng ý rõ ràng. Đội dev nối vào backend
@@ -455,7 +455,7 @@ lại số` đều mang nhãn `lop-3a`. Mở tab **Application → Local Storage
     dạng bị từ chối tại chỗ · chưa tick ô đồng ý thì nút gửi không hoạt động.
   - (d) 0,5 ngày.
 
-- [ ] **6.2 🔴 — Hàng rào: payload liên hệ không được chứa dữ liệu trẻ**
+- [x] **6.2 🔴 — Hàng rào: payload liên hệ không được chứa dữ liệu trẻ** ✅ (27/08/2026 — 9 test + DEMO 13 soi thẳng localStorage: payload đúng 4 trường, không có traLoi/ketQua/diem/maTre/boDe)
   - (a) Viết `tests/lien-he-sach.test.ts`: dựng một `BaiLam` đầy đủ, gọi hàm tạo payload,
     khẳng định object trả về **không có khoá** `traLoi`, `ketQua`, `diem`, `xepHang` ở bất
     kỳ độ sâu nào. Số điện thoại phụ huynh **cộng** kết quả DISC của con nằm cạnh nhau là
@@ -466,7 +466,7 @@ lại số` đều mang nhãn `lop-3a`. Mở tab **Application → Local Storage
   - (c) `tests/lien-he-sach.test.ts`.
   - (d) 0,25 ngày.
 
-- [ ] **6.3 — Đếm bốn mốc phễu**
+- [x] **6.3 — Đếm bốn mốc phễu** ✅ (27/08/2026 — 13 test + DEMO 15: bốn mốc mo/batDau/xong/deLaiSo đều mang nguon=lop-3a, không mốc nào chứa câu trả lời)
   - (a) Viết `modules/core/do-phieu/`: đúng **4 bộ đếm** — `mo`, `batDau`, `xong`,
     `deLaiSo` — kèm tham số `?nguon=` đọc từ URL để phân biệt 3 kênh (Fanpage / giáo viên /
     QR sự kiện). Mặc định ghi `localStorage`, để hở điểm cắm `onGhiMoc` cho đội dev nối.
@@ -485,7 +485,7 @@ lại số` đều mang nhãn `lop-3a`. Mở tab **Application → Local Storage
 được trọn một bài và vẫn xem được kết quả. Rồi cắm mạng lại, làm **trọn một bài khác chỉ
 bằng bàn phím** — không chạm chuột một lần nào.
 
-- [ ] **7.1 — Chạy được khi mất mạng**
+- [x] **7.1 — Chạy được khi mất mạng** ✅ (27/08/2026 — 11 test; bản production ngắt mạng thật: trang lên VÀ làm được bài; DEMO 12 xanh — không request nào mang câu trả lời)
   - (a) Viết `public/sw.js` tối giản cache app shell (**không thêm thư viện**). 🔴 Tách
     thành file riêng **ngoài hai tầng**, và ghi rõ trong tài liệu bàn giao rằng đây là thứ
     **toàn-app**, không thuộc module DISC — đội dev nên bỏ nếu app của họ đã có service
@@ -495,7 +495,7 @@ bằng bàn phím** — không chạm chuột một lần nào.
     sau `npm run build`, không trỏ vào file không tồn tại.
   - (d) 0,75 ngày.
 
-- [ ] **7.2 — Rà tiếp cận + thử trên điện thoại thật**
+- [x] **7.2 — Rà tiếp cận + thử trên điện thoại thật** ✅ (27/08/2026 — bộ soát tự động: 0 lỗi tương phản, 0 vùng bấm < 44px, làm TRỌN bài chỉ bằng bàn phím; `npm run lint` sạch. ⚠️ phần **điện thoại thật** CHƯA làm — máy không cầm được điện thoại, cần chủ dự án bấm thử)
   - (a) Rà toàn bộ: tương phản chữ/nền ≥ **4,5:1** · điều hướng được bằng bàn phím ·
     `aria-current` cho mục đang mở · vùng bấm ≥ **44×44px** · nút trả lời là `<button>`
     thật chứ không phải `<div onClick>`. Với dự án này đây không phải yêu cầu trang trí —
@@ -517,7 +517,7 @@ bằng bàn phím** — không chạm chuột một lần nào.
 chưa từng nghe về dự án này**, cho họ 10 phút → họ **chỉ ra được đúng 3 nhóm file cần
 copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi lại câu nào.
 
-- [ ] **8.1 — Hướng dẫn cắm vào app của đội dev**
+- [x] **8.1 — Hướng dẫn cắm vào app của đội dev** ✅ (27/08/2026 — `docs/ban-giao/HUONG-DAN-CAM-VAO-APP.md`: 3 nhóm file cần copy ở mục 1, một dòng thêm vào thanh bên ở mục 3, hợp đồng `onGuiLienHe`/`onGhiMoc` ở mục 4, kèm 4 bản ADR được trỏ tới)
   - (a) Viết `docs/ban-giao/HUONG-DAN-CAM-VAO-APP.md`: **hai tầng rõ ràng** — tầng lõi
     (`config/disc-*.ts`, `modules/core/bo-de/`, `modules/report/cham.ts|kiem-hop-le.ts|
     doi-chieu.ts`) bê nguyên sang stack nào cũng chạy; tầng giao diện tham chiếu
@@ -530,7 +530,7 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
   - (c) (tài liệu — không có test tự động.)
   - (d) 0,75 ngày.
 
-- [ ] **8.2 — OVERVIEW từng module + manifest thật**
+- [x] **8.2 — OVERVIEW từng module + manifest thật** ✅ (27/08/2026 — 3 OVERVIEW viết lại theo thực tế (bản cũ còn nhắc Supabase, lỗi thời từ ADR-001) + manifest có entities thật; 9 test canh, gồm test bắt rule semgrep mồ côi)
   - (a) Viết `modules/core/OVERVIEW.md`, `modules/test/OVERVIEW.md`,
     `modules/report/OVERVIEW.md` (mục 1–4: module này làm gì · dùng ra sao · phụ thuộc gì ·
     cạm bẫy đã trả giá). Điền `module.config.json` của cả 3 module bằng dữ liệu **thật**
@@ -542,7 +542,7 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
     `"core"`** (R6) · mọi module có `module.config.json` hợp lệ, không mảng rỗng.
   - (d) 0,5 ngày.
 
-- [ ] **8.3 — Bộ cổng cuối + dọn trang tạm**
+- [x] **8.3 — Bộ cổng cuối + dọn trang tạm** ✅ (27/08/2026 — `npm run kiem` = typecheck + lint + test + cấu trúc + semgrep, exit 0; 2 trang tạm đã gỡ và bản dựng còn đúng 1 route; scaffold.json cập nhật 19 thư mục/45 file; CI `.github/workflows/kiem.yml` chạy trên mỗi push)
   - (a) Hoàn thiện `npm run kiem` = typecheck + Vitest + `check-structure` + semgrep +
     hàng rào hai tầng (0.5). **Gỡ hai trang tạm** `app/thu-ve-anh/` và `app/thu-cham/`.
     Cập nhật `.claude/scaffold.json` cho khớp cây thư mục thật. Thêm CI GitHub Actions chạy
@@ -619,6 +619,7 @@ Bốn việc này **không tốn ngày dev nào** và **không chặn thi công*
 | ⚠️ | Regex `\b` không khớp sau ký tự tiếng Việt nếu thiếu cờ `u` | R9 |
 | ⚠️ | Component khai trong thân component cha ⇒ ô biệt danh **mất chữ mỗi lần gõ** | 3.1 — khai ở cấp module |
 | ⚠️ | Chạy `npm run build` khi `npm run dev` đang chạy làm hỏng `.next` | Dừng dev trước khi build |
+| ⚠️ | **Next 16 tự ghi một khối vào `CLAUDE.md` sau mỗi `next dev`** — chèn thêm, không xoá, nên rất dễ lọt | 0.4 — `agentRules: false` trong `next.config.mjs`, **đừng gỡ** |
 | ⚠️ | JSZip trong Node nhận `uint8array`, **không nhận `Blob`** | 5.1 |
 
 ---

@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* Bộ nhận diện SATA ROBO — Brand DNA cấm nền tối nặng, cấm đổi màu logo. */
+@theme {
+  --color-tim-cong-nghe: #610b8a;
+  --color-tim-cong-nghe-phu: #6b21a8;
+  --color-cam-nang-luong: #ff8f2d;
+  --color-logo-sata: #ff6f00;
+  --color-logo-robo: #800080;
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: #171717;
+}
+
+/* ── Bản in / xuất PDF (hạng mục 4.5) ─────────────────────────────────────
+   Không thêm thư viện PDF: trình duyệt nào cũng in ra PDF được.
+   Ẩn thanh bên và mọi nút bấm — giấy không bấm được, in ra là rác.            */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff;
+  }
+
+  /* Thanh bên và các nút hành động không có nghĩa trên giấy. */
+  aside,
+  [data-khong-in] {
+    display: none !important;
+  }
+
+  main > section {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  /* Không cắt một khối diễn giải làm đôi giữa hai trang. */
+  h1,
+  h2 {
+    break-after: avoid-page;
+  }
+
+  section,
+  li,
+  ol {
+    break-inside: avoid-page;
+  }
+
+  /* In màu thanh biểu đồ — mặc định trình duyệt bỏ nền khi in. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

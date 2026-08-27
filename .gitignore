@@ -38,3 +38,9 @@ Thumbs.db
 # Test / coverage
 coverage/
 .nyc_output/
+
+# Claude Code — cấu hình cục bộ của máy này, không đẩy lên
+.claude/settings.local.json
+
+# Bài làm thật để phân tích item — KHÔNG BAO GIỜ commit (NĐ 13/2023)
+/du-lieu-thu/

@@ -1,11 +1,14 @@
 {
-  "_ghiChu": "Module manifest — hệ thống/công cụ đọc file này để biết module khai gì. Điền dần khi build; các mảng để rỗng lúc scaffold. Nếu dự án dùng TypeScript, có thể chuyển thành module.config.ts giữ nguyên các trường.",
   "id": "test",
   "name": "test",
-  "version": "0.1.0",
-  "navigation": [],
+  "version": "1.0.0",
+  "moTa": "Định tuyến bộ đề theo đối tượng, và logic luồng làm bài.",
+  "navigation": [{ "ma": "disc", "ten": "DISC", "duong": "app/khoang/disc.tsx" }],
   "permissions": [],
-  "entities": [],
+  "entities": [
+    { "ten": "DauVaoDinhTuyen", "noiO": "dinh-tuyen.ts", "moTa": "Đối tượng + lớp + mục tiêu + tuổi con" },
+    { "ten": "KetQuaDinhTuyen", "noiO": "dinh-tuyen.ts", "moTa": "Mã bộ đề, kèm lý do nếu bị chuyển sang bản quan sát" }
+  ],
   "dependencies": ["core"],
   "eventsPublished": [],
   "eventsConsumed": []

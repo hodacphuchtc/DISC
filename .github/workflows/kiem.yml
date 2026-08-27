@@ -1,0 +1,72 @@
+# Bộ cổng chạy trên MỖI push và MỖI pull request.
+#
+# 🔴 Vì sao cần: toàn bộ nội dung nghiệp vụ nằm trong `config/*.ts` để người không biết
+# code sửa được ngay trên giao diện web của GitHub. Nhưng sửa file `.ts` trên web thì
+# KHÔNG có ai kiểm cú pháp — thiếu một dấu phẩy là hỏng build, và người sửa chỉ biết khi
+# ai đó deploy. Cửa này bắt lỗi ngay lúc lưu.
+#
+# Nó cũng canh ba thứ hỏng IM LẶNG: gỡ câu đảo chiều cuối của một trục · sửa câu mà quên
+# tăng phiên bản · nhét React vào tầng lõi.
+
+name: Kiểm
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kiem-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  kiem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Cài phụ thuộc
+        run: npm ci
+
+      - name: Kiểm kiểu
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Soi cấu trúc dự án
+        run: npm run check:structure
+
+      # semgrep canh ranh giới module (rule 2 của .claude/rules/module-boundaries.md).
+      # Cài riêng vì nó là công cụ Python, không nằm trong package.json.
+      - name: Cài semgrep
+        run: pipx install semgrep
+
+      - name: Canh ranh giới module
+        run: npm run check:sast
+
+      - name: Dựng bản tĩnh
+        run: npm run build
+
+      # Bản dựng phải KHÔNG chứa trang tạm — chúng bị gỡ ở hạng mục 8.3.
+      - name: Chặn trang tạm lọt ra bản dựng
+        run: |
+          if [ -d out/thu-cham ] || [ -d out/thu-nhan-vat ]; then
+            echo "::error::Trang tạm (thu-*) lọt vào bản dựng. Gỡ trước khi phát hành."
+            exit 1
+          fi
+          echo "Bản dựng sạch, không có trang tạm."

@@ -1,0 +1,36 @@
+/**
+ * Bộ nhận diện SATA ROBO — NGUỒN DUY NHẤT của mọi mã màu dùng trong mã nguồn.
+ *
+ * 🔴 Brand DNA: cấm đổi màu logo, kể cả sang màu gần giống. Cấm nền tối nặng.
+ *
+ * ⚠️ `app/globals.css` có một bản sao của các màu này dưới dạng token Tailwind
+ * (`@theme`). Tailwind v4 đọc CSS, không đọc TypeScript, nên không tránh được hai
+ * nơi. Sửa ở đây thì sửa cả bên kia — hai bản lệch nhau thì tấm ảnh PNG chia sẻ
+ * (GĐ4) sẽ khác màu so với thứ đang hiện trên màn hình.
+ */
+
+export const MAU_LOGO = {
+  sata: "#FF6F00",
+  robo: "#800080",
+} as const;
+
+export const MAU = {
+  timCongNghe: "#610B8A",
+  timCongNghePhu: "#6B21A8",
+  camNangLuong: "#FF8F2D",
+  /**
+   * 🔴 Cam năng lượng `#FF8F2D` trên nền trắng chỉ đạt tương phản 2,28:1 — dưới cả ngưỡng
+   * chữ to (3:1) lẫn chữ thường (4,5:1). Dùng nó làm MÀU CHỮ là chữ mờ với người mắt kém,
+   * người già, và bất kỳ ai đọc ngoài nắng.
+   * Sắc đậm này (≈6,9:1) dành RIÊNG cho chữ. Viền và mảng màu vẫn dùng cam thương hiệu.
+   */
+  camDamChoChu: "#8A4B00",
+  /** Nền của mục đang mở trên thanh bên (DISC_BA.md §5.1). */
+  timRatNhat: "rgba(97, 11, 138, 0.09)",
+  muc: "#171717",
+  mucNhat: "#6B7280",
+  vienMo: "#E5E5E5",
+} as const;
+
+/** Tỷ lệ màu toàn trang (DISC_BA.md §5.3): trắng 55–65% · tím 20–30% · cam 10–15%. */
+export const TY_LE_MAU = { trang: [55, 65], tim: [20, 30], cam: [10, 15] } as const;
