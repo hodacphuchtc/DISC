@@ -36,7 +36,7 @@ lấy kiểu từ `core/bo-de/kieu.ts` (QĐ5).
 
 ## 5. Trạng thái
 
-Xong (27/08/2026, gồm GĐ9). Không còn việc dở. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
+Xong GĐ9. **GĐ10 chặng 1 đang dở** — xem `PLAN.md` mục BÀN GIAO. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
 
 **GĐ9 thêm hai đường ra khỏi module này, đừng nhầm chúng với nhau:**
 - `layDienGiai(kieu, maBoDe)` — bốn khối mặc định, chữ ký GIỮ NGUYÊN từ GĐ4.
@@ -44,8 +44,24 @@ Xong (27/08/2026, gồm GĐ9). Không còn việc dở. Chi tiết tiến độ:
   theo lứa tuổi, cặp pha có thứ tự, tầng lời khuyên. Nhận **record phẳng**, cố ý KHÔNG
   nhận `BaiLamLuu` (kiểu đó ở `core/luu-tru`, không thuộc tầng lõi).
 
+**GĐ10 — BA BẢN, mỗi bản một người đọc.** `layDienGiaiDay` trả `banCon` / `banBoMe` /
+`banTuMinh` thay cho `loiKhuyen`/`tuMinh` phẳng. Tách bằng CẤU TRÚC chứ không bằng kỷ luật:
+giao diện không có đường nào đổ chữ của bố mẹ vào mục của con nếu chúng không chung một trường.
+
+| Bộ đề | `banCon` | `banBoMe` | `banTuMinh` |
+| --- | --- | --- | --- |
+| MN, QS | — | ✅ | — |
+| TH, THCS | ✅ | ✅ | — |
+| PH | — | — | ✅ |
+
+🔴 `thayChuThe(chuoi, maBoDe, banDoc)` — mặc định `banDoc = "con"` giữ nguyên hành vi cũ.
+Cùng một bài TH: con đọc "em", bố mẹ đọc "con".
+
 ## 6. Cạm bẫy đã trả giá
 
+- 🔴 **Bảng đại từ một chiều đã cắt cả một nhóm người dùng khỏi sản phẩm.** `CHU_THE[maBoDe]`
+  ngầm giả định "một bộ đề = một người đọc" ⇒ bộ TH/THCS bị chặn khỏi TOÀN BỘ `LOI_KHUYEN`,
+  nghĩa là phụ huynh của mọi học sinh tiểu học/THCS không nhận được chữ nào, suốt từ GĐ9.
 - 🔴 **Diễn giải theo TRỤC, không theo KIỂU.** Bản GĐ4 làm theo kiểu nên chỉ trục trội có
   chữ; ba trục còn lại im lặng suốt tới GĐ9 dù biểu đồ vẫn hiện đủ bốn cột kèm số. Test cũ
   không bắt được vì nó kiểm "mỗi kiểu" trong khi đặc tả đòi "mỗi trục".
@@ -65,3 +81,31 @@ Xong (27/08/2026, gồm GĐ9). Không còn việc dở. Chi tiết tiến độ:
 - **Nhân vật chỉ có MỘT bản vẽ** (`hinh-nhan-vat.ts`). Vẽ hai bản cho màn hình và cho ảnh
   thì hai bản chỉ lệch nhau vào đúng ngày ai đó sửa một bên.
 - **Cam thương hiệu `#FF8F2D` làm màu CHỮ chỉ đạt 2,28:1.** Dùng `MAU.camDamChoChu`.
+
+<!-- Chuyển từ CLAUDE.md ngày 27/08/2026: bài học theo MIỀN thì ở sổ miền, CLAUDE.md chỉ trỏ tới. -->
+- **Bốn lỗi "sai người đọc" cùng một họ, không lỗi nào làm test đỏ** (27/08/2026, GĐ10):
+  câu rào gọi em lớp 4 là "con" · học sinh THCS đọc được khối viết cho bố mẹ · bộ PH mời
+  chính người vừa làm xong đi làm lại · con 8–10 tuổi bị mời sai bộ đề vì `vung-lech.tsx` gõ
+  cứng `"THCS"` thay vì gọi `dinhTuyen`. Cả bốn chỉ lộ ra khi ngồi hỏi *ai đang cầm máy và
+  người đó nhìn thấy chữ gì* — không có cửa kiểm tự động nào thay được câu hỏi đó.
+- **`layDienGiai(kieu, maBoDe)` không nhận `diem`** (27/08/2026). Hồ sơ D=92 và D=58 ra báo
+  cáo giống nhau **từng byte**. Không test nào bắt được vì không test nào từng hỏi *"hai hồ sơ
+  khác nhau có ra hai bản khác nhau không"*. Đã có `tests/dien-giai-day.test.ts` canh.
+- **Phép đo DISC ở đây quá thô để đỡ thang cao/vừa/thấp** (27/08/2026). Một nấc trả lời dịch
+  điểm chuẩn hoá đi: **TH 10,0 · QS 6,25 · MN 5,0 · THCS/PH 4,17**. Đặt lằn ranh band ở 45/65
+  nghĩa là cùng một đứa trẻ làm lại sau năm phút rơi sang band khác và đọc một bản khác nghĩa.
+  Cách xử lý KHÔNG phải chỉnh ngưỡng cho chuẩn, mà là **chặn thiệt hại**: cường độ chỉ đổi
+  một mệnh đề, mọi nội dung khác khoá theo THỨ HẠNG.
+- **Nội dung không có trong DOM thì không in được** (27/08/2026, GĐ9). `{mo && <div/>}` làm
+  bản PDF mất đúng phần sâu nhất. Phải render luôn rồi ẩn bằng CSS. Và **`<details>` cũng
+  không dùng được**: trình duyệt ẩn thân qua `::details-content`, CSS in không đè chắc.
+  Thêm nữa: tiêu đề nằm trong nút bấm mà nút thì `data-khong-in` ⇒ in ra mất tiêu đề, phải
+  có bản `.chi-in` thế chỗ.
+- **`break-inside: avoid-page` áp cho MỌI `section` là quả mìn hẹn giờ** (27/08/2026). Chạy
+  tốt suốt GĐ4–GĐ8 vì màn kết quả còn ngắn. Thêm lớp bóc sâu vào là một `section` cao hơn
+  một trang giấy mà lại cấm tách ⇒ in ra một trang gần trắng rồi mới tới nội dung. Đã thu
+  luật về mức khối nhỏ (`.khoi-in`).
+- **Tiếng Việt: "bạn" vừa là đại từ vừa là danh từ chỉ bạn bè** (27/08/2026). Hàng rào cấm
+  gõ cứng đại từ báo nhầm hàng loạt ở "kết bạn nhanh", "phân vai cho các bạn". Phải gỡ nghĩa
+  danh từ ra trước khi soi — hàng rào báo nhầm nhiều thì người sau sẽ tắt nó đi, và mất luôn
+  phần canh thật.

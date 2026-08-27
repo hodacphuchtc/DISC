@@ -19,38 +19,43 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
 
-**Phiên 27/08/2026 (tối) — GĐ10 chặng 1, mới xong 4/6 hạng mục**
+**Phiên 27/08/2026 (tối) — GĐ10 chặng 1, xong 4/6**
 
-**1. Vừa xong.** `10.1` `10.2` `10.3` `10.5` — **731 test xanh** (đầu phiên 676) ·
-`npm run kiem` + `npm run build` xanh · đã soi trên Chromium thật, 0 lỗi JS.
+**1. Vừa xong.** `10.1` `10.2` `10.3` `10.5`. **Đã push `origin/main`, CI xanh**:
+`9bf2521` (GĐ10 chặng 1) · `823f0d6` (lệnh chạy thử local) · `a2da871` (GĐ9).
+731 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật, 0 lỗi JS.
 
-**2. ĐANG DỞ — làm tiếp từ đây.** Còn `10.4` (ba dải + in theo từng bản) và `10.6`
-(sắp lại màn 1 hai nhánh). Cả hai đều `(e) chặn: MÁY` — giao là làm được ngay.
-Chặng 2 (`10.7`) chặn ở NGƯỜI: chờ chủ dự án bấm thử chặng 1.
+**2. ĐANG DỞ — làm tiếp từ đây.**
+- `10.4` **ba dải + in theo từng bản** → sửa `app/khoang/ket-qua.tsx` (361 dòng) và
+  `app/khoang/lop-sau.tsx`. Khuôn đã chứng minh được: `[data-lop-sau]{display:block!important}`
+  trong `app/globals.css` + `.chi-in` — dùng lại y hệt cho `[data-ban]`, đừng phát minh lại.
+  🔴 Một trang nghĩa là trẻ cầm máy cuộn xuống đọc được phần bố mẹ ⇒ bắt buộc dải chắn.
+- `10.6` **sắp lại màn 1 hai nhánh** → `app/khoang/chon-doi-tuong.tsx`. `dinhTuyen()` KHÔNG
+  đổi, chỉ đổi cách M1 thu thập ⇒ `tests/dinh-tuyen.test.ts` vẫn xanh.
 
-**3. Chạy thử thế nào.** `npm run xem-thu` → http://localhost:3100 (bản phát hành thật),
-chạy song song được với `npm run dev` ở cổng 3000. Nạp 8 bài mẫu bằng cách dán
-`tests/DATA_TEST/nap-vao-trinh-duyet.js` vào Console. Chi tiết ở README mục
-*"Chạy thử trên máy mình"*.
+**3. Chặn ở NGƯỜI / NGOÀI.** `10.7` (chặng 2) chặn ở NGƯỜI: chờ chủ dự án bấm thử chặng 1.
+Bốn việc cũ ở `CLAUDE.md` mục CHỜ NGOÀI vẫn nguyên; nội dung mới của chặng 2 cần **gói ký
+duyệt thứ hai** (phản hồi tính cách cho người lớn — gần tham vấn hơn, người ký chịu trách
+nhiệm ở mức khác).
 
 **4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
-- Bốn lỗi im lặng đã sửa và **đã xác nhận trên trình duyệt thật**: con 9 tuổi được mời bộ
-  **TH** (không phải THCS) · bộ TH hiện câu rào *"để em hiểu mình hơn"* · học sinh TH/THCS
-  không còn đọc được khối viết cho bố mẹ · bộ PH hết mời chính mình.
-- **`next start` KHÔNG chạy được với `output: "export"`** — script `start` cũ trỏ vào đó và
-  chỉ ném lỗi suốt từ GĐ0. Đã thay bằng `scripts/xem-ban-phat-hanh.mjs`.
-- Số lớp gập trên màn kết quả: MN/QS **5**, TH/THCS/PH **4**, cộng 1 nếu máy có bài bộ PH.
-  Con số này có test canh — thêm/bớt một khối là đỏ ngay.
-- Đoạn mở đầu **136 từ** (trần 200). Kho chữ hiện ~6.000 từ.
+- Số lớp gập màn kết quả: MN/QS **5**, TH/THCS/PH **4**, +1 nếu máy có bài bộ PH. Có test canh.
+- Kho chữ ~6.000 từ; đoạn mở đầu 136 từ (trần 200). Chặng 2 sẽ +2.400–3.000 từ.
+- Ma trận ba bản đã chốt (`modules/report/OVERVIEW.md`): MN/QS chỉ `banBoMe`; TH/THCS có
+  **cả hai**; PH chỉ `banTuMinh`. Bản kết hợp cần HAI bài — sau bài đầu nó là LỜI MỜI.
+- Nội dung ghép cặp dùng **8 khoá** `[trục][hướng lệch]`, KHÔNG phải ma trận 16 cặp.
+- Playwright vẫn không sống qua phiên: `npm i playwright` vào thư mục tạm; Chromium đã có
+  ở `~/Library/Caches/ms-playwright`.
 
-**5. Cạm bẫy vừa trả giá.** Đã ghi vào `CLAUDE.md`. Đắt nhất: **bảng đại từ khoá một chiều
-theo bộ đề** ngầm giả định *"một bộ đề = một người đọc"* — giả định đó chặn phụ huynh của
-học sinh TH/THCS khỏi TOÀN BỘ lời khuyên, suốt từ GĐ9, mà không test nào thấy.
+**5. Cạm bẫy vừa trả giá.** 4 mục đã ghi `CLAUDE.md`; bài học theo miền ở
+`modules/report/OVERVIEW.md` mục 6 và `modules/test/OVERVIEW.md`. Đắt nhất: **bảng đại từ
+khoá một chiều** cắt phụ huynh của toàn bộ học sinh TH/THCS khỏi lời khuyên suốt từ GĐ9 mà
+không test nào thấy.
 
-**6. Lệnh nên chạy đầu phiên sau.**
+**6. Lệnh phiên sau nên chạy.**
 ```bash
 npm run kiem       # 731 test
-npm run xem-thu    # bản phát hành ở cổng 3100
+npm run xem-thu    # bản phát hành thật, cổng 3100 (README mục "Chạy thử trên máy mình")
 ```
 
 ---

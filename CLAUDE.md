@@ -64,18 +64,10 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
 🔴 **GĐ10 mới xong chặng 1 phần đầu** — còn `10.4`, `10.6`, và trọn chặng 2 (`10.7`).
 
-- **GĐ0–GĐ1** — khung Next 16 + Tailwind 4 + Vitest 4, thanh bên, hàng rào hai tầng,
-  spike Canvas vẽ chữ tiếng Việt vừa khung.
-- **GĐ2** — 104 câu hỏi (bóc từ `docs/BA/DISC_BA.md`), thứ tự trộn chốt cứng, lõi chấm
-  điểm + năm hàng rào `HL-1..HL-5`, checksum khoá nội dung, script phân tích item.
-- **GĐ3** — luồng làm bài 5 bộ đề, hai kiểu trình bày, tự lưu nháp.
-- **GĐ4** — màn kết quả đầy đủ, 4 nhân vật SVG, ảnh PNG 1080×1350, in PDF.
-- **GĐ5** — IndexedDB, màn *Bài đã làm*, sao lưu `.zip`, **vùng lệch con ↔ cha mẹ**,
-  chuyền tay chủ động.
-- **GĐ6** — ô thu liên hệ + điểm cắm, bốn mốc phễu.
-- **GĐ7** — chạy được khi mất mạng, 0 lỗi tương phản, 0 vùng bấm < 44px, làm trọn bài
-  chỉ bằng bàn phím.
-- **GĐ8** — `docs/ban-giao/HUONG-DAN-CAM-VAO-APP.md`, 3 OVERVIEW, 4 ADR, manifest thật.
+- **GĐ0–GĐ8** — dựng xong sản phẩm chạy đầu-cuối: khung Next 16 · 104 câu hỏi + lõi chấm
+  điểm + năm hàng rào `HL-1..HL-5` · luồng làm bài 5 bộ đề · màn kết quả + ảnh PNG + in PDF ·
+  IndexedDB + vùng lệch con↔cha mẹ · thu liên hệ + phễu · ngoại tuyến + tiếp cận · gói bàn giao.
+  Chi tiết từng hạng mục: `PLAN.md`.
 - **GĐ9** — **làm sâu bản báo cáo**: diễn giải đủ **bốn trục** (trước chỉ trục trội có chữ),
   nội dung theo **lứa tuổi**, 12 cặp pha **có thứ tự**, tầng lời khuyên hành động
   (câu nên nói / nên tránh · khi con căng thẳng · linh hoạt tình huống · một việc tối nay),
@@ -148,17 +140,15 @@ toán. Ba việc đầu nên làm ngay tuần này.
 
 ## CẢNH BÁO / CẠM BẪY (đã trả giá, đừng lặp lại)
 
+> Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
+> `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
+
 - **Bảng đại từ khoá MỘT CHIỀU theo bộ đề đã âm thầm cắt cả một nhóm người dùng khỏi sản
   phẩm** (27/08/2026, GĐ10). `CHU_THE[maBoDe]` ngầm giả định *"một bộ đề = một người đọc"*.
   Giả định đó khiến bộ TH/THCS bị chặn khỏi TOÀN BỘ `LOI_KHUYEN` — nghĩa là **phụ huynh của
   mọi học sinh tiểu học và THCS không nhận được một chữ lời khuyên nào**, suốt từ GĐ9. Không
   test nào thấy vì test chỉ hỏi "bộ này có `tuMinh` không", chưa ai hỏi "phụ huynh của em này
   đọc được gì". **Bài học: khi thêm một trường khoá theo X, hỏi ngay X có đủ chiều không.**
-- **Bốn lỗi "sai người đọc" cùng một họ, không lỗi nào làm test đỏ** (27/08/2026, GĐ10):
-  câu rào gọi em lớp 4 là "con" · học sinh THCS đọc được khối viết cho bố mẹ · bộ PH mời
-  chính người vừa làm xong đi làm lại · con 8–10 tuổi bị mời sai bộ đề vì `vung-lech.tsx` gõ
-  cứng `"THCS"` thay vì gọi `dinhTuyen`. Cả bốn chỉ lộ ra khi ngồi hỏi *ai đang cầm máy và
-  người đó nhìn thấy chữ gì* — không có cửa kiểm tự động nào thay được câu hỏi đó.
 - **`next start` KHÔNG chạy được với `output: "export"`** (27/08/2026). Script `start` trỏ vào
   đó từ GĐ0 và chỉ ném lỗi — không ai phát hiện vì không ai chạy nó. Đã thay bằng
   `scripts/xem-ban-phat-hanh.mjs` (`npm run xem-thu`). **Một script hỏng mà không ai gọi thì
@@ -173,27 +163,6 @@ toán. Ba việc đầu nên làm ngay tuần này.
   DEMO "đạt", hạng mục `4.2` tick ✅ từ GĐ4, trong khi phụ huynh nhìn biểu đồ bốn cột có số
   đầy đủ mà chỉ đọc được chữ về **một** nhóm. **Bài học: viết test theo ĐÚNG DANH TỪ mà đặc
   tả dùng.** "Mỗi trục" mà đi kiểm "mỗi kiểu" là một cửa kiểm nhìn sai chỗ suốt bốn giai đoạn.
-- **`layDienGiai(kieu, maBoDe)` không nhận `diem`** (27/08/2026). Hồ sơ D=92 và D=58 ra báo
-  cáo giống nhau **từng byte**. Không test nào bắt được vì không test nào từng hỏi *"hai hồ sơ
-  khác nhau có ra hai bản khác nhau không"*. Đã có `tests/dien-giai-day.test.ts` canh.
-- **Phép đo DISC ở đây quá thô để đỡ thang cao/vừa/thấp** (27/08/2026). Một nấc trả lời dịch
-  điểm chuẩn hoá đi: **TH 10,0 · QS 6,25 · MN 5,0 · THCS/PH 4,17**. Đặt lằn ranh band ở 45/65
-  nghĩa là cùng một đứa trẻ làm lại sau năm phút rơi sang band khác và đọc một bản khác nghĩa.
-  Cách xử lý KHÔNG phải chỉnh ngưỡng cho chuẩn, mà là **chặn thiệt hại**: cường độ chỉ đổi
-  một mệnh đề, mọi nội dung khác khoá theo THỨ HẠNG.
-- **Nội dung không có trong DOM thì không in được** (27/08/2026, GĐ9). `{mo && <div/>}` làm
-  bản PDF mất đúng phần sâu nhất. Phải render luôn rồi ẩn bằng CSS. Và **`<details>` cũng
-  không dùng được**: trình duyệt ẩn thân qua `::details-content`, CSS in không đè chắc.
-  Thêm nữa: tiêu đề nằm trong nút bấm mà nút thì `data-khong-in` ⇒ in ra mất tiêu đề, phải
-  có bản `.chi-in` thế chỗ.
-- **`break-inside: avoid-page` áp cho MỌI `section` là quả mìn hẹn giờ** (27/08/2026). Chạy
-  tốt suốt GĐ4–GĐ8 vì màn kết quả còn ngắn. Thêm lớp bóc sâu vào là một `section` cao hơn
-  một trang giấy mà lại cấm tách ⇒ in ra một trang gần trắng rồi mới tới nội dung. Đã thu
-  luật về mức khối nhỏ (`.khoi-in`).
-- **Tiếng Việt: "bạn" vừa là đại từ vừa là danh từ chỉ bạn bè** (27/08/2026). Hàng rào cấm
-  gõ cứng đại từ báo nhầm hàng loạt ở "kết bạn nhanh", "phân vai cho các bạn". Phải gỡ nghĩa
-  danh từ ra trước khi soi — hàng rào báo nhầm nhiều thì người sau sẽ tắt nó đi, và mất luôn
-  phần canh thật.
 - **Next.js 16 TỰ GHI một khối vào `CLAUDE.md` sau mỗi lần `next dev`** (26/08/2026,
   hạng mục 0.4). Nó chỉ chèn thêm chứ không xoá, nên rất dễ lọt — nhưng hiến pháp dự án
   do người viết, không để công cụ build sửa, và nó làm bẩn diff mỗi lần chạy dev. Đã chặn
