@@ -19,42 +19,47 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
 
-**Phiên 27/08/2026 (tối, chặng 2) — GĐ10 hết sạch việc MÁY: 47/48**
+**Phiên 27/08/2026 (tối, chặng 3) — GĐ10 XONG TRỌN: 48/48, hết việc trong sổ**
 
-**1. Vừa xong.** `10.4` (ba dải + in tách bản) và `10.6` (M1 hai nhánh). **770 test ·
-`npm run kiem` + `npm run build` xanh · soi Chromium thật, 0 lỗi JS.**
+**1. Vừa xong.** `10.4` (ba dải + in tách bản) · `10.6` (M1 hai nhánh) · `10.7` (nội dung
+ba bản, chặng 2). **796 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật,
+0 lỗi JS.** Đã tick hết 48/48 hạng mục.
 
-**2. ĐANG DỞ — không còn hạng mục MÁY nào.** `10.7` là việc duy nhất còn lại và nó chặn ở
-NGƯỜI: chờ chủ dự án bấm thử rồi quyết, cộng **gói ký duyệt thứ hai** (phản hồi tính cách
-cho người lớn — gần tham vấn hơn, người ký chịu trách nhiệm ở mức khác).
+**2. ĐANG DỞ — không còn gì trong PLAN.md.** Mọi việc còn lại ở mục CHỜ NGOÀI của
+`CLAUDE.md`, dẫn đầu là **hai** chữ ký chuyên môn (gói A và gói B).
 
-**3. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
-- **Số lớp gập đổi:** MN/QS **5** · **TH/THCS 8** (4 → 8: thêm 3 lớp của bố mẹ + nút dải
-  chắn) · PH **4** · +1 nếu máy có bài bộ PH. `tests/m4-ket-qua.test.tsx` canh.
-- **In tách bản đo trên Chromium thật:** tờ của em 2286 ký tự · tờ bố mẹ 3144 ký tự ·
-  **0 câu rò rỉ chéo**. Dải bố mẹ ẩn trên màn mà vẫn giữ 1248 ký tự trong DOM ⇒ in được.
-- Cơ chế: `<section data-ban>` + cờ `data-in-ban` gắn thẳng lên `<html>` bằng DOM trước
-  `window.print()`. **KHÔNG qua state React** — `print()` chặn luồng đồng bộ nên React chưa
-  kịp vẽ lại, hộp thoại in mở với DOM cũ, và in nhầm bản trong im lặng.
-- **Độ đặc hiệu CSS mới là thứ phân định**, không phải `!important`: cả luật ép mở
-  (`[data-ban]`, 0-1-0) lẫn luật loại trừ (`[data-in-ban=…] [data-ban=…]`, 0-2-0) đều
-  `!important`. Có test canh đúng quan hệ đó.
-- Kho chữ ~6.000 từ, chưa đổi ở chặng này. Chặng 2 sẽ +2.400–3.000 từ.
-- Ma trận ba bản không đổi: MN/QS chỉ `banBoMe` · TH/THCS **cả hai** · PH chỉ `banTuMinh`.
-- Playwright vẫn không sống qua phiên: `npm i playwright` vào thư mục tạm; Chromium đã có
+**3. 🔴 CÁI BẪY LỚN NHẤT CỦA PHIÊN NÀY — ĐỌC TRƯỚC KHI SỬA BẤT CỨ TEST NÀO.**
+Máy đang bị **Docker chiếm ~200% CPU** (6 container, không của dự án này). Ở load average
+32,6 thì `waitFor` của Testing Library đói CPU và **19–20 test đỏ GIẢ**, mỗi test mất
+6–23 giây thay vì vài chục mili-giây. Cùng bộ mã đó chạy `npx vitest run --maxWorkers=2`
+ra **796/796 xanh**. Thấy test đỏ hàng loạt mà lỗi toàn là hết giờ chờ ⇒ soi `uptime` và
+`ps aux | sort -nrk 3` TRƯỚC khi soi code. Suýt nữa đã đi sửa mã lành.
+
+**4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
+- **Ba dải trên máy có đủ hai bài** (bộ PH của bố mẹ + bài con lớp 4), đo bằng `textContent`
+  chứ không phải `innerText`: chung **2.598** ký tự · con **1.036** · bố mẹ **2.696**, và
+  **0 câu ≥60 ký tự dùng chung ở cả BA cặp dải**.
+  ⚠️ `innerText` chỉ trả chữ ĐANG HIỆN — dải đóng đo ra 57 ký tự còn dải `display:none`
+  lại trả trọn textContent. Hai thước khác nhau, số không so được với nhau.
+- **In tách bản** (đo trước đó): tờ của em 2.286 ký tự · tờ bố mẹ 3.144 · 0 câu rò rỉ chéo.
+- **Số lớp gập:** MN/QS 5 · TH/THCS **8** · PH 4 · **+3 nếu máy có bài bộ PH** (so phong
+  cách + nhìn về phía bố mẹ + thoả thuận), nên bộ QS có bài PH = **8**.
+- **Nội dung chặng 2:** 1.934 từ mới / 24 đoạn (8 khoá × 3 trường), trung bình 81 từ/đoạn.
+  Dưới ước lượng 2.400–3.000 của sổ — lý do và cách xử ghi ngay dưới hạng mục `10.7`.
+- Hai hồ sơ ký duyệt: gói A **11.506 từ**, gói B **1.537 từ**.
+- Playwright vẫn không sống qua phiên: `npm i playwright` vào thư mục tạm; Chromium có sẵn
   ở `~/Library/Caches/ms-playwright`. **Trang chạy ở `/`, KHÔNG phải `/khoang-disc/`.**
-- **Muốn máy tự làm trọn một bài thì phải TRÁNH MỨC GIỮA** — trả lời xoay vòng đều là ra
-  hồ sơ phẳng và HL-1 từ chối kết luận (đúng thiết kế). Và phải **trả lời TRƯỚC rồi mới
-  bấm "Xem kết quả"**: nút đó hiện ra từ màn cuối trong khi câu trên màn chưa được chọn.
+- **Máy tự làm trọn một bài:** phải TRÁNH MỨC GIỮA (hàng rào HL-1 từ chối hồ sơ phẳng), và
+  phải trả lời TRƯỚC rồi mới bấm "Xem kết quả".
 
-**4. Cạm bẫy vừa trả giá.** Xem `CLAUDE.md` mục CẢNH BÁO — hai mục mới: bốn file test cùng
-đỏ vì mỗi file tự gõ lại đường đi M1 (đã gom về `tests/duong-m1.ts`), và `CHU_BAN` đụng
-tiền tố `CHU_BAN_KHOAN` sẵn có.
+**5. Cạm bẫy vừa trả giá.** Xem `CLAUDE.md` mục CẢNH BÁO (toàn hệ) và
+`modules/report/OVERVIEW.md` mục 6 (miền báo cáo).
 
-**5. Lệnh phiên sau nên chạy.**
+**6. Lệnh phiên sau nên chạy.**
 ```bash
-npm run kiem       # 770 test
-npm run xem-thu    # bản phát hành thật, cổng 3100
+npx vitest run --maxWorkers=2    # 796 test — dùng cờ này khi máy đang tải nặng
+npm run xem-thu                  # bản phát hành thật, cổng 3100
+node scripts/xuat-noi-dung-ky-duyet.mjs   # sinh lại HAI hồ sơ ký duyệt
 ```
 
 ---
@@ -741,12 +746,24 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
     và cập nhật `DISC_BA.md` §5.2.
   - (d) 1 ngày.
 
-- [ ] **10.7 — CHẶNG 2: nội dung ba bản** (lời riêng cho con · góp ý cho bố mẹ về chính mình ·
-      thoả thuận hai chiều · cờ Gói B + hai hồ sơ ký duyệt)
-  - (a) ~2.400–3.000 từ mới, 8 khoá `[trục][hướng lệch]` chứ KHÔNG phải ma trận 16 cặp.
-  - (b) Ma trận ba bản không ô nào rỗng; không câu >60 ký tự nào xuất hiện ở hai bản.
-  - (c) Test không-trùng-câu + ma trận ba bản. (d) 5,5 ngày.
-  - (e) chặn: NGƯỜI — chờ chủ dự án bấm thử chặng 1 rồi mới quyết.
+- [x] **10.7 — CHẶNG 2: nội dung ba bản** ✅ (27/08/2026 — lời riêng cho con · góp ý cho bố mẹ
+      về chính mình · thoả thuận hai chiều · cờ Gói B + hai hồ sơ ký duyệt)
+  - (a) **1.934 từ mới** trên 24 đoạn (8 khoá `[trục][hướng lệch]` × 3 trường), KHÔNG phải ma
+    trận 16 cặp. ⚠️ Dưới ước lượng 2.400–3.000 của bản kế hoạch — xem ghi chú bên dưới.
+  - (b) ✅ Đo trên Chromium thật, một máy có cả bài bộ PH lẫn bài con: dải chung 2.598 ký tự ·
+    dải con 1.036 · dải bố mẹ 2.696, và **0 câu ≥60 ký tự dùng chung ở cả ba cặp dải**.
+    Ma trận ba bản không ô nào rỗng (`tests/ba-ban-noi-dung.test.ts`).
+  - (c) `tests/ba-ban-noi-dung.test.ts` — 24 test: ma trận ba bản · không-trùng-câu · hai gói
+    ký duyệt tách rời · `boMeTuNhin` không nhận xét đứa trẻ. (d) 5,5 ngày.
+
+  > ⚠️ **VỀ CON SỐ 1.934 TỪ.** Ước lượng cũ ngầm giả định ~100 từ/đoạn; văn của sản phẩm này
+  > vốn gọn hơn (`choBoMe` sẵn có trung bình 44 từ/đoạn), và bản viết ra trung bình 81 từ.
+  > Đã rà lại một lượt để tìm chỗ thiếu THẬT chứ không lấp cho đủ số, và tìm được một thiếu
+  > sót có thật: `boMeTuNhin` là khối DUY NHẤT trong cả sản phẩm chỉ nêu nhận định rồi dừng,
+  > không kết bằng một việc làm được; `choCon` thì không cho đứa trẻ biết thế nào là có tác
+  > dụng. Đã bổ sung đúng hai nhịp đó (1.491 → 1.934 từ). Phần chênh còn lại là do văn phong,
+  > không phải do thiếu nội dung — nếu chủ dự án đọc thấy mỏng ở đâu thì nói, viết dày thêm
+  > đúng chỗ đó rẻ hơn nhiều so với viết dày đều.
 
 ---
 

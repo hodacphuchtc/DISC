@@ -34,7 +34,7 @@ registerHooks({
 const { BIEU_HIEN, DAC_DIEM_TRUC, MUC_DO_RO, THU_TU_PHA, LUA_TUOI } = await import(
   new URL("config/disc-bieu-hien.ts", GOC).href
 );
-const { LOI_KHUYEN, TU_MINH, BAN_KHOAN, MA_BAN_KHOAN, LECH_PHONG_CACH } = await import(
+const { LOI_KHUYEN, TU_MINH, BAN_KHOAN, MA_BAN_KHOAN, LECH_PHONG_CACH, GOI_KY_DUYET } = await import(
   new URL("config/disc-loi-khuyen.ts", GOC).href
 );
 const { DIEN_GIAI, CHU_THE, TIEU_DE_KHOI } = await import(
@@ -51,6 +51,10 @@ const TEN_BO = {
 
 const d = [];
 const p = (...x) => d.push(...x);
+
+/** Bộ đệm riêng cho HỒ SƠ GÓI B — xem khối GOI_KY_DUYET ở config/disc-loi-khuyen.ts. */
+const dB = [];
+const pB = (...x) => dB.push(...x);
 
 p(
   "# Nội dung báo cáo DISC — bản để ký duyệt",
@@ -161,17 +165,96 @@ for (const m of MA_BAN_KHOAN) {
 p("");
 
 p("---", "", "## 8. Lệch phong cách bố mẹ ↔ con", "",
-  "Chỉ hiện khi phụ huynh đã tự làm bộ *Phụ huynh*. “bạn” = bố mẹ đang đọc, “con” = đứa trẻ.", "");
+  "Chỉ hiện khi phụ huynh đã tự làm bộ *Phụ huynh*. “bạn” = bố mẹ đang đọc, “con” = đứa trẻ.",
+  "",
+  "🔴 Mỗi chỗ vênh được kể BA lần cho ba người đọc khác nhau. Cách kể thứ tư — *nhìn về phía",
+  "bố mẹ* — nằm ở **hồ sơ Gói B** riêng, vì nó là phản hồi tính cách cho người lớn về chính họ.",
+  "");
 for (const t of TRUC_MA) {
-  p(`### Nhóm ${TRUC[t].ten} (${t})`, "");
-  p(`- **Bố mẹ cao hơn con:** ${LECH_PHONG_CACH[t]["bo-me-cao-hon"]}`);
-  p(`- **Bố mẹ thấp hơn con:** ${LECH_PHONG_CACH[t]["bo-me-thap-hon"]}`);
-  p("");
+  for (const [h, nhan] of [
+    ["bo-me-cao-hon", "Bố mẹ cao hơn con"],
+    ["bo-me-thap-hon", "Bố mẹ thấp hơn con"],
+  ]) {
+    const k = LECH_PHONG_CACH[t][h];
+    p(`### Nhóm ${TRUC[t].ten} (${t}) — ${nhan}`, "");
+    p(`- **Bố mẹ đọc về con:** ${k.choBoMe}`);
+    p(`- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** ${thayChuThe(k.choCon, "TH", "con")}`);
+    p(`- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** ${k.thoaThuan}`);
+    p("");
+  }
 }
 
-const chu = d.join("\n").replace(/\n{3,}/gu, "\n\n") + "\n";
-writeFileSync(new URL("docs/noi-dung-cho-ky-duyet.md", GOC), chu, "utf8");
+/* ══════════════════════════════════════════════════════════════════════════
+   HỒ SƠ GÓI B — phản hồi tính cách cho NGƯỜI LỚN về chính họ.
+   ══════════════════════════════════════════════════════════════════════════ */
 
-const soTu = chu.split(/\s+/u).filter(Boolean).length;
-console.log(`Đã xuất docs/noi-dung-cho-ky-duyet.md — ${soTu} từ, ${chu.split("\n").length} dòng.`);
-console.log("Đưa file này cho người có chuyên môn tâm lý/giáo dục đọc và ký.");
+pB(`# ${GOI_KY_DUYET.B.ten}`, "");
+pB("> Hồ sơ ký duyệt **thứ hai**, tách khỏi gói A có chủ đích.", "");
+pB(GOI_KY_DUYET.B.moTa, "");
+pB("🔴 **Vì sao tách.** Gói A mô tả hành vi một đứa trẻ và đưa lời khuyên nuôi dạy. Gói B đưa");
+pB("phản hồi tính cách cho một **người lớn về chính họ** — việc này gần tham vấn hơn hẳn, và");
+pB("người ký chịu trách nhiệm ở một mức khác. Gộp chung một tệp thì người ký hoặc phải nhận cả");
+pB("hai mức, hoặc từ chối cả hai — và thường họ sẽ từ chối cả hai.", "");
+pB("**Gói A chặn ngày ra người dùng thật. Gói B chỉ chặn phần nội dung của chính nó:** chưa ký");
+pB("được gói B thì vẫn phát hành được sản phẩm, chỉ cần tắt hai khối dưới đây đi.", "");
+pB("---", "");
+
+pB("## B1. Bản tự đọc của người lớn (bộ Phụ huynh)", "");
+pB("Người đọc là một phụ huynh vừa tự đánh giá **chính mình**. Không có đứa trẻ nào trong khối này.", "");
+for (const t of TRUC_MA) {
+  const k = TU_MINH[t];
+  const s = (c) => thayChuThe(c, "PH", "boMe");
+  pB(`### Khi nhóm ${TRUC[t].ten} (${t}) nổi nhất`, "");
+  pB(`- **Khi căng thẳng:** ${s(k.khiCangThang)}`);
+  pB(`- **Tập thêm:** ${s(k.tapThem)}`);
+  pB(`- **Một việc hôm nay:** ${s(k.motViecToiNay)}`);
+  pB("");
+}
+
+pB("---", "");
+pB("## B2. Nhìn về phía bố mẹ — soi phong cách của chính người đọc", "");
+pB("Hiện cùng khối lệch phong cách, nhưng **không nhận xét đứa trẻ một chữ nào**.", "");
+pB("“bạn” = phụ huynh đang đọc.", "");
+for (const t of TRUC_MA) {
+  pB(`### Nhóm ${TRUC[t].ten} (${t})`, "");
+  pB(`- **Khi bố mẹ cao hơn con:** ${LECH_PHONG_CACH[t]["bo-me-cao-hon"].boMeTuNhin}`);
+  pB(`- **Khi bố mẹ thấp hơn con:** ${LECH_PHONG_CACH[t]["bo-me-thap-hon"].boMeTuNhin}`);
+  pB("");
+}
+
+pB("---", "");
+pB("## B3. Năm câu người ký gói B cần xác nhận", "");
+pB("1. Những đoạn này có **vượt quá mô tả phong cách** để thành nhận định về sức khoẻ tâm thần không?");
+pB("2. Có đoạn nào khiến người đọc thấy **bị phán xét về cách làm cha mẹ** không?");
+pB("3. Vế “cái giá đi kèm” có luôn đi sau một vế ghi nhận điểm mạnh không?");
+pB("4. Có chỗ nào một phụ huynh đang căng thẳng đọc thành **lỗi tại mình** không?");
+pB("5. Với người đọc không có ai hỗ trợ chuyên môn bên cạnh, nội dung này có **an toàn** không?");
+pB("");
+
+/**
+ * 🔴 HAI TỆP, KHÔNG PHẢI MỘT.
+ *
+ * Tách không phải cho gọn. Hai gói đòi hai mức trách nhiệm khác nhau ở người ký: mô tả một
+ * đứa trẻ là một việc, đưa phản hồi tính cách cho một người lớn về chính họ là việc khác.
+ * Gộp chung thì người ký hoặc nhận cả hai mức, hoặc từ chối cả hai.
+ */
+const gon = (ds) => ds.join("\n").replace(/\n{3,}/gu, "\n\n") + "\n";
+const demTu = (c) => c.split(/\s+/u).filter(Boolean).length;
+
+const raA = "docs/noi-dung-cho-ky-duyet.md";
+const raB = "docs/noi-dung-cho-ky-duyet-goi-b.md";
+
+const chuA = gon(d);
+const chuB = gon(dB);
+writeFileSync(new URL(raA, GOC), chuA, "utf8");
+writeFileSync(new URL(raB, GOC), chuB, "utf8");
+
+console.log(`Đã xuất HAI hồ sơ ký duyệt:`);
+console.log(`  A · ${raA}`);
+console.log(`      ${GOI_KY_DUYET.A.ten} — ${demTu(chuA)} từ, ${chuA.split("\n").length} dòng.`);
+console.log(`  B · ${raB}`);
+console.log(`      ${GOI_KY_DUYET.B.ten} — ${demTu(chuB)} từ, ${chuB.split("\n").length} dòng.`);
+console.log("");
+console.log("Gói A chặn ngày ra người dùng thật.");
+console.log("Gói B chỉ chặn phần nội dung của chính nó — chưa ký được thì vẫn phát hành,");
+console.log("chỉ cần tắt khối 'Nhìn về phía bố mẹ' và bản tự đọc của bộ Phụ huynh.");

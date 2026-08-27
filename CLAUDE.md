@@ -59,11 +59,16 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **47/48 hạng mục PLAN.md · 770 test xanh ·
+Ứng dụng chạy được đầu-cuối trên local. **48/48 hạng mục PLAN.md · 796 test xanh ·
 `npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
 Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
-✅ **GĐ10 đã hết sạch việc MÁY.** Hạng mục duy nhất còn lại là `10.7` (chặng 2), chặn ở
-NGƯỜI — chờ chủ dự án bấm thử rồi quyết, cộng một gói ký duyệt thứ hai.
+✅ **HẾT SẠCH VIỆC MÁY TRONG PLAN.** Không còn hạng mục nào chưa tick. Mọi việc còn lại
+đều là việc NGƯỜI/NGOÀI ở mục CHỜ NGOÀI bên dưới — dẫn đầu là hai chữ ký chuyên môn.
+
+⚠️ **Máy này đang bị Docker chiếm ~200% CPU** (6 container, không của dự án). Load average
+đo được 32,6 lúc chạy kiểm. Ở mức tải đó `waitFor` của Testing Library đói CPU và **19–20
+test đỏ giả**; chạy `npx vitest run --maxWorkers=2` thì 796/796 xanh. Thấy test đỏ hàng
+loạt mà lỗi toàn là hết giờ chờ thì soi `uptime` trước khi soi code.
 
 - **GĐ0–GĐ8** — dựng xong sản phẩm chạy đầu-cuối: khung Next 16 · 104 câu hỏi + lõi chấm
   điểm + năm hàng rào `HL-1..HL-5` · luồng làm bài 5 bộ đề · màn kết quả + ảnh PNG + in PDF ·
@@ -82,16 +87,19 @@ NGƯỜI — chờ chủ dự án bấm thử rồi quyết, cộng một gói k
 
 ### ĐANG DỞ
 
-**Không còn hạng mục MÁY nào.** `10.7` (chặng 2 — nội dung ba bản) là việc duy nhất còn
-lại, và nó chặn ở NGƯỜI: chờ chủ dự án bấm thử, cộng **gói ký duyệt thứ hai** (phản hồi
-tính cách cho người lớn — gần tham vấn hơn, người ký chịu trách nhiệm ở mức khác).
+**Không còn gì trong PLAN.md.** `10.7` đã xong 27/08/2026 — chủ dự án bỏ cổng duyệt giữa
+chặng và cho làm trọn một lượt. Việc còn lại đều nằm ở CHỜ NGOÀI.
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
-1. 🔴 **Bấm thử trọn GĐ10** — `npm run xem-thu`. Soi hai thứ mới: màn 1 hỏi *"Ai đang cầm
-   máy?"*, và màn kết quả bộ TH/THCS có dải chắn *"Phần dưới đây viết cho bố mẹ"* cùng hai
-   nút in riêng. Quyết xong mới chạy chặng 2.
-2. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
+1. 🔴 **Nghiệm thu trọn GĐ10** — `npm run xem-thu`. Ba thứ cần soi: màn 1 hỏi *"Ai đang cầm
+   máy?"* · dải chắn *"Phần dưới đây viết cho bố mẹ"* + hai nút in riêng · ba khối mới của
+   chặng 2 (*chỗ em và bố mẹ hay va nhau* · *nhìn về phía bố mẹ* · *thoả thuận hai chiều*).
+   Khối thứ ba chỉ hiện khi trên máy có **cả** bài bộ PH lẫn bài của con.
+2. 🔴 **Đưa HAI hồ sơ ký duyệt đi ký** — `node scripts/xuat-noi-dung-ky-duyet.mjs` sinh ra
+   `docs/noi-dung-cho-ky-duyet.md` (gói A, 11.506 từ) và `docs/noi-dung-cho-ky-duyet-goi-b.md`
+   (gói B, 1.537 từ). Gói A chặn ngày ra người dùng thật; gói B chỉ chặn phần của chính nó.
+3. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
 3. **Đọc `docs/noi-dung-cho-ky-duyet.md`** rồi đưa cho người có chuyên môn tâm lý/giáo dục.
    Đây là việc gỡ khoá ngày ra người dùng thật.
@@ -104,6 +112,13 @@ tính cách cho người lớn — gần tham vấn hơn, người ký chịu tr
 Bốn việc dưới đây **không tốn ngày dev nào**, nhưng cả bốn đều có thể đổi hình dạng bài
 toán. Ba việc đầu nên làm ngay tuần này.
 
+- 🔴 **GÓI B — chữ ký thứ hai, cho phần phản hồi tính cách của NGƯỜI LỚN về chính họ.**
+  Mới tách ra ở GĐ10 chặng 2. Gói A mô tả một đứa trẻ và khuyên bố mẹ; gói B nói với một
+  người lớn về chính họ — gần tham vấn hơn hẳn, người ký chịu trách nhiệm ở mức khác. Gộp
+  chung một tệp thì người ký hoặc nhận cả hai mức, hoặc từ chối cả hai.
+  ✅ `docs/noi-dung-cho-ky-duyet-goi-b.md` (1.537 từ) đã có sẵn, kèm 5 câu người ký cần
+  xác nhận. *Chặn: chỉ chặn PHẦN NỘI DUNG CỦA CHÍNH NÓ* — chưa ký được vẫn phát hành được
+  sản phẩm, chỉ cần tắt khối "Nhìn về phía bố mẹ" và bản tự đọc của bộ Phụ huynh.
 - 🔴 **Người có chuyên môn tâm lý/giáo dục KÝ DUYỆT 104 câu hỏi + văn bản báo cáo.**
   Chạy nội bộ thì không sao. Ngày bấm nút chạy quảng cáo là ngày nói với người lạ về con
   của họ — trước ngày đó phải có một người chịu trách nhiệm.

@@ -22,7 +22,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `D`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé quyết nhanh và nói thẳng. Trong nhóm, bé thường là người đưa ra phương án trước khi mọi người còn đang bàn, và không ngại nhận phần khó. Bị cản thì phản ứng ngay chứ ít khi để bụng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần người khởi động, cần ai đó chịu trách nhiệm khi những người khác còn do dự — đó là chỗ bé phát huy. Bé cũng chịu được va chạm và bất đồng tốt hơn nhiều người.
@@ -32,7 +32,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Khi người khác không đồng ý, bé thường làm gì?
   1. Có việc nào bé muốn tự làm mà người lớn hay làm giúp không?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con quyết nhanh và nói thẳng. Trong nhóm, con thường là người đưa ra phương án trước khi mọi người còn đang bàn, và không ngại nhận phần khó. Bị cản thì phản ứng ngay chứ ít khi để bụng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần người khởi động, cần ai đó chịu trách nhiệm khi những người khác còn do dự — đó là chỗ con phát huy. Con cũng chịu được va chạm và bất đồng tốt hơn nhiều người.
@@ -42,7 +42,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Khi người khác không đồng ý, con thường làm gì?
   1. Có việc nào con muốn tự làm mà người lớn hay làm giúp không?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn quyết nhanh và nói thẳng. Trong nhóm, bạn thường là người đưa ra phương án trước khi mọi người còn đang bàn, và không ngại nhận phần khó. Bị cản thì phản ứng ngay chứ ít khi để bụng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần người khởi động, cần ai đó chịu trách nhiệm khi những người khác còn do dự — đó là chỗ bạn phát huy. Bạn cũng chịu được va chạm và bất đồng tốt hơn nhiều người.
@@ -54,7 +54,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `I`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé thuyết phục bằng câu chuyện và cảm xúc hơn là bằng số liệu. Làm quen nhanh, kể chuyện có duyên, và không khí quanh bé thường nhẹ đi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần gắn kết người với người, cần ai đó phá tan sự ngại ngùng ban đầu — bé làm việc đó rất tự nhiên. Bé cũng động viên người khác một cách thật lòng.
@@ -64,7 +64,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có ai hôm nay bé muốn làm quen mà chưa nói được câu nào không?
   1. Việc gì bé bắt đầu rồi mà chưa làm xong?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con thuyết phục bằng câu chuyện và cảm xúc hơn là bằng số liệu. Làm quen nhanh, kể chuyện có duyên, và không khí quanh con thường nhẹ đi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần gắn kết người với người, cần ai đó phá tan sự ngại ngùng ban đầu — con làm việc đó rất tự nhiên. Con cũng động viên người khác một cách thật lòng.
@@ -74,7 +74,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có ai hôm nay con muốn làm quen mà chưa nói được câu nào không?
   1. Việc gì con bắt đầu rồi mà chưa làm xong?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn thuyết phục bằng câu chuyện và cảm xúc hơn là bằng số liệu. Làm quen nhanh, kể chuyện có duyên, và không khí quanh bạn thường nhẹ đi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần gắn kết người với người, cần ai đó phá tan sự ngại ngùng ban đầu — bạn làm việc đó rất tự nhiên. Bạn cũng động viên người khác một cách thật lòng.
@@ -86,7 +86,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `S`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé giữ nhịp đều, chờ được lâu, và thường là người nhường để mọi việc êm. Thay đổi đột ngột làm bé thấy chông chênh, nhưng nếu biết trước thì bé thích nghi tốt.
 - *Điểm mạnh khi ở đúng chỗ:* Người khác hay tìm đến bé khi cần một chỗ yên để nói chuyện. Việc cần bền, cần đều tay, cần giữ lời — đó là chỗ bé đáng tin.
@@ -96,7 +96,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có chuyện gì làm bé thấy khó chịu mà chưa kể với ai chưa?
   1. Ngày mai có việc gì bé muốn biết trước để đỡ lo không?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con giữ nhịp đều, chờ được lâu, và thường là người nhường để mọi việc êm. Thay đổi đột ngột làm con thấy chông chênh, nhưng nếu biết trước thì con thích nghi tốt.
 - *Điểm mạnh khi ở đúng chỗ:* Người khác hay tìm đến con khi cần một chỗ yên để nói chuyện. Việc cần bền, cần đều tay, cần giữ lời — đó là chỗ con đáng tin.
@@ -106,7 +106,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có chuyện gì làm con thấy khó chịu mà chưa kể với ai chưa?
   1. Ngày mai có việc gì con muốn biết trước để đỡ lo không?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn giữ nhịp đều, chờ được lâu, và thường là người nhường để mọi việc êm. Thay đổi đột ngột làm bạn thấy chông chênh, nhưng nếu biết trước thì bạn thích nghi tốt.
 - *Điểm mạnh khi ở đúng chỗ:* Người khác hay tìm đến bạn khi cần một chỗ yên để nói chuyện. Việc cần bền, cần đều tay, cần giữ lời — đó là chỗ bạn đáng tin.
@@ -118,7 +118,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `C`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé đọc kỹ trước khi làm, soát lại sau khi xong, và hỏi “vì sao” trước khi đồng ý. Đồ đạc và công việc của bé thường có một trật tự riêng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần chính xác, cần phát hiện chỗ sai trước khi nó thành chuyện lớn — bé nhìn ra những thứ người khác lướt qua.
@@ -128,7 +128,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có chỗ nào bé thấy chưa hợp lý mà chưa hỏi lại không?
   1. Nếu làm sai một chỗ nhỏ thì bé thấy thế nào?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con đọc kỹ trước khi làm, soát lại sau khi xong, và hỏi “vì sao” trước khi đồng ý. Đồ đạc và công việc của con thường có một trật tự riêng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần chính xác, cần phát hiện chỗ sai trước khi nó thành chuyện lớn — con nhìn ra những thứ người khác lướt qua.
@@ -138,7 +138,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có chỗ nào con thấy chưa hợp lý mà chưa hỏi lại không?
   1. Nếu làm sai một chỗ nhỏ thì con thấy thế nào?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn đọc kỹ trước khi làm, soát lại sau khi xong, và hỏi “vì sao” trước khi đồng ý. Đồ đạc và công việc của bạn thường có một trật tự riêng.
 - *Điểm mạnh khi ở đúng chỗ:* Việc cần chính xác, cần phát hiện chỗ sai trước khi nó thành chuyện lớn — bạn nhìn ra những thứ người khác lướt qua.
@@ -150,7 +150,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `DI`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé vừa quyết nhanh vừa kéo được người khác đi cùng. Ý tưởng đến nhanh, và bé nói ra ngay chứ ít khi giữ trong đầu.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa khởi động vừa tập hợp người — bé làm được cả hai. Nhóm ít khi bị đứng yên khi có bé.
@@ -160,7 +160,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có việc nào bé nhận rồi mà thấy hơi quá sức không?
   1. Trong nhóm hôm nay, ai là người ít nói nhất?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con vừa quyết nhanh vừa kéo được người khác đi cùng. Ý tưởng đến nhanh, và con nói ra ngay chứ ít khi giữ trong đầu.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa khởi động vừa tập hợp người — con làm được cả hai. Nhóm ít khi bị đứng yên khi có con.
@@ -170,7 +170,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có việc nào con nhận rồi mà thấy hơi quá sức không?
   1. Trong nhóm hôm nay, ai là người ít nói nhất?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn vừa quyết nhanh vừa kéo được người khác đi cùng. Ý tưởng đến nhanh, và bạn nói ra ngay chứ ít khi giữ trong đầu.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa khởi động vừa tập hợp người — bạn làm được cả hai. Nhóm ít khi bị đứng yên khi có bạn.
@@ -182,7 +182,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `DS`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé quyết đoán nhưng vẫn giữ hoà khí. Biết mình muốn gì, và cũng biết lúc nào nên lùi để mọi việc êm.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa dám nhận trách nhiệm vừa không làm người khác tổn thương — tổ hợp này hiếm và rất được việc khi nhóm có bất đồng.
@@ -192,7 +192,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Khi bé và người khác muốn hai thứ khác nhau, bé làm thế nào?
   1. Có việc gì bé nhường mà thật ra bé muốn làm không?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con quyết đoán nhưng vẫn giữ hoà khí. Biết mình muốn gì, và cũng biết lúc nào nên lùi để mọi việc êm.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa dám nhận trách nhiệm vừa không làm người khác tổn thương — tổ hợp này hiếm và rất được việc khi nhóm có bất đồng.
@@ -202,7 +202,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Khi con và người khác muốn hai thứ khác nhau, con làm thế nào?
   1. Có việc gì con nhường mà thật ra con muốn làm không?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn quyết đoán nhưng vẫn giữ hoà khí. Biết mình muốn gì, và cũng biết lúc nào nên lùi để mọi việc êm.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa dám nhận trách nhiệm vừa không làm người khác tổn thương — tổ hợp này hiếm và rất được việc khi nhóm có bất đồng.
@@ -214,7 +214,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `DC`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé quyết nhanh nhưng đòi có căn cứ. Không thích vòng vo, và cũng không thích làm bừa.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa nhanh vừa chắc — bé vừa dám chốt vừa kiểm được chỗ dễ sai. Ít khi phải làm lại.
@@ -224,7 +224,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Bé nói thế nào khi thấy ai đó làm sai?
   1. Có việc gì bé muốn làm nhanh mà phải chờ không?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con quyết nhanh nhưng đòi có căn cứ. Không thích vòng vo, và cũng không thích làm bừa.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa nhanh vừa chắc — con vừa dám chốt vừa kiểm được chỗ dễ sai. Ít khi phải làm lại.
@@ -234,7 +234,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Con nói thế nào khi thấy ai đó làm sai?
   1. Có việc gì con muốn làm nhanh mà phải chờ không?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn quyết nhanh nhưng đòi có căn cứ. Không thích vòng vo, và cũng không thích làm bừa.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần vừa nhanh vừa chắc — bạn vừa dám chốt vừa kiểm được chỗ dễ sai. Ít khi phải làm lại.
@@ -246,7 +246,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `IS`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé ấm áp và dễ gần, giữ được quan hệ lâu. Thích không khí vui nhưng không thích tranh cãi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần giữ người ở lại với nhau, cần ai đó để ý xem có ai đang bị bỏ ra rìa — bé nhìn thấy điều đó sớm.
@@ -256,7 +256,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có ai nhờ bé việc gì mà bé không muốn nhận không?
   1. Lúc mọi người tranh cãi, bé làm gì?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con ấm áp và dễ gần, giữ được quan hệ lâu. Thích không khí vui nhưng không thích tranh cãi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần giữ người ở lại với nhau, cần ai đó để ý xem có ai đang bị bỏ ra rìa — con nhìn thấy điều đó sớm.
@@ -266,7 +266,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có ai nhờ con việc gì mà con không muốn nhận không?
   1. Lúc mọi người tranh cãi, con làm gì?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn ấm áp và dễ gần, giữ được quan hệ lâu. Thích không khí vui nhưng không thích tranh cãi.
 - *Điểm mạnh khi ở đúng chỗ:* Chỗ cần giữ người ở lại với nhau, cần ai đó để ý xem có ai đang bị bỏ ra rìa — bạn nhìn thấy điều đó sớm.
@@ -278,7 +278,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `IC`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé kể chuyện có dẫn chứng. Thích chia sẻ, nhưng thích chia sẻ thứ mình đã kiểm lại.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa làm người khác muốn nghe, vừa nói đúng — chỗ cần giải thích một việc phức tạp cho nhiều người là chỗ bé sáng.
@@ -288,7 +288,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có lúc nào bé định nói rồi lại thôi vì sợ nói sai không?
   1. Bé thích giải thích cho người khác kiểu nào hơn: kể chuyện hay chỉ từng bước?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con kể chuyện có dẫn chứng. Thích chia sẻ, nhưng thích chia sẻ thứ mình đã kiểm lại.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa làm người khác muốn nghe, vừa nói đúng — chỗ cần giải thích một việc phức tạp cho nhiều người là chỗ con sáng.
@@ -298,7 +298,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có lúc nào con định nói rồi lại thôi vì sợ nói sai không?
   1. Con thích giải thích cho người khác kiểu nào hơn: kể chuyện hay chỉ từng bước?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn kể chuyện có dẫn chứng. Thích chia sẻ, nhưng thích chia sẻ thứ mình đã kiểm lại.
 - *Điểm mạnh khi ở đúng chỗ:* Vừa làm người khác muốn nghe, vừa nói đúng — chỗ cần giải thích một việc phức tạp cho nhiều người là chỗ bạn sáng.
@@ -310,7 +310,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `SC`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bé bền và kỹ. Làm theo nếp, làm đến nơi, và cần thời gian để quen với cái mới.
 - *Điểm mạnh khi ở đúng chỗ:* Việc dài hơi, việc cần đều tay và chính xác — bé giữ được chất lượng từ đầu đến cuối, không đuối giữa chừng.
@@ -320,7 +320,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Hôm nay có gì thay đổi so với mọi hôm không? Bé thấy thế nào?
   1. Có chuyện gì bé đang lo mà chưa kể với ai không?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Con bền và kỹ. Làm theo nếp, làm đến nơi, và cần thời gian để quen với cái mới.
 - *Điểm mạnh khi ở đúng chỗ:* Việc dài hơi, việc cần đều tay và chính xác — con giữ được chất lượng từ đầu đến cuối, không đuối giữa chừng.
@@ -330,7 +330,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Hôm nay có gì thay đổi so với mọi hôm không? Con thấy thế nào?
   1. Có chuyện gì con đang lo mà chưa kể với ai không?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bạn bền và kỹ. Làm theo nếp, làm đến nơi, và cần thời gian để quen với cái mới.
 - *Điểm mạnh khi ở đúng chỗ:* Việc dài hơi, việc cần đều tay và chính xác — bạn giữ được chất lượng từ đầu đến cuối, không đuối giữa chừng.
@@ -342,7 +342,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
 
 ### Kiểu `DEU`
 
-**Bộ Mầm non** (gọi người làm bài là “bé”)
+**Bộ Mầm non** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bốn nhóm hành vi của bé khá cân bằng, chưa nhóm nào nổi rõ hơn hẳn.
 - *Điểm mạnh khi ở đúng chỗ:* Cân bằng có cái lợi riêng: bé xoay theo hoàn cảnh dễ hơn người có một nhóm rất trội, và ít khi bị kẹt vì chỉ có một cách làm.
@@ -352,7 +352,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có việc gì bé làm theo một cách hẳn, không giống người khác không?
   1. Nếu được chọn, bé thích làm việc một mình hay làm cùng nhóm?
 
-**Bộ Bố mẹ nhìn con** (gọi người làm bài là “con”)
+**Bộ Bố mẹ nhìn con** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bốn nhóm hành vi của con khá cân bằng, chưa nhóm nào nổi rõ hơn hẳn.
 - *Điểm mạnh khi ở đúng chỗ:* Cân bằng có cái lợi riêng: con xoay theo hoàn cảnh dễ hơn người có một nhóm rất trội, và ít khi bị kẹt vì chỉ có một cách làm.
@@ -362,7 +362,7 @@ Toàn bộ chữ mà một phụ huynh hoặc một học sinh sẽ đọc đề
   1. Có việc gì con làm theo một cách hẳn, không giống người khác không?
   1. Nếu được chọn, con thích làm việc một mình hay làm cùng nhóm?
 
-**Bộ Trung học cơ sở** (gọi người làm bài là “bạn”)
+**Bộ Trung học cơ sở** (gọi người làm bài là “undefined”)
 
 - *Điều này thường trông như thế nào:* Bốn nhóm hành vi của bạn khá cân bằng, chưa nhóm nào nổi rõ hơn hẳn.
 - *Điểm mạnh khi ở đúng chỗ:* Cân bằng có cái lợi riêng: bạn xoay theo hoàn cảnh dễ hơn người có một nhóm rất trội, và ít khi bị kẹt vì chỉ có một cách làm.
@@ -591,23 +591,54 @@ Người đọc là chính người vừa làm bài. Dưới đây thay đại t
 
 Chỉ hiện khi phụ huynh đã tự làm bộ *Phụ huynh*. “bạn” = bố mẹ đang đọc, “con” = đứa trẻ.
 
-### Nhóm Chủ động (D)
+🔴 Mỗi chỗ vênh được kể BA lần cho ba người đọc khác nhau. Cách kể thứ tư — *nhìn về phía
+bố mẹ* — nằm ở **hồ sơ Gói B** riêng, vì nó là phản hồi tính cách cho người lớn về chính họ.
 
-- **Bố mẹ cao hơn con:** Bạn chủ động và quyết nhanh hơn con khá nhiều. Trong nhà, điều đó dễ thành: bạn quyết xong rồi mới thấy con chưa kịp có ý kiến. Thử lùi một nhịp và hỏi trước khi chốt — không phải để chiều, mà để con tập nói ra ý mình.
-- **Bố mẹ thấp hơn con:** Con chủ động và quyết nhanh hơn bạn. Điều đó rất dễ bị đọc thành bướng, trong khi thực ra con đang muốn tự làm. Chừa cho con một khoảng được tự quyết thường hạ căng thẳng nhanh hơn là siết lại.
+### Nhóm Chủ động (D) — Bố mẹ cao hơn con
 
-### Nhóm Ảnh hưởng (I)
+- **Bố mẹ đọc về con:** Bạn chủ động và quyết nhanh hơn con khá nhiều. Trong nhà, điều đó dễ thành: bạn quyết xong rồi mới thấy con chưa kịp có ý kiến. Thử lùi một nhịp và hỏi trước khi chốt — không phải để chiều, mà để con tập nói ra ý mình.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Bố mẹ quyết nhanh và thích bắt tay vào việc ngay, còn em cần thêm một nhịp để nghĩ. Đó không phải chậm — hai người đang chạy hai tốc độ khác nhau. Lúc thấy bị hối, thử nói thành lời: “Con cần thêm một phút ạ.” Câu đó ngắn nhưng nó cho bố mẹ biết em đang nghĩ, chứ không phải đang lờ đi. Dấu hiệu nó có tác dụng: bố mẹ bắt đầu hỏi lại em trước khi chốt, thay vì báo cho em biết sau khi đã quyết xong. Dấu hiệu nó có tác dụng: bố mẹ bắt đầu chờ em thay vì đẩy, và chỗ đông người bớt thành chỗ em phải gồng. Dấu hiệu nó có tác dụng: bố mẹ trả lời nhanh hơn với những việc em báo trước, và bớt dần câu “để tính sau”. Dấu hiệu nó có tác dụng: em biết trước làm tới đâu là xong, nên bớt phải làm lại và bớt phải đoán ý bố mẹ.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử trong hai tuần: bố mẹ đếm đến ba trước khi chốt một việc có liên quan tới con; con nói ra ý mình ngay trong lúc đó, kể cả khi chưa nghĩ xong hẳn. Hết hai tuần, mỗi người kể một lần thấy cách này dễ chịu hơn và một lần thấy khó.
 
-- **Bố mẹ cao hơn con:** Bạn cởi mở và bắt chuyện dễ hơn con. Chỗ va nhau thường là lúc bạn muốn con chào hỏi, kể chuyện, hoà vào chỗ đông người — còn con thì đang cần thêm thời gian. Giới thiệu trước rồi đứng cạnh vài phút giúp nhiều hơn là giục.
-- **Bố mẹ thấp hơn con:** Con cần được nói và được chú ý nhiều hơn bạn. Cái bạn thấy là ồn thì với con là cách kết nối. Mười phút ngồi nghe con kể mà không xen vào thường đủ để phần còn lại của buổi tối dễ hơn hẳn.
+### Nhóm Chủ động (D) — Bố mẹ thấp hơn con
 
-### Nhóm Ổn định (S)
+- **Bố mẹ đọc về con:** Con chủ động và quyết nhanh hơn bạn. Điều đó rất dễ bị đọc thành bướng, trong khi thực ra con đang muốn tự làm. Chừa cho con một khoảng được tự quyết thường hạ căng thẳng nhanh hơn là siết lại.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Em quyết nhanh và muốn tự xoay hơn bố mẹ. Điều đó hay bị đọc thành bướng, dù thật ra em chỉ đang muốn tự làm lấy. Cách đỡ mất sức nhất là nói trước ý định thay vì làm rồi mới báo: “Con định làm thế này, bố mẹ thấy sao ạ?” Nói trước thường mở được nhiều cửa hơn hẳn là làm trước. Dấu hiệu nó có tác dụng: bố mẹ bớt hỏi lại từng bước, và số việc em được tự quyết nhiều dần lên. Dấu hiệu nó có tác dụng: bố mẹ hỏi lại về chuyện em kể hôm trước — nghĩa là bố mẹ có nghe thật, chỉ là không nói nhiều. Dấu hiệu nó có tác dụng: em biết trước buổi tối sẽ diễn ra thế nào, và bớt hẳn cảm giác bị hẫng giữa chừng. Dấu hiệu nó có tác dụng: em dừng lại được mà không thấy áy náy, vì đã biết trước mức nào là đủ.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử trong hai tuần: con báo trước ý định trước khi bắt tay vào; bố mẹ trả lời ngay trong ngày thay vì để treo đó. Chốt sẵn một danh sách ngắn những việc con được tự quyết mà không cần hỏi — có danh sách thì cả hai hết phải đoán ranh giới nằm ở đâu.
 
-- **Bố mẹ cao hơn con:** Bạn điềm đạm và chịu được nhịp chậm hơn con. Chỗ va nhau thường là lúc con muốn đổi, muốn nhanh, còn bạn muốn giữ nếp. Nói rõ đâu là chỗ đổi được, đâu là chỗ giữ, sẽ đỡ hơn là cản chung chung.
-- **Bố mẹ thấp hơn con:** Con cần nếp quen và cần được báo trước nhiều hơn bạn. Việc bạn thấy là linh hoạt thì với con là mất chỗ bám. Báo trước mười lăm phút là việc rất nhỏ nhưng đổi hẳn cách buổi tối diễn ra.
+### Nhóm Ảnh hưởng (I) — Bố mẹ cao hơn con
 
-### Nhóm Cẩn trọng (C)
+- **Bố mẹ đọc về con:** Bạn cởi mở và bắt chuyện dễ hơn con. Chỗ va nhau thường là lúc bạn muốn con chào hỏi, kể chuyện, hoà vào chỗ đông người — còn con thì đang cần thêm thời gian. Giới thiệu trước rồi đứng cạnh vài phút giúp nhiều hơn là giục.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Bố mẹ bắt chuyện và hoà vào chỗ đông người dễ hơn em. Chỗ em hay thấy mệt là lúc bị đẩy ra chào hỏi khi chưa sẵn sàng. Em không cần thành một người khác — chỉ cần cho bố mẹ biết em cần mấy phút. Một câu “Con đứng đây một lát rồi con ra” thường là đủ.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: đến chỗ đông người, bố mẹ giới thiệu con một lần rồi đứng cạnh năm phút và không giục thêm; đổi lại, mỗi tuần con nhận một việc nhỏ có nói chuyện với người lạ, do chính con chọn. Cả hai cùng ghi lại lần nào hoá ra dễ hơn mình tưởng.
 
-- **Bố mẹ cao hơn con:** Bạn kỹ lưỡng và cần chắc chắn hơn con. Chỗ va nhau thường là lúc bạn thấy chưa đủ chuẩn còn con thấy đã xong rồi. Nói trước “thế nào là xong” giúp cả hai đỡ phải tranh nhau ở phút cuối.
-- **Bố mẹ thấp hơn con:** Con kỹ lưỡng và cần chắc chắn hơn bạn. Cái bạn thấy là chậm hoặc cầu toàn thì với con là chưa yên tâm. Cho con biết vạch đích nằm ở đâu thường hiệu quả hơn là giục nhanh lên.
+### Nhóm Ảnh hưởng (I) — Bố mẹ thấp hơn con
+
+- **Bố mẹ đọc về con:** Con cần được nói và được chú ý nhiều hơn bạn. Cái bạn thấy là ồn thì với con là cách kết nối. Mười phút ngồi nghe con kể mà không xen vào thường đủ để phần còn lại của buổi tối dễ hơn hẳn.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Em cần được nói và được để ý nhiều hơn bố mẹ. Khi bố mẹ im hoặc trả lời cụt, rất dễ tưởng là bố mẹ không quan tâm — thường thì không phải vậy, bố mẹ chỉ ít lời hơn em thôi. Nếu muốn được nghe, thử nói thẳng ra: “Con kể chuyện này một lát nhé.” Rõ ràng như vậy dễ hơn là ngồi chờ được hỏi.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: mỗi tối mười phút con được kể, bố mẹ không cắt ngang và không sửa; đổi lại, ngoài mười phút đó con để bố mẹ có khoảng yên của mình. Đặt giờ hẳn hoi — có mốc thì cả hai đều biết lúc nào đến lượt mình, và không ai phải tranh.
+
+### Nhóm Ổn định (S) — Bố mẹ cao hơn con
+
+- **Bố mẹ đọc về con:** Bạn điềm đạm và chịu được nhịp chậm hơn con. Chỗ va nhau thường là lúc con muốn đổi, muốn nhanh, còn bạn muốn giữ nếp. Nói rõ đâu là chỗ đổi được, đâu là chỗ giữ, sẽ đỡ hơn là cản chung chung.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Bố mẹ chịu được nhịp chậm và thích giữ nếp hơn em. Khi em muốn đổi, muốn thử cái mới, bố mẹ hay phanh lại — không phải để cấm, mà vì đổi đột ngột làm bố mẹ mất chỗ bám. Nói trước sẽ đổi cái gì và đổi tới đâu thường được đồng ý nhanh hơn nhiều so với đổi rồi mới nói.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: con nói trước ít nhất một ngày với việc muốn đổi; bố mẹ trả lời có hoặc không kèm đúng một lý do, không để lửng. Chia sẵn thành hai nhóm — chỗ nào đổi được, chỗ nào là nếp giữ nguyên. Biết ranh giới rồi thì hết phải thử lại từng lần một.
+
+### Nhóm Ổn định (S) — Bố mẹ thấp hơn con
+
+- **Bố mẹ đọc về con:** Con cần nếp quen và cần được báo trước nhiều hơn bạn. Việc bạn thấy là linh hoạt thì với con là mất chỗ bám. Báo trước mười lăm phút là việc rất nhỏ nhưng đổi hẳn cách buổi tối diễn ra.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Em cần nếp quen và cần được báo trước nhiều hơn bố mẹ. Bố mẹ đổi kế hoạch nhanh không phải vì coi nhẹ em, mà vì với bố mẹ việc đó nhẹ thật. Nếu bị đổi đột ngột làm em khó chịu, hãy nói ra bằng một con số: “Con cần biết trước mười lăm phút ạ.” Con số dễ làm theo hơn là một cảm giác.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: bố mẹ báo trước mười lăm phút mỗi khi đổi việc đang làm; đổi lại, mỗi tuần con nhận một lần đổi bất ngờ mà không phản ứng ngay, coi như tập. Ghi lại tuần đó báo trước được mấy lần — con số nói rõ hơn cảm giác của cả hai bên.
+
+### Nhóm Cẩn trọng (C) — Bố mẹ cao hơn con
+
+- **Bố mẹ đọc về con:** Bạn kỹ lưỡng và cần chắc chắn hơn con. Chỗ va nhau thường là lúc bạn thấy chưa đủ chuẩn còn con thấy đã xong rồi. Nói trước “thế nào là xong” giúp cả hai đỡ phải tranh nhau ở phút cuối.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Bố mẹ kỹ và cần chắc chắn hơn em. Chỗ hay va nhau là lúc em thấy đã xong rồi còn bố mẹ thấy chưa đủ. Cách đỡ mất công nhất là hỏi ngay từ đầu: “Thế nào là xong ạ?” Biết vạch đích trước khi bắt tay vào thì đỡ phải làm lại, và cũng đỡ phải cãi nhau ở phút cuối.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: trước mỗi việc chung, bố mẹ nói ra “xong nghĩa là thế nào” bằng đúng một câu; con làm tới đúng mức đó rồi mới hỏi có cần thêm gì không. Trong hai tuần, bố mẹ chọn ít nhất ba lần nói “thế là được rồi” và dừng lại thật ở đó.
+
+### Nhóm Cẩn trọng (C) — Bố mẹ thấp hơn con
+
+- **Bố mẹ đọc về con:** Con kỹ lưỡng và cần chắc chắn hơn bạn. Cái bạn thấy là chậm hoặc cầu toàn thì với con là chưa yên tâm. Cho con biết vạch đích nằm ở đâu thường hiệu quả hơn là giục nhanh lên.
+- **Chính đứa trẻ đọc** (thay đại từ theo bộ *Tiểu học*)**:** Em kỹ và cần chắc chắn hơn bố mẹ. Khi bố mẹ bảo “thế được rồi”, em dễ thấy chưa yên tâm — cảm giác đó có lý của nó. Nhưng em cũng nên tự đặt cho mình một mức: tới đâu thì dừng. Không có mức đó thì việc gì cũng kéo dài ra, và em mệt trước khi kịp làm xong.
+- **Thoả thuận hai chiều** (cả hai cùng đọc)**:** Thử cách này: bố mẹ cho con biết vạch đích cụ thể thay vì giục nhanh lên; đổi lại, con tự chốt trước một mốc thời gian và dừng đúng ở đó, kể cả khi thấy chưa hoàn hảo. Cuối tuần cùng soi lại một việc đã dừng đúng hạn, xem thật ra có sao không.
 

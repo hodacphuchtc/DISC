@@ -17,7 +17,11 @@
  */
 
 import { NGUONG_VUNG_LECH } from "@config/disc-nguong";
-import { LECH_PHONG_CACH, type HuongLechPhongCach } from "@config/disc-loi-khuyen";
+import {
+  LECH_PHONG_CACH,
+  type HuongLechPhongCach,
+  type KhoiLechPhongCach,
+} from "@config/disc-loi-khuyen";
 import { NHAN_MUC_LECH, type MaMucLech } from "@config/disc-doi-chieu";
 
 import { MA_TRUC, type KetQua, type MaBoDe, type MaTruc } from "@modules/core/bo-de/kieu";
@@ -52,8 +56,14 @@ export type KetQuaPhongCach =
       readonly baiBoMe: BaiPhongCach;
       /** Bốn trục, giữ thứ tự cố định D-I-S-C để đọc cùng nhịp với biểu đồ. */
       readonly bang: readonly LechTrucPhongCach[];
-      /** 🔴 Tối đa HAI trục lệch lớn nhất — nói ít mà trúng, cùng luật với vùng lệch. */
-      readonly dienGiai: readonly { readonly truc: MaTruc; readonly than: string }[];
+      /**
+       * 🔴 Tối đa HAI trục lệch lớn nhất — nói ít mà trúng, cùng luật với vùng lệch.
+       *
+       * Từ GĐ10 chặng 2 mỗi trục trả về CẢ BỐN cách kể, không phải một đoạn. Tầng lõi cố ý
+       * KHÔNG chọn hộ xem người đọc là ai — nó không biết ai đang cầm máy. Giao diện mới
+       * biết, và nó đổ từng trường vào đúng dải `data-ban` của nó.
+       */
+      readonly dienGiai: readonly (KhoiLechPhongCach & { readonly truc: MaTruc })[];
     };
 
 function mucLechTu(lech: number): MaMucLech {
@@ -119,7 +129,7 @@ export function doiChieuPhongCach(
     .filter((x) => x.mucLech !== "trungKhop")
     .sort((a, b) => Math.abs(b.lech) - Math.abs(a.lech))
     .slice(0, NGUONG_VUNG_LECH.soTrucDienGiaiToiDa)
-    .map((x) => ({ truc: x.truc, than: LECH_PHONG_CACH[x.truc][x.huong] }));
+    .map((x) => ({ truc: x.truc, ...LECH_PHONG_CACH[x.truc][x.huong] }));
 
   return { ghepDuoc: true, baiBoMe: boMe, bang, dienGiai };
 }

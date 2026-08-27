@@ -66,12 +66,20 @@ const MOI_VAN_BAN: readonly { readonly nguon: string; readonly chu: string }[] =
 /**
  * `LECH_PHONG_CACH` cố ý KHÔNG nằm trong danh sách kiểm đại từ ở trên — xem khối chú thích
  * "MIỄN TRỪ CÓ CHỦ ĐÍCH" trong `disc-loi-khuyen.ts`. Nó vẫn phải qua bốn luật §9.2.
+ *
+ * 🔴 GĐ10 chặng 2: mỗi khoá nay có BỐN trường, và cả bốn đều phải qua §9.2. Trải phẳng ra
+ * ở đây thay vì kiểm một trường — thêm trường mới mà quên trải là thêm một khối chữ không
+ * cửa nào soi, đúng kiểu lỗi đã trả giá ở GĐ9.
  */
+const TRUONG_LECH = ["choBoMe", "choCon", "boMeTuNhin", "thoaThuan"] as const;
+
 const VAN_BAN_LECH = MA_TRUC.flatMap((t) =>
-  (["bo-me-cao-hon", "bo-me-thap-hon"] as const).map((h) => ({
-    nguon: `LECH_PHONG_CACH.${t}.${h}`,
-    chu: LECH_PHONG_CACH[t][h],
-  })),
+  (["bo-me-cao-hon", "bo-me-thap-hon"] as const).flatMap((h) =>
+    TRUONG_LECH.map((f) => ({
+      nguon: `LECH_PHONG_CACH.${t}.${h}.${f}`,
+      chu: LECH_PHONG_CACH[t][h][f],
+    })),
+  ),
 );
 
 describe("🔴 luật viết nội dung §9.2 áp cho MỌI chuỗi mới", () => {

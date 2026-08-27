@@ -85,7 +85,10 @@ describe("doiChieuPhongCach", () => {
     expect(kq.dienGiai.length).toBeLessThanOrEqual(NGUONG_VUNG_LECH.soTrucDienGiaiToiDa);
     for (const d of kq.dienGiai) {
       expect(kq.bang.find((r) => r.truc === d.truc)?.mucLech).not.toBe("trungKhop");
-      expect(d.than.length).toBeGreaterThan(40);
+      // Cả BỐN cách kể phải có mặt — thiếu một trường là một người đọc mất phần của họ.
+      for (const f of ["choBoMe", "choCon", "boMeTuNhin", "thoaThuan"] as const) {
+        expect(d[f].length, `${d.truc}.${f}`).toBeGreaterThan(40);
+      }
     }
   });
 

@@ -51,6 +51,10 @@ export function LopSauKetQua({
 
   const chuThe = (c: string) => thayChuThe(c, maBoDe, banCon ? "con" : "boMe");
 
+  // Hai trục lệch lớn nhất, dùng chung cho CẢ BA dải — mỗi dải lấy một trường khác nhau
+  // của cùng một chỗ vênh. Tầng lõi cố ý không chọn hộ người đọc; chỗ chọn là ở đây.
+  const lechChoCon = phongCach?.ghepDuoc ? phongCach.dienGiai : [];
+
   return (
     <div className="mt-10 space-y-3">
       {/* ── DẢI CHUNG ────────────────────────────────────────────────────────
@@ -95,6 +99,29 @@ export function LopSauKetQua({
             </p>
           )}
         </LopSau>
+
+        {/* 🔴 THOẢ THUẬN HAI CHIỀU — nằm ở DẢI CHUNG, và đó là một quyết định, không phải
+            chỗ trống tiện tay. Đây là phần duy nhất cả hai người cùng phải đọc: một thoả
+            thuận mà chỉ một bên nhìn thấy thì không phải thoả thuận. Để ở dải chung cũng
+            là cách duy nhất nó theo được vào CẢ HAI bản in mà không vi phạm luật "không
+            câu nào xuất hiện ở hai bản". */}
+        {lechChoCon.length > 0 && (
+          <LopSau tieuDe={CHU_PHONG_CACH.tieuDeThoaThuan}>
+            <p className="khoi-in text-[14px] leading-relaxed text-neutral-600">
+              {CHU_PHONG_CACH.moTaThoaThuan}
+            </p>
+            <div className="mt-4 space-y-3">
+              {lechChoCon.map((d) => (
+                <p
+                  key={d.truc}
+                  className="khoi-in text-[15px] leading-relaxed text-neutral-800"
+                >
+                  {d.thoaThuan}
+                </p>
+              ))}
+            </div>
+          </LopSau>
+        )}
       </section>
 
       {/* ── DẢI CỦA CON / DẢI TỰ ĐỌC ─────────────────────────────────────────
@@ -103,6 +130,29 @@ export function LopSauKetQua({
         <section data-ban="con" className="space-y-3">
           <TenDai>{chuThe(CHU_BA_BAN.tenCon)}</TenDai>
           <KhoiTuDoc ban={banCon} tieuDeCangThang={chuThe(TIEU_DE_LOP.cangThang)} />
+
+          {/* 🔴 CHỖ VÊNH, KỂ CHO CHÍNH ĐỨA TRẺ NGHE (GĐ10 chặng 2).
+              Trước đây khối so phong cách bị CHẶN THẲNG khỏi bộ TH/THCS — đúng, vì chữ
+              trong đó viết cho phụ huynh. Nhưng hệ quả là đứa trẻ không được nói gì về
+              chính chỗ nó đang va hằng ngày; nó chỉ được người lớn nhận xét. Nay nó có
+              bản riêng, bằng đại từ của nó, và nằm trong DẢI CỦA NÓ. */}
+          {lechChoCon.length > 0 && (
+            <LopSau tieuDe={chuThe(CHU_PHONG_CACH.tieuDeChoCon)}>
+              <p className="khoi-in text-[14px] leading-relaxed text-neutral-600">
+                {CHU_PHONG_CACH.moTaChoCon}
+              </p>
+              <div className="mt-4 space-y-3">
+                {lechChoCon.map((d) => (
+                  <p
+                    key={d.truc}
+                    className="khoi-in text-[15px] leading-relaxed text-neutral-800"
+                  >
+                    {thayChuThe(d.choCon, maBoDe, "con")}
+                  </p>
+                ))}
+              </div>
+            </LopSau>
+          )}
         </section>
       )}
 
@@ -235,7 +285,7 @@ export function LopSauKetQua({
                       key={d.truc}
                       className="khoi-in text-[15px] leading-relaxed text-neutral-800"
                     >
-                      {d.than}
+                      {d.choBoMe}
                     </p>
                   ))}
                 </div>
@@ -244,6 +294,30 @@ export function LopSauKetQua({
                   {CHU_PHONG_CACH.ratGiongNhau}
                 </p>
               )}
+            </LopSau>
+          )}
+
+          {/* 🔴 GÓI KÝ DUYỆT B — bố mẹ đọc về CHÍNH MÌNH, không một chữ nhận xét đứa trẻ.
+              Tách khỏi khối trên không phải cho gọn: đưa phản hồi tính cách cho một NGƯỜI
+              LỚN về bản thân họ là việc gần tham vấn hơn hẳn mô tả một đứa trẻ, và người
+              ký duyệt chịu trách nhiệm ở mức khác. Gộp chung thì họ phải nhận cả hai mức
+              hoặc từ chối cả hai. Chưa ký được gói B thì gỡ đúng khối này, phần còn lại
+              của sản phẩm vẫn phát hành được. */}
+          {lechChoCon.length > 0 && (
+            <LopSau tieuDe={CHU_PHONG_CACH.tieuDeTuNhin}>
+              <p className="khoi-in text-[14px] leading-relaxed text-neutral-600">
+                {CHU_PHONG_CACH.moTaTuNhin}
+              </p>
+              <div className="mt-4 space-y-3">
+                {lechChoCon.map((d) => (
+                  <p
+                    key={d.truc}
+                    className="khoi-in text-[15px] leading-relaxed text-neutral-800"
+                  >
+                    {d.boMeTuNhin}
+                  </p>
+                ))}
+              </div>
             </LopSau>
           )}
 

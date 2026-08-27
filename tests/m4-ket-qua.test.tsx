@@ -170,10 +170,14 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
     expect(screen.queryAllByRole("button", { expanded: true })).toHaveLength(0);
   });
 
-  it("có bài bộ Phụ huynh trên máy ⇒ thêm một lớp so phong cách", async () => {
+  it("có bài bộ Phụ huynh trên máy ⇒ thêm BA lớp về chỗ vênh phong cách", async () => {
+    // 🔴 GĐ10 chặng 2: 6 → 8. Một chỗ vênh nay kể thành ba khối cho ba người đọc —
+    // "so phong cách" (bố mẹ đọc về con) · "Nhìn về phía bố mẹ" (Gói B, bố mẹ đọc về
+    // chính mình) · "Thoả thuận hai chiều" (dải chung, cả hai cùng đọc).
+    // Con số tụt về 6 nghĩa là hai khối mới của chặng 2 đã rơi mất.
     await luuBai(baiPH());
     hien("QS");
-    await waitFor(() => expect(soLop()).toBe(6));
+    await waitFor(() => expect(soLop()).toBe(8));
   });
 });
 

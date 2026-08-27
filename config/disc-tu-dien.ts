@@ -353,6 +353,19 @@ export const CHU_PHONG_CACH = {
   moTa: "So hồ sơ bạn tự làm ở bộ Phụ huynh với hồ sơ đang xem. Chỗ vênh nhau nhiều nhất thường là chỗ hai bên hay va nhau.",
   nhanBoMe: "bạn",
   nhanCon: "con",
+  /* ── GĐ10 chặng 2: một chỗ vênh, ba khối, ba người đọc ─────────────────── */
+  /** Dải CON. Dùng {chuThe} vì người đọc là chính em học sinh. */
+  tieuDeChoCon: "Chỗ {chuThe} và bố mẹ hay va nhau",
+  moTaChoCon:
+    "Đây không phải lỗi của ai. Hai người thiên về hai nhóm khác nhau thì va nhau ở đúng những chỗ này.",
+  /** Dải BỐ MẸ. 🔴 GÓI KÝ DUYỆT B — phản hồi tính cách cho người lớn về chính họ. */
+  tieuDeTuNhin: "Nhìn về phía bố mẹ",
+  moTaTuNhin:
+    "Phần này nói về phong cách của chính bạn, không nhận xét gì về con. Bạn đọc để biết chỗ mạnh của mình đang trả giá bằng gì.",
+  /** Dải CHUNG — cả hai cùng đọc, nên nó là chỗ duy nhất câu chữ được dùng cho cả hai. */
+  tieuDeThoaThuan: "Thử một thoả thuận hai chiều",
+  moTaThoaThuan:
+    "Mỗi bên nhường một việc, có thời hạn, và có lúc ngồi lại xem đã đi tới đâu. Một chiều thì không gọi là thoả thuận.",
   ratGiongNhau:
     "Bốn nhóm của hai người khá gần nhau. Điều đó thường làm việc hiểu nhau dễ hơn — nhưng cũng có nghĩa là điểm cần để ý của bạn và của con nhiều khả năng trùng nhau.",
   moiTieuDe: "Muốn biết bạn và con khác nhau ở đâu?",

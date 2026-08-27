@@ -4,7 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ManKetQua } from "../app/khoang/ket-qua";
 import { MoiLamNot } from "../app/khoang/vung-lech";
 import { TUOI_VAO_THCS } from "../config/disc-nguong";
+import { LECH_PHONG_CACH } from "../config/disc-loi-khuyen";
 import { CHU_KET_QUA, CHU_PHONG_CACH } from "../config/disc-tu-dien";
+import { MA_TRUC } from "../modules/core/bo-de/kieu";
 import { napBoDe } from "../modules/core/bo-de/nap";
 import type { KetQua, MaBoDe } from "../modules/core/bo-de/kieu";
 import { luuBai, xoaSach, type BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
@@ -157,7 +159,15 @@ describe("🔴 LỖI 3 — học sinh đọc được đoạn viết cho bố m�
   /**
    * Khối "Phong cách của bạn và của con" viết cho PHỤ HUYNH ("bạn" = bố mẹ, "con" = trẻ),
    * nhưng không lọc bộ đề. Máy nào có bài bộ PH thì học sinh THCS cuộn xuống là đọc được.
+   *
+   * 🔴 GĐ10 CHẶNG 2 ĐỔI CÁCH CHẶN, KHÔNG NỚI LUẬT. Bản vá đầu tiên chặn thẳng cả khối khỏi
+   * bộ TH/THCS. An toàn cho đứa trẻ, nhưng nó cũng có nghĩa là đứa trẻ không được nói gì về
+   * chính chỗ nó đang va hằng ngày — nó chỉ được người lớn nhận xét. Nay mỗi người đọc có
+   * bản riêng nằm trong dải riêng, nên phép kiểm chuyển từ *"khối này có tồn tại không"*
+   * sang *"CHỮ CỦA BỐ MẸ có lọt sang chỗ đứa trẻ đọc không"* — đó mới là điều luật muốn.
    */
+  const daiCua = (c: HTMLElement, ten: string) => c.querySelector(`[data-ban="${ten}"]`);
+
   it.each(["MN", "QS"] as const)("bộ %s (bố mẹ đọc): CÓ khối so phong cách", async (ma) => {
     await luuBai(baiPH());
     hien(ma);
@@ -169,12 +179,60 @@ describe("🔴 LỖI 3 — học sinh đọc được đoạn viết cho bố m�
     });
   });
 
-  it.each(["TH", "THCS", "PH"] as const)("🔴 bộ %s: KHÔNG có khối so phong cách", async (ma) => {
+  it("bộ PH: KHÔNG ghép cặp với chính mình nên không có khối nào", async () => {
     await luuBai(baiPH());
-    hien(ma);
+    hien("PH");
     await choXong();
     expect(screen.queryAllByText(CHU_PHONG_CACH.tieuDe)).toHaveLength(0);
   });
+
+  it.each(["TH", "THCS"] as const)(
+    "🔴 bộ %s: chữ viết cho BỐ MẸ nằm trong dải bố mẹ, KHÔNG lọt sang dải của em",
+    async (ma) => {
+      await luuBai(baiPH());
+      const { container } = hien(ma);
+      // Chờ kho đọc xong THẬT — `choXong()` chỉ chờ có nút, mà M4 có nút ngay từ đầu, nên
+      // nó về trước khi `usePhongCach` kịp chạy. Kiểm lúc đó là kiểm một trang chưa dựng
+      // xong, và sẽ xanh vì lý do sai.
+      await waitFor(() => {
+        expect(daiCua(container, "boMe")?.textContent).toContain(CHU_PHONG_CACH.tieuDe);
+      });
+
+      const chuBoMe = daiCua(container, "boMe")!.textContent ?? "";
+      const chuCuaEm =
+        (daiCua(container, "con")?.textContent ?? "") +
+        (daiCua(container, "chung")?.textContent ?? "");
+
+      // Mọi câu viết cho bố mẹ đều phải nằm ở dải bố mẹ, và KHÔNG câu nào lọt sang chỗ em đọc.
+      let daKiem = 0;
+      for (const t of MA_TRUC) {
+        for (const h of ["bo-me-cao-hon", "bo-me-thap-hon"] as const) {
+          for (const f of ["choBoMe", "boMeTuNhin"] as const) {
+            const cau = LECH_PHONG_CACH[t][h][f];
+            if (!chuBoMe.includes(cau)) continue;
+            daKiem += 1;
+            expect(
+              chuCuaEm.includes(cau),
+              `${t}.${h}.${f} lọt sang chỗ em học sinh đọc`,
+            ).toBe(false);
+          }
+        }
+      }
+      expect(daKiem, "không câu nào của bố mẹ được dựng — phép kiểm rỗng").toBeGreaterThan(0);
+    },
+  );
+
+  it.each(["TH", "THCS"] as const)(
+    "🔴 bộ %s: dải bố mẹ ĐÓNG SẴN, em không cuộn tới được",
+    async (ma) => {
+      await luuBai(baiPH());
+      const { container } = hien(ma);
+      await waitFor(() => {
+        expect(daiCua(container, "boMe")?.textContent).toContain(CHU_PHONG_CACH.tieuDe);
+      });
+      expect(daiCua(container, "boMe")!.className).toContain("hidden");
+    },
+  );
 });
 
 describe("🔴 LỖI 4 — mời người vừa làm xong bộ Phụ huynh đi làm bộ Phụ huynh", () => {

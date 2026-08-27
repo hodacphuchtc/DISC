@@ -244,7 +244,12 @@ export function ManKetQua({
       <LopSauKetQua
         sau={sau}
         maBoDe={boDe.ma}
-        phongCach={laNguoiLonDocVeTre ? phongCach : null}
+        // 🔴 GĐ10 chặng 2: KHÔNG còn lọc theo bộ đề ở đây nữa. Trước đây phải chặn thẳng
+        // bộ TH/THCS vì cả khối viết bằng giọng nói với phụ huynh, nên học sinh cuộn
+        // xuống là đọc nhầm phần của người lớn. Nay mỗi trường có dải riêng: em học sinh
+        // đọc `choCon` trong dải của mình, còn `choBoMe`/`boMeTuNhin` nằm trong dải bố mẹ,
+        // đóng sau dải chắn. Chặn bằng CẤU TRÚC chứ không bằng một câu điều kiện.
+        phongCach={phongCach}
         onLamBoPhuHuynh={onLamBoConThieu ? () => onLamBoConThieu("PH", "") : undefined}
       />
 
