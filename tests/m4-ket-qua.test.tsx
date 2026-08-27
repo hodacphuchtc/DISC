@@ -145,10 +145,19 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
   });
 
   it.each([
-    ["TH", 4],
-    ["THCS", 4],
-    ["PH", 4],
-  ] as const)("bộ %s (tự đọc về mình): %i lớp", async (ma, mong) => {
+    ["TH", 8],
+    ["THCS", 8],
+  ] as const)("bộ %s (em học sinh cầm máy): %i lớp — có CẢ phần của bố mẹ", async (ma, mong) => {
+    // 🔴 GĐ10 hạng mục 10.4: 4 → 8. Bốn lớp mới KHÔNG phải nội dung mới, mà là phần của
+    // bố mẹ trước đây bị chặn thẳng khỏi bộ TH/THCS — ba lớp lời khuyên cộng nút dải chắn.
+    // Đây là đặc tả đổi (phụ huynh của học sinh TH/THCS từ nay đọc được), không phải chỉnh
+    // test cho vừa code. Con số tụt lại về 4 nghĩa là cả nhóm người dùng đó lại bị cắt.
+    hien(ma);
+    await choDocKhoXong();
+    await waitFor(() => expect(soLop()).toBe(mong));
+  });
+
+  it.each([["PH", 4]] as const)("bộ %s (người lớn tự đọc về mình): %i lớp", async (ma, mong) => {
     hien(ma);
     await choDocKhoXong();
     await waitFor(() => expect(soLop()).toBe(mong));

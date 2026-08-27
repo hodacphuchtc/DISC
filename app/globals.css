@@ -77,6 +77,32 @@ body {
     display: block !important;
   }
 
+  /* 🔴 Dải của bố mẹ có thể đang ĐÓNG trên màn hình (trẻ cầm máy, chưa bấm qua dải chắn),
+     nhưng trên giấy nó phải mở — người bấm In là người đã cầm máy thật. Cùng lý do với
+     [data-lop-sau]: ẩn bằng CSS chứ không bỏ khỏi DOM.
+     Độ đặc hiệu 0-1-0, cố ý THẤP HƠN luật loại trừ 0-2-0 ngay bên dưới, để "in tách bản"
+     luôn thắng "ép mở". Đổi bộ chọn ở đây là đổi luôn thứ tự đó — cân nhắc kỹ. */
+  [data-ban] {
+    display: block !important;
+  }
+
+  /* 🔴 GĐ10 — IN TÁCH BẢN. Một trang, ba dải, nhưng KHÔNG một người đọc.
+     Bấm "In phần của em" phải ra tờ giấy KHÔNG có chữ nào của bố mẹ, và ngược lại.
+
+     Cách hỏng nếu làm ẩu: ẩn bằng cách bỏ nội dung khỏi DOM ⇒ rơi đúng cạm bẫy đã trả giá
+     ở GĐ9 (nội dung không có trong DOM thì không in được). Nên ẩn ở mức DẢI bằng CSS, và
+     ẩn tại ANCESTOR: con cháu của một khối display:none thì không dựng, kể cả khi chính
+     chúng mang display:block !important như [data-lop-sau]. Luật này vì thế chắc ăn hơn
+     mọi cách đi gỡ từng khối bên trong — không cần biết bên trong có gì.
+
+     Cờ data-in-ban do ket-qua.tsx gắn thẳng lên <html> ngay trước window.print() rồi gỡ ở
+     afterprint — KHÔNG đi qua state React: window.print() chặn luồng đồng bộ, React chưa
+     kịp vẽ lại thì hộp thoại in đã mở với DOM cũ. */
+  [data-in-ban="con"] [data-ban="boMe"],
+  [data-in-ban="boMe"] [data-ban="con"] {
+    display: none !important;
+  }
+
   /* In màu thanh biểu đồ — mặc định trình duyệt bỏ nền khi in. */
   * {
     -webkit-print-color-adjust: exact;

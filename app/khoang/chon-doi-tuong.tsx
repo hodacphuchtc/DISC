@@ -6,18 +6,22 @@ import { HopGiaiThich, NutVien, TheChon } from "@/app/components/the-doi-tuong";
 import {
   CHU_CHON,
   CHU_DISC,
-  DOI_TUONG,
-  MA_DOI_TUONG,
+  MA_NHANH,
   MA_TRUC,
+  NHANH_CAM_MAY,
   TRUC,
-  type MaDoiTuong,
+  type MaNhanh,
 } from "@config/disc-tu-dien";
+import { LOP_CUOI_TIEU_HOC, LOP_LON_NHAT, LOP_NHO_NHAT } from "@config/disc-nguong";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe } from "@modules/core/bo-de/kieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
-import { dinhTuyen, type MucTieuPhuHuynh } from "@modules/test/dinh-tuyen";
+import { dinhTuyen, type DauVaoDinhTuyen, type MucTieuPhuHuynh } from "@modules/test/dinh-tuyen";
 
-const LOP_TIEU_HOC = [1, 2, 3, 4, 5];
+const LOP = Array.from(
+  { length: LOP_LON_NHAT - LOP_NHO_NHAT + 1 },
+  (_, i) => LOP_NHO_NHAT + i,
+);
 const TUOI_CON = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 /**
@@ -35,22 +39,45 @@ export type BoiCanhChon = {
   readonly tuoiCon?: number;
 };
 
+/**
+ * M1 — HAI NHÁNH THEO NGƯỜI CẦM MÁY.
+ *
+ * 🔴 `dinhTuyen()` KHÔNG ĐỔI. Màn này chỉ đổi cách THU THẬP đầu vào rồi quy về đúng bộ
+ * `DauVaoDinhTuyen` cũ — nhờ vậy `tests/dinh-tuyen.test.ts` (luật ADR-002, thứ đắt nhất
+ * trong sản phẩm) vẫn canh y nguyên một hàm thuần không bị đụng tới.
+ *
+ * Ánh xạ nhánh → đối tượng:
+ *   em học sinh + lớp ≤ LOP_CUOI_TIEU_HOC  → "tieu-hoc"  (lớp 1–2 sẽ bị chuyển sang MN)
+ *   em học sinh + lớp trên mốc đó          → "thcs"
+ *   bố mẹ / thầy cô                        → "phu-huynh" (rồi mục tiêu, rồi tuổi con)
+ */
 export function ManChonDoiTuong({
   onXong,
 }: {
   readonly onXong: (boDe: BoDe, boiCanh: BoiCanhChon) => void;
 }) {
-  const [doiTuong, datDoiTuong] = useState<MaDoiTuong | null>(null);
+  const [nhanh, datNhanh] = useState<MaNhanh | null>(null);
   const [lop, datLop] = useState<number | undefined>();
   const [mucTieu, datMucTieu] = useState<MucTieuPhuHuynh | undefined>();
   const [tuoiCon, datTuoiCon] = useState<number | undefined>();
 
-  function chonDoiTuong(ma: MaDoiTuong) {
-    datDoiTuong(ma);
+  function chonNhanh(ma: MaNhanh) {
+    datNhanh(ma);
     datLop(undefined);
     datMucTieu(undefined);
     datTuoiCon(undefined);
   }
+
+  // Chưa biết lớp thì chưa biết cấp — và chưa gọi `dinhTuyen` được. Đó là lý do nhánh học
+  // sinh trả về `null` ở đây thay vì đoán bừa một cấp rồi sửa sau.
+  const doiTuong: DauVaoDinhTuyen["doiTuong"] | null =
+    nhanh === "nguoi-lon"
+      ? "phu-huynh"
+      : nhanh === "hoc-sinh" && lop !== undefined
+        ? lop <= LOP_CUOI_TIEU_HOC
+          ? "tieu-hoc"
+          : "thcs"
+        : null;
 
   const tuyen = doiTuong ? dinhTuyen({ doiTuong, lop, mucTieu, tuoiCon }) : null;
   const boDe = tuyen?.xong ? napBoDe(tuyen.boDe) : null;
@@ -71,29 +98,37 @@ export function ManChonDoiTuong({
       </h1>
 
       <div className="mt-7 grid gap-2 sm:grid-cols-2">
-        {MA_DOI_TUONG.map((ma) => (
+        {MA_NHANH.map((ma) => (
           <TheChon
             key={ma}
-            ten={DOI_TUONG[ma].ten}
-            moTa={DOI_TUONG[ma].moTa}
-            dangChon={ma === doiTuong}
-            onChon={() => chonDoiTuong(ma)}
+            ten={NHANH_CAM_MAY[ma].ten}
+            moTa={NHANH_CAM_MAY[ma].moTa}
+            dangChon={ma === nhanh}
+            onChon={() => chonNhanh(ma)}
           />
         ))}
       </div>
 
-      {doiTuong === "tieu-hoc" && (
+      {/* Nhánh học sinh: lớp hỏi ĐÚNG MỘT LẦN, trải cả hai cấp. Bản cũ bắt em chọn cấp
+          trước rồi mới chọn lớp — hai lần hỏi cho một thông tin, và em lớp 5 hay lớp 6 thì
+          phải tự biết mình thuộc cấp nào trước khi máy biết. */}
+      {nhanh === "hoc-sinh" && (
         <fieldset className="mt-8">
           <legend className="text-[15px] font-semibold text-neutral-900">{CHU_CHON.hoiLop}</legend>
           <div className="mt-3 flex flex-wrap gap-2">
-            {LOP_TIEU_HOC.map((l) => (
-              <NutVien key={l} nhan={`Lớp ${l}`} dangChon={l === lop} onChon={() => datLop(l)} />
+            {LOP.map((l) => (
+              <NutVien
+                key={l}
+                nhan={CHU_CHON.nhanLop.replace("{so}", String(l))}
+                dangChon={l === lop}
+                onChon={() => datLop(l)}
+              />
             ))}
           </div>
         </fieldset>
       )}
 
-      {doiTuong === "phu-huynh" && (
+      {nhanh === "nguoi-lon" && (
         <fieldset className="mt-8">
           <legend className="text-[15px] font-semibold text-neutral-900">
             {CHU_CHON.hoiMucTieu}
@@ -113,7 +148,7 @@ export function ManChonDoiTuong({
         </fieldset>
       )}
 
-      {doiTuong === "phu-huynh" && mucTieu === "con" && (
+      {nhanh === "nguoi-lon" && mucTieu === "con" && (
         <fieldset className="mt-8">
           <legend className="text-[15px] font-semibold text-neutral-900">
             {CHU_CHON.hoiTuoiCon}
@@ -144,7 +179,9 @@ export function ManChonDoiTuong({
             type="button"
             onClick={() =>
               onXong(boDe, {
-                ...(doiTuong === "tieu-hoc" && lop !== undefined ? { lop } : {}),
+                // Lớp đã HỎI THẬT ở nhánh học sinh nên lưu được — cả lớp 7 cũng vậy. Còn
+                // TUỔI thì tuyệt đối không suy từ lớp: lớp 4 có cả bé 9 lẫn bé 10.
+                ...(nhanh === "hoc-sinh" && lop !== undefined ? { lop } : {}),
                 ...(tuoiCon !== undefined ? { tuoiCon } : {}),
               })
             }

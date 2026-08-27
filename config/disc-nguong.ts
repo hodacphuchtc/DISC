@@ -85,3 +85,17 @@ export const NGUONG_VUNG_LECH = {
   /** Chỉ diễn giải tối đa bấy nhiêu trục lệch lớn nhất — nói ít mà trúng. */
   soTrucDienGiaiToiDa: 2,
 } as const;
+
+/**
+ * Lớp cuối cấp tiểu học. Trên mốc này là THCS.
+ *
+ * 🔴 Sinh ra ở GĐ10 hạng mục 10.6, khi màn 1 đổi sang hỏi "em học lớp mấy" MỘT lần cho cả
+ * hai cấp thay vì bắt người dùng tự chọn cấp trước rồi mới chọn lớp. Chỗ duy nhất biết
+ * lớp 5 và lớp 6 khác cấp là con số này — gõ cứng `lop <= 5` trong `chon-doi-tuong.tsx`
+ * là dựng nguồn sự thật thứ hai, đúng vết xe của `TUOI_VAO_THCS` đã trả giá.
+ */
+export const LOP_CUOI_TIEU_HOC = 5;
+
+/** Lớp nhỏ nhất và lớn nhất mà khoang này nhận. Ngoài khoảng đó là ngoài phạm vi sản phẩm. */
+export const LOP_NHO_NHAT = 1;
+export const LOP_LON_NHAT = 9;

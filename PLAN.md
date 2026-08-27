@@ -19,43 +19,42 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
 
-**Phiên 27/08/2026 (tối) — GĐ10 chặng 1, xong 4/6**
+**Phiên 27/08/2026 (tối, chặng 2) — GĐ10 hết sạch việc MÁY: 47/48**
 
-**1. Vừa xong.** `10.1` `10.2` `10.3` `10.5`. **Đã push `origin/main`, CI xanh**:
-`9bf2521` (GĐ10 chặng 1) · `823f0d6` (lệnh chạy thử local) · `a2da871` (GĐ9).
-731 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật, 0 lỗi JS.
+**1. Vừa xong.** `10.4` (ba dải + in tách bản) và `10.6` (M1 hai nhánh). **770 test ·
+`npm run kiem` + `npm run build` xanh · soi Chromium thật, 0 lỗi JS.**
 
-**2. ĐANG DỞ — làm tiếp từ đây.**
-- `10.4` **ba dải + in theo từng bản** → sửa `app/khoang/ket-qua.tsx` (361 dòng) và
-  `app/khoang/lop-sau.tsx`. Khuôn đã chứng minh được: `[data-lop-sau]{display:block!important}`
-  trong `app/globals.css` + `.chi-in` — dùng lại y hệt cho `[data-ban]`, đừng phát minh lại.
-  🔴 Một trang nghĩa là trẻ cầm máy cuộn xuống đọc được phần bố mẹ ⇒ bắt buộc dải chắn.
-- `10.6` **sắp lại màn 1 hai nhánh** → `app/khoang/chon-doi-tuong.tsx`. `dinhTuyen()` KHÔNG
-  đổi, chỉ đổi cách M1 thu thập ⇒ `tests/dinh-tuyen.test.ts` vẫn xanh.
+**2. ĐANG DỞ — không còn hạng mục MÁY nào.** `10.7` là việc duy nhất còn lại và nó chặn ở
+NGƯỜI: chờ chủ dự án bấm thử rồi quyết, cộng **gói ký duyệt thứ hai** (phản hồi tính cách
+cho người lớn — gần tham vấn hơn, người ký chịu trách nhiệm ở mức khác).
 
-**3. Chặn ở NGƯỜI / NGOÀI.** `10.7` (chặng 2) chặn ở NGƯỜI: chờ chủ dự án bấm thử chặng 1.
-Bốn việc cũ ở `CLAUDE.md` mục CHỜ NGOÀI vẫn nguyên; nội dung mới của chặng 2 cần **gói ký
-duyệt thứ hai** (phản hồi tính cách cho người lớn — gần tham vấn hơn, người ký chịu trách
-nhiệm ở mức khác).
-
-**4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
-- Số lớp gập màn kết quả: MN/QS **5**, TH/THCS/PH **4**, +1 nếu máy có bài bộ PH. Có test canh.
-- Kho chữ ~6.000 từ; đoạn mở đầu 136 từ (trần 200). Chặng 2 sẽ +2.400–3.000 từ.
-- Ma trận ba bản đã chốt (`modules/report/OVERVIEW.md`): MN/QS chỉ `banBoMe`; TH/THCS có
-  **cả hai**; PH chỉ `banTuMinh`. Bản kết hợp cần HAI bài — sau bài đầu nó là LỜI MỜI.
-- Nội dung ghép cặp dùng **8 khoá** `[trục][hướng lệch]`, KHÔNG phải ma trận 16 cặp.
+**3. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
+- **Số lớp gập đổi:** MN/QS **5** · **TH/THCS 8** (4 → 8: thêm 3 lớp của bố mẹ + nút dải
+  chắn) · PH **4** · +1 nếu máy có bài bộ PH. `tests/m4-ket-qua.test.tsx` canh.
+- **In tách bản đo trên Chromium thật:** tờ của em 2286 ký tự · tờ bố mẹ 3144 ký tự ·
+  **0 câu rò rỉ chéo**. Dải bố mẹ ẩn trên màn mà vẫn giữ 1248 ký tự trong DOM ⇒ in được.
+- Cơ chế: `<section data-ban>` + cờ `data-in-ban` gắn thẳng lên `<html>` bằng DOM trước
+  `window.print()`. **KHÔNG qua state React** — `print()` chặn luồng đồng bộ nên React chưa
+  kịp vẽ lại, hộp thoại in mở với DOM cũ, và in nhầm bản trong im lặng.
+- **Độ đặc hiệu CSS mới là thứ phân định**, không phải `!important`: cả luật ép mở
+  (`[data-ban]`, 0-1-0) lẫn luật loại trừ (`[data-in-ban=…] [data-ban=…]`, 0-2-0) đều
+  `!important`. Có test canh đúng quan hệ đó.
+- Kho chữ ~6.000 từ, chưa đổi ở chặng này. Chặng 2 sẽ +2.400–3.000 từ.
+- Ma trận ba bản không đổi: MN/QS chỉ `banBoMe` · TH/THCS **cả hai** · PH chỉ `banTuMinh`.
 - Playwright vẫn không sống qua phiên: `npm i playwright` vào thư mục tạm; Chromium đã có
-  ở `~/Library/Caches/ms-playwright`.
+  ở `~/Library/Caches/ms-playwright`. **Trang chạy ở `/`, KHÔNG phải `/khoang-disc/`.**
+- **Muốn máy tự làm trọn một bài thì phải TRÁNH MỨC GIỮA** — trả lời xoay vòng đều là ra
+  hồ sơ phẳng và HL-1 từ chối kết luận (đúng thiết kế). Và phải **trả lời TRƯỚC rồi mới
+  bấm "Xem kết quả"**: nút đó hiện ra từ màn cuối trong khi câu trên màn chưa được chọn.
 
-**5. Cạm bẫy vừa trả giá.** 4 mục đã ghi `CLAUDE.md`; bài học theo miền ở
-`modules/report/OVERVIEW.md` mục 6 và `modules/test/OVERVIEW.md`. Đắt nhất: **bảng đại từ
-khoá một chiều** cắt phụ huynh của toàn bộ học sinh TH/THCS khỏi lời khuyên suốt từ GĐ9 mà
-không test nào thấy.
+**4. Cạm bẫy vừa trả giá.** Xem `CLAUDE.md` mục CẢNH BÁO — hai mục mới: bốn file test cùng
+đỏ vì mỗi file tự gõ lại đường đi M1 (đã gom về `tests/duong-m1.ts`), và `CHU_BAN` đụng
+tiền tố `CHU_BAN_KHOAN` sẵn có.
 
-**6. Lệnh phiên sau nên chạy.**
+**5. Lệnh phiên sau nên chạy.**
 ```bash
-npm run kiem       # 731 test
-npm run xem-thu    # bản phát hành thật, cổng 3100 (README mục "Chạy thử trên máy mình")
+npm run kiem       # 770 test
+npm run xem-thu    # bản phát hành thật, cổng 3100
 ```
 
 ---
@@ -727,22 +726,20 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
   - (c) `tests/mo-dau.test.tsx` — 13 test, gồm: ≤200 từ · cấm tuyên bố chuẩn hoá · cấm viết
     `DiSC` · tóm tắt dưới 60 từ. (d) 1 ngày.
 
-- [ ] **10.4 — Ba dải + in theo từng bản**
+- [x] **10.4 — Ba dải + in theo từng bản** ✅ (27/08/2026 — soi Chromium thật: tờ của em 2286 ký tự / tờ bố mẹ 3144 ký tự, **0 câu rò rỉ chéo**; dải bố mẹ ẩn trên màn nhưng vẫn 1248 ký tự trong DOM nên in được)
   - (a) Một trang, ba `<section data-ban>`; dải 2/3 đóng sẵn + dải chắn *"đưa máy cho bố mẹ"*;
     luật in tách bản.
   - (b) In bản con KHÔNG ra chữ của bản bố mẹ; trẻ cầm máy không cuộn tới phần của bố mẹ.
   - (c) Mở rộng `tests/ban-in.test.ts` — hiện nó **không** bắt được cơ chế ẩn mới.
   - (d) 1 ngày.
-  - (e) chặn: MÁY.
 
-- [ ] **10.6 — Sắp lại màn 1 thành hai nhánh**
+- [x] **10.6 — Sắp lại màn 1 thành hai nhánh** ✅ (27/08/2026 — M1 nay hỏi "Ai đang cầm máy?", 2 thẻ; lớp hỏi MỘT lần trải 1–9; bộ Mầm non không còn cửa trực tiếp; `dinhTuyen()` không đổi một dòng)
   - (a) *"Ai đang cầm máy?"* → học sinh / phụ huynh. Mỗi bộ đề đúng MỘT cửa, tuổi-lớp hỏi một
     lần. `dinhTuyen()` KHÔNG đổi nên `tests/dinh-tuyen.test.ts` vẫn xanh.
   - (b) Bộ Mầm non còn đúng một cửa; bộ Bố mẹ-nhìn-con có cửa riêng; sửa mâu thuẫn nhãn 3–5 ↔ 3–7.
   - (c) `m1-chon-doi-tuong.test.tsx` + `dieu-huong.test.tsx` sẽ đỏ — đặc tả đổi ⇒ sửa test,
     và cập nhật `DISC_BA.md` §5.2.
   - (d) 1 ngày.
-  - (e) chặn: MÁY.
 
 - [ ] **10.7 — CHẶNG 2: nội dung ba bản** (lời riêng cho con · góp ý cho bố mẹ về chính mình ·
       thoả thuận hai chiều · cờ Gói B + hai hồ sơ ký duyệt)

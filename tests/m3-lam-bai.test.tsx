@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { KhoangDisc } from "../app/khoang/disc";
 import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import { napBoDe } from "../modules/core/bo-de/nap";
+import { DUONG_M1 } from "./duong-m1";
 
 afterEach(() => {
   cleanup();
@@ -24,12 +25,8 @@ function vaoM3(duong: () => void, bietDanh = "Bi") {
   bam(CHU_TRUOC_KHI_BAT_DAU.nutBatDau);
 }
 
-const vaoTHCS = () => vaoM3(() => bam(/^Trung học cơ sở/u));
-const vaoTieuHoc = () =>
-  vaoM3(() => {
-    bam(/^Tiểu học/u);
-    bam("Lớp 4");
-  });
+const vaoTHCS = () => vaoM3(DUONG_M1.THCS);
+const vaoTieuHoc = () => vaoM3(() => DUONG_M1.TH(4));
 
 /** Trả lời hết các câu đang hiện trên màn, chọn mức thứ `viTri` (đếm từ 0). */
 function traLoiTrangNay(viTri: number) {
@@ -69,7 +66,7 @@ describe("M3 — hai kiểu trình bày", () => {
   });
 
   it("nói rõ đang làm bài của AI — máy dùng chung", () => {
-    vaoM3(() => bam(/^Trung học cơ sở/u), "Bống");
+    vaoM3(DUONG_M1.THCS, "Bống");
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Bống");
   });
 });
@@ -158,7 +155,7 @@ describe("M3 — lưu nháp", () => {
     traLoiTrangNay(3);
     cleanup();
 
-    vaoM3(() => bam(/^Trung học cơ sở/u), "Bống");
+    vaoM3(DUONG_M1.THCS, "Bống");
     expect(screen.queryByText(CHU_LAM_BAI.tiepTucNhap)).toBeNull();
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "0");
   });

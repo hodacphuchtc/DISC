@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
-import { CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
+import { CHU_BA_BAN, CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe, MaTruc } from "@modules/core/bo-de/kieu";
 import { OLienHe } from "@/app/components/o-lien-he";
@@ -19,6 +19,7 @@ import { LopSauKetQua } from "./lop-sau";
 import { BangTraDisc, MoDauKetQua, TomTat30Giay } from "./mo-dau";
 import {
   KhoiChuyenTay,
+  NutIn,
   NutKetThucVaXoa,
   NutLamLai,
   NutTaiAnh,
@@ -129,6 +130,10 @@ export function ManKetQua({
   const trucNheNhat = sau.phoBonNhom.find((t) => t.viTri === "nheNhat")?.truc ?? ketQua.xepHang[3];
   const motViecNgay =
     sau.banBoMe?.motViecToiNay ?? sau.banCon?.motViecToiNay ?? sau.banTuMinh?.motViecToiNay;
+
+  // Trang này có HAI người đọc không? Chỉ bộ TH/THCS: em học sinh tự làm bài, nên máy vừa
+  // giữ phần của em vừa giữ phần của bố mẹ. Đó cũng là điều kiện dựng dải chắn ở lớp sâu.
+  const coHaiBan = Boolean(sau.banCon && sau.banBoMe);
 
   const boDeGhepCapDuoc =
     BO_DE_CON.includes(boDe.ma) || boDe.ma === BO_DE_BO_ME;
@@ -279,14 +284,17 @@ export function ManKetQua({
             chanTrang: CHU_M4.chanTrangAnh,
           }}
         />
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="min-h-[48px] rounded-xl border border-neutral-300 px-5 text-[15px] font-medium text-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2"
-          style={{ outlineColor: MAU.timCongNghe }}
-        >
-          {CHU_M4.nutTaiPdf}
-        </button>
+        {/* 🔴 Trang có HAI người đọc thì phải có HAI nút in. Một nút "In / Tải PDF" duy
+            nhất buộc bố mẹ đưa cho con tờ giấy có cả phần người lớn bàn về con — đúng thứ
+            việc tách dải sinh ra để chặn, mà chặn trên màn hình rồi lại hở ở máy in. */}
+        {coHaiBan ? (
+          <>
+            <NutIn ban="con" nhan={thayChuThe(CHU_BA_BAN.nutInCon, boDe.ma, "con")} />
+            <NutIn ban="boMe" nhan={CHU_BA_BAN.nutInBoMe} />
+          </>
+        ) : (
+          <NutIn nhan={CHU_M4.nutTaiPdf} />
+        )}
         <NutLamLai onLamLai={onLamLai} />
         {idBai && <NutKetThucVaXoa idBai={idBai} onXong={onLamLai} />}
       </div>

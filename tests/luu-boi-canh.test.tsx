@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import type { BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
+import { DUONG_M1 } from "./duong-m1";
 
 /**
  * 🔴 VÌ SAO CÓ FILE NÀY.
@@ -72,9 +73,7 @@ function lamTronBai(duongM1: () => void) {
 describe("🔴 bối cảnh màn 1 phải THEO ĐƯỢC vào bản ghi đã lưu", () => {
   it("bộ QS: tuổi con đã hỏi thì phải nằm trong bản ghi", () => {
     lamTronBai(() => {
-      bam(/^Phụ huynh/u);
-      bam(CHU_CHON.mucTieuCon);
-      bam("13");
+      DUONG_M1.QS(13);
     });
 
     expect(daLuu).toHaveLength(1);
@@ -86,8 +85,7 @@ describe("🔴 bối cảnh màn 1 phải THEO ĐƯỢC vào bản ghi đã lưu
 
   it("bộ Tiểu học: lớp đã hỏi thì phải nằm trong bản ghi", () => {
     lamTronBai(() => {
-      bam(/^Tiểu học/u);
-      bam("Lớp 4");
+      DUONG_M1.TH(4);
     });
 
     expect(daLuu).toHaveLength(1);
@@ -95,14 +93,17 @@ describe("🔴 bối cảnh màn 1 phải THEO ĐƯỢC vào bản ghi đã lưu
     expect(daLuu[0].lop).toBe("4");
   });
 
-  it("không hỏi thì KHÔNG bịa: bộ THCS không có lớp lẫn tuổi", () => {
-    // Cố ý không suy tuổi từ lớp hay từ mã bộ đề. Đoán ra một con số rồi lưu như thể đã
-    // hỏi là tự bịa dữ liệu cá nhân của trẻ.
-    lamTronBai(() => bam(/^Trung học cơ sở/u));
+  it("hỏi rồi thì LƯU, nhưng TUỔI thì không bao giờ suy từ lớp", () => {
+    // 🔴 Đặc tả đổi ở 10.6: nhánh học sinh nay hỏi lớp MỘT lần cho cả hai cấp, nên bộ THCS
+    // cũng có lớp thật — lưu nó KHÔNG phải là bịa, vì em ấy vừa tự bấm.
+    // Phần chống bịa vẫn nguyên vẹn và mới là phần quan trọng: TUỔI phải trống, vì không ai
+    // hỏi tuổi ở nhánh này. Lớp 7 có cả bé 12 lẫn bé 13 — suy ra một con số rồi lưu như thể
+    // đã hỏi mới là bịa dữ liệu cá nhân của trẻ.
+    lamTronBai(() => DUONG_M1.THCS(7));
 
     expect(daLuu).toHaveLength(1);
     expect(daLuu[0].boDe).toBe("THCS");
-    expect(daLuu[0].tuoi).toBeUndefined();
-    expect(daLuu[0].lop).toBeUndefined();
+    expect(daLuu[0].tuoi, "tuổi bị suy ra từ lớp — đây là bịa dữ liệu").toBeUndefined();
+    expect(daLuu[0].lop).toBe("7");
   });
 });

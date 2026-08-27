@@ -223,16 +223,47 @@ export const MA_DOI_TUONG = ["mam-non", "tieu-hoc", "thcs", "phu-huynh"] as cons
 export type MaDoiTuong = (typeof MA_DOI_TUONG)[number];
 
 export const DOI_TUONG: Record<MaDoiTuong, { ten: string; moTa: string }> = {
-  "mam-non": { ten: "Mầm non", moTa: "Bé 3–5 tuổi · bố mẹ hoặc thầy cô trả lời giúp" },
+  // 🔴 "3–7", KHÔNG phải "3–5". Metadata bộ đề (`config/disc-cau-hoi.ts` → MN.veAi) ghi
+  // "Bé 3–7 tuổi", và trên thực tế bộ này còn nhận cả lớp 1–2 lẫn mọi bé dưới 8 tuổi được
+  // chuyển sang. Nhãn "3–5" ở đây làm phụ huynh bé 6 tuổi tưởng sản phẩm không có phần của
+  // mình. Hai chỗ nói hai con số thì chỗ người dùng đọc được là chỗ sai đắt hơn.
+  "mam-non": { ten: "Mầm non", moTa: "Bé 3–7 tuổi · bố mẹ hoặc thầy cô trả lời giúp" },
   "tieu-hoc": { ten: "Tiểu học", moTa: "Lớp 1–5" },
   thcs: { ten: "Trung học cơ sở", moTa: "Lớp 6–9 · các em tự làm" },
   "phu-huynh": { ten: "Phụ huynh", moTa: "Tìm hiểu về chính mình, hoặc trả lời về con" },
 };
 
+/**
+ * 🔴 GĐ10 hạng mục 10.6 — MÀN 1 HỎI "AI ĐANG CẦM MÁY", KHÔNG HỎI "BÀI NÀY VỀ AI".
+ *
+ * Bốn thẻ cũ (Mầm non · Tiểu học · THCS · Phụ huynh) trộn hai câu hỏi khác nhau vào một
+ * hàng: ba thẻ đầu nói về NGƯỜI ĐƯỢC ĐÁNH GIÁ, thẻ thứ tư nói về NGƯỜI TRẢ LỜI. Hậu quả
+ * đo được: bố mẹ của một bé lớp 1 có HAI cửa cùng dẫn tới bộ Mầm non — bấm "Tiểu học →
+ * Lớp 1", hoặc bấm "Phụ huynh → về con → 6 tuổi. Cửa nào cũng đúng, nên chẳng cửa nào
+ * hiển nhiên, và người dùng phải đoán.
+ *
+ * Tách theo NGƯỜI CẦM MÁY thì mỗi bộ đề còn đúng một cửa, và tuổi/lớp chỉ hỏi MỘT lần.
+ */
+export const MA_NHANH = ["hoc-sinh", "nguoi-lon"] as const;
+export type MaNhanh = (typeof MA_NHANH)[number];
+
+export const NHANH_CAM_MAY: Record<MaNhanh, { ten: string; moTa: string }> = {
+  "hoc-sinh": {
+    ten: "Em học sinh, tự làm bài",
+    moTa: "Lớp 1–9 · em tự đọc và tự trả lời",
+  },
+  "nguoi-lon": {
+    ten: "Bố mẹ hoặc thầy cô",
+    moTa: "Trả lời về một bạn nhỏ, hoặc tìm hiểu về chính mình",
+  },
+};
+
 export const CHU_CHON = {
   nhanTren: "5–8 phút · không có câu nào đúng hay sai",
-  tieuDe: "Ai sẽ làm bài này?",
-  hoiLop: "Bé đang học lớp mấy?",
+  tieuDe: "Ai đang cầm máy?",
+  /** Hỏi MỘT lần cho cả hai cấp — lớp 1–9. Con số phân cấp ở `config/disc-nguong.ts`. */
+  hoiLop: "Em đang học lớp mấy?",
+  nhanLop: "Lớp {so}",
   hoiMucTieu: "Bạn muốn làm gì?",
   mucTieuToi: "Tìm hiểu về chính tôi",
   mucTieuCon: "Trả lời về con tôi",
@@ -248,10 +279,16 @@ export const CHU_CHON = {
     than:
       "Trẻ dưới 8 tuổi chưa tự nhìn lại được tính cách của mình, nên kết quả bé tự tick sẽ không đáng tin. Bố mẹ hoặc thầy cô trả lời giúp — dựa trên những gì thật sự nhìn thấy trong khoảng hai tuần gần đây.",
   },
+  /**
+   * 🔴 Từ GĐ10 (hạng mục 10.6) đây là cửa DUY NHẤT dẫn tới bộ Mầm non, nên câu chữ không
+   * còn được nói riêng về chuyện đối chiếu nữa. Phụ huynh của một bé 4 tuổi chưa hề hỏi
+   * xin bản đối chiếu — đọc "bản đối chiếu hai góc nhìn cần con tự làm bài" là đọc lời
+   * giải thích cho một thứ họ không đòi.
+   */
   giaiThichConDuoi8: {
     tieuDe: "Con dưới 8 tuổi dùng bản quan sát.",
     than:
-      "Bản đối chiếu hai góc nhìn cần con tự làm bài, mà trẻ dưới 8 tuổi chưa tự đánh giá được. Bạn trả lời bản quan sát — dựa trên những gì thật sự nhìn thấy trong khoảng hai tuần gần đây.",
+      "Trẻ dưới 8 tuổi chưa tự nhìn lại được tính cách của mình, nên phần này bạn trả lời — dựa trên những gì thật sự nhìn thấy trong khoảng hai tuần gần đây. Khi con đủ 8 tuổi, hai người làm hai bài riêng rồi đối chiếu được với nhau.",
   },
 } as const;
 
@@ -345,6 +382,37 @@ export const CHU_M4 = {
   anhBiCat: "Có câu hơi dài nên ảnh phải rút gọn bớt. Bản đầy đủ vẫn ở trên màn hình.",
   chanTrangAnh: "Câu trả lời không rời máy bạn",
   nhanBieuDo: "Điểm bốn nhóm, thang 0–100",
+} as const;
+
+/* ── GĐ10 — ba dải, mỗi dải một NGƯỜI ĐỌC ────────────────────────────────── */
+
+/**
+ * 🔴 Một trang, nhưng KHÔNG phải một người đọc.
+ *
+ * Bộ TH/THCS là em học sinh tự cầm máy làm bài, mà bản báo cáo lại có cả phần viết cho bố
+ * mẹ. Để hai phần đó chảy liền nhau nghĩa là đứa trẻ cuộn xuống là đọc được đoạn người lớn
+ * bàn về mình — thứ không viết cho nó đọc.
+ *
+ * Nên: dải của bố mẹ ĐÓNG SẴN, và có một dải chắn phải bấm qua. Dải chắn không phải cái
+ * khoá — nó là gờ giảm tốc, đủ để việc đọc nhầm thành cố ý chứ không còn là tình cờ.
+ */
+export const CHU_BA_BAN = {
+  tenChung: "Phần đọc chung",
+  tenCon: "Phần của {chuThe}",
+  tenBoMe: "Phần của bố mẹ",
+  tenTuMinh: "Phần của {chuThe}",
+
+  /** Dải chắn — CHỈ dựng khi chính người được đánh giá đang cầm máy. */
+  chanTieuDe: "Phần dưới đây viết cho bố mẹ",
+  chanMoTa:
+    "Đoạn này nói chuyện với người lớn về cách đồng hành, không phải viết cho {chuThe} đọc. Đưa máy cho bố mẹ rồi bấm mở giúp mình nhé.",
+  chanNut: "Bố mẹ đã cầm máy — mở phần này",
+  chanDong: "Đóng phần của bố mẹ lại",
+
+  /** Nút in tách bản. CHỈ hiện khi trang có từ HAI dải nội dung trở lên. */
+  nhomNutIn: "In riêng từng phần",
+  nutInCon: "In phần của {chuThe}",
+  nutInBoMe: "In phần của bố mẹ",
 } as const;
 
 /* ── M6 — bài đã làm ─────────────────────────────────────────────────────── */

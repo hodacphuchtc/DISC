@@ -57,3 +57,61 @@ describe("🔴 bản in — ba luật đã trả giá mới tìm ra", () => {
     expect(thanKhoiIn()).toMatch(/\[data-khong-in\]\s*,?[\s\S]{0,40}\{[^}]*display:\s*none/u);
   });
 });
+
+/**
+ * 🔴 GĐ10 — IN TÁCH BẢN.
+ *
+ * Cơ chế mới: mỗi dải là một `<section data-ban>`, và `ket-qua.tsx` gắn cờ `data-in-ban`
+ * lên `<html>` ngay trước `window.print()`. Bốn luật dưới đây khoá đúng bốn cách nó hỏng.
+ */
+describe("🔴 in tách bản — ba dải, mỗi dải một người đọc", () => {
+  /** Đếm bộ chọn thuộc tính `[…]` — đủ để so độ đặc hiệu giữa hai luật ở đây. */
+  function demThuocTinh(boChon: string): number {
+    return (boChon.match(/\[[^\]]+\]/gu) ?? []).length;
+  }
+
+  function luatCua(bam: RegExp): { boChon: string; than: string } {
+    const than = thanKhoiIn();
+    const m = than.match(bam);
+    expect(m, `không còn luật nào khớp ${String(bam)} trong @media print`).not.toBeNull();
+    const cum = m![0];
+    return { boChon: cum.slice(0, cum.indexOf("{")), than: cum };
+  }
+
+  it("dải bị đóng trên màn hình vẫn được ép hiện khi in", () => {
+    // Cách hỏng: dải của bố mẹ đóng sau dải chắn (trẻ cầm máy). Không ép mở khi in thì bố
+    // mẹ bấm In ra tờ giấy thiếu đúng phần lời khuyên viết cho họ.
+    expect(thanKhoiIn()).toMatch(/\[data-ban\]\s*\{[^}]*display:\s*block\s*!important/u);
+  });
+
+  it("in bản của con KHÔNG kéo theo chữ của bố mẹ, và ngược lại", () => {
+    // Cách hỏng: chỉ ẩn trên màn hình rồi quên máy in — bố mẹ đưa con tờ giấy có nguyên
+    // đoạn người lớn bàn về con. Chặn ở màn hình mà hở ở giấy thì coi như không chặn.
+    const than = thanKhoiIn();
+    expect(than).toMatch(
+      /\[data-in-ban="con"\]\s+\[data-ban="boMe"\][\s\S]{0,80}display:\s*none\s*!important/u,
+    );
+    expect(than).toMatch(
+      /\[data-in-ban="boMe"\]\s+\[data-ban="con"\][\s\S]{0,80}display:\s*none\s*!important/u,
+    );
+  });
+
+  it("🔴 luật loại trừ phải ĐẶC HIỆU HƠN luật ép mở", () => {
+    // Cách hỏng tinh vi nhất: cả hai luật đều `!important`, nên `!important` không phân
+    // định được ai thắng — ĐỘ ĐẶC HIỆU mới phân định. Ai đó rút gọn bộ chọn loại trừ
+    // xuống một thuộc tính là "ép mở" thắng, và mọi bản in lại dính chữ của cả hai người.
+    const epMo = luatCua(/\[data-ban\]\s*\{[^}]*\}/u);
+    const loaiTru = luatCua(/\[data-in-ban="con"\][^{]*\{[^}]*\}/u);
+    expect(
+      demThuocTinh(loaiTru.boChon),
+      `bộ chọn loại trừ "${loaiTru.boChon.trim()}" phải nhiều thuộc tính hơn "${epMo.boChon.trim()}"`,
+    ).toBeGreaterThan(demThuocTinh(epMo.boChon));
+  });
+
+  it("luật tách bản nằm TRONG @media print, không rò ra màn hình", () => {
+    // Cách hỏng: đặt ngoài `@media print` thì lúc gắn cờ, nội dung biến mất ngay trên màn
+    // hình — người dùng thấy trang nháy trắng rồi mới hiện hộp thoại in.
+    const truocKhoiIn = CSS.slice(0, CSS.indexOf("@media print"));
+    expect(truocKhoiIn).not.toMatch(/\[data-in-ban/u);
+  });
+});

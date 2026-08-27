@@ -55,14 +55,15 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 27/08/2026 — tối)
+## TRẠNG THÁI (cập nhật 27/08/2026 — tối, chặng 2)
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **45/48 hạng mục PLAN.md · 731 test xanh ·
+Ứng dụng chạy được đầu-cuối trên local. **47/48 hạng mục PLAN.md · 770 test xanh ·
 `npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
 Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
-🔴 **GĐ10 mới xong chặng 1 phần đầu** — còn `10.4`, `10.6`, và trọn chặng 2 (`10.7`).
+✅ **GĐ10 đã hết sạch việc MÁY.** Hạng mục duy nhất còn lại là `10.7` (chặng 2), chặn ở
+NGƯỜI — chờ chủ dự án bấm thử rồi quyết, cộng một gói ký duyệt thứ hai.
 
 - **GĐ0–GĐ8** — dựng xong sản phẩm chạy đầu-cuối: khung Next 16 · 104 câu hỏi + lõi chấm
   điểm + năm hàng rào `HL-1..HL-5` · luồng làm bài 5 bộ đề · màn kết quả + ảnh PNG + in PDF ·
@@ -74,20 +75,22 @@ Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (REA
   bóc lớp dần + bản in mở sẵn, ô "điều đang băn khoăn", **so sánh phong cách bố mẹ ↔ con**,
   và `docs/noi-dung-cho-ky-duyet.md` để người chuyên môn ký.
 
-- **GĐ10** — **chặng 1 (đang dở)**: sửa bốn lỗi sai người đọc · đại từ hai chiều
+- **GĐ10** — **chặng 1 XONG TRỌN**: sửa bốn lỗi sai người đọc · đại từ hai chiều
   (phụ huynh của học sinh TH/THCS lần đầu nhận được lời khuyên) · tóm tắt 30 giây ·
-  bảng tra D-I-S-C có từ tiếng Anh · đoạn mở đầu 136 từ nói thật về giới hạn.
+  bảng tra D-I-S-C có từ tiếng Anh · đoạn mở đầu 136 từ nói thật về giới hạn ·
+  **ba dải + in tách bản** (`10.4`) · **màn 1 hai nhánh theo người cầm máy** (`10.6`).
 
 ### ĐANG DỞ
 
-**GĐ10** — xong `10.1` `10.2` `10.3` `10.5`. Còn `10.4` (ba dải + in theo từng bản) và
-`10.6` (sắp lại màn 1 hai nhánh), cả hai đều giao là làm được ngay. Chặng 2 (`10.7`) chờ
-chủ dự án bấm thử chặng 1 trước.
+**Không còn hạng mục MÁY nào.** `10.7` (chặng 2 — nội dung ba bản) là việc duy nhất còn
+lại, và nó chặn ở NGƯỜI: chờ chủ dự án bấm thử, cộng **gói ký duyệt thứ hai** (phản hồi
+tính cách cho người lớn — gần tham vấn hơn, người ký chịu trách nhiệm ở mức khác).
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
-1. 🔴 **Bấm thử chặng 1 của GĐ10** — `npm run xem-thu`, nạp 8 bài mẫu, soi ba khối mới
-   (tóm tắt 30 giây · bảng tra D-I-S-C · đoạn mở đầu). Quyết xong mới chạy chặng 2.
+1. 🔴 **Bấm thử trọn GĐ10** — `npm run xem-thu`. Soi hai thứ mới: màn 1 hỏi *"Ai đang cầm
+   máy?"*, và màn kết quả bộ TH/THCS có dải chắn *"Phần dưới đây viết cho bố mẹ"* cùng hai
+   nút in riêng. Quyết xong mới chạy chặng 2.
 2. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
 3. **Đọc `docs/noi-dung-cho-ky-duyet.md`** rồi đưa cho người có chuyên môn tâm lý/giáo dục.
@@ -142,6 +145,21 @@ toán. Ba việc đầu nên làm ngay tuần này.
 
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
+
+- **Một thay đổi đặc tả làm BỐN file test cùng đỏ, vì mỗi file tự gõ lại đường đi màn 1**
+  (27/08/2026, `10.6`). Sắp lại M1 thành hai nhánh làm **34 cửa đỏ** ở `m1-chon-doi-tuong` ·
+  `m2-truoc-khi-bat-dau` · `m3-lam-bai` · `luu-boi-canh`. Bản thân việc đỏ là ĐÚNG — đặc tả
+  đổi thật. Cái sai là phải sửa BỐN chỗ cho MỘT thay đổi, và lần sau vẫn thế. Đã gom về
+  `tests/duong-m1.ts`: một chỗ duy nhất biết cách đi từ M1 vào mỗi bộ đề, và nó đọc lên như
+  chính bản đặc tả *"mỗi bộ đề đúng một cửa"*. **Test dùng chung một luồng vào thì luồng đó
+  phải là một hàm dùng chung, không phải một đoạn ai cũng chép lại.**
+- **Muốn máy tự làm trọn một bài thì phải TRÁNH MỨC GIỮA** (27/08/2026). Trả lời xoay vòng
+  đều là ra hồ sơ phẳng, và hàng rào HL-1 từ chối kết luận — ĐÚNG thiết kế, nhưng rất dễ
+  đọc nhầm thành "giao diện hỏng" rồi đi sửa nhầm chỗ. Và phải **trả lời TRƯỚC rồi mới bấm
+  "Xem kết quả"**: nút đó hiện ra từ màn cuối trong khi câu trên chính màn đó chưa được chọn.
+- **Đặt tên hằng mới phải soi TIỀN TỐ của hằng cũ** (27/08/2026). `CHU_BAN` (ba bản báo cáo)
+  đụng `CHU_BAN_KHOAN` (ô băn khoăn) đã có. Đổi thành `CHU_BA_BAN`. Rẻ — nhưng không có
+  bước kiểm thì hai khái niệm khác hẳn nhau nằm cạnh nhau với cái tên gần y hệt.
 
 - **Bảng đại từ khoá MỘT CHIỀU theo bộ đề đã âm thầm cắt cả một nhóm người dùng khỏi sản
   phẩm** (27/08/2026, GĐ10). `CHU_THE[maBoDe]` ngầm giả định *"một bộ đề = một người đọc"*.

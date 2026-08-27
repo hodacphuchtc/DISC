@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { KhoangDisc } from "../app/khoang/disc";
 import { CHU_CHON, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import { DO_DAI_BIET_DANH_TOI_DA, demKyTu } from "../modules/test/biet-danh";
+import { DUONG_M1 } from "./duong-m1";
 
 afterEach(cleanup);
 
@@ -13,7 +14,7 @@ const bam = (ten: string | RegExp) =>
 /** Đi từ M1 tới M2 bằng đường THCS (không có câu hỏi phụ). */
 function vaoM2() {
   render(<KhoangDisc />);
-  bam(/^Trung học cơ sở/u);
+  DUONG_M1.THCS();
   bam(CHU_CHON.nutTiepTuc);
 }
 
@@ -86,7 +87,7 @@ describe("M2 — trước khi bắt đầu", () => {
 
   it("bộ đề đi theo đúng lựa chọn ở M1 — thời gian ước lượng khớp bộ", () => {
     render(<KhoangDisc />);
-    bam(/^Mầm non/u);
+    DUONG_M1.MN();
     bam(CHU_CHON.nutTiepTuc);
     expect(screen.getByText(/Mầm non · 20 câu/u)).toBeInTheDocument();
     expect(screen.getByText(/Khoảng 5–6 phút/u)).toBeInTheDocument();

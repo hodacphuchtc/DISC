@@ -170,3 +170,40 @@ export function NutLamLai({ onLamLai }: { readonly onLamLai: () => void }) {
     </button>
   );
 }
+
+/**
+ * NÚT IN — một nút khi trang chỉ có một người đọc, hai nút khi có hai.
+ *
+ * 🔴 Cờ `data-in-ban` gắn THẲNG lên `<html>` bằng DOM, KHÔNG qua state React.
+ * `window.print()` chặn luồng đồng bộ: đặt state rồi gọi print ngay thì React chưa kịp vẽ
+ * lại, và hộp thoại in mở ra với DOM cũ — tức là in nhầm bản, im lặng, không lỗi nào.
+ *
+ * Gỡ cờ ở `afterprint`. Nếu vì lý do nào đó sự kiện không bắn, cờ nằm lại cũng vô hại:
+ * luật dùng nó sống trong `@media print` nên màn hình không đổi gì, và lần in sau luôn
+ * ghi đè hoặc gỡ cờ ngay đầu hàm.
+ */
+export function NutIn({ ban, nhan }: { readonly ban?: "con" | "boMe"; readonly nhan: string }) {
+  function in_() {
+    const goc = document.documentElement;
+    if (ban) goc.setAttribute("data-in-ban", ban);
+    else goc.removeAttribute("data-in-ban");
+
+    const don = () => {
+      goc.removeAttribute("data-in-ban");
+      window.removeEventListener("afterprint", don);
+    };
+    window.addEventListener("afterprint", don);
+    window.print();
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={in_}
+      className="min-h-[48px] rounded-xl border border-neutral-300 px-5 text-[15px] font-medium text-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2"
+      style={{ outlineColor: MAU.timCongNghe }}
+    >
+      {nhan}
+    </button>
+  );
+}

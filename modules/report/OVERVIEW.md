@@ -57,7 +57,32 @@ giao diện không có đường nào đổ chữ của bố mẹ vào mục c�
 🔴 `thayChuThe(chuoi, maBoDe, banDoc)` — mặc định `banDoc = "con"` giữ nguyên hành vi cũ.
 Cùng một bài TH: con đọc "em", bố mẹ đọc "con".
 
+**GĐ10 `10.4` — ba bản đó đã RA TỚI MÀN HÌNH, gói trong `<section data-ban>`** (`chung` ·
+`con` · `boMe` · `tuMinh`, dựng ở `app/khoang/lop-sau.tsx`). Hai hệ quả cần nhớ:
+
+- Bộ **TH/THCS** nay hiện CẢ `banBoMe`, nhưng ĐÓNG SẴN sau một **dải chắn** — vì chính đứa
+  trẻ đang cầm máy. Trước đó phần này bị chặn thẳng, nghĩa là phụ huynh của mọi học sinh
+  tiểu học/THCS không đọc được chữ nào.
+- Bản in **tách theo dải**: cờ `data-in-ban` trên `<html>` + luật trong `app/globals.css`.
+  Đo trên Chromium thật (27/08/2026): tờ của em 2286 ký tự · tờ bố mẹ 3144 ký tự ·
+  **0 câu rò rỉ chéo**. Dải bố mẹ ẩn trên màn mà vẫn giữ 1248 ký tự trong DOM ⇒ in được.
+
 ## 6. Cạm bẫy đã trả giá
+
+- 🔴 **`!important` KHÔNG phân định được ai thắng khi CẢ HAI luật cùng `!important`** — độ
+  ĐẶC HIỆU mới phân định (27/08/2026, `10.4`). Bản in tách theo dải dựa trên hai luật nằm
+  cạnh nhau trong `@media print`: luật ép dải hiện (`[data-ban]`, 0-1-0) và luật loại trừ
+  (`[data-in-ban="con"] [data-ban="boMe"]`, 0-2-0). Rút gọn bộ chọn thứ hai xuống một thuộc
+  tính là mọi bản in lại dính chữ của cả hai người đọc — im lặng, không lỗi nào.
+  `tests/ban-in.test.ts` đếm số bộ chọn thuộc tính của hai luật để canh đúng quan hệ đó.
+- 🔴 **`window.print()` chặn luồng đồng bộ ⇒ KHÔNG đặt cờ in qua state React** (27/08/2026).
+  Đặt state rồi gọi `print()` ngay thì React chưa kịp vẽ lại và hộp thoại in mở với DOM cũ:
+  in nhầm bản, không lỗi nào. `NutIn` gắn `data-in-ban` thẳng lên `<html>` bằng DOM rồi gỡ ở
+  `afterprint`.
+- 🔴 **Ẩn ở ANCESTOR, đừng đi gỡ từng khối bên trong.** Con cháu của một khối `display:none`
+  thì không dựng, kể cả khi chính chúng mang `display:block !important` như `[data-lop-sau]`.
+  Nhờ vậy luật tách bản không cần biết bên trong mỗi dải có gì — thêm khối mới vào dải không
+  làm hở bản in.
 
 - 🔴 **Bảng đại từ một chiều đã cắt cả một nhóm người dùng khỏi sản phẩm.** `CHU_THE[maBoDe]`
   ngầm giả định "một bộ đề = một người đọc" ⇒ bộ TH/THCS bị chặn khỏi TOÀN BỘ `LOI_KHUYEN`,

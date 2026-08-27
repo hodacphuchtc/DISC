@@ -273,8 +273,11 @@ export const MO_TA_KHOANG: Record<MaKhoang, string> = {
 ```
 DISC (khoang)
  │
- ├── M1  Chọn đối tượng          4 thẻ lớn: Mầm non · Tiểu học · THCS · Phụ huynh
- │        └─ M1b Hỏi thêm        (lớp mấy? / làm cho ai?) — chỉ hiện khi cần
+ ├── M1  Ai đang cầm máy?          2 thẻ: Em học sinh (tự làm) · Bố mẹ hoặc thầy cô
+ │        ├─ nhánh HỌC SINH        hỏi lớp MỘT lần, trải lớp 1–9
+ │        │     lớp 1–2 → bộ MN kèm hộp giải thích (ADR-002) · lớp 3–5 → TH · lớp 6–9 → THCS
+ │        └─ nhánh NGƯỜI LỚN       "làm cho ai?" → về mình = PH
+ │                                 → về con: hỏi tuổi · dưới 8 → MN kèm giải thích · từ 8 → QS
  │
  ├── M2  Trước khi bắt đầu       4 dòng: bao lâu · không có đúng sai · dữ liệu không rời máy
  │                                · trả lời theo phản xạ đầu tiên
@@ -292,6 +295,13 @@ DISC (khoang)
  │
  └── M6  Bài đã làm              danh sách bài trên máy này · mở lại · xoá · xuất .zip sao lưu
 ```
+
+> **Cập nhật 27/08/2026 (GĐ10, hạng mục 10.6).** M1 trước đây bày bốn thẻ trộn hai câu
+> hỏi khác nhau: ba thẻ nói về NGƯỜI ĐƯỢC ĐÁNH GIÁ, một thẻ nói về NGƯỜI TRẢ LỜI. Hậu quả
+> đo được là bố mẹ của một bé lớp 1 có HAI cửa cùng dẫn tới bộ Mầm non (bấm *Tiểu học →
+> Lớp 1*, hoặc *Phụ huynh → về con → 6 tuổi*) — cửa nào cũng đúng nên chẳng cửa nào hiển
+> nhiên. Tách theo NGƯỜI CẦM MÁY thì mỗi bộ đề còn đúng một cửa, và tuổi/lớp chỉ hỏi một
+> lần. **`dinhTuyen()` không đổi một dòng** — chỉ đổi cách màn 1 thu thập đầu vào.
 
 **Quy tắc màn hình M3 với trẻ nhỏ (MN, TH):**
 - **Một câu một màn.** Trẻ nhìn thấy 20 câu cùng lúc là nản trước khi bắt đầu.
