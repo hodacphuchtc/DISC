@@ -70,3 +70,29 @@ describe("soNgayGiua", () => {
     expect(soNgayGiua(null, "2026-08-27")).toBeNull();
   });
 });
+
+describe("🔴 HỒI QUY: ngày phụ thuộc múi giờ", () => {
+  /**
+   * Lỗi đã trả giá 27/08/2026 — CI đỏ ngay lần chạy đầu tiên.
+   *
+   * `hienNgay()` đọc ngày theo múi giờ của MÁY ĐANG CHẠY. Đó là hành vi ĐÚNG với người
+   * dùng: họ thấy ngày theo giờ của chính họ. Nhưng nó biến một ngày gõ cứng trong test
+   * thành trò may rủi — máy dev ở +07 thì xanh, GitHub Actions chạy ở UTC thì đỏ.
+   *
+   * `vitest.config.mts` ghim TZ = Asia/Ho_Chi_Minh. Test này canh cái ghim đó còn sống.
+   */
+  it("môi trường test phải được ghim vào múi giờ +07", () => {
+    const lech = new Date("2026-08-27T00:00:00Z").getTimezoneOffset();
+    expect(lech, "TZ chưa được ghim — thêm env.TZ vào vitest.config.mts").toBe(-420);
+  });
+
+  it("mốc 06:08 giờ Việt Nam hiển thị là NGÀY HÔM ĐÓ, không lùi một ngày", () => {
+    // Cùng mốc này ở UTC là 26/08 lúc 23:08 — sai một ngày.
+    expect(hienNgay("2026-08-27T06:08:00+07:00")).toBe("27/08/2026");
+  });
+
+  it("mốc sát nửa đêm giờ Việt Nam vẫn ra đúng ngày", () => {
+    expect(hienNgay("2026-08-27T00:30:00+07:00")).toBe("27/08/2026");
+    expect(hienNgay("2026-08-27T23:30:00+07:00")).toBe("27/08/2026");
+  });
+});
