@@ -19,47 +19,44 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
 
-**Phiên 27/08/2026 (tối, chặng 3) — GĐ10 XONG TRỌN: 48/48, hết việc trong sổ**
+**Phiên 27/08/2026 (tối, chặng 3) — GĐ10 xong trọn · GĐ11–GĐ14 vừa mở, CHỜ DUYỆT**
 
-**1. Vừa xong.** `10.4` (ba dải + in tách bản) · `10.6` (M1 hai nhánh) · `10.7` (nội dung
-ba bản, chặng 2). **805 test · `npm run kiem` + `npm run build` xanh · soi Chromium thật,
-0 lỗi JS.** Đã tick hết 48/48 hạng mục.
+**1. Vừa xong.** `10.4` `10.6` `10.7` — **48/48 hạng mục GĐ0–GĐ10**. Đã push `origin/main`,
+CI xanh: `76d9cde` (ba dải + in tách bản, M1 hai nhánh) · `84c8a23` (nội dung ba bản, hai gói
+ký duyệt) · `f31a3de` (sửa lỗi 8 nhịp dồn nhầm trục D). **805 test · `kiem` + `build` xanh.**
 
-**2. ĐANG DỞ — không còn gì trong PLAN.md.** Mọi việc còn lại ở mục CHỜ NGOÀI của
-`CLAUDE.md`, dẫn đầu là **hai** chữ ký chuyên môn (gói A và gói B).
+**2. ĐANG DỞ — chờ MỘT chữ.** Lộ trình GĐ11–GĐ14 (**DISC GIA ĐÌNH**, 20 hạng mục, 28 ngày)
+đã viết xong vào `PLAN.md` dòng ~770–1160. Chủ dự án nói **chỉ khi gõ "DUYỆT" mới bắt đầu**.
+Duyệt rồi thì làm từ **`11.1` — spike mã QR**, file mới `modules/core/gia-dinh/ma-moi.ts`
++ trang tạm `app/thu-ma-moi/page.tsx`. Thiết kế đầy đủ (645 dòng, có cả phần thẩm định đầu
+tư): `~/.claude/plans/t-i-test-v-purrfect-star.md`.
 
-**3. 🔴 CÁI BẪY LỚN NHẤT CỦA PHIÊN NÀY — ĐỌC TRƯỚC KHI SỬA BẤT CỨ TEST NÀO.**
-Máy đang bị **Docker chiếm ~200% CPU** (6 container, không của dự án này). Ở load average
-32,6 thì `waitFor` của Testing Library đói CPU và **19–20 test đỏ GIẢ**, mỗi test mất
-6–23 giây thay vì vài chục mili-giây. Cùng bộ mã đó chạy `npx vitest run --maxWorkers=2`
-ra **796/796 xanh**. Thấy test đỏ hàng loạt mà lỗi toàn là hết giờ chờ ⇒ soi `uptime` và
-`ps aux | sort -nrk 3` TRƯỚC khi soi code. Suýt nữa đã đi sửa mã lành.
+**3. Chặn ở NGƯỜI / NGOÀI.** (a) **Chữ "DUYỆT"** — chặn toàn bộ GĐ11. (b) Hai hồ sơ ký duyệt
+`docs/noi-dung-cho-ky-duyet.md` (gói A, 11.506 từ) + `...-goi-b.md` (gói B, 1.537 từ) **chưa
+gửi đi ký** — nên gửi TRƯỚC khi viết 3.000 từ của `14.3`. (c) **Gọi đội dev app chủ 30 phút**
+(React bản mấy · có Tailwind không) — họ sẽ ôm hệ 28 ngày này mà chưa ai hỏi họ. (d) Nghi
+thức mời của trường + gọi 5 phụ huynh vừa nghỉ.
 
-**4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
-- **Ba dải trên máy có đủ hai bài** (bộ PH của bố mẹ + bài con lớp 4), đo bằng `textContent`
-  chứ không phải `innerText`: chung **2.598** ký tự · con **1.036** · bố mẹ **2.696**, và
-  **0 câu ≥60 ký tự dùng chung ở cả BA cặp dải**.
-  ⚠️ `innerText` chỉ trả chữ ĐANG HIỆN — dải đóng đo ra 57 ký tự còn dải `display:none`
-  lại trả trọn textContent. Hai thước khác nhau, số không so được với nhau.
-- **In tách bản** (đo trước đó): tờ của em 2.286 ký tự · tờ bố mẹ 3.144 · 0 câu rò rỉ chéo.
-- **Số lớp gập:** MN/QS 5 · TH/THCS **8** · PH 4 · **+3 nếu máy có bài bộ PH** (so phong
-  cách + nhìn về phía bố mẹ + thoả thuận), nên bộ QS có bài PH = **8**.
-- **Nội dung chặng 2:** 1.934 từ mới / 24 đoạn (8 khoá × 3 trường), trung bình 81 từ/đoạn.
-  Dưới ước lượng 2.400–3.000 của sổ — lý do và cách xử ghi ngay dưới hạng mục `10.7`.
-- Hai hồ sơ ký duyệt: gói A **11.506 từ**, gói B **1.537 từ**.
-- Playwright vẫn không sống qua phiên: `npm i playwright` vào thư mục tạm; Chromium có sẵn
-  ở `~/Library/Caches/ms-playwright`. **Trang chạy ở `/`, KHÔNG phải `/khoang-disc/`.**
-- **Máy tự làm trọn một bài:** phải TRÁNH MỨC GIỮA (hàng rào HL-1 từ chối hồ sơ phẳng), và
-  phải trả lời TRƯỚC rồi mới bấm "Xem kết quả".
+**4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.** *(khảo sát sản phẩm 27/08 — phần đắt nhất của phiên)*
+- **1.000+ gia đình đang trả tiền · app chủ đang sống, phụ huynh vào thường xuyên.**
+- **< 10 người ngoài vòng quen từng làm xong một bài** ⇒ tiếp cận **dưới 1%** tệp khách.
+- 🔴 **CHƯA gia đình nào tự làm 2 bài** — dù tính năng ghép 2 người đã có từ GĐ5. Đây là
+  giả định đang đỡ 9,5 ngày của GĐ14. Chủ dự án đã nghe và chọn xây trọn.
+- **Chưa đo lý do phụ huynh rời đi.** Mục tiêu kinh doanh = **giữ chân**, không phải mồi khách.
+- Trần kiến trúc: ADR-001 cấm backend ⇒ cả nhà phải dùng chung một máy. `13.1` (mã mời/QR,
+  ~40 byte) gỡ được trần này mà không phá ADR-001.
+- Nội dung cặp N người: **PA-2 = 56 đoạn ≈ 3.000 từ** (PA-1 là 168 đoạn ≈ 12.600 từ). Chọn
+  PA-2 vì thêm quan hệ mới (ông bà, bố dượng) tốn **+0 đoạn**. Chi tiết ở file thiết kế mục 8.
 
-**5. Cạm bẫy vừa trả giá.** Xem `CLAUDE.md` mục CẢNH BÁO (toàn hệ) và
-`modules/report/OVERVIEW.md` mục 6 (miền báo cáo).
+**5. Cạm bẫy vừa trả giá.** Bốn mục mới đã ghi `CLAUDE.md` mục CẢNH BÁO; bài học miền báo cáo
+ở `modules/report/OVERVIEW.md` mục 6. Đắt nhất: **script sửa hàng loạt dò khoá bằng
+`indexOf("  D: {")` khớp nhầm khối `LOI_KHUYEN` đứng trước** ⇒ cả 8 câu dồn vào riêng trục D,
+không cửa kiểm nào bắt được, **chỉ lộ ra khi NHÌN ảnh chụp trang**.
 
 **6. Lệnh phiên sau nên chạy.**
 ```bash
-npx vitest run --maxWorkers=2    # 805 test — dùng cờ này khi máy đang tải nặng
-npm run xem-thu                  # bản phát hành thật, cổng 3100
-node scripts/xuat-noi-dung-ky-duyet.mjs   # sinh lại HAI hồ sơ ký duyệt
+npx vitest run --maxWorkers=2   # 805 test — dùng cờ này khi máy đang tải nặng
+npm run xem-thu                 # bản phát hành thật, cổng 3100
 ```
 
 ---
@@ -767,6 +764,403 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
 
 ---
 
+## 🏠 DISC GIA ĐÌNH — GĐ11 → GĐ14 (ước lượng: 28 ngày · chốt 27/08/2026)
+
+> **Vì sao có bốn giai đoạn này.** Chủ dự án chạy thử GĐ10 và nêu bảy việc. Đọc kỹ thì chúng
+> không phải bảy lỗi rời rạc — chúng là một sản phẩm khác: từ *"đo một đứa trẻ"* sang
+> *"giúp một gia đình hiểu nhau"*. Mục tiêu kinh doanh: **giữ chân trong hơn 1.000 gia đình
+> đang học**. Bản thiết kế đầy đủ: `~/.claude/plans/t-i-test-v-purrfect-star.md`.
+>
+> 🔴 **GIẢ ĐỊNH ĐANG ĐỠ GĐ14 (9,5 ngày):** *một phụ huynh sẽ triệu tập được từ hai thành
+> viên trở lên cùng làm bài.* Giả định này hiện có **0 quan sát ủng hộ và 1 quan sát phản
+> bác** — tính năng ghép 2 người đã có từ GĐ5 và **chưa lần nào tự kích hoạt ngoài đời**.
+> Chủ dự án đã nghe phản biện và chọn xây trọn. Ghi lại đây để sau còn truy được.
+>
+> **Ba bảo hiểm đã cài:** GĐ11 phát cho 30 nhà ngay khi xong (ngày 5, không đợi hết gói) ·
+> mốc đo `baiThuHai` làm sớm ở `11.6` · `13.1` mã mời gỡ trần "cả nhà một máy" **trước** GĐ14.
+>
+> **Hai việc NGƯỜI chạy song song, 0 ngày dev:** chốt nghi thức mời của trường (ai nói, ở
+> đâu, lúc nào) · gọi 5 phụ huynh vừa nghỉ để biết lý do rời thật.
+
+---
+
+## GIAI ĐOẠN 11 — Gỡ khó chịu + giết rủi ro kỹ thuật sớm (ước lượng: 5 ngày)
+
+> **Xong giai đoạn này là có thứ PHÁT ĐƯỢC cho 30 gia đình thật.** Không đợi GĐ14.
+
+- [ ] 🔴 **11.1 — SPIKE: nhét một hồ sơ DISC vào mã QR**
+  - (a) Chứng minh 4 điểm số + biệt danh + vai + mã bộ đề + ngày phát gói vừa một mã QR vẽ
+    bằng Canvas 2D **không thêm thư viện nào**. File mới `modules/core/gia-dinh/ma-moi.ts`
+    (tầng lõi, hàm thuần): `goiHoSo()` → chuỗi ~12 ký tự có kiểm tổng 2 ký tự, và `moHoSo()`
+    giải ngược. Trang tạm `app/thu-ma-moi/page.tsx` để nhìn bằng mắt.
+  - (b) Mở `/thu-ma-moi`, thấy một mã QR trên màn. **Lấy điện thoại quét nó** — điện thoại
+    phải hiện ra đúng chuỗi mã. Gõ chuỗi đó vào ô bên dưới, bấm *Mở* → hiện lại đúng 4 con
+    số ban đầu. Sửa một ký tự trong chuỗi → phải báo lỗi, không ra hồ sơ rác.
+  - (c) `tests/ma-moi.test.ts` — gói/mở khứ hồi giữ nguyên điểm · kiểm tổng bắt lỗi 1 ký tự ·
+    mã quá 7 ngày bị từ chối · **chuỗi mã KHÔNG chứa câu trả lời nào**.
+  - (d) 0,5 ngày.
+  - (e) chặn: MÁY.
+  - 🔴 **LÀM ĐẦU TIÊN, TRƯỚC MỌI THỨ KHÁC.** Đây là thứ duy nhất trong cả gói chưa từng
+    chứng minh chạy được, và nó gỡ trần *"cả nhà phải dùng chung một máy"* — cái trần quyết
+    định GĐ14 có bao giờ được kích hoạt hay không. Hỏng ở đây thì GĐ13 và GĐ14 đổi hình dạng,
+    và biết điều đó ở ngày 1 rẻ hơn biết ở ngày 18.
+
+- [ ] **11.2 — Bỏ ô thu liên hệ**
+  - (a) Xoá `app/components/o-lien-he.tsx` và `modules/core/lien-he/luu-tam.ts`; gỡ 3 chỗ ở
+    `app/khoang/ket-qua.tsx` (import dòng 11, 13 và khối JSX ~266–272); gỡ `LIEN_HE_SATA` +
+    `CHU_LIEN_HE` khỏi `config/disc-tu-dien.ts`. Gỡ mốc chết `deLaiSo` khỏi
+    `modules/core/do-phieu/index.ts`.
+    🔴 **GIỮ NGUYÊN** `modules/core/lien-he/kieu.ts` và `tests/lien-he-sach.test.ts` — đó là
+    hàng rào biên dịch cấm dữ liệu trẻ lọt ra ngoài, và `tests/do-phieu.test.ts` đang dùng
+    `timKhoaCam` từ đó. Xoá nhầm là gỡ mất một lớp phòng vệ.
+  - (b) Làm trọn một bài, cuộn xuống hết màn kết quả: **không còn ô xin số điện thoại**, không
+    còn nút *Gửi số cho SATA ROBO*. Các nút Tải ảnh / In / Làm bài khác vẫn còn nguyên.
+  - (c) `tests/do-phieu.test.ts` sửa còn 3 mốc · `tests/lien-he-sach.test.ts` vẫn xanh nguyên ·
+    `tests/m4-ket-qua.test.tsx` xanh.
+  - (d) 0,5 ngày. — (e) chặn: MÁY.
+
+- [ ] 🔴 **11.3 — Màn làm bài: 5 câu/màn, đánh số, có khung**
+  - (a) `config/disc-cau-hoi.ts`: `cauMoiMan` → `5` cho MN và TH. Nới kiểu `1 | 5` →
+    `number` ở `modules/core/bo-de/kieu.ts:50`. `app/khoang/lam-bai.tsx` (~147–174): mỗi câu
+    thành **thẻ có khung** — viền 1px trung tính, **viền trái 3px tím thương hiệu**, số thứ
+    tự **theo cả bài** (`11`, không phải `1` của trang) trong vòng tròn nhạt góc trái. Câu đã
+    trả lời → viền trái đổi sang **cam**. Bộ TH giữ cỡ chữ ≥18px và nút ≥56px.
+    🔴 Kèm bắt buộc: `PHIEN_BAN_BO_DE` "1.0"→"1.1" ở `config/disc-cau-hoi.ts:26`, chạy
+    `node scripts/sinh-checksum.mjs`, và thêm dòng báo tử tế khi phát hiện nháp phiên bản cũ.
+  - (b) Vào bài bộ **Tiểu học**: thấy **5 câu một màn**, mỗi câu có số thứ tự và khung riêng,
+    **không còn dính vào nhau** như ảnh đã chụp. Chọn một câu → viền trái đổi màu cam. Bấm
+    *Tiếp* khi còn câu trống → báo lỗi **và cuộn tới đúng câu còn thiếu**. Làm dở rồi tải lại
+    trang → thấy dòng báo nháp cũ không dùng được nữa, không im lặng mất bài.
+  - (c) `tests/m3-lam-bai.test.tsx` sửa số radiogroup mỗi màn · `tests/tien-trinh.test.ts` sửa
+    số trang (TH 20 câu → 4 trang) · `tests/checksum.test.ts` xanh lại sau khi sinh checksum.
+  - (d) 1,5 ngày.
+  - (e) chặn: MÁY.
+  - 🔴 **Rủi ro: đổi `cauMoiMan` HUỶ MỌI BÀI ĐANG LÀM DỞ** của người dùng, vì nó nằm trong
+    checksum bộ đề (`modules/core/bo-de/bam.ts:37`). Hiện gần như chưa ai có bài dở nên **đây
+    là thời điểm rẻ nhất để đổi** — sáu tháng nữa với 1.000 nhà thì đắt hơn nhiều.
+  - 🔴 Đi ngược đặc tả §5.2 *"MN & TH: một câu một màn"*. Chủ dự án đã chốt lật luật này; phải
+    viết `ADR-006` ghi rõ vì sao và cách giảm thiệt hại (giữ cỡ chữ + nút to cho bộ TH).
+
+- [ ] **11.4 — Tách rõ bản của con và bản của bố mẹ**
+  - (a) Chủ dự án nói *"hai bản in thấy thông tin giống nhau"*. Đo lại: hai tờ **không dùng
+    chung câu nào**, nhưng **nhìn thì giống** vì cùng mở đầu bằng biểu đồ và bốn khối trục.
+    Sửa để khác nhau **ngay dòng đầu**: `TenDai` ở `app/khoang/lop-sau.tsx` thành **tiêu đề
+    trang thật sự** (không phải nhãn nhỏ) — *"Bin — bản của em"* vs *"Bin — phần dành cho bố
+    mẹ"*; đảo thứ tự khối trong dải bố mẹ để **"một việc làm được ngay" lên đầu** thay vì cuối.
+  - (b) Làm một bài bộ TH, bấm *In phần của em* rồi *In phần của bố mẹ*. Đặt hai tờ cạnh nhau:
+    **dòng đầu tiên phải khác nhau**, và tờ bố mẹ mở đầu bằng việc làm được chứ không bằng
+    biểu đồ. Đưa tờ của em cho một người lạ đọc — họ phải nói được ngay tờ này viết cho ai.
+  - (c) `tests/ban-in.test.ts` mở rộng: hai dải có tiêu đề khác nhau · `tests/ba-dai.test.tsx`
+    xanh nguyên · `tests/ba-ban-noi-dung.test.ts` giữ luật 0 câu trùng.
+  - (d) 1 ngày. — (e) chặn: MÁY.
+
+- [ ] **11.5 — Lớp 1–12 và "trên lớp 12"**
+  - (a) `config/disc-nguong.ts`: `LOP_LON_NHAT` 9 → 12, thêm mục *"Trên lớp 12"*.
+    `modules/test/dinh-tuyen.ts` thêm nhánh: **lớp 10–12 và trên 12 → bộ PH** (tự đánh giá,
+    thang 5 mức, câu chữ người lớn), lứa nội dung dùng tầng `NGUOI_LON` sẵn có.
+    🔴 **ADR-002 GIỮ NGUYÊN, không đụng:** lớp 1–2 vẫn ra bộ MN kèm hộp giải thích.
+  - (b) Ở màn 1 chọn *Em học sinh* → thấy đủ **lớp 1 tới lớp 12** và một ô *Trên lớp 12*.
+    Bấm lớp 11 → ra *Bộ đề: Phụ huynh*. Bấm lớp 1 → vẫn ra *Bộ đề: Mầm non* **kèm hộp giải
+    thích màu tím** (đây là luật ADR-002, bấm thử để chắc nó chưa bị phá).
+  - (c) `tests/dinh-tuyen.test.ts` mở rộng quét đủ 12 lớp + "trên 12" · `tests/m1-chon-doi-tuong.test.tsx` ·
+    `tests/duong-m1.ts` cập nhật đường đi chung.
+  - (d) 0,5 ngày. — (e) chặn: MÁY.
+
+- [ ] **11.6 — Đo hành vi: mốc `baiThuHai`**
+  - (a) `modules/core/do-phieu/index.ts` thêm 3 mốc: `themThanhVien` · **`baiThuHai`** ·
+    `phanTichGiaDinh`. Màn mới `app/khoang/so-lieu.tsx` (chỉ đọc localStorage, **không gửi đi
+    đâu**): máy này có mấy bài, mấy biệt danh khác nhau, đã đạt ≥2 bài chưa.
+    Mốc `baiThuHai` ở GĐ11 định nghĩa là *"máy này đã lưu ≥2 bài với biệt danh khác nhau"* —
+    đo được ngay mà chưa cần sổ gia đình.
+  - (b) Làm 2 bài với 2 biệt danh khác nhau trên cùng máy, mở màn *Số liệu máy này* → thấy
+    con số nhảy lên 1. Đây là **con số quan trọng nhất của cả gói** — nó chính là giả định
+    đang đỡ GĐ14.
+  - (c) `tests/do-phieu.test.ts` mở rộng 3 mốc mới · `tests/so-lieu.test.tsx` mới.
+  - (d) 0,5 ngày. — (e) chặn: MÁY.
+  - 🔴 Bộ đếm phễu đã có từ GĐ6 nhưng **không màn nào đọc nó** — chỉ test dùng. Không sửa
+    chỗ này thì phát hành xong vẫn mù đúng như hôm nay.
+
+- [ ] **11.7 — Ba ADR + sửa đặc tả cho khớp**
+  - (a) Ba quyết định của GĐ11 lật luật cũ nên phải có ADR, nếu không sáu tháng nữa không ai
+    truy được vì sao: `docs/decisions/ADR-005-cho-nhap-ten-that.md` (lật §10.2 — bối cảnh, cái
+    giá, **bốn hàng rào vẫn giữ**) · `ADR-006-nam-cau-moi-man.md` (lật §5.2 — vì sao, và cách
+    giảm thiệt hại cho bộ TH) · `ADR-007-don-vi-du-lieu-la-gia-dinh.md` (3 bảng, hạn mức, vì
+    sao không tách bảng nối). Sửa `docs/BA/DISC_BA.md` §5.2 (sơ đồ màn hình: bảng gia đình
+    thay wizard) · §9.2 (thêm luật **được nói KHÁC CÁCH, cấm nói AI HƠN AI**) · §10.1–10.2
+    (lược đồ mới + hàng rào tên thật). Cập nhật `docs/ban-giao/HUONG-DAN-CAM-VAO-APP.md` và
+    `modules/core/module.config.json` sau khi gỡ ô liên hệ.
+  - (b) Mở `docs/decisions/` thấy đủ 7 ADR. Đọc `ADR-005` trong 2 phút phải trả lời được:
+    *vì sao cho nhập tên thật, và cái gì vẫn được bảo vệ*. Mở `DISC_BA.md` §5.2 → sơ đồ đã là
+    bảng gia đình, **không còn dòng "một câu một màn"**.
+  - (c) `npm run check:structure` xanh (nó đếm ADR khai báo trong `.claude/scaffold.json`).
+  - (d) 0,5 ngày. — (e) chặn: MÁY.
+
+### 🎬 DEMO GĐ11 — chủ dự án tự bấm, ~10 phút
+1. Vào bài bộ **Tiểu học**: 5 câu/màn, mỗi câu có số và khung, **không dính nhau**.
+2. Bỏ trống một câu rồi bấm *Tiếp* → báo lỗi và **cuộn tới đúng câu thiếu**.
+3. Cuộn hết màn kết quả → **không còn ô xin số điện thoại**.
+4. In hai tờ → **dòng đầu khác nhau ngay**.
+5. Màn 1 → chọn lớp 11 → ra bộ Phụ huynh; chọn lớp 1 → ra Mầm non **kèm hộp giải thích**.
+6. Mở `/thu-ma-moi`, **lấy điện thoại quét mã QR** → ra đúng chuỗi mã.
+7. Làm 2 bài 2 biệt danh → mở *Số liệu máy này* → thấy đếm.
+
+🔴 **XONG BƯỚC NÀY LÀ PHÁT CHO 30 GIA ĐÌNH.** Không đợi GĐ14. Tới giữa GĐ12 đã có số thật.
+
+---
+
+## GIAI ĐOẠN 12 — Sổ gia đình (ước lượng: 9,5 ngày)
+
+- [ ] 🔴 **12.1 — Lược đồ dữ liệu v2 + di trú không mất một bài nào**
+  - (a) `modules/core/luu-tru/kho-bai.ts`: `PHIEN_BAN_KHO` 1 → 2. **Giữ nguyên bảng `bai-lam`**,
+    thêm đúng một trường `maThanhVien?: string` (uuid) + index cùng tên. Hai bảng mới:
+    `thanh-vien` (`{ id, ten, vaiTro, lop?, thuTu, ghiChu, taoLuc, suaLuc }` — **ghi chú nằm
+    ngay trong bản ghi thành viên**, không bảng phụ) và `phan-tich-gia-dinh`.
+    🔴 `onupgradeneeded` **CHỈ** tạo store + index. **KHÔNG ghi lại bài cũ trong transaction
+    versionchange** — cursor rewrite cả bảng ở đó là chỗ mất dữ liệu kinh điển nếu abort.
+    Gán bài cũ bằng **"nhận nuôi" lười** sau khi mở kho, transaction thường, chạy một lần, có
+    mốc `daNhanNuoi`, idempotent: gom bài theo `maTre` ⇒ mỗi `maTre` thành một thành viên.
+    🔴 `onblocked` hiện `giaiQuyet(null)` **im lặng** — phải trả mã lỗi riêng để giao diện nói
+    *"Đóng các tab DISC khác rồi tải lại"*.
+  - (b) **Trước khi sửa: làm 3 bài với 3 biệt danh, bấm *Sao lưu ra .zip* giữ lại.** Sau khi
+    sửa, mở lại app → **cả 3 bài vẫn còn nguyên** trong màn *Bài đã làm*, và mỗi biệt danh cũ
+    đã thành một thành viên trong sổ. Mở app ở 2 tab cùng lúc → tab cũ báo *"Đóng các tab
+    khác"* chứ không im lặng hỏng.
+  - (c) `tests/luu-tru.test.ts` mở rộng: di trú v1→v2 giữ đủ bài · nhận nuôi idempotent ·
+    `tests/lien-he-sach.test.ts` thêm `maThanhVien` vào `PHAN_LOAI_TRUONG` (đỏ typecheck nếu
+    quên) · `modules/core/lien-he/kieu.ts` `KHOA_CAM` thêm `maThanhVien`/`ten`/`ghiChu`.
+  - (d) 2,5 ngày.
+  - (e) chặn: MÁY.
+  - 🔴 **Rủi ro cao nhất của cả gói: mất dữ liệu người dùng.** Làm sớm trong GĐ12, và làm khi
+    số người dùng thật còn gần bằng 0 — đây là thời điểm rẻ nhất có thể.
+
+- [ ] 🔴 **12.2 — Hạn mức 2 bài/người, không bao giờ xoá im lặng**
+  - (a) File mới `modules/core/gia-dinh/han-muc.ts` (**tầng lõi, hàm thuần**):
+    `chonBaiPhaiXoa(ds, gioiHan = 2)` và `chonThuMucPhaiXoa(ds, gioiHan = 5)` → trả **danh
+    sách nạn nhân**. Thi hành ở tầng lưu trữ: `donBaiThanhVien()`. File mới
+    `modules/core/luu-tru/tai-ve.ts`: `taiVeThuMucThanhVien()`.
+    🔴 **KHÔNG đặt hạn mức trong `luuBai`** — `ghiBanKhoan` cũng gọi `luuBai`, và xoá im lặng
+    bên trong hàm ghi đúng là cái bẫy cả repo đang cảnh báo. Chỉ chạy khi người dùng bấm
+    *Bắt đầu bài mới* cho người đã có 2 bài. Quyết định nạn nhân **bên trong chính transaction
+    readwrite** đã thi hành xoá. Thêm `BroadcastChannel("disc:kho")` cho tab kia nạp lại.
+  - (b) Cho một thành viên làm **bài thứ 3**: phải hiện hộp thoại **nêu đích danh bài nào sắp
+    mất** (ngày nào, kiểu gì) + nút **Tải xuống** + ô xác nhận. Bấm *Tải xuống* → có file về
+    máy. Bấm huỷ → **bài cũ còn nguyên**. Xác nhận → còn đúng 2 bài mới nhất.
+  - (c) `tests/han-muc.test.ts` mới (thuần, không cần trình duyệt): chọn đúng nạn nhân, giữ
+    2 bài mới nhất, danh sách rỗng khi chưa đầy · `tests/luu-tru.test.ts` cho phần thi hành.
+  - (d) 1,5 ngày. — (e) chặn: MÁY.
+
+- [ ] **12.3 — Màn BẢNG GIA ĐÌNH (thay màn *Bài đã làm*)**
+  - (a) File mới `app/khoang/bang-gia-dinh.tsx`. Bỏ khuôn wizard, dùng **một bảng**: thông
+    điệp nhân văn trên cùng · lưới thẻ thành viên có sổ tiến độ `●●` và bốn cột mini · nút
+    thêm/sửa/xoá người · khối *Phân tích cả nhà* (mờ cho tới GĐ14) · danh sách thư mục.
+    🔴 `xoaThanhVien(id, cheDo)` **bắt buộc truyền chế độ, không mặc định**; giao diện mặc
+    định `"giu-bai"` (bài rơi về *chưa xếp*) — xoá dây chuyền là đường mất dữ liệu nhanh nhất.
+  - (b) Tạo nhà 4 người, đặt tên. Xoá một người → hỏi *"giữ bài hay xoá bài"*, chọn **giữ** →
+    bài vẫn còn ở mục *chưa xếp*. Thêm lại người đó → xếp bài về được. Nhìn một cái biết ngay
+    ai đã làm, ai chưa.
+  - (c) `tests/bang-gia-dinh.test.tsx` mới: thêm/sửa/xoá thành viên · xoá giữ bài không mất
+    bài · sổ tiến độ đúng số bài.
+  - (d) 2,5 ngày. — (e) chặn: MÁY.
+
+- [ ] **12.4 — Bấm *Làm bài* từ thẻ thành viên**
+  - (a) `app/khoang/disc.tsx`: vào bài từ thẻ thành viên ⇒ **bỏ luôn màn hỏi biệt danh** (M2
+    chỉ còn phần dặn dò), vì tên đã có ở sổ. `maThanhVien` đóng dấu vào bản ghi lúc lưu.
+  - (b) Bấm *Làm bài* trên thẻ **Bin** → vào thẳng phần dặn dò rồi vào câu hỏi, **không bị hỏi
+    tên lần nữa**. Xong bài → thẻ Bin hiện `●○ 1 bài`. **Đây là chỗ tiết kiệm thao tác lớn
+    nhất của cả gói.**
+  - (c) `tests/luu-boi-canh.test.tsx` mở rộng: `maThanhVien` phải vào bản ghi ·
+    `tests/dieu-huong.test.tsx` cập nhật luồng.
+  - (d) 1 ngày. — (e) chặn: MÁY.
+
+- [ ] **12.5 — Chú giải DISC + khối trích dẫn**
+  - (a) Mỗi trục bốn khối: *khi nhóm này đậm* · *cái giá đi kèm* · *khi nhóm này nhạt* (nêu
+    cái ĐƯỢC trước) · **mượn cách của nhóm khác**. Khối thứ tư chính là "cân bằng" theo nghĩa
+    **thêm một lựa chọn**, không phải **vá một chỗ hổng**. Cấm từ khuyết thiếu.
+    Khối kết dẫn nguồn: mô hình DISC do W.M. Marston mô tả (1928) — Marston **không** tạo bài
+    trắc nghiệm nào, bộ công cụ đầu tiên là của Walter Clarke (1956); bộ câu hỏi này **chưa
+    chuẩn hoá trên dữ liệu người Việt**; chỉ để mở một cuộc trò chuyện.
+    🔴 **CẤM:** con số tin cậy/hiệu lực cụ thể · "đã được khoa học chứng minh" · bất kỳ trích
+    dẫn nghiên cứu nào không kiểm chứng được. Luật *KHÔNG LÀM* của dự án vẫn nguyên hiệu lực.
+  - (b) Mở khối chú giải, đọc trục **Ổn định**: phải thấy cả mặt mạnh lẫn chỗ cần để ý, và một
+    đoạn nói *khi nào nên mượn cách của nhóm khác*. Đọc khối kết: phải thấy câu *"chưa chuẩn
+    hoá trên dữ liệu người Việt"*. **Tìm chữ "điểm yếu" trong cả trang — không được có.**
+  - (c) `tests/noi-dung-moi.test.ts` mở rộng: cấm từ khuyết thiếu · cấm tuyên bố chuẩn hoá ·
+    mỗi trục đủ bốn khối.
+  - (d) 2 ngày. — (e) chặn: MÁY *(nhưng nội dung nên gửi người ký duyệt ngay khi viết xong)*.
+
+- [ ] **12.6 — Thông điệp nhân văn trên bảng**
+  - (a) Thêm vào `config/disc-tu-dien.ts`. Bản khuyến nghị: **"Không ai trong nhà sai. Chỉ là
+    mỗi người quen một nhịp."** / *Làm cùng nhau, mỗi người mười phút.* Chân bảng, chữ nhỏ,
+    một lần: *"Phần này miễn phí và không bán gì cả. Câu trả lời của cả nhà không rời khỏi
+    máy này."*
+    🔴 **Dùng "miễn phí cho gia đình đang học", KHÔNG dùng "phi lợi nhuận"** — mục tiêu là giữ
+    chân khách đang trả tiền; đó là tiện ích miễn phí chính đáng nhưng không phải phi lợi nhuận.
+    🔴 Thông điệp **chỉ xuất hiện ở bảng gia đình**. Rải vào màn kết quả và bản in là biến sự
+    chân thành thành khẩu hiệu.
+  - (b) Mở khoang DISC → thấy câu đó ngay dòng đầu, trước mọi thứ khác. Vào màn kết quả và bản
+    in → **không thấy nó lặp lại**. Tìm chữ *"phi lợi nhuận"* trong cả app → không được có.
+  - (c) `tests/thong-diep.test.tsx` mới: có ở bảng, vắng ở M4 và bản in, không có chuỗi
+    "phi lợi nhuận" trong `config/`.
+  - (d) 0,5 ngày. — (e) chặn: NGƯỜI — chủ dự án chọn 1 trong 3 bản nháp ở file thiết kế mục 4.
+
+### 🎬 DEMO GĐ12 — ~15 phút
+1. Tạo nhà 4 người: **Mẹ Lan · Bố Nam · Bin lớp 4 · Bống lớp 1**.
+2. Bấm *Làm bài* trên thẻ **Bin** → **không bị hỏi tên**, vào thẳng bài.
+3. Xong → thẻ Bin hiện `●○ 1 bài`. Nhìn bảng biết ngay ai chưa làm.
+4. Cho Bin làm **bài thứ 3** → hộp thoại nêu đích danh bài sắp mất + nút *Tải xuống*.
+5. Xoá **Bố Nam**, chọn *giữ bài* → bài vẫn còn ở mục *chưa xếp*.
+6. Mở khối chú giải DISC → đọc trục Ổn định, thấy đủ bốn khối và câu *"chưa chuẩn hoá"*.
+7. 🔴 **Kiểm di trú:** trước GĐ12 sao lưu .zip 3 bài; giờ mở lại → **cả 3 vẫn còn**.
+
+---
+
+## GIAI ĐOẠN 13 — Mã mời + so sánh 6 tháng (ước lượng: 4 ngày)
+
+> Hai hạng mục này **cố ý xếp TRƯỚC GĐ14**. `13.1` gỡ trần "cả nhà một máy" — cái trần quyết
+> định GĐ14 có bao giờ được kích hoạt hay không. Làm GĐ14 trước là xây tầng ba khi chưa biết
+> cầu thang lên được tầng hai.
+
+- [ ] 🔴 **13.1 — Mã mời / QR hoàn chỉnh**
+  - (a) Dựng trên spike `11.1`. Làm bài xong → hiện **mã QR** (Canvas, không thêm thư viện)
+    **và** chuỗi ~12 ký tự gõ tay được. Máy khác quét/gõ ⇒ tạo một thành viên trong sổ với hồ
+    sơ đó, đánh dấu *"nhận qua mã mời"*.
+    🔴 **Mã chỉ chứa ĐIỂM, tuyệt đối không chứa câu trả lời.** Câu trả lời của trẻ không bao
+    giờ rời máy — mã mời không được phép làm lời hứa ADR-001 thành lời nói dối.
+    Mã có **hạn 7 ngày**; kiểm tổng 2 ký tự.
+  - (b) 🔴 **Dùng HAI máy thật.** Máy A làm bài của Mẹ → hiện QR. **Máy B quét QR đó** → sổ gia
+    đình máy B có thêm thành viên *Mẹ* với đúng 4 con số. Thử cả đường gõ tay 12 ký tự. Gõ sai
+    một chữ → **báo lỗi, không dựng hồ sơ rác**. Mở mã ra xem → **chỉ có điểm, không có câu
+    trả lời nào**.
+  - (c) `tests/ma-moi.test.ts` mở rộng: nhận mã tạo đúng thành viên · mã hết hạn bị từ chối ·
+    mã cùng người hai lần không tạo trùng.
+  - (d) 2 ngày. — (e) chặn: MÁY.
+
+- [ ] **13.2 — So sánh 6 tháng: "Bin hồi tháng 3 ↔ Bin bây giờ"**
+  - (a) Hai bài lưu sẵn của cùng một người chính là dữ liệu trước/sau. Dùng lại `mucLechTu()`
+    và `NGUONG_VUNG_LECH` — **không toán mới**. Chỉ hiện khi hai bài cách nhau **≥ 90 ngày**
+    (gần hơn thì chênh lệch là nhiễu đo, xem cạm bẫy *"phép đo quá thô"*).
+    🔴 **Giọng văn:** cấm tuyệt đối *"đã tiến bộ"* / *"đã cải thiện"* — DISC không có chiều
+    tốt/xấu nên **không có gì để tiến bộ**. Câu đúng: *"Sáu tháng trước Bin nghiêng về Ổn định
+    rõ hơn. Giờ Chủ động lên gần bằng. Điều gì đã đổi ở lớp hay ở nhà?"* — mở một câu hỏi,
+    không phát một bằng khen. Nhắc làm lại sau 6 tháng ngay trên bảng ⇒ **lý do quay lại**.
+  - (b) Nạp hai bài của Bin cách nhau **100 ngày** → thẻ Bin hiện nút *Xem thay đổi*, bấm vào
+    ra màn trước/sau. Nạp hai bài cách nhau **30 ngày** → **không** hiện nút đó. Đọc kỹ chữ:
+    **tìm "tiến bộ" và "cải thiện" — không được có chữ nào.**
+  - (c) `tests/so-sanh-thoi-gian.test.ts` mới: <90 ngày không trả kết quả · ≥90 ngày trả đúng
+    trục lệch · văn bản không chứa từ đánh giá tốt/xấu.
+  - (d) 2 ngày. — (e) chặn: MÁY.
+
+### 🎬 DEMO GĐ13 — ~10 phút, **cần hai điện thoại**
+1. Máy A: Mẹ làm bài → hiện QR. **Máy B quét** → sổ máy B có thành viên *Mẹ* đủ 4 số.
+2. Gõ tay chuỗi 12 ký tự trên máy thứ ba → cũng ra đúng hồ sơ.
+3. Sửa một ký tự → báo lỗi.
+4. Nạp 2 bài của Bin cách 100 ngày → *Xem thay đổi* hiện ra; cách 30 ngày → không hiện.
+5. Đọc màn thay đổi: **không có chữ "tiến bộ" nào.**
+
+---
+
+## GIAI ĐOẠN 14 — Phân tích cả gia đình (ước lượng: 9,5 ngày)
+
+- [ ] 🔴 **14.1 — Đổi trục quy chiếu: từ VAI sang NGƯỜI ĐỌC**
+  - (a) Thay `"bo-me-cao-hon" | "bo-me-thap-hon"` bằng `"toi-cao-hon" | "toi-thap-hon"`. Cùng
+    một chỗ vênh: A đọc khoá `toi-cao-hon`, B đọc `toi-thap-hon` ⇒ **vẫn chỉ 8 khoá** phủ cả
+    hai chiều mọi cặp. File mới `config/disc-lech-cap.ts`.
+    🔴 **GIỮ NGUYÊN `LECH_PHONG_CACH` cho màn 1-1 cũ, dựng bảng mới cạnh nó — đừng sửa tại chỗ.**
+  - (b) Màn *so phong cách* của bộ QS (2 người) phải chạy **y hệt như trước**, không đổi một
+    chữ. Đây là bài kiểm hồi quy: đổi trục quy chiếu mà làm hỏng màn cũ là hỏng thứ đang chạy.
+  - (c) `tests/doi-chieu-phong-cach.test.ts` xanh nguyên · `tests/ba-ban-noi-dung.test.ts` xanh.
+  - (d) 1 ngày. — (e) chặn: MÁY.
+
+- [ ] **14.2 — Engine phân tích N người**
+  - (a) File mới `modules/report/phan-tich-gia-dinh.ts` (tầng lõi, hàm thuần). Cặp **có hướng**:
+    N bản × (N−1) lát cắt, nhưng `lech` tính **một lần** cho cặp vô hướng rồi **soi gương**
+    (`lech(B→A) = −lech(A→B)`). `soTrucTheoN`: N≤3 → 2 trục/cặp; **N≥4 → 1 trục/cặp** (nhà 5
+    người mà 2 trục là 120 đoạn, không ai đọc hết). `soThanhVienToiDa = 6`.
+    Trùng khớp cả 4 trục → trả khối `diemChung`, **không để trống**. N≤1 → union
+    `{ phanTichDuoc: false, lyDo: "CHUA_DU_HAI_NGUOI" }`, chặn ở nút, **không sinh thư mục rỗng**.
+  - (b) Nhà 3 người đã test → bấm *Phân tích cả nhà* → ra **đúng 3 bản tổng hợp**, mỗi bản có
+    **2 lát cắt**. Nhà chỉ 1 người đã test → nút mờ, kèm câu giải thích và lời mời, **không
+    phải màn trống**.
+  - (c) `tests/phan-tich-gia-dinh.test.ts` mới: N=1 trả đúng lý do · N=3 ra 3 bản × 2 lát ·
+    soi gương đúng dấu · trùng khớp 4 trục vẫn có chữ · N=7 bị chặn.
+  - (d) 2 ngày. — (e) chặn: MÁY.
+
+- [ ] **14.3 — Nội dung 56 đoạn (~3.000 từ)**
+  - (a) `MO_TA_LECH[truc][huong]` 16 đoạn (~85 từ) · `THOA_THUAN[truc][huong]` 8 đoạn (~60 từ) ·
+    `VIEC_CUA_TOI[truc][huong][theQuyen]` 24 đoạn (~40 từ) · `TRUNG_KHOP[truc][cung-noi|cung-nhe]`
+    8 đoạn (~25 từ). `theQuyen = "nguoi-lon-voi-tre" | "tre-voi-nguoi-lon" | "ngang-vai"`.
+    Token `{toi}`/`{Toi}` và `{nguoiKia}`/`{NguoiKia}`; hàm `thayDaiTuCap()`.
+    🔴 **`{nguoiKia}` = BIỆT DANH đã lưu** ("Mẹ Bống") — tự nhiên trong tiếng Việt và né được
+    việc phải suy giới tính, thứ app cố ý không thu. Bảng xưng hô co từ 49 ô xuống 7 phần tử.
+    🔴 **KHÔNG mở rộng `CHU_THE[maBoDe]`** — bảng đó khoá theo bộ đề, và chính giả định *"một
+    bộ đề = một người đọc"* đã cắt phụ huynh TH/THCS khỏi sản phẩm suốt GĐ9.
+  - (b) Đọc bản tổng hợp của **Bin (con) về Mẹ Lan**: phải nói với Bin bằng "em", gọi mẹ bằng
+    biệt danh, và **không có câu nào bảo Bin đi quản lý mẹ**. Đọc bản của **Mẹ Lan về Bin**:
+    khác hẳn chữ, cùng chỗ vênh. **Không câu ≥60 ký tự nào xuất hiện ở hai bản.**
+  - (c) `tests/lech-cap.test.ts` mới: duyệt **mọi cặp vai có hướng** UI sinh ra được, khẳng
+    định có `{toi}` và có `theQuyen` · **khẳng định dương** — mọi `veNguoiKia` phải chứa một
+    dấu hiệu lật khung (`không phải…mà` · `thật ra` · `dễ bị đọc thành` · `nhìn từ ngoài`) ·
+    regex mới chặn `tốt hơn|giỏi hơn|đúng hơn|hợp lý hơn`.
+  - (d) 4 ngày.
+  - (e) chặn: MÁY *(nhưng phần `theQuyen="ngang-vai"` — vợ↔chồng, hai người lớn nói về nhau —
+    thuộc **GÓI KÝ DUYỆT B**, phải khai vào `GOI_KY_DUYET` ngay khi dựng bảng)*.
+  - 🔴 **Nguy cơ số 1: `{nguoiKia}` là biệt danh một đứa trẻ thật, và người đọc có thể là anh
+    chị nó.** *"Tí Nị chậm hơn em"* là đúng thứ không bao giờ được sinh ra. Dùng test khẳng
+    định dương chứ không dùng regex cấm — regex cấm sẽ báo nhầm chính các câu lật khung, đúng
+    bài học *"bạn"* vừa là đại từ vừa là danh từ.
+
+- [ ] **14.4 — Màn chọn bài + bản tổng hợp + thư mục**
+  - (a) File mới `app/khoang/ban-tong-hop.tsx`. Bấm *Phân tích cả nhà* → bảng chọn mỗi thành
+    viên **một** bài (mặc định bài mới nhất) → bấm *Phân tích* → sinh N bản, lưu thành **một
+    thư mục theo ngày chạy**.
+    🔴 Mỗi bản gói trong `<section data-ban="tv-{id}">`, dùng lại luật in `data-in-ban` đã
+    chạy được ở GĐ10. **In tách bản = mỗi thành viên MỘT TỜ**, không phải một tờ chung.
+    🔴 **Chụp `tenLuc` vào bản phân tích** — đổi tên hay xoá thành viên sau đó thì bản cũ vẫn
+    đọc được. `dienGiai` **lưu MÃ, không lưu chuỗi đã dựng**.
+  - (b) Nhà 3 người → *Phân tích cả nhà* → chọn bài → ra 3 bản. **In riêng bản của Bin** → tờ
+    giấy **không có chữ nào của bản Mẹ Lan**. Đổi tên *Mẹ Lan* thành *Mẹ* → mở lại bản cũ,
+    **vẫn đọc được** và vẫn ghi tên lúc chạy.
+  - (c) `tests/ban-tong-hop.test.tsx` mới: 3 người ra 3 bản · in tách bản 0 câu rò rỉ · đổi
+    tên không vỡ bản cũ.
+  - (d) 2 ngày. — (e) chặn: MÁY.
+
+- [ ] **14.5 — Hạn mức 5 thư mục + tải xuống**
+  - (a) `chonThuMucPhaiXoa(ds, 5)` (đã viết ở `12.2`) + `donThuMucPhanTich()` +
+    `taiVeThuMucPhanTich()`. Chỉ chạy khi bấm *Phân tích* lúc đã có 5 thư mục.
+    Khi `luuBanPhanTich` trả `false` (hết quota trình duyệt) → **mời tải xuống + xoá thư mục
+    cũ, không được im lặng**.
+  - (b) Chạy phân tích **6 lần** → lần thứ 6 hiện hộp thoại nêu đích danh thư mục sắp mất +
+    nút *Tải xuống*. Xác nhận → còn đúng **5 thư mục**, thư mục cũ nhất đã mất.
+  - (c) `tests/han-muc.test.ts` mở rộng cho thư mục phân tích.
+  - (d) 0,5 ngày. — (e) chặn: MÁY.
+
+### 🎬 DEMO GĐ14 — ~15 phút
+1. Nhà 4 người, 3 người đã test → *Phân tích cả nhà* → ra **đúng 3 bản**, mỗi bản 2 lát cắt.
+2. Đọc bản của **Bin về Mẹ**: gọi Bin là "em", gọi mẹ bằng biệt danh, **không bảo Bin quản lý mẹ**.
+3. So bản của Bin và bản của Mẹ về cùng chỗ vênh → **khác chữ hoàn toàn**.
+4. **In riêng bản của Bin** → không có chữ nào của bản Mẹ.
+5. Chạy phân tích 6 lần → còn 5 thư mục, có nhắc tải xuống trước khi xoá.
+6. Đổi tên một thành viên → bản phân tích cũ **vẫn đọc được**.
+7. Mở *Số liệu máy này* → mốc `phanTichGiaDinh` đã nhảy.
+
+---
+
+## ❌ KHÔNG LÀM Ở GĐ11–GĐ14
+
+| Không làm | Vì sao |
+| --------- | ------ |
+| **Đồng bộ nhiều thiết bị qua máy chủ** | Phá ADR-001. Mã mời (`13.1`) giải được 90% nhu cầu với 0đ/tháng |
+| **Tài khoản, đăng nhập trong module DISC** | App chủ đã có. Dựng lần hai là dựng bản sao |
+| **Bảng theo dõi cho giáo viên (gộp nhiều gia đình)** | Cần máy chủ ⇒ phá ADR-001, và gom dữ liệu hành vi trẻ em vào một chỗ là đúng thứ ADR-001 tránh |
+| **Gửi bản phân tích qua email / Zalo tự động** | Cần máy chủ. Người dùng tự tải xuống rồi tự gửi |
+| **Nâng trục thấp / "khắc phục điểm yếu"** | ADR-002. "Cân bằng" = **mở rộng vốn hành vi**, không phải vá chỗ hổng |
+| **Con số độ tin cậy, "đã được khoa học chứng minh"** | Chưa có chuẩn hoá trên người Việt. Chỉ được nói: *"Bộ câu hỏi do SATA ROBO biên soạn theo mô hình DISC"* |
+| **Ông bà / cô dì / bố dượng thành loại quan hệ riêng** | Kiến trúc `theQuyen` đã phủ sẵn — thêm sau tốn **+0 đoạn nội dung**, chỉ một dòng xưng hô |
+| **Hơn 6 thành viên một nhà** | N=7 là 42 lát cắt, không ai đọc hết. Chặn ở `soThanhVienToiDa` |
+| **Ghi chú tự do dài cho từng bài** | Chưa ai xin. Ghi chú thành viên ở `12.1` là đủ |
+
+---
+
 ## 🏁 MỐC LỚN
 
 | Mốc | Hết GĐ | Tiêu chí đo được |
@@ -778,6 +1172,10 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
 | **MỐC 5 — Sản phẩm có mũi nhọn** | GĐ5 | Bảng đối chiếu con ↔ mẹ hiện ra, diễn giải đúng 2 trục |
 | **MỐC 6 — Bàn giao được** | GĐ8 | Người lạ đọc 10 phút chỉ ra đúng 3 nhóm file cần copy |
 | **MỐC 7 — Báo cáo đủ sâu** | GĐ9 | Cả bốn nhóm đều có chữ; phụ huynh đọc xong biết tối nay làm gì |
+| **MỐC 8 — Phát được cho người thật** | GĐ11 | 30 gia đình bấm thử; 5 câu/màn không dính nhau; quét được mã QR bằng điện thoại |
+| **MỐC 9 — Nhà mình có sổ** | GĐ12 | Tạo nhà 4 người, bấm Làm bài từ thẻ mà KHÔNG bị hỏi tên lần nữa |
+| **MỐC 10 — Mỗi người một máy** | GĐ13 | Máy A hiện QR, máy B quét xong có đủ hai hồ sơ để ghép |
+| **MỐC 11 — Cả nhà hiểu nhau hơn** | GĐ14 | 3 người ra 3 bản tổng hợp; in riêng bản của con, 0 chữ của bố mẹ lọt sang |
 
 ---
 

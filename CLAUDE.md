@@ -14,7 +14,10 @@
 
 ## DỰ ÁN
 
-Ứng dụng trắc nghiệm DISC dành cho phụ huynh và học sinh mầm non, tiểu học, THCS: người làm bài nhập thông tin đầu vào tương ứng với từng đối tượng, hệ thống chấm và trả về một bản báo cáo kết quả chính xác, đọc được ngay.
+Khoang trắc nghiệm DISC nhúng vào app chủ của SATA ROBO, cho **cả gia đình**: trẻ mầm non
+tới lớp 12, và bố mẹ. Hệ thống chấm rồi trả về bản báo cáo đọc được ngay — mỗi người đọc bản
+viết cho đúng mình. Mục tiêu kinh doanh: **giữ chân hơn 1.000 gia đình đang học** (đổi từ mồi
+thu khách, 27/08/2026). Hướng đang mở: **DISC gia đình** — GĐ11–GĐ14 trong `PLAN.md`.
 Nguồn yêu cầu: `docs/brd/`. Lộ trình thi công: `PLAN.md` gốc dự án (checkbox, khuôn 4 dòng).
 Repo: https://github.com/hodacphuchtc/DISC — **PUBLIC**, đã push (27/08/2026).
 🔴 Repo công khai: mọi thứ trong này internet đọc được. Đừng đưa dữ liệu thật của trẻ,
@@ -55,83 +58,67 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 27/08/2026 — tối, chặng 2)
+## TRẠNG THÁI (cập nhật 27/08/2026 — tối, chặng 3)
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **48/48 hạng mục PLAN.md · 805 test xanh ·
-`npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
-Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
-✅ **HẾT SẠCH VIỆC MÁY TRONG PLAN.** Không còn hạng mục nào chưa tick. Mọi việc còn lại
-đều là việc NGƯỜI/NGOÀI ở mục CHỜ NGOÀI bên dưới — dẫn đầu là hai chữ ký chuyên môn.
+**GĐ0–GĐ10 xong trọn: 48/48 hạng mục · 805 test xanh · `npm run kiem` + `npm run build`
+xanh · 12/12 DEMO đạt.** Chạy thử: `npm run xem-thu` → http://localhost:3100.
+Đã push `origin/main` tới `f31a3de`, CI xanh. Chi tiết từng giai đoạn: `PLAN.md`.
 
-⚠️ **Máy này đang bị Docker chiếm ~200% CPU** (6 container, không của dự án). Load average
-đo được 32,6 lúc chạy kiểm. Ở mức tải đó `waitFor` của Testing Library đói CPU và **19–20
-test đỏ giả**; chạy `npx vitest run --maxWorkers=2` thì 805/805 xanh. Thấy test đỏ hàng
-loạt mà lỗi toàn là hết giờ chờ thì soi `uptime` trước khi soi code.
+Ba mốc lớn: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo (đủ bốn trục,
+theo lứa tuổi, tầng lời khuyên) · **GĐ10** ba bản báo cáo (ba dải + in tách bản, màn 1 hai
+nhánh, nội dung ba bản, hai gói ký duyệt).
 
-- **GĐ0–GĐ8** — dựng xong sản phẩm chạy đầu-cuối: khung Next 16 · 104 câu hỏi + lõi chấm
-  điểm + năm hàng rào `HL-1..HL-5` · luồng làm bài 5 bộ đề · màn kết quả + ảnh PNG + in PDF ·
-  IndexedDB + vùng lệch con↔cha mẹ · thu liên hệ + phễu · ngoại tuyến + tiếp cận · gói bàn giao.
-  Chi tiết từng hạng mục: `PLAN.md`.
-- **GĐ9** — **làm sâu bản báo cáo**: diễn giải đủ **bốn trục** (trước chỉ trục trội có chữ),
-  nội dung theo **lứa tuổi**, 12 cặp pha **có thứ tự**, tầng lời khuyên hành động
-  (câu nên nói / nên tránh · khi con căng thẳng · linh hoạt tình huống · một việc tối nay),
-  bóc lớp dần + bản in mở sẵn, ô "điều đang băn khoăn", **so sánh phong cách bố mẹ ↔ con**,
-  và `docs/noi-dung-cho-ky-duyet.md` để người chuyên môn ký.
+### ĐANG DỞ — chờ MỘT chữ
 
-- **GĐ10** — **chặng 1 XONG TRỌN**: sửa bốn lỗi sai người đọc · đại từ hai chiều
-  (phụ huynh của học sinh TH/THCS lần đầu nhận được lời khuyên) · tóm tắt 30 giây ·
-  bảng tra D-I-S-C có từ tiếng Anh · đoạn mở đầu 136 từ nói thật về giới hạn ·
-  **ba dải + in tách bản** (`10.4`) · **màn 1 hai nhánh theo người cầm máy** (`10.6`).
+🆕 **GĐ11–GĐ14 — DISC GIA ĐÌNH**, 20 hạng mục, **28 ngày**, đã viết vào `PLAN.md` (~dòng
+770–1160). **Chủ dự án nói chỉ khi gõ "DUYỆT" mới bắt đầu.** Duyệt rồi thì làm từ `11.1`.
+Thiết kế đầy đủ + phần thẩm định đầu tư: `~/.claude/plans/t-i-test-v-purrfect-star.md`.
 
-### ĐANG DỞ
+Mục tiêu kinh doanh đã đổi: từ **mồi thu khách** sang **giữ chân hơn 1.000 gia đình đang học**.
 
-**Không còn gì trong PLAN.md.** `10.7` đã xong 27/08/2026 — chủ dự án bỏ cổng duyệt giữa
-chặng và cho làm trọn một lượt. Việc còn lại đều nằm ở CHỜ NGOÀI.
+🔴 **GIẢ ĐỊNH ĐANG ĐỠ GĐ14 (9,5 ngày):** *một phụ huynh sẽ triệu tập được từ hai thành viên
+trở lên cùng làm bài.* Hiện **0 quan sát ủng hộ, 1 quan sát phản bác** — tính năng ghép 2
+người có từ GĐ5 và **chưa lần nào tự kích hoạt ngoài đời**; dưới 10 người ngoài vòng quen
+từng làm xong một bài (tiếp cận <1% tệp khách). Chủ dự án đã nghe phản biện và chọn xây trọn.
+Bảo hiểm đã cài: phát GĐ11 cho 30 nhà ngay ngày 5 · mốc đo `baiThuHai` ở `11.6` · `13.1`
+mã mời gỡ trần "cả nhà một máy" trước GĐ14.
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
-1. 🔴 **Nghiệm thu trọn GĐ10** — `npm run xem-thu`. Ba thứ cần soi: màn 1 hỏi *"Ai đang cầm
-   máy?"* · dải chắn *"Phần dưới đây viết cho bố mẹ"* + hai nút in riêng · ba khối mới của
-   chặng 2 (*chỗ em và bố mẹ hay va nhau* · *nhìn về phía bố mẹ* · *thoả thuận hai chiều*).
-   Khối thứ ba chỉ hiện khi trên máy có **cả** bài bộ PH lẫn bài của con.
-2. 🔴 **Đưa HAI hồ sơ ký duyệt đi ký** — `node scripts/xuat-noi-dung-ky-duyet.mjs` sinh ra
-   `docs/noi-dung-cho-ky-duyet.md` (gói A, 11.506 từ) và `docs/noi-dung-cho-ky-duyet-goi-b.md`
-   (gói B, 1.537 từ). Gói A chặn ngày ra người dùng thật; gói B chỉ chặn phần của chính nó.
-3. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
-   `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
-4. **Gọi đội dev 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu ·
-   nhận dạng nào. Bốn câu này quyết định phần giao diện có dùng lại được không.
-5. Các việc còn lại ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
+1. 🔴 **Chủ dự án gõ "DUYỆT"** cho lộ trình GĐ11–GĐ14 → bắt đầu `11.1` (spike mã QR).
+2. 🔴 **Gửi hai hồ sơ ký duyệt đi ký** — `docs/noi-dung-cho-ky-duyet.md` (gói A, 11.506 từ)
+   và `...-goi-b.md` (gói B, 1.537 từ). Phải gửi **trước** khi viết 3.000 từ của `14.3`.
+3. 🔴 **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
+   Họ sẽ ôm hệ 28 ngày này mà **chưa ai hỏi họ có nhận không**; trả lời khác đi thì con số
+   28 ngày sai.
+4. Hai việc NGƯỜI, 0 ngày dev: chốt **nghi thức mời** của trường (ai nói, ở đâu, lúc nào) ·
+   **gọi 5 phụ huynh vừa nghỉ** để biết lý do rời thật (hiện chưa đo).
+5. Bấm thử trên điện thoại thật (phần duy nhất của `7.2` máy không làm được).
 
-### CHỜ NGOÀI (thiếu key/env/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
+### CHỜ NGOÀI (thiếu người/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
 
-Bốn việc dưới đây **không tốn ngày dev nào**, nhưng cả bốn đều có thể đổi hình dạng bài
-toán. Ba việc đầu nên làm ngay tuần này.
+- 🔴 **HAI chữ ký chuyên môn, hai mức trách nhiệm khác nhau.** Cả hai tệp đã sinh sẵn bằng
+  `node scripts/xuat-noi-dung-ky-duyet.mjs` — đưa thẳng cho người ký, họ không phải mở file
+  `.ts` nào. **Gói A** `docs/noi-dung-cho-ky-duyet.md` (11.506 từ), nội dung nói về TRẺ,
+  *chặn ngày ra người dùng thật*. **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (1.537 từ),
+  phản hồi tính cách cho NGƯỜI LỚN về chính họ — *chỉ chặn phần nội dung của chính nó*, chưa
+  ký được vẫn phát hành, chỉ cần tắt khối "Nhìn về phía bố mẹ" + bản tự đọc bộ PH.
+  🔴 Gửi **TRƯỚC** khi viết 3.000 từ của `14.3`, không phải sau.
+- 🔴 **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
+  Họ sẽ bảo trì hệ 28 ngày này mà **chưa ai hỏi họ có nhận không**. *Chặn: độ chính xác của
+  toàn bộ ước lượng GĐ11–14.*
+- 🔴 **Đo lý do phụ huynh rời đi** — gọi 5 người vừa nghỉ. Mục tiêu là giữ chân mà **chưa ai
+  đo vì sao họ rời**. *Chặn: cả bốn giai đoạn có nhắm đúng chỗ không.*
+- **Chốt nghi thức mời của trường** (ai nói, ở đâu, lúc nào). Lý do chưa nhà nào làm 2 bài
+  không phải phần mềm khó dùng — là chưa ai bảo họ làm. *Chặn: GĐ14 có ai dùng không.*
+- **Thu 30–50 phản hồi thật** rồi chạy `node scripts/phan-tich-item.mjs` → Cronbach's α. Đây
+  là thứ duy nhất biến bộ 104 câu từ *"do BA soạn"* thành *"đã sàng trên người Việt"*, và là
+  lúc DUY NHẤT được phép nói về độ tin cậy — bằng số của chính mình.
+- **Số Zalo/hotline thật** — hiện là số giữ chỗ `0900 000 000`. ⚠️ Sẽ bị gỡ ở `11.2` cùng ô
+  liên hệ; chỉ cần lại nếu sau này dựng kênh liên hệ khác.
 
-- 🔴 **GÓI B — chữ ký thứ hai, cho phần phản hồi tính cách của NGƯỜI LỚN về chính họ.**
-  Mới tách ra ở GĐ10 chặng 2. Gói A mô tả một đứa trẻ và khuyên bố mẹ; gói B nói với một
-  người lớn về chính họ — gần tham vấn hơn hẳn, người ký chịu trách nhiệm ở mức khác. Gộp
-  chung một tệp thì người ký hoặc nhận cả hai mức, hoặc từ chối cả hai.
-  ✅ `docs/noi-dung-cho-ky-duyet-goi-b.md` (1.537 từ) đã có sẵn, kèm 5 câu người ký cần
-  xác nhận. *Chặn: chỉ chặn PHẦN NỘI DUNG CỦA CHÍNH NÓ* — chưa ký được vẫn phát hành được
-  sản phẩm, chỉ cần tắt khối "Nhìn về phía bố mẹ" và bản tự đọc của bộ Phụ huynh.
-- 🔴 **Người có chuyên môn tâm lý/giáo dục KÝ DUYỆT 104 câu hỏi + văn bản báo cáo.**
-  Chạy nội bộ thì không sao. Ngày bấm nút chạy quảng cáo là ngày nói với người lạ về con
-  của họ — trước ngày đó phải có một người chịu trách nhiệm.
-  ✅ **Nút thắt đã gỡ (GĐ9):** `node scripts/xuat-noi-dung-ky-duyet.mjs` sinh ra
-  `docs/noi-dung-cho-ky-duyet.md` — gom trọn chữ, thay sẵn đại từ theo từng bộ đề, kèm
-  5 câu người ký cần xác nhận. Đưa thẳng file đó, họ không phải mở file `.ts` nào.
-  *Chặn: ngày ra người dùng thật.*
-- 🔴 **Thu 30–50 phản hồi thật** (Google Form cũng được), rồi chạy
-  `node scripts/phan-tich-item.mjs`. Đây là thứ duy nhất biến bộ 104 câu từ *"do BA soạn"*
-  thành *"đã sàng trên người Việt"*. *Chặn: ngày bật quảng cáo.*
-- ⚠️ **Nộp 3 mẫu quảng cáo cho Facebook duyệt.** Facebook hạn chế quảng cáo ngụ ý biết đặc
-  điểm tâm lý của người xem hoặc người thân. Cần kiểm chứng — chính sách có thể đã đổi.
-  *Nếu trượt thì kênh phân phối số 1 chết.*
-- **Số Zalo/hotline thật** để điền vào `LIEN_HE_SATA` trong `config/disc-tu-dien.ts`
-  (hiện là số giữ chỗ `0900 000 000`).
 > Quyền ghi vào repo: **đã có** (tài khoản `hodacphuchtc`, token có scope `repo` +
 > `workflow`). Push lần đầu ngày 27/08/2026.
 
@@ -141,6 +128,14 @@ toán. Ba việc đầu nên làm ngay tuần này.
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 27/08/2026 | **Mục tiêu kinh doanh = GIỮ CHÂN học viên đang học**, không phải mồi thu khách | 1.000+ gia đình đang trả tiền, app chủ đang sống. Phễu thu số điện thoại thành thừa ⇒ gỡ ở `11.2` |
+| 27/08/2026 | **Đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH** (GĐ11–14, ADR-007 sẽ viết) | Sản phẩm chuyển từ *"đo một đứa trẻ"* sang *"giúp một gia đình hiểu nhau"* |
+| 27/08/2026 | **Bảng gia đình thay wizard 3 bước** | Ba bước tuần tự bắt đi hết bước 1 mới thấy bước 2. Một bảng ⇒ mỗi việc đúng một cú chạm, và nhìn một cái biết ai chưa làm |
+| 27/08/2026 | **Mã mời/QR ~40 byte thay vì "cả nhà một máy"** | ADR-001 cấm backend ⇒ mặc định cả nhà xếp hàng trên một điện thoại. Hồ sơ DISC chỉ là 4 con số nên nhét vừa một QR — gỡ trần mà không phá ADR-001 |
+| 27/08/2026 | **Cho nhập TÊN THẬT** (lật §10.2, ADR-005 sẽ viết) | Chủ dự án chốt. Dữ liệu không rời máy nên rủi ro pháp lý thấp; **giữ nguyên 4 hàng rào**: không rời máy · tên không vào tệp xuất · tên không vào ảnh chia sẻ · test dùng tên bịa |
+| 27/08/2026 | **5 câu/màn cho MỌI bộ đề** (lật §5.2, ADR-006 sẽ viết) | Chủ dự án chốt. Giảm thiệt hại: bộ TH giữ cỡ chữ ≥18px và nút ≥56px. Đổi lúc này rẻ nhất vì gần như chưa ai có bài dở |
+| 27/08/2026 | **Nội dung cặp N người dùng PA-2** (56 đoạn, không phải 168) | Cơ chế chỗ vênh không đổi theo quan hệ; chỉ đại từ và *thế quyền* đổi. Thêm ông bà/bố dượng sau tốn **+0 đoạn** |
+| 27/08/2026 | **Nói "miễn phí cho gia đình đang học", CẤM nói "phi lợi nhuận"** | Mục tiêu là giữ chân khách đang trả tiền — đó là tiện ích miễn phí chính đáng, nhưng gọi là phi lợi nhuận là một tuyên bố sai |
 | 26/08/2026 | Dùng bộ khung chuẩn từ skill `khoi-tao-du-an` | Tái dùng hệ điều hành đã kiểm chứng: não 4 tầng, nghiệm thu bằng DEMO, decision log, sổ sẹo |
 | 27/08/2026 | **Bỏ Supabase, bản 1 không backend** (ADR-001) | Module sắp bê sang app đã có backend riêng. Và không giữ dữ liệu trẻ thì không phát sinh nghĩa vụ NĐ 13/2023 — lợi thế đó miễn phí |
 | 27/08/2026 | **Tách mã nguồn hai tầng** (ADR-004) | Đội dev nhiều khả năng viết lại giao diện. Tách ngay từ đầu tốn 0 ngày; để đến cuối tốn 2 ngày |
@@ -156,9 +151,18 @@ toán. Ba việc đầu nên làm ngay tuần này.
 
 ## CẢNH BÁO / CẠM BẪY (đã trả giá, đừng lặp lại)
 
+> Cạm bẫy CÔNG CỤ (Next 16 ghi đè CLAUDE.md · eslint flat config ·
+> `eslint-disable-next-line` một dòng · `import.meta.url` dưới jsdom · Node ESM cần đuôi
+> `.ts`) nằm ở `.claude/rules/tech-defaults.md` mục cuối — **đừng chép lại vào đây**.
+
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
 
+- 🔴 **MÁY TẢI NẶNG LÀM 19–20 TEST ĐỎ GIẢ** (27/08/2026). Docker chiếm ~200% CPU (6 container
+  không của dự án), load average 32,6 ⇒ `waitFor` của Testing Library đói CPU, mỗi test mất
+  6–23 giây thay vì vài chục mili-giây và hết giờ chờ hàng loạt. Cùng bộ mã đó chạy
+  `npx vitest run --maxWorkers=2` ra **805/805 xanh**. **Thấy test đỏ hàng loạt mà lỗi toàn là
+  hết giờ chờ ⇒ soi `uptime` và `ps aux | sort -nrk 3` TRƯỚC khi soi code.** Suýt đi sửa mã lành.
 - 🔴 **Script sửa hàng loạt dò khoá bằng `indexOf("  D: {")` đã đổ CẢ TÁM câu vào riêng một
   trục** (27/08/2026, `10.7`). `LOI_KHUYEN`, `TU_MINH` và `LECH_PHONG_CACH` **đều** có khoá
   `D:`/`I:`/`S:`/`C:` trong CÙNG một file, nên `indexOf` khớp khối đầu tiên và mọi lần chèn
@@ -204,23 +208,6 @@ toán. Ba việc đầu nên làm ngay tuần này.
   DEMO "đạt", hạng mục `4.2` tick ✅ từ GĐ4, trong khi phụ huynh nhìn biểu đồ bốn cột có số
   đầy đủ mà chỉ đọc được chữ về **một** nhóm. **Bài học: viết test theo ĐÚNG DANH TỪ mà đặc
   tả dùng.** "Mỗi trục" mà đi kiểm "mỗi kiểu" là một cửa kiểm nhìn sai chỗ suốt bốn giai đoạn.
-- **Next.js 16 TỰ GHI một khối vào `CLAUDE.md` sau mỗi lần `next dev`** (26/08/2026,
-  hạng mục 0.4). Nó chỉ chèn thêm chứ không xoá, nên rất dễ lọt — nhưng hiến pháp dự án
-  do người viết, không để công cụ build sửa, và nó làm bẩn diff mỗi lần chạy dev. Đã chặn
-  bằng `agentRules: false` trong `next.config.mjs`. **Đừng gỡ dòng đó.** Tài liệu Next 16
-  vẫn đọc được ở `node_modules/next/dist/docs/` khi cần.
-- **`import.meta.url` KHÔNG phải URL `file://` khi test chạy dưới jsdom** (26/08/2026,
-  hạng mục 0.5). `fileURLToPath(new URL("..", import.meta.url))` nổ ngay dòng đầu với
-  *"TypeError: The URL must be of scheme file"*, và lỗi hiện ra là **cả file test không nạp
-  được** chứ không phải một test đỏ — rất dễ đọc nhầm thành lỗi cú pháp. Trong test dùng
-  `process.cwd()` làm mốc, Vitest luôn chạy từ gốc dự án.
-- **`eslint-config-next` v16 ĐÃ LÀ flat config** (27/08/2026, GĐ6). Bọc thêm `FlatCompat`
-  làm ESLint nổ *"Converting circular structure to JSON"* — thông báo chẳng liên quan gì
-  tới nguyên nhân. Hậu quả tệ hơn lỗi: **cửa `npm run lint` im lặng không chạy suốt từ
-  GĐ0 tới GĐ6**, đúng kiểu "script có mà cửa vẫn không mở". Sửa xong nó lộ ra 9 lỗi thật.
-- **`eslint-disable-next-line` chỉ tác dụng lên ĐÚNG dòng kế tiếp** (27/08/2026). Chỉ thị
-  viết thành hai dòng thì nó tắt dòng bình luận thứ hai, không tắt câu lệnh — và lint vẫn
-  đỏ y nguyên, rất dễ tưởng là quy tắc không tắt được.
 - **Tailwind v4 sinh màu dạng `oklch()`** (27/08/2026, GĐ7). Tự viết bộ đo tương phản mà
   phân tích chuỗi theo `rgb()` là **báo nhầm hàng loạt**. Vẽ màu lên canvas 1×1 rồi đọc
   pixel — đổi được mọi định dạng CSS về RGB thật. Và nhớ **trộn nền trong suốt** trước khi
