@@ -20,7 +20,26 @@ import { dinhTuyen, type MucTieuPhuHuynh } from "@modules/test/dinh-tuyen";
 const LOP_TIEU_HOC = [1, 2, 3, 4, 5];
 const TUOI_CON = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
-export function ManChonDoiTuong({ onXong }: { readonly onXong: (boDe: BoDe) => void }) {
+/**
+ * Bối cảnh màn 1 đã hỏi được, chuyền tiếp để LƯU LẠI.
+ *
+ * 🔴 Trước đây hai con số này bị vứt ngay sau khi định tuyến xong. Giữ lại KHÔNG tốn thêm
+ * một thao tác nào của người dùng, mà lại là thứ duy nhất phân định được lứa nội dung cho
+ * bộ QS — bộ đó trải từ 8 đến 15 tuổi, tức bắc qua cả tiểu học lẫn THCS.
+ *
+ * Cố ý KHÔNG suy tuổi từ lớp: lớp 4 có cả bé 9 lẫn bé 10, đoán ra một con số rồi lưu như
+ * thể đã hỏi là tự bịa dữ liệu. Không hỏi thì để trống, lứa suy từ mã bộ đề.
+ */
+export type BoiCanhChon = {
+  readonly lop?: number;
+  readonly tuoiCon?: number;
+};
+
+export function ManChonDoiTuong({
+  onXong,
+}: {
+  readonly onXong: (boDe: BoDe, boiCanh: BoiCanhChon) => void;
+}) {
   const [doiTuong, datDoiTuong] = useState<MaDoiTuong | null>(null);
   const [lop, datLop] = useState<number | undefined>();
   const [mucTieu, datMucTieu] = useState<MucTieuPhuHuynh | undefined>();
@@ -123,7 +142,12 @@ export function ManChonDoiTuong({ onXong }: { readonly onXong: (boDe: BoDe) => v
           </p>
           <button
             type="button"
-            onClick={() => onXong(boDe)}
+            onClick={() =>
+              onXong(boDe, {
+                ...(doiTuong === "tieu-hoc" && lop !== undefined ? { lop } : {}),
+                ...(tuoiCon !== undefined ? { tuoiCon } : {}),
+              })
+            }
             className="mt-4 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
           >

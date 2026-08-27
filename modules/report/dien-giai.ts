@@ -4,11 +4,30 @@
  * Hàm thuần, thuộc TẦNG LÕI (ADR-004): không React, không DOM.
  */
 
+import {
+  BIEU_HIEN,
+  DAC_DIEM_TRUC,
+  MUC_DO_RO,
+  THU_TU_PHA,
+  type KhoiPha,
+  type LuaTuoi,
+} from "@config/disc-bieu-hien";
 import { CHU_THE, DIEN_GIAI, type KhoiDienGiai, type MaKieu } from "@config/disc-dien-giai";
+import {
+  BAN_KHOAN,
+  LOI_KHUYEN,
+  MA_BAN_KHOAN,
+  TU_MINH,
+  type KhoiLoiKhuyen,
+  type KhoiTuMinh,
+  type MaBanKhoan,
+} from "@config/disc-loi-khuyen";
 
-import { MA_TRUC, type MaBoDe } from "@modules/core/bo-de/kieu";
+import { MA_TRUC, type MaBoDe, type MaTruc } from "@modules/core/bo-de/kieu";
 
 import type { Kieu } from "./cham";
+import { xepKieu } from "./cham";
+import { noiRo, viTriTrongHoSo, type ViTriTruc } from "./muc-do";
 
 export class LoiDienGiai extends Error {
   constructor(thongDiep: string) {
@@ -59,5 +78,193 @@ export function layDienGiai(kieu: Kieu, maBoDe: MaBoDe): DienGiaiDaThay {
     diemManh: thayChuThe(khoi.diemManh, maBoDe),
     choCanDeY: thayChuThe(khoi.choCanDeY, maBoDe),
     cauHoiToiNay: khoi.cauHoiToiNay.map((c) => thayChuThe(c, maBoDe)),
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * BẢN ĐẦY ĐỦ — lớp bóc sâu, thêm vào chứ KHÔNG thay bản cũ.
+ *
+ * 🔴 `layDienGiai` ở trên GIỮ NGUYÊN CHỮ KÝ. Nó là bốn khối mặc định mà màn kết quả vẫn
+ * hiện y như cũ. Đổi chữ ký tại chỗ chỉ tổ tạo ra chín điểm phải sửa trong
+ * `tests/dien-giai.test.ts` mà không đổi được hành vi nào.
+ *
+ * Ba lỗi gốc mà phần dưới đây trả nợ:
+ *  1. `layDienGiai` không nhận `diem` ⇒ hồ sơ D=92 và D=58 ra báo cáo giống nhau TỪNG BYTE.
+ *  2. Diễn giải làm theo KIỂU nên chỉ trục trội có chữ; ba trục còn lại — nhất là trục
+ *     nhẹ nhất — không một dòng nào, dù biểu đồ vẫn hiện đủ bốn cột kèm số. Đặc tả §9.2
+ *     luật 2 đòi đủ bốn trục ngay từ đầu.
+ *  3. Cặp pha mất thứ tự ⇒ "D trội, I phụ" đọc y hệt "I trội, D phụ".
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/** Bộ nào do NGƯỜI LỚN đọc về một đứa trẻ. Chỉ những bộ này mới hiện `LOI_KHUYEN`. */
+const BO_NGUOI_LON_DOC_VE_TRE: readonly MaBoDe[] = ["MN", "QS"];
+
+/** Tuổi từ mốc này trở lên thì bộ QS dùng nội dung lứa THCS. */
+const TUOI_VAO_THCS = 12;
+
+export function laMaBanKhoan(gia: unknown): gia is MaBanKhoan {
+  return typeof gia === "string" && (MA_BAN_KHOAN as readonly string[]).includes(gia);
+}
+
+/**
+ * Chọn lứa nội dung.
+ *
+ * 🔴 Bốn bộ suy thẳng từ mã bộ đề. Riêng bộ QS trải từ 8 đến 15 tuổi — bắc qua CẢ tiểu học
+ * lẫn THCS — nên chỉ trường `tuoi` phân định được. Đó là lý do `tuoi` được lưu lại ở GĐ B.
+ *
+ * Bài lưu từ trước khi có trường `tuoi` sẽ rơi về lứa `TH`: chọn bản nhẹ nhàng hơn khi
+ * không biết, thay vì nói với phụ huynh của một bé lớp 3 bằng giọng viết cho lớp 9.
+ */
+export function luaTuoiTu(maBoDe: MaBoDe, tuoi?: number): LuaTuoi {
+  switch (maBoDe) {
+    case "MN":
+      return "MN";
+    case "TH":
+      return "TH";
+    case "THCS":
+      return "THCS";
+    case "PH":
+      return "NGUOI_LON";
+    case "QS":
+      return tuoi !== undefined && tuoi >= TUOI_VAO_THCS ? "THCS" : "TH";
+  }
+}
+
+/**
+ * Khoá cặp pha CÓ THỨ TỰ, lấy từ `xepHang` chứ không lấy từ `kieu.cap`.
+ *
+ * `xepKieu()` cố ý sắp `cap` về thứ tự cố định D-I-S-C và `tests/cham-diem.test.ts` khẳng
+ * định điều đó — đấy là hành vi ĐÚNG của tầng chấm điểm, đừng đụng vào. Thứ tự trội/phụ là
+ * việc của tầng diễn giải, và `xepHang` đã mang sẵn.
+ */
+export function maPhaCoThuTu(xepHang: readonly MaTruc[]): string {
+  return `${xepHang[0]}${xepHang[1]}`;
+}
+
+export type TrucDaDoc = {
+  readonly truc: MaTruc;
+  readonly diem: number;
+  readonly viTri: ViTriTruc;
+  /** Hành vi quan sát được, theo lứa tuổi. */
+  readonly bieuHien: string;
+  /** Trục nổi/giữa: cái được. Trục nhẹ nhất: cả cái được lẫn cái giá, gộp một khối. */
+  readonly than: string;
+  /** Trục nổi/giữa mới có. Trục nhẹ nhất đã gộp cái giá vào `than`. */
+  readonly choCanDeY?: string;
+  /** 🔴 ĐÚNG MỘT MỆNH ĐỀ, chỉ có ở trục nổi nhất khi `noiRo()` đúng. */
+  readonly mucDoRo?: string;
+};
+
+export type DienGiaiDay = DienGiaiDaThay & {
+  readonly luaTuoi: LuaTuoi;
+  /** 🔴 ĐỦ BỐN TRỤC, không bao giờ ít hơn — đây chính là món §9.2 luật 2 đòi. */
+  readonly phoBonNhom: readonly TrucDaDoc[];
+  /** Chỉ có khi kiểu là pha. Đã tính theo thứ tự trội/phụ thật. */
+  readonly pha?: KhoiPha;
+  /** Bộ MN và QS: người lớn đọc về trẻ. */
+  readonly loiKhuyen?: KhoiLoiKhuyen;
+  /** Bộ TH, THCS, PH: chính người làm bài đọc về mình. KHÔNG phải bản dịch của `loiKhuyen`. */
+  readonly tuMinh?: KhoiTuMinh;
+  readonly banKhoan?: { readonly nhan: string; readonly loiMoDau: string };
+};
+
+export type DauVaoDienGiai = {
+  readonly diem: Readonly<Record<MaTruc, number>>;
+  readonly xepHang: readonly MaTruc[];
+  readonly maBoDe: MaBoDe;
+  readonly tuoi?: number;
+  readonly banKhoan?: string;
+};
+
+/**
+ * Ghép trọn bản báo cáo sâu.
+ *
+ * 🔴 Đầu vào là RECORD PHẲNG, cố ý không nhận thẳng `BaiLamLuu`: kiểu đó nằm ở
+ * `modules/core/luu-tru`, vốn KHÔNG thuộc tầng lõi (nó đụng IndexedDB). Semgrep cho qua vì
+ * report được phép import core, nên sẽ không có gì đỏ để nhắc — hàng rào duy nhất là chỗ
+ * này. Nơi gọi tự bóc các trường ra.
+ *
+ * 🔴 Mọi trường mới đều tuỳ chọn, và bài lưu từ trước GĐ B thiếu `tuoi`/`banKhoan` vẫn phải
+ * ra báo cáo đầy đủ. Màn *Bài đã làm* dựng lại kết quả từ bản ghi cũ — ném ở đây là làm
+ * hỏng cả màn lịch sử.
+ */
+export function layDienGiaiDay(dv: DauVaoDienGiai): DienGiaiDay {
+  const { diem, xepHang, maBoDe } = dv;
+  const kieu = xepKieu(diem, xepHang);
+  const goc = layDienGiai(kieu, maBoDe);
+  const luaTuoi = luaTuoiTu(maBoDe, dv.tuoi);
+  const thay = (chuoi: string) => thayChuThe(chuoi, maBoDe);
+
+  const daNoiRo = noiRo(diem, xepHang);
+
+  // Đi theo MA_TRUC chứ không theo xepHang: biểu đồ bốn cột luôn xếp D-I-S-C, và chữ phải
+  // đọc cùng thứ tự với cột thì mắt mới nối được hai thứ với nhau.
+  const phoBonNhom: TrucDaDoc[] = MA_TRUC.map((t) => {
+    const viTri = viTriTrongHoSo(xepHang, t);
+    const chung = {
+      truc: t,
+      diem: diem[t],
+      viTri,
+      bieuHien: thay(BIEU_HIEN[t][luaTuoi]),
+    };
+    if (viTri === "nheNhat") {
+      // `khiNhe` đã gói sẵn cả cái được lẫn cái giá, nên không kèm `choCanDeY` nữa —
+      // kèm thêm là biến trục nhẹ thành trục bị chê hai lần.
+      return { ...chung, than: thay(DAC_DIEM_TRUC[t].khiNhe) };
+    }
+    return {
+      ...chung,
+      than: thay(DAC_DIEM_TRUC[t].diemManh),
+      choCanDeY: thay(DAC_DIEM_TRUC[t].choCanDeY),
+      ...(viTri === "noiNhat" && daNoiRo ? { mucDoRo: thay(MUC_DO_RO[t]) } : {}),
+    };
+  });
+
+  const khoiPha = kieu.loai === "pha" ? THU_TU_PHA[maPhaCoThuTu(xepHang)] : undefined;
+  const trucChinh = xepHang[0];
+  const laNguoiLonDocVeTre = BO_NGUOI_LON_DOC_VE_TRE.includes(maBoDe);
+
+  const bk = laMaBanKhoan(dv.banKhoan) ? BAN_KHOAN[dv.banKhoan] : undefined;
+
+  return {
+    ...goc,
+    luaTuoi,
+    phoBonNhom,
+    ...(khoiPha
+      ? {
+          pha: {
+            tieuDe: thay(khoiPha.tieuDe),
+            tieuDeNgan: thay(khoiPha.tieuDeNgan),
+            than: thay(khoiPha.than),
+          },
+        }
+      : {}),
+    ...(laNguoiLonDocVeTre
+      ? { loiKhuyen: thayKhoiLoiKhuyen(LOI_KHUYEN[trucChinh], maBoDe) }
+      : { tuMinh: thayKhoiTuMinh(TU_MINH[trucChinh], maBoDe) }),
+    ...(bk ? { banKhoan: { nhan: bk.nhan, loiMoDau: thay(bk.loiMoDau) } } : {}),
+  };
+}
+
+function thayKhoiLoiKhuyen(k: KhoiLoiKhuyen, maBoDe: MaBoDe): KhoiLoiKhuyen {
+  const t = (c: string) => thayChuThe(c, maBoDe);
+  return {
+    noiTheNao: t(k.noiTheNao),
+    cauNenNoi: [t(k.cauNenNoi[0]), t(k.cauNenNoi[1]), t(k.cauNenNoi[2])],
+    cauNenTranh: [t(k.cauNenTranh[0]), t(k.cauNenTranh[1]), t(k.cauNenTranh[2])],
+    khiCangThang: t(k.khiCangThang),
+    kyNangThem: t(k.kyNangThem),
+    boMeChinh: t(k.boMeChinh),
+    cungHocTheNao: t(k.cungHocTheNao),
+    motViecToiNay: t(k.motViecToiNay),
+  };
+}
+
+function thayKhoiTuMinh(k: KhoiTuMinh, maBoDe: MaBoDe): KhoiTuMinh {
+  const t = (c: string) => thayChuThe(c, maBoDe);
+  return {
+    khiCangThang: t(k.khiCangThang),
+    tapThem: t(k.tapThem),
+    motViecToiNay: t(k.motViecToiNay),
   };
 }

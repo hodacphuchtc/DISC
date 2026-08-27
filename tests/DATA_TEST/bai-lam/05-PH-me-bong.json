@@ -1,0 +1,55 @@
+{
+  "id": "mau-disc-05",
+  "boDe": "PH",
+  "maTre": "Mẹ Bống",
+  "nguoiTraLoi": "nguoi-lon",
+  "batDau": "2026-08-24T14:10:00.000Z",
+  "ketThuc": "2026-08-24T14:13:12.000Z",
+  "traLoi": {
+    "PH-D1": 3,
+    "PH-D6": 4,
+    "PH-D2": 2,
+    "PH-D3": 2,
+    "PH-D4": 2,
+    "PH-D5": 2,
+    "PH-I6": 3,
+    "PH-I1": 4,
+    "PH-I2": 4,
+    "PH-I3": 2,
+    "PH-I4": 2,
+    "PH-I5": 2,
+    "PH-S1": 5,
+    "PH-S2": 5,
+    "PH-S3": 4,
+    "PH-S6": 2,
+    "PH-S4": 4,
+    "PH-S5": 2,
+    "PH-C1": 4,
+    "PH-C2": 4,
+    "PH-C6": 3,
+    "PH-C3": 4,
+    "PH-C4": 2,
+    "PH-C5": 2
+  },
+  "ketQua": {
+    "hopLe": true,
+    "diem": {
+      "D": 29.2,
+      "I": 45.8,
+      "S": 75,
+      "C": 54.2
+    },
+    "xepHang": [
+      "S",
+      "C",
+      "I",
+      "D"
+    ],
+    "kieu": {
+      "loai": "don",
+      "truc": "S"
+    },
+    "canhBao": []
+  },
+  "phienBanBoDe": "1.0"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "mau-disc-03",
+  "boDe": "THCS",
+  "maTre": "Tí Nị",
+  "nguoiTraLoi": "tre",
+  "batDau": "2026-08-22T12:05:00.000Z",
+  "ketThuc": "2026-08-22T12:08:12.000Z",
+  "traLoi": {
+    "THCS-D1": 4,
+    "THCS-D6": 3,
+    "THCS-D2": 2,
+    "THCS-D3": 2,
+    "THCS-D4": 2,
+    "THCS-D5": 2,
+    "THCS-I6": 3,
+    "THCS-I1": 4,
+    "THCS-I2": 4,
+    "THCS-I3": 2,
+    "THCS-I4": 2,
+    "THCS-I5": 2,
+    "THCS-S1": 4,
+    "THCS-S2": 4,
+    "THCS-S3": 4,
+    "THCS-S6": 3,
+    "THCS-S4": 2,
+    "THCS-S5": 2,
+    "THCS-C1": 5,
+    "THCS-C2": 5,
+    "THCS-C6": 2,
+    "THCS-C3": 4,
+    "THCS-C4": 4,
+    "THCS-C5": 3
+  },
+  "ketQua": {
+    "hopLe": true,
+    "diem": {
+      "D": 37.5,
+      "I": 45.8,
+      "S": 54.2,
+      "C": 79.2
+    },
+    "xepHang": [
+      "C",
+      "S",
+      "I",
+      "D"
+    ],
+    "kieu": {
+      "loai": "don",
+      "truc": "C"
+    },
+    "canhBao": []
+  },
+  "phienBanBoDe": "1.0"
+}

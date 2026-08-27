@@ -55,13 +55,13 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 27/08/2026)
+## TRẠNG THÁI (cập nhật 27/08/2026 — chiều)
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **33/33 hạng mục PLAN.md · 416 test xanh ·
-`npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production ·
-đã push lên GitHub và CI xanh.**
+Ứng dụng chạy được đầu-cuối trên local. **41/41 hạng mục PLAN.md · 676 test xanh ·
+`npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
+🔴 **GĐ9 chưa commit** — bản đã push lên GitHub dừng ở GĐ8 (`fcbfeb8`).
 
 - **GĐ0–GĐ1** — khung Next 16 + Tailwind 4 + Vitest 4, thanh bên, hàng rào hai tầng,
   spike Canvas vẽ chữ tiếng Việt vừa khung.
@@ -75,20 +75,27 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - **GĐ7** — chạy được khi mất mạng, 0 lỗi tương phản, 0 vùng bấm < 44px, làm trọn bài
   chỉ bằng bàn phím.
 - **GĐ8** — `docs/ban-giao/HUONG-DAN-CAM-VAO-APP.md`, 3 OVERVIEW, 4 ADR, manifest thật.
+- **GĐ9** — **làm sâu bản báo cáo**: diễn giải đủ **bốn trục** (trước chỉ trục trội có chữ),
+  nội dung theo **lứa tuổi**, 12 cặp pha **có thứ tự**, tầng lời khuyên hành động
+  (câu nên nói / nên tránh · khi con căng thẳng · linh hoạt tình huống · một việc tối nay),
+  bóc lớp dần + bản in mở sẵn, ô "điều đang băn khoăn", **so sánh phong cách bố mẹ ↔ con**,
+  và `docs/noi-dung-cho-ky-duyet.md` để người chuyên môn ký.
 
 ### ĐANG DỞ
 
-Không còn hạng mục nào trong PLAN.md. Code đã commit và push lên `origin/main`.
+Không còn hạng mục nào trong PLAN.md. 🔴 **GĐ9 chưa commit, chưa push.**
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
-1. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
+1. 🔴 **Commit GĐ9** (điểm DỪNG BẮT BUỘC, cần chủ dự án duyệt). Kèm 4 file sổ của GĐ8
+   cũng đang treo từ phiên trước.
+2. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
-2. **Đọc 33 câu gợi chuyện** ở `config/disc-dien-giai.ts` — dòng `(b)` của hạng mục 4.3
-   đòi chủ dự án chỉ ra được ít nhất một câu sẽ thật sự hỏi con.
-3. **Gọi đội dev 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu ·
+3. **Đọc `docs/noi-dung-cho-ky-duyet.md`** rồi đưa cho người có chuyên môn tâm lý/giáo dục.
+   Đây là việc gỡ khoá ngày ra người dùng thật.
+4. **Gọi đội dev 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu ·
    nhận dạng nào. Bốn câu này quyết định phần giao diện có dùng lại được không.
-4. Ba việc ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
+5. Ba việc còn lại ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
 
 ### CHỜ NGOÀI (thiếu key/env/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
 
@@ -98,6 +105,9 @@ toán. Ba việc đầu nên làm ngay tuần này.
 - 🔴 **Người có chuyên môn tâm lý/giáo dục KÝ DUYỆT 104 câu hỏi + văn bản báo cáo.**
   Chạy nội bộ thì không sao. Ngày bấm nút chạy quảng cáo là ngày nói với người lạ về con
   của họ — trước ngày đó phải có một người chịu trách nhiệm.
+  ✅ **Nút thắt đã gỡ (GĐ9):** `node scripts/xuat-noi-dung-ky-duyet.mjs` sinh ra
+  `docs/noi-dung-cho-ky-duyet.md` — gom trọn chữ, thay sẵn đại từ theo từng bộ đề, kèm
+  5 câu người ký cần xác nhận. Đưa thẳng file đó, họ không phải mở file `.ts` nào.
   *Chặn: ngày ra người dùng thật.*
 - 🔴 **Thu 30–50 phản hồi thật** (Google Form cũng được), rồi chạy
   `node scripts/phan-tich-item.mjs`. Đây là thứ duy nhất biến bộ 104 câu từ *"do BA soạn"*
@@ -123,8 +133,42 @@ toán. Ba việc đầu nên làm ngay tuần này.
 | 27/08/2026 | **Ảnh chia sẻ xoay quanh "3 câu để hỏi con tối nay"**, không phải nhãn của trẻ | Phụ huynh chia sẻ thứ khiến họ trông như cha mẹ tinh tế, không chia sẻ thứ dán nhãn con mình. Hạ luôn rủi ro dán nhãn |
 | 27/08/2026 | **Nháp bài gắn theo cả biệt danh**, không chỉ theo bộ đề | Máy giáo viên đi qua nhiều gia đình — trả nháp của bé A cho bé B là vừa lộ chéo vừa sai người |
 
+| 27/08/2026 | **Bóc lớp dần** thay vì đưa hết ra màn kết quả | Đặc tả đã chốt "nói ít mà trúng"; chủ dự án muốn sâu hơn. Bóc lớp giữ được cả hai — màn hình ngắn như cũ, bản in đầy đủ, không phá bố cục ảnh chia sẻ |
+| 27/08/2026 | **"Cân bằng DISC" = LINH HOẠT TÌNH HUỐNG**, không phải nâng trục thấp | DISC không phải mô hình khuyết thiếu. Khuyên "nâng trục thấp" là ngầm nói đứa trẻ đang thiếu — đụng thẳng ADR-002. Thay bằng cặp *kỹ năng dạy con dùng thêm* + *điều bố mẹ tự chỉnh*, luôn đi cùng nhau |
+| 27/08/2026 | **Được nói CÁCH học, cấm ĐOÁN năng lực** | Luật §9.2 số 5 cấm gắn học lực. Cách tổ chức việc học cùng con là lời khuyên quy trình, khác hẳn dự đoán môn/năng lực. Ranh giới đặt ở đó và có test canh |
+| 27/08/2026 | **Cường độ chỉ đổi MỘT mệnh đề, không bao giờ đổi mạch văn** | Phép đo quá thô để đỡ thang cao/vừa/thấp: một nấc trả lời dịch 4–10 điểm tuỳ bộ. Không cố làm ngưỡng chính xác — mà chặn thiệt hại khi ngưỡng sai. Nội dung khoá theo THỨ HẠNG, vốn ổn định hơn nhiều |
+| 27/08/2026 | **Lời khuyên cho người lớn và bản tự đọc là HAI bộ chữ khác nhau** | Không phải bản dịch của nhau. Bê chữ viết cho phụ huynh sang bộ THCS rồi chỉ đổi tiêu đề là đúng lỗi đã trả giá sáng cùng ngày |
+
 ## CẢNH BÁO / CẠM BẪY (đã trả giá, đừng lặp lại)
 
+- **Hạng mục có thể TICK ✅ mà vẫn chưa làm đúng thứ đặc tả đòi** (27/08/2026, GĐ9 — đắt
+  nhất phiên). Đặc tả §9.2 luật 2 ghi *"Mỗi trục nêu CẢ mặt mạnh LẪN mặt cần để ý"*, DEMO #5
+  đòi *"mỗi trục có ít nhất một dòng chỗ cần để ý"*. Bản dựng làm theo **KIỂU** (11 kiểu) chứ
+  không theo **TRỤC** (4 trục), và `tests/dien-giai.test.ts` chỉ kiểm 11 kiểu — nên test xanh,
+  DEMO "đạt", hạng mục `4.2` tick ✅ từ GĐ4, trong khi phụ huynh nhìn biểu đồ bốn cột có số
+  đầy đủ mà chỉ đọc được chữ về **một** nhóm. **Bài học: viết test theo ĐÚNG DANH TỪ mà đặc
+  tả dùng.** "Mỗi trục" mà đi kiểm "mỗi kiểu" là một cửa kiểm nhìn sai chỗ suốt bốn giai đoạn.
+- **`layDienGiai(kieu, maBoDe)` không nhận `diem`** (27/08/2026). Hồ sơ D=92 và D=58 ra báo
+  cáo giống nhau **từng byte**. Không test nào bắt được vì không test nào từng hỏi *"hai hồ sơ
+  khác nhau có ra hai bản khác nhau không"*. Đã có `tests/dien-giai-day.test.ts` canh.
+- **Phép đo DISC ở đây quá thô để đỡ thang cao/vừa/thấp** (27/08/2026). Một nấc trả lời dịch
+  điểm chuẩn hoá đi: **TH 10,0 · QS 6,25 · MN 5,0 · THCS/PH 4,17**. Đặt lằn ranh band ở 45/65
+  nghĩa là cùng một đứa trẻ làm lại sau năm phút rơi sang band khác và đọc một bản khác nghĩa.
+  Cách xử lý KHÔNG phải chỉnh ngưỡng cho chuẩn, mà là **chặn thiệt hại**: cường độ chỉ đổi
+  một mệnh đề, mọi nội dung khác khoá theo THỨ HẠNG.
+- **Nội dung không có trong DOM thì không in được** (27/08/2026, GĐ9). `{mo && <div/>}` làm
+  bản PDF mất đúng phần sâu nhất. Phải render luôn rồi ẩn bằng CSS. Và **`<details>` cũng
+  không dùng được**: trình duyệt ẩn thân qua `::details-content`, CSS in không đè chắc.
+  Thêm nữa: tiêu đề nằm trong nút bấm mà nút thì `data-khong-in` ⇒ in ra mất tiêu đề, phải
+  có bản `.chi-in` thế chỗ.
+- **`break-inside: avoid-page` áp cho MỌI `section` là quả mìn hẹn giờ** (27/08/2026). Chạy
+  tốt suốt GĐ4–GĐ8 vì màn kết quả còn ngắn. Thêm lớp bóc sâu vào là một `section` cao hơn
+  một trang giấy mà lại cấm tách ⇒ in ra một trang gần trắng rồi mới tới nội dung. Đã thu
+  luật về mức khối nhỏ (`.khoi-in`).
+- **Tiếng Việt: "bạn" vừa là đại từ vừa là danh từ chỉ bạn bè** (27/08/2026). Hàng rào cấm
+  gõ cứng đại từ báo nhầm hàng loạt ở "kết bạn nhanh", "phân vai cho các bạn". Phải gỡ nghĩa
+  danh từ ra trước khi soi — hàng rào báo nhầm nhiều thì người sau sẽ tắt nó đi, và mất luôn
+  phần canh thật.
 - **Next.js 16 TỰ GHI một khối vào `CLAUDE.md` sau mỗi lần `next dev`** (26/08/2026,
   hạng mục 0.4). Nó chỉ chèn thêm chứ không xoá, nên rất dễ lọt — nhưng hiến pháp dự án
   do người viết, không để công cụ build sửa, và nó làm bẩn diff mỗi lần chạy dev. Đã chặn

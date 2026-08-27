@@ -1,0 +1,35 @@
+{
+  "id": "mau-disc-07",
+  "boDe": "MN",
+  "maTre": "Cà Rốt",
+  "nguoiTraLoi": "nguoi-lon",
+  "batDau": "2026-08-26T01:45:00.000Z",
+  "ketThuc": "2026-08-26T01:47:40.000Z",
+  "traLoi": {
+    "MN-D1": 3,
+    "MN-D5": 3,
+    "MN-D2": 3,
+    "MN-D3": 3,
+    "MN-D4": 3,
+    "MN-I5": 3,
+    "MN-I1": 3,
+    "MN-I2": 3,
+    "MN-I3": 3,
+    "MN-I4": 3,
+    "MN-S1": 3,
+    "MN-S2": 3,
+    "MN-S3": 2,
+    "MN-S5": 3,
+    "MN-S4": 4,
+    "MN-C1": 3,
+    "MN-C2": 3,
+    "MN-C5": 3,
+    "MN-C3": 4,
+    "MN-C4": 2
+  },
+  "ketQua": {
+    "hopLe": false,
+    "lyDo": "PHANG"
+  },
+  "phienBanBoDe": "1.0"
+}

@@ -65,7 +65,12 @@ export function taoPhieu(dauVao: {
   };
 }
 
-/** Khoá bị cấm tuyệt đối trong phiếu. Dùng cho cả test lẫn kiểm lúc chạy. */
+/**
+ * Khoá bị cấm tuyệt đối trong phiếu. Dùng cho cả test lẫn kiểm lúc chạy.
+ *
+ * 🔴 THÊM TRƯỜNG MỚI VÀO `BaiLamLuu` THÌ PHẢI THÊM VÀO ĐÂY. `tests/lien-he-sach.test.ts`
+ * có hàng rào biên dịch bắt việc này — bỏ sót là typecheck đỏ, không phải là im lặng lọt.
+ */
 export const KHOA_CAM = [
   "traLoi",
   "ketQua",
@@ -76,6 +81,8 @@ export const KHOA_CAM = [
   "boDe",
   "maTre",
   "lop",
+  "tuoi",
+  "banKhoan",
   "bietDanh",
 ] as const;
 

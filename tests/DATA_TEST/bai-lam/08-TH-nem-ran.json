@@ -1,0 +1,54 @@
+{
+  "id": "mau-disc-08",
+  "boDe": "TH",
+  "maTre": "Nem Rán",
+  "lop": "5",
+  "nguoiTraLoi": "tre",
+  "batDau": "2026-08-26T10:00:00.000Z",
+  "ketThuc": "2026-08-26T10:02:40.000Z",
+  "traLoi": {
+    "TH-D1": 3,
+    "TH-D5": 3,
+    "TH-D2": 3,
+    "TH-D3": 3,
+    "TH-D4": 1,
+    "TH-I5": 2,
+    "TH-I1": 3,
+    "TH-I2": 3,
+    "TH-I3": 1,
+    "TH-I4": 1,
+    "TH-S1": 3,
+    "TH-S2": 3,
+    "TH-S3": 3,
+    "TH-S5": 2,
+    "TH-S4": 1,
+    "TH-C1": 2,
+    "TH-C2": 3,
+    "TH-C5": 3,
+    "TH-C3": 3,
+    "TH-C4": 1
+  },
+  "ketQua": {
+    "hopLe": true,
+    "diem": {
+      "D": 60,
+      "I": 50,
+      "S": 70,
+      "C": 50
+    },
+    "xepHang": [
+      "S",
+      "D",
+      "I",
+      "C"
+    ],
+    "kieu": {
+      "loai": "don",
+      "truc": "S"
+    },
+    "canhBao": [
+      "MOT_COT"
+    ]
+  },
+  "phienBanBoDe": "1.0"
+}

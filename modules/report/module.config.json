@@ -9,7 +9,9 @@
     { "ten": "Kieu", "noiO": "cham.ts", "moTa": "Kiểu đơn / kiểu pha / phổ đều" },
     { "ten": "KetQuaKiem", "noiO": "kiem-hop-le.ts", "moTa": "Lý do chặn, hoặc danh sách cảnh báo" },
     { "ten": "DienGiaiDaThay", "noiO": "dien-giai.ts", "moTa": "Bốn khối văn bản đã thay đại từ" },
+    { "ten": "ViTriTruc", "noiO": "muc-do.ts", "moTa": "Vị trí một trục trong hồ sơ: nổi nhất / giữa / nhẹ nhất" },
     { "ten": "KetQuaDoiChieu", "noiO": "doi-chieu.ts", "moTa": "Bảng vùng lệch, hoặc lý do chưa ghép được" },
+    { "ten": "KetQuaPhongCach", "noiO": "doi-chieu-phong-cach.ts", "moTa": "Lệch phong cách bố mẹ ↔ con — KHÁC với vùng lệch hai góc nhìn" },
     { "ten": "NoiDungAnhKetQua", "noiO": "xuat-anh.ts", "moTa": "Dữ liệu để vẽ tấm ảnh 1080×1350" }
   ],
   "dependencies": ["core"],

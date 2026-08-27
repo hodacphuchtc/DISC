@@ -7,6 +7,33 @@ import {
   taoPhieu,
   timKhoaCam,
 } from "../modules/core/lien-he/kieu";
+import type { BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
+
+/**
+ * 🔴 HÀNG RÀO BIÊN DỊCH — chỗ này từng là điểm mù.
+ *
+ * Test cũ duyệt `Object.keys(BAI_LAM)` của một fixture GÕ TAY. Thêm một trường vào
+ * `BaiLamLuu` mà quên khai vào `KHOA_CAM` thì test vẫn XANH, trong khi đã có đường cho dữ
+ * liệu của trẻ lọt vào phiếu liên hệ — phá thẳng QĐ3.
+ *
+ * `Record<keyof BaiLamLuu, ...>` đòi liệt kê ĐỦ mọi trường, kể cả trường tuỳ chọn. Thêm
+ * trường mà không khai ở đây ⇒ `npm run typecheck` ĐỎ ngay, không phải im lặng lọt.
+ */
+const PHAN_LOAI_TRUONG: Record<keyof BaiLamLuu, "cua-tre" | "vo-danh"> = {
+  id: "vo-danh",
+  nguoiTraLoi: "vo-danh",
+  batDau: "vo-danh",
+  ketThuc: "vo-danh",
+  phienBanBoDe: "vo-danh",
+
+  boDe: "cua-tre",
+  maTre: "cua-tre",
+  lop: "cua-tre",
+  tuoi: "cua-tre",
+  banKhoan: "cua-tre",
+  traLoi: "cua-tre",
+  ketQua: "cua-tre",
+};
 
 const PHIEU = {
   soDienThoai: "0912 345 678",
@@ -21,6 +48,8 @@ const BAI_LAM = {
   boDe: "THCS",
   maTre: "Bi",
   lop: "7",
+  tuoi: 13,
+  banKhoan: "con-hay-cau",
   traLoi: { "THCS-D1": 4, "THCS-I6": 2 },
   ketQua: {
     hopLe: true,
@@ -68,7 +97,19 @@ describe("🔴 QĐ3 — phiếu liên hệ KHÔNG được chứa dữ liệu c�
 
   it("timKhoaCam bắt được khoá cấm ở MỌI độ sâu — hàng rào tự nó phải hoạt động", () => {
     expect(timKhoaCam(BAI_LAM).sort()).toEqual(
-      ["boDe", "ketQua", "ketQua.canhBao", "ketQua.diem", "ketQua.kieu", "ketQua.xepHang", "lop", "maTre", "traLoi"].sort(),
+      [
+        "banKhoan",
+        "boDe",
+        "ketQua",
+        "ketQua.canhBao",
+        "ketQua.diem",
+        "ketQua.kieu",
+        "ketQua.xepHang",
+        "lop",
+        "maTre",
+        "traLoi",
+        "tuoi",
+      ].sort(),
     );
     expect(timKhoaCam({ a: { b: { c: { diem: 1 } } } })).toEqual(["a.b.c.diem"]);
   });
@@ -84,6 +125,19 @@ describe("🔴 QĐ3 — phiếu liên hệ KHÔNG được chứa dữ liệu c�
   it("danh sách khoá cấm phủ đủ mọi trường của bài làm", () => {
     for (const k of Object.keys(BAI_LAM)) {
       expect(KHOA_CAM as readonly string[], `thiếu "${k}"`).toContain(k);
+    }
+  });
+
+  it("🔴 KHOA_CAM phủ đủ MỌI trường của BaiLamLuu mang dữ liệu trẻ", () => {
+    // Nguồn là `Record<keyof BaiLamLuu, …>` nên danh sách này không thể lạc hậu so với
+    // kiểu thật: quên khai một trường mới là typecheck đỏ ngay ở chỗ khai báo.
+    const cuaTre = Object.entries(PHAN_LOAI_TRUONG)
+      .filter(([, loai]) => loai === "cua-tre")
+      .map(([khoa]) => khoa);
+
+    expect(cuaTre.length).toBeGreaterThan(0);
+    for (const k of cuaTre) {
+      expect(KHOA_CAM as readonly string[], `trường "${k}" của BaiLamLuu chưa vào KHOA_CAM`).toContain(k);
     }
   });
 });

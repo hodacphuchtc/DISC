@@ -15,6 +15,49 @@
 
 ---
 
+## BÀN GIAO PHIÊN GẦN NHẤT
+
+> 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
+
+**Phiên 27/08/2026 (chiều) — GĐ9: làm sâu bản báo cáo**
+
+**1. Vừa xong.** 41/41 hạng mục · **676 test xanh** (đầu phiên 416) · `npm run kiem` và
+`npm run build` đều xanh. GĐ9 gồm 8 hạng mục `9.1`–`9.8`.
+
+**2. ĐANG DỞ.** Không còn hạng mục code nào. 🔴 **CHƯA COMMIT** — toàn bộ GĐ9 đang nằm
+ở cây làm việc, chưa `git add`. Đây là việc đầu tiên của phiên sau.
+
+**3. Chặn ở NGƯỜI / NGOÀI.** Vẫn bốn việc cũ ở `CLAUDE.md` mục CHỜ NGOÀI. **Việc ký duyệt
+nội dung giờ đã gỡ được nút thắt**: chạy `node scripts/xuat-noi-dung-ky-duyet.mjs` ra
+`docs/noi-dung-cho-ky-duyet.md` (10.060 từ, đã thay sẵn đại từ) — đưa thẳng cho người
+chuyên môn, họ không phải mở file `.ts` nào.
+
+**4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
+- **Bản in đã đo trên Chromium thật**: màn hình 0/5 lớp mở · bản in **5/5** lớp mở · bản in
+  có tầng lời khuyên · 5 tiêu đề chỉ-in hiện ra · **0** nút bấm lọt vào giấy · PDF **3 trang**
+  cho cả 5 bộ đề. `tests/ban-in.test.ts` khoá lại, và **đã thử phá luật để chắc test fail được**.
+- **Đại từ theo bộ đề đã soi bằng ảnh chụp**: QS→"con" (5 lớp) · MN→"bé" (5 lớp) ·
+  THCS→"bạn" (4 lớp, **không** có lớp "Nói chuyện với…" vì đó là lớp cho người lớn) ·
+  bài PHANG→**0 lớp** (lớp sâu không lọt vào nhánh không hợp lệ).
+- **Độ thô của phép đo, đã tính bằng số:** một nấc trả lời dịch điểm chuẩn hoá đi
+  **TH 10,0 · QS 6,25 · MN 5,0 · THCS/PH 4,17**. Đây là lý do KHÔNG có thang cao/vừa/thấp.
+- **Playwright vẫn KHÔNG sống qua phiên.** `npm i playwright` vào thư mục tạm; Chromium đã
+  nằm sẵn ở `~/Library/Caches/ms-playwright`.
+- **Có sẵn một dev server của dự án ở cổng 3000** (Next chặn mở bản thứ hai ở cổng khác).
+
+**5. Cạm bẫy vừa trả giá.** 5 mục mới đã ghi vào `CLAUDE.md` mục "CẢNH BÁO / CẠM BẪY".
+Đắt nhất: **hạng mục `4.2` đã tick ✅ từ GĐ4 nhưng nghiệm thu bằng tiêu chí sai** — test
+kiểm 11 KIỂU trong khi đặc tả đòi 4 TRỤC, nên ba trục im lặng suốt từ GĐ4 tới giờ.
+
+**6. Lệnh nên chạy đầu phiên sau.**
+```bash
+git status                                  # GĐ9 chưa commit
+npm run kiem                                # 676 test
+node tests/DATA_TEST/tao-du-lieu-mau.mjs    # sinh lại 8 bài mẫu
+```
+
+---
+
 ## MỤC TIÊU & PHẠM VI
 
 **Xây cái gì:** một khoang DISC tự chứa, chạy trên máy local, để đội dev của chủ dự án bê
@@ -555,6 +598,85 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
 
 ---
 
+## GIAI ĐOẠN 9 — Làm sâu bản báo cáo (ước lượng: 7,5 ngày · 27/08/2026)
+
+> **Vì sao có giai đoạn này.** Chủ dự án chạy thử bản production và chê bản báo cáo
+> *"phân tích khá sơ sài, chưa chạm đến cảm xúc của phụ huynh"*. Đo trên mã thật thì lời
+> chê có căn cứ kỹ thuật: `layDienGiai(kieu, maBoDe)` **không nhận `diem`**, nên hai hồ sơ
+> D=92 và D=58 ra báo cáo giống nhau **từng byte**; diễn giải làm theo KIỂU nên chỉ trục
+> trội có chữ còn ba trục kia — nhất là trục thấp nhất — không một dòng nào, dù biểu đồ
+> vẫn hiện đủ bốn cột kèm số.
+>
+> 🔴 **Phần lớn GĐ9 là TRẢ NỢ, không phải mở rộng phạm vi.** Đặc tả §9.2 luật 2 ghi
+> *"Mỗi trục nêu CẢ mặt mạnh LẪN mặt cần để ý. Không có ngoại lệ"* và DEMO #5 đòi *"mỗi
+> trục có ít nhất một dòng chỗ cần để ý"*. Hạng mục `4.2` đã tick ✅ ở GĐ4 **nhưng nghiệm
+> thu bằng tiêu chí sai** — test chỉ kiểm 11 KIỂU, không kiểm 4 TRỤC.
+>
+> **Bốn quyết định đã chốt với chủ dự án trước khi code:** bóc lớp dần (màn hình ngắn, bản
+> in đầy đủ) · khung "linh hoạt tình huống" chứ không phải "nâng trục thấp" · được nói CÁCH
+> học, cấm ĐOÁN năng lực · thêm đầu vào không tốn thao tác.
+
+- [x] **9.1 — Dữ liệu mẫu tám hồ sơ** ✅ (27/08/2026)
+  - (a) `tests/DATA_TEST/` tự chứa: generator, 8 bản ghi JSON, bộ nạp/xoá qua DevTools,
+    README. Xoá cả thư mục không ảnh hưởng gì — không file nào ngoài nó trỏ vào.
+  - (b) Dán `nap-vao-trinh-duyet.js` vào Console → màn *Bài đã làm* hiện đủ 8 bài.
+  - (c) `ketQua` do chính `cham()` tính, không gõ tay ⇒ đổi ngưỡng là mẫu tự đúng theo.
+  - (d) 0,5 ngày.
+
+- [x] **9.2 — Hàng rào riêng tư đi trước, rồi mới thêm trường** ✅ (27/08/2026)
+  - (a) `tuoi`/`banKhoan` vào `BaiLamLuu` + `KHOA_CAM`; nối `lop`/`tuoi` từ màn 1 vào bản ghi
+    (trường `lop` khai từ GĐ0 mà **chưa từng có nơi nào ghi**).
+  - (b) Làm bài bộ QS chọn tuổi 13 → bản ghi có `tuoi: 13`; bộ THCS **không** bịa tuổi.
+  - (c) `tests/lien-he-sach.test.ts` thêm hàng rào **biên dịch** `Record<keyof BaiLamLuu, …>`
+    — quên khai trường mới là typecheck ĐỎ, không còn im lặng lọt. `tests/luu-boi-canh.test.tsx`.
+  - (d) 0,5 ngày.
+
+- [x] **9.3 — Ngưỡng cường độ + vị trí trục** ✅ (27/08/2026)
+  - (a) `NGUONG_NOI_RO` + `modules/report/muc-do.ts` (`viTriTrongHoSo`, `noiRo`).
+  - (b) Hồ sơ nổi rõ được thêm một câu; hồ sơ chưa đủ nổi thì im lặng.
+  - (c) `tests/muc-do.test.ts` — chạy đủ 24 câu × 2 chiều: nhích một nấc **không** xoay
+    được trục nổi nhất/nhẹ nhất.
+  - (d) 0,5 ngày.
+
+- [x] **9.4 — Viết nội dung theo TRỤC và theo LỨA TUỔI** ✅ (27/08/2026)
+  - (a) `config/disc-bieu-hien.ts` + `config/disc-loi-khuyen.ts`: biểu hiện 4 trục × 4 lứa ·
+    mạnh/cần để ý/khi nhẹ · 12 cặp pha có thứ tự · lời khuyên cho người lớn · bản tự đọc ·
+    5 thẻ băn khoăn · 8 khối lệch phong cách.
+  - (b) Bé 3 tuổi và học sinh lớp 9 đọc hai bản khác nhau, không còn chung một đoạn.
+  - (c) `tests/noi-dung-moi.test.ts` (194 test) — nối hàng rào §9.2 sang MỌI hằng mới.
+  - (d) 2,5 ngày.
+
+- [x] **9.5 — Hàm ghép bản đầy đủ** ✅ (27/08/2026)
+  - (a) `layDienGiaiDay()` nhận `diem` + lứa tuổi + băn khoăn. `layDienGiai()` **giữ nguyên
+    chữ ký** làm vỏ mỏng — không đụng 9 điểm gọi trong test cũ.
+  - (b) Hai hồ sơ cùng thứ hạng khác cường độ ra hai bản khác nhau; đủ 4 trục đều có chữ.
+  - (c) `tests/dien-giai-day.test.ts` — cả ba lỗi gốc đều có test hồi quy riêng.
+  - (d) 1 ngày.
+
+- [x] **9.6 — Bóc lớp dần + bản in** ✅ (27/08/2026)
+  - (a) `app/khoang/lop-sau.tsx`. Nội dung LUÔN trong DOM, ẩn bằng CSS; bản in ép mở hết.
+  - (b) Đo bằng Chromium thật: màn hình 0/5 lớp mở · bản in **5/5** lớp mở · bản in có
+    tầng lời khuyên · 5 tiêu đề chỉ-in hiện ra · **0** nút bấm lọt vào giấy · PDF 3 trang.
+  - (c) `tests/ban-in.test.ts` — đã thử phá luật `section` để chắc test fail được thật.
+  - (d) 1 ngày.
+
+- [x] **9.7 — Băn khoăn + so sánh phong cách bố mẹ ↔ con** ✅ (27/08/2026)
+  - (a) Ô chọn 1 chạm đặt SAU kết quả (không chèn giữa M1→M2);
+    `modules/report/doi-chieu-phong-cach.ts` — **khác** `doiChieu()` vốn so hai góc nhìn.
+  - (b) Mở mẫu 04 (QS · Tí Nị) khi máy đã có mẫu 05 (PH · Mẹ Bống) → hiện bảng lệch 4 trục
+    + 2 đoạn diễn giải. Chưa có bài PH thì hiện lời mời làm.
+  - (c) `tests/doi-chieu-phong-cach.test.ts` (13 test).
+  - (d) 1,5 ngày.
+
+- [x] **9.8 — Hồ sơ ký duyệt** ✅ (27/08/2026)
+  - (a) `scripts/xuat-noi-dung-ky-duyet.mjs` → `docs/noi-dung-cho-ky-duyet.md` (10.060 từ):
+    gom trọn chữ, **thay sẵn đại từ** theo từng bộ đề, xếp theo thứ tự người đọc gặp.
+  - (b) Đưa file này cho người có chuyên môn đọc — họ không phải mở file `.ts` nào.
+  - (c) Sinh lại được bất cứ lúc nào, không gõ tay nên không lạc hậu.
+  - (d) 0,5 ngày.
+
+---
+
 ## 🏁 MỐC LỚN
 
 | Mốc | Hết GĐ | Tiêu chí đo được |
@@ -565,6 +687,7 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
 | **MỐC 4 — Có thứ để chia sẻ** | GĐ4 | Tấm PNG "3 câu để hỏi con tối nay" gửi Zalo đọc được |
 | **MỐC 5 — Sản phẩm có mũi nhọn** | GĐ5 | Bảng đối chiếu con ↔ mẹ hiện ra, diễn giải đúng 2 trục |
 | **MỐC 6 — Bàn giao được** | GĐ8 | Người lạ đọc 10 phút chỉ ra đúng 3 nhóm file cần copy |
+| **MỐC 7 — Báo cáo đủ sâu** | GĐ9 | Cả bốn nhóm đều có chữ; phụ huynh đọc xong biết tối nay làm gì |
 
 ---
 

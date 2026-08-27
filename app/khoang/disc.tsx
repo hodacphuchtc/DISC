@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { ManChonDoiTuong } from "./chon-doi-tuong";
+import { ManChonDoiTuong, type BoiCanhChon } from "./chon-doi-tuong";
 import { ManKetQua } from "./ket-qua";
 import { LamBai } from "./lam-bai";
 import { TruocKhiBatDau } from "./truoc-khi-bat-dau";
@@ -71,6 +71,12 @@ export function KhoangDisc() {
   /** Mã bài trong kho — để nút "Kết thúc & xoá" biết xoá cái nào (QĐ7). */
   const [idBai, datIdBai] = useState<string | null>(null);
 
+  /**
+   * Lớp / tuổi con mà màn 1 đã hỏi. Giữ ngoài `buoc` vì nó không đổi trong suốt một lượt
+   * làm bài, và lượt sau luôn đi qua màn 1 nên không có đường mang giá trị cũ sang bài mới.
+   */
+  const [boiCanh, datBoiCanh] = useState<BoiCanhChon>({});
+
   function xongBai(
     boDe: BoDe,
     bietDanh: string,
@@ -92,6 +98,8 @@ export function KhoangDisc() {
       id,
       boDe: boDe.ma,
       maTre: bietDanh,
+      ...(boiCanh.lop !== undefined ? { lop: String(boiCanh.lop) } : {}),
+      ...(boiCanh.tuoiCon !== undefined ? { tuoi: boiCanh.tuoiCon } : {}),
       nguoiTraLoi: nguoiTraLoiCua(boDe.ma),
       batDau,
       ketThuc: new Date().toISOString(),
@@ -105,7 +113,14 @@ export function KhoangDisc() {
 
   switch (buoc.ten) {
     case "chon":
-      return <ManChonDoiTuong onXong={(boDe) => datBuoc({ ten: "dan-do", boDe })} />;
+      return (
+        <ManChonDoiTuong
+          onXong={(boDe, bc) => {
+            datBoiCanh(bc);
+            datBuoc({ ten: "dan-do", boDe });
+          }}
+        />
+      );
 
     case "dan-do":
       return (
@@ -151,6 +166,7 @@ export function KhoangDisc() {
             datBuoc({ ten: "dan-do", boDe: napBoDe(ma), bietDanhGoiY: maTre })
           }
           nguon={nguon}
+          tuoi={boiCanh.tuoiCon}
         />
       );
 

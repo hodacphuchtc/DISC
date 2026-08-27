@@ -12,6 +12,34 @@
  */
 export const NGUONG_PHA = 8;
 
+/**
+ * Điểm tối thiểu (thang 0–100) để được nói thêm MỘT mệnh đề "nhóm này nổi rất rõ".
+ *
+ * 🔴 ĐỌC KỸ TRƯỚC KHI ĐỔI — vì sao chỉ có MỘT nấc chứ không phải thang cao/vừa/thấp:
+ *
+ * Phép đo quá thô để đỡ một thang nhiều nấc. Một nấc trả lời dịch điểm chuẩn hoá đi:
+ *   bộ TH   5 câu/trục, thang 3 mức → 10,0 điểm
+ *   bộ QS   4 câu/trục, thang 5 mức →  6,25 điểm
+ *   bộ MN   5 câu/trục, thang 5 mức →  5,0 điểm
+ *   THCS/PH 6 câu/trục, thang 5 mức →  4,17 điểm
+ * Đặt lằn ranh ở 45 và 65 nghĩa là CÙNG MỘT ĐỨA TRẺ làm lại sau năm phút rơi sang nhóm
+ * khác và đọc được một bản báo cáo khác nghĩa. Đó là ảnh chụp màn hình sẽ dùng để chê
+ * sản phẩm, và người chê sẽ đúng.
+ *
+ * Nên cách xử lý KHÔNG phải là cố chỉnh ngưỡng cho chính xác — mà là CHẶN THIỆT HẠI khi
+ * ngưỡng đoán sai: cường độ chỉ được thêm/bớt đúng một mệnh đề, không bao giờ đổi mạch
+ * văn. Sai bên nào cũng chỉ mất một câu. Mọi nội dung khác khoá theo THỨ HẠNG (nổi nhất /
+ * giữa / nhẹ nhất) vốn ổn định hơn nhiều.
+ *
+ * Và phải thoả CẢ HAI điều kiện (xem `noiRo` ở `modules/report/muc-do.ts`): điểm tuyệt đối
+ * đạt ngưỡng này VÀ cách trục kế ít nhất `NGUONG_PHA`. Một mình điểm cao không đủ — bốn
+ * trục cùng cao thì chẳng có trục nào nổi cả.
+ *
+ * ⚠️ Con số 70 là phán đoán chuyên môn, CHƯA có chuẩn Việt Nam. Chốt được nó cần bộ
+ * 30–50 phản hồi thật ở mục CHỜ NGOÀI của `CLAUDE.md`.
+ */
+export const NGUONG_NOI_RO = 70;
+
 export const NGUONG_HOP_LE = {
   /**
    * HL-1 — TRẢ LỜI PHẲNG. Tỷ lệ câu chọn đúng mức giữa vượt ngưỡng này ⇒ KHÔNG trả kết quả.

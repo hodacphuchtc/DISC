@@ -43,8 +43,13 @@ Chỉ đọc `config/`. Không import `modules/test` hay `modules/report`.
 
 ## 5. Trạng thái
 
-Xong các hạng mục `NEN.*`, `CH.*`, `LT.*`, `6.*` trong `PLAN.md` — 404 test xanh
-(27/08/2026).
+Xong (27/08/2026, gồm GĐ9). Không còn việc dở. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
+
+🔴 **GĐ9 thêm `tuoi`/`banKhoan` vào `BaiLamLuu`, và bắt đầu GHI `lop`** (trường này khai
+từ GĐ0 mà chưa từng có nơi nào ghi). Mọi trường mới đều tuỳ chọn và **không nâng version
+IndexedDB** — `moKho()` có `onblocked → giaiQuyet(null)`, nên một tab cũ đang mở là mất
+im lặng cả tính năng lưu. Thêm trường mới thì PHẢI thêm vào `KHOA_CAM` của
+`lien-he/kieu.ts`; `tests/lien-he-sach.test.ts` có hàng rào biên dịch bắt việc này.
 
 ## 6. Cạm bẫy đã trả giá
 

@@ -1,0 +1,51 @@
+{
+  "id": "mau-disc-01",
+  "boDe": "MN",
+  "maTre": "Bé Bún",
+  "nguoiTraLoi": "nguoi-lon",
+  "batDau": "2026-08-20T02:15:00.000Z",
+  "ketThuc": "2026-08-20T02:17:40.000Z",
+  "traLoi": {
+    "MN-D1": 5,
+    "MN-D5": 1,
+    "MN-D2": 5,
+    "MN-D3": 4,
+    "MN-D4": 4,
+    "MN-I5": 3,
+    "MN-I1": 4,
+    "MN-I2": 4,
+    "MN-I3": 3,
+    "MN-I4": 2,
+    "MN-S1": 3,
+    "MN-S2": 3,
+    "MN-S3": 2,
+    "MN-S5": 4,
+    "MN-S4": 2,
+    "MN-C1": 4,
+    "MN-C2": 3,
+    "MN-C5": 3,
+    "MN-C3": 2,
+    "MN-C4": 2
+  },
+  "ketQua": {
+    "hopLe": true,
+    "diem": {
+      "D": 90,
+      "I": 55,
+      "S": 35,
+      "C": 45
+    },
+    "xepHang": [
+      "D",
+      "I",
+      "C",
+      "S"
+    ],
+    "kieu": {
+      "loai": "don",
+      "truc": "D"
+    },
+    "canhBao": []
+  },
+  "phienBanBoDe": "1.0"
+}

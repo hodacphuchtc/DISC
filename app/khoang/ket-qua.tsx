@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
-import { CHU_KET_QUA, CHU_M4, CHU_M6, TRUC } from "@config/disc-tu-dien";
+import { CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, CHU_M6, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe, MaTruc } from "@modules/core/bo-de/kieu";
 import { xoaBai } from "@modules/core/luu-tru/kho-bai";
@@ -16,7 +16,11 @@ import { BO_DE_BO_ME, BO_DE_CON } from "@modules/report/doi-chieu";
 import { MoiLamNot, useDoiChieu } from "./vung-lech";
 import type { MaBoDe } from "@modules/core/bo-de/kieu";
 import type { KetQua } from "@modules/report/cham";
-import { layDienGiai, thayChuThe } from "@modules/report/dien-giai";
+import { layDienGiai, layDienGiaiDay, thayChuThe } from "@modules/report/dien-giai";
+import { LopSauKetQua } from "./lop-sau";
+import { BAN_KHOAN, MA_BAN_KHOAN, type MaBanKhoan } from "@config/disc-loi-khuyen";
+import { docTatCa, ghiBanKhoan } from "@modules/core/luu-tru/kho-bai";
+import { doiChieuPhongCach, type KetQuaPhongCach } from "@modules/report/doi-chieu-phong-cach";
 import { hoFontDangDung, veAnhKetQua } from "@modules/report/xuat-anh";
 
 /** M4 — màn kết quả. Bốn khối văn bản đọc từ `config/disc-dien-giai.ts`. */
@@ -29,6 +33,8 @@ export function ManKetQua({
   onXemDoiChieu,
   onLamBoConThieu,
   nguon = "truc-tiep",
+  tuoi,
+  banKhoan,
 }: {
   readonly boDe: BoDe;
   readonly bietDanh: string;
@@ -41,9 +47,20 @@ export function ManKetQua({
   readonly onLamBoConThieu?: (ma: MaBoDe, maTre: string) => void;
   /** Kênh người dùng đến từ đâu — đi kèm phiếu liên hệ và mốc phễu, KHÔNG định danh ai. */
   readonly nguon?: string;
+  /** Tuổi người được đánh giá. Chỉ bộ QS cần — nó bắc qua cả lứa tiểu học lẫn THCS. */
+  readonly tuoi?: number;
+  /** Mã điều phụ huynh đang băn khoăn, nếu đã chọn. */
+  readonly banKhoan?: string;
 }) {
   const laBoTreNho = boDe.ma === "MN" || boDe.ma === "TH";
   const laTuDanhGia = boDe.ma === "TH" || boDe.ma === "THCS" || boDe.ma === "PH";
+  const laNguoiLonDocVeTre = boDe.ma === "MN" || boDe.ma === "QS";
+
+  // 🔴 Hai hook phải gọi TRƯỚC nhánh return sớm ngay bên dưới, nếu không thứ tự hook đổi
+  // giữa hai lần render và React vỡ. Bài không hợp lệ vẫn đi qua đây — `usePhongCach` tự
+  // trả về lý do "bài con không hợp lệ" nên không cần chặn ở ngoài.
+  const [banKhoanChon, datBanKhoanChon] = useState(banKhoan);
+  const phongCach = usePhongCach(ketQua, boDe.ma);
 
   if (!ketQua.hopLe) {
     return (
@@ -68,6 +85,13 @@ export function ManKetQua({
   }
 
   const dienGiai = layDienGiai(ketQua.kieu, boDe.ma);
+  const sau = layDienGiaiDay({
+    diem: ketQua.diem,
+    xepHang: ketQua.xepHang,
+    maBoDe: boDe.ma,
+    tuoi,
+    banKhoan: banKhoanChon,
+  });
   const noiBat: MaTruc[] | undefined =
     ketQua.kieu.loai === "don"
       ? [ketQua.kieu.truc]
@@ -170,6 +194,23 @@ export function ManKetQua({
         </div>
       </div>
 
+      {laNguoiLonDocVeTre && (
+        <OBanKhoan
+          dangChon={banKhoanChon}
+          onChon={(ma) => {
+            datBanKhoanChon(ma);
+            if (idBai) void ghiBanKhoan(idBai, ma);
+          }}
+        />
+      )}
+
+      <LopSauKetQua
+        sau={sau}
+        maBoDe={boDe.ma}
+        phongCach={phongCach}
+        onLamBoPhuHuynh={onLamBoConThieu ? () => onLamBoConThieu("PH", "") : undefined}
+      />
+
       {boDeGhepCapDuoc && onXemDoiChieu && onLamBoConThieu && (
         <div data-khong-in className="mt-10">
           <KhoiChuyenTay
@@ -196,7 +237,11 @@ export function ManKetQua({
               ? TIEU_DE_KHOI.cauHoiToiNayTuMinh
               : TIEU_DE_KHOI.cauHoiToiNay,
             cauHoi: dienGiai.cauHoiToiNay,
-            tieuDe,
+            // 🔴 Ảnh dùng nhan đề NGẮN: Canvas không báo lỗi khi chữ tràn khung — nhan đề
+            // dài làm cỡ chữ tụt xuống rồi bị cắt, và khối kết quả cao cố định nên dòng
+            // thứ ba đè lên biểu đồ. Bản ngắn cũng giữ đúng thứ tự trội/phụ, thứ mà
+            // "Pha giữa … và …" làm mất.
+            tieuDe: sau.pha?.tieuDeNgan ?? tieuDe,
             diem: ketQua.diem,
             trucNhanVat: noiBat ?? [],
             chanTrang: CHU_M4.chanTrangAnh,
@@ -369,4 +414,72 @@ function NutLamLai({ onLamLai }: { readonly onLamLai: () => void }) {
       {CHU_M4.nutLamLai}
     </button>
   );
+}
+
+/**
+ * Ô chọn "điều đang băn khoăn" — MỘT chạm, đặt ở màn kết quả.
+ *
+ * 🔴 ĐẶT SAU KẾT QUẢ, KHÔNG chèn vào giữa M1→M2. `tests/m1-chon-doi-tuong.test.tsx` và
+ * `tests/dieu-huong.test.tsx` bấm xuyên luồng, chèn thêm một màn vào giữa là đỏ hàng loạt
+ * mà chẳng đổi được gì về giá trị. Đặt ở đây còn đúng hơn về nghiệp vụ: phụ huynh vừa đọc
+ * xong kết quả mới là lúc họ biết mình muốn hỏi gì.
+ *
+ * 🔴 CHỈ hiện cho bộ MN và QS — hai bộ mà người đọc là NGƯỜI LỚN nói về một đứa trẻ. Bộ tự
+ * đánh giá thì "con ngại giao tiếp" là câu hỏi sai người.
+ */
+function OBanKhoan({
+  dangChon,
+  onChon,
+}: {
+  readonly dangChon?: string;
+  readonly onChon: (ma: MaBanKhoan) => void;
+}) {
+  return (
+    <section data-khong-in className="mt-10 rounded-xl border border-neutral-200 px-4 py-4">
+      <h2 className="text-[15px] font-semibold text-neutral-900">{CHU_BAN_KHOAN.tieuDe}</h2>
+      <p className="mt-1 text-[13px] leading-snug text-neutral-600">{CHU_BAN_KHOAN.moTa}</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {MA_BAN_KHOAN.map((ma) => {
+          const chon = ma === dangChon;
+          return (
+            <button
+              key={ma}
+              type="button"
+              aria-pressed={chon}
+              onClick={() => onChon(ma)}
+              className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{
+                borderColor: chon ? MAU.timCongNghe : "#d4d4d4",
+                backgroundColor: chon ? "#F5F3FF" : "transparent",
+                color: chon ? MAU.timCongNghe : "#404040",
+                outlineColor: MAU.timCongNghe,
+              }}
+            >
+              {BAN_KHOAN[ma].nhan}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Tìm hồ sơ phong cách của bố mẹ trên máy này.
+ *
+ * 🔴 Đọc kho ở tầng giao diện, KHÔNG đọc trong `modules/report` — tầng lõi không được đụng
+ * IndexedDB (ADR-004). Đúng khuôn `useDoiChieu` ở `vung-lech.tsx`.
+ */
+function usePhongCach(ketQua: KetQua, maBoDe: MaBoDe) {
+  const [kq, datKq] = useState<KetQuaPhongCach | null>(null);
+  useEffect(() => {
+    let con = true;
+    void docTatCa().then((ds) => {
+      if (con) datKq(doiChieuPhongCach(ds, ketQua, maBoDe));
+    });
+    return () => {
+      con = false;
+    };
+  }, [ketQua, maBoDe]);
+  return kq;
 }

@@ -33,6 +33,8 @@ const FILE_LOI = [
   "modules/report/kiem-hop-le.ts",
   "modules/report/doi-chieu.ts",
   "modules/report/dien-giai.ts",
+  "modules/report/muc-do.ts",
+  "modules/report/doi-chieu-phong-cach.ts",
   "modules/report/hinh-nhan-vat.ts",
 ] as const;
 

@@ -90,10 +90,14 @@ export function KhoangLichSu() {
             ← {CHU_M6.nutDong}
           </button>
         </div>
+        {/* Bài lưu từ trước GĐ B không có `tuoi`/`banKhoan` — để trống là đúng: tầng
+            diễn giải rơi về mặc định an toàn thay vì ném, nên màn lịch sử không vỡ. */}
         <ManKetQua
           boDe={napBoDe(dangXem.boDe)}
           bietDanh={dangXem.maTre}
           ketQua={dangXem.ketQua}
+          tuoi={dangXem.tuoi}
+          banKhoan={dangXem.banKhoan}
           onLamLai={() => datDangXem(null)}
         />
       </div>

@@ -19,6 +19,11 @@ body {
   color: #171717;
 }
 
+/* Chỉ hiện trên giấy. Ngoài màn hình thì tắt hẳn. */
+.chi-in {
+  display: none;
+}
+
 /* ── Bản in / xuất PDF (hạng mục 4.5) ─────────────────────────────────────
    Không thêm thư viện PDF: trình duyệt nào cũng in ra PDF được.
    Ẩn thanh bên và mọi nút bấm — giấy không bấm được, in ra là rác.            */
@@ -49,10 +54,27 @@ body {
     break-after: avoid-page;
   }
 
-  section,
-  li,
-  ol {
+  /* 🔴 CỐ Ý KHÔNG áp `break-inside: avoid-page` cho `section`.
+     Luật cũ áp cho MỌI `section`, và nó chạy tốt chừng nào màn kết quả còn ngắn. Từ lúc có
+     lớp bóc sâu, một `section` cao hơn một trang giấy mà lại cấm tách sẽ đẩy cả khối sang
+     trang sau — in ra một trang gần trắng rồi mới tới nội dung. Giữ luật ở mức KHỐI NHỎ:
+     `.khoi-in` là những đoạn ngắn thật sự không nên bị cắt làm đôi. */
+  .khoi-in,
+  li {
     break-inside: avoid-page;
+  }
+
+  /* 🔴 Lớp bóc sâu: trên màn hình có thể đang đóng, nhưng trên giấy PHẢI mở hết.
+     Vì vậy nội dung luôn nằm trong DOM và chỉ bị ẩn bằng CSS — dùng `{mo && <div/>}` thì
+     nội dung không tồn tại lúc in và bản PDF sẽ thiếu đúng phần sâu nhất. */
+  [data-lop-sau] {
+    display: block !important;
+  }
+
+  /* Tiêu đề mỗi lớp nằm TRONG nút bấm, mà nút thì `data-khong-in`. In ra là mất luôn tiêu
+     đề, còn lại mấy đoạn văn không biết thuộc mục nào. Bản chỉ-in này thế chỗ. */
+  .chi-in {
+    display: block !important;
   }
 
   /* In màu thanh biểu đồ — mặc định trình duyệt bỏ nền khi in. */

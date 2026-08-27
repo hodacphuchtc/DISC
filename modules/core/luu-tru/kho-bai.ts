@@ -25,6 +25,16 @@ export type BaiLamLuu = {
   readonly maTre: string;
   /** Chỉ để định tuyến lúc làm bài. Không đưa vào báo cáo. */
   readonly lop?: string;
+  /**
+   * Tuổi người được đánh giá, 3–15. Màn 1 đã hỏi sẵn rồi vứt đi — giữ lại vì bộ QS trải
+   * từ 8 đến 15 tuổi, tức là bắc qua HAI lứa nội dung (tiểu học và THCS), và chỉ con số
+   * này phân định được. Bộ khác suy ra lứa từ chính mã bộ đề.
+   *
+   * 🔴 Là dữ liệu cá nhân của trẻ ⇒ đã nằm trong `KHOA_CAM` của phiếu liên hệ.
+   */
+  readonly tuoi?: number;
+  /** Mã điều phụ huynh đang băn khoăn (chọn 1 chạm ở màn kết quả). 🔴 Cũng thuộc `KHOA_CAM`. */
+  readonly banKhoan?: string;
   readonly nguoiTraLoi: "tre" | "nguoi-lon";
   /** ISO 8601. Hiển thị mới dùng dd/mm/yyyy. */
   readonly batDau: string;
@@ -92,6 +102,22 @@ export function docTatCa(): Promise<BaiLamLuu[]> {
   return chay<BaiLamLuu[]>("readonly", (b) => b.getAll(), []).then(
     (ds) => [...ds].sort((a, b) => b.ketThuc.localeCompare(a.ketThuc)),
   );
+}
+
+/**
+ * Ghi lại điều phụ huynh đang băn khoăn vào một bài đã lưu.
+ *
+ * Đọc–sửa–ghi thay vì `put` một bản ghi dựng mới: nơi gọi ở màn kết quả chỉ có `id`, không
+ * giữ trọn bản ghi, và dựng lại từ trí nhớ là cách chắc chắn nhất để làm mất `traLoi`.
+ *
+ * Bài không còn (người dùng vừa bấm "Kết thúc & xoá") thì trả `false` chứ không tạo mới —
+ * một bản ghi chỉ có mỗi mã băn khoăn là rác, và nó sẽ hiện ra ở màn *Bài đã làm*.
+ */
+export function ghiBanKhoan(id: string, banKhoan: string): Promise<boolean> {
+  return chay<BaiLamLuu | undefined>("readonly", (b) => b.get(id), undefined).then((bai) => {
+    if (!bai) return false;
+    return luuBai({ ...bai, banKhoan });
+  });
 }
 
 export function xoaBai(id: string): Promise<void> {

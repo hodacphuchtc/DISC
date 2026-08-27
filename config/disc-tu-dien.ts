@@ -222,6 +222,28 @@ export const CHU_LAM_BAI = {
   tiepTucNhap: "Bài đang làm dở đã được mở lại từ chỗ bạn dừng.",
 } as const;
 
+/* ── Lệch phong cách bố mẹ ↔ con ───────────────────────────────────────── */
+
+export const CHU_PHONG_CACH = {
+  tieuDe: "Phong cách của bạn và của con",
+  moTa: "So hồ sơ bạn tự làm ở bộ Phụ huynh với hồ sơ đang xem. Chỗ vênh nhau nhiều nhất thường là chỗ hai bên hay va nhau.",
+  nhanBoMe: "bạn",
+  nhanCon: "con",
+  ratGiongNhau:
+    "Bốn nhóm của hai người khá gần nhau. Điều đó thường làm việc hiểu nhau dễ hơn — nhưng cũng có nghĩa là điểm cần để ý của bạn và của con nhiều khả năng trùng nhau.",
+  moiTieuDe: "Muốn biết bạn và con khác nhau ở đâu?",
+  moiMoTa:
+    "Làm thêm bộ Phụ huynh cho chính bạn (5–8 phút). Máy sẽ so hai hồ sơ và chỉ ra chỗ hai bên dễ va nhau nhất.",
+  moiNut: "Làm bộ Phụ huynh",
+} as const;
+
+/* ── Ô chọn điều đang băn khoăn (màn kết quả) ───────────────────────────── */
+
+export const CHU_BAN_KHOAN = {
+  tieuDe: "Bạn đang băn khoăn điều gì?",
+  moTa: "Chọn một điều để phần đọc sâu mở đúng chỗ bạn quan tâm. Không chọn cũng không sao.",
+} as const;
+
 /* ── M4 — kết quả ────────────────────────────────────────────────────────── */
 
 export const CHU_M4 = {

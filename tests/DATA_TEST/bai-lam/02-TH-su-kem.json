@@ -1,0 +1,55 @@
+{
+  "id": "mau-disc-02",
+  "boDe": "TH",
+  "maTre": "Su Kem",
+  "lop": "4",
+  "nguoiTraLoi": "tre",
+  "batDau": "2026-08-21T07:30:00.000Z",
+  "ketThuc": "2026-08-21T07:32:40.000Z",
+  "traLoi": {
+    "TH-D1": 3,
+    "TH-D5": 3,
+    "TH-D2": 3,
+    "TH-D3": 1,
+    "TH-D4": 1,
+    "TH-I5": 2,
+    "TH-I1": 3,
+    "TH-I2": 3,
+    "TH-I3": 3,
+    "TH-I4": 1,
+    "TH-S1": 3,
+    "TH-S2": 3,
+    "TH-S3": 3,
+    "TH-S5": 2,
+    "TH-S4": 1,
+    "TH-C1": 3,
+    "TH-C2": 1,
+    "TH-C5": 2,
+    "TH-C3": 1,
+    "TH-C4": 1
+  },
+  "ketQua": {
+    "hopLe": true,
+    "diem": {
+      "D": 40,
+      "I": 70,
+      "S": 70,
+      "C": 30
+    },
+    "xepHang": [
+      "I",
+      "S",
+      "D",
+      "C"
+    ],
+    "kieu": {
+      "loai": "pha",
+      "cap": [
+        "I",
+        "S"
+      ]
+    },
+    "canhBao": []
+  },
+  "phienBanBoDe": "1.0"
+}

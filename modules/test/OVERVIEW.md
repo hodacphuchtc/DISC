@@ -27,7 +27,7 @@ Chỉ `@modules/core` và `@config`. **Không** import `@modules/report`.
 
 ## 5. Trạng thái
 
-Xong `BAI.*` / `3.*` trong `PLAN.md`.
+Xong (27/08/2026). Không còn việc dở. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
 
 ## 6. Cạm bẫy đã trả giá
 
