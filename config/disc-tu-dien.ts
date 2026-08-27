@@ -51,6 +51,12 @@ export type MaTruc = (typeof MA_TRUC)[number];
 
 export type MoTaTruc = {
   readonly ten: string;
+  /** Tên trục trong mô hình DISC. Chỉ hiện ở khối tra cứu, KHÔNG hiện ở nhãn biểu đồ. */
+  readonly tenTiengAnh: string;
+  /** Nghĩa gọn của chữ tiếng Anh đó — viết bằng hành vi, không bằng nhãn con người. */
+  readonly nghia: string;
+  /** Một dòng ≤12 từ cho khối tóm tắt 30 giây. Dài hơn là không còn 30 giây nữa. */
+  readonly motDong: string;
   readonly nhanVat: string;
   readonly mau: string;
   readonly dauHieuOTre: string;
@@ -60,24 +66,36 @@ export type MoTaTruc = {
 export const TRUC: Record<MaTruc, MoTaTruc> = {
   D: {
     ten: "Chủ động",
+    tenTiengAnh: "Dominance",
+    nghia: "Chủ động, quyết đoán, hướng tới kết quả",
+    motDong: "Quyết nhanh, nói thẳng, thích tự làm",
     nhanVat: "Rô Xung Phong",
     mau: "#FF6F00",
     dauHieuOTre: "Bày cách chơi, đòi tự làm, thích thắng",
   },
   I: {
     ten: "Ảnh hưởng",
+    tenTiengAnh: "Influence",
+    nghia: "Ảnh hưởng, kết nối, truyền cảm hứng",
+    motDong: "Kết nối nhanh, thích kể và được nghe",
     nhanVat: "Rô Kể Chuyện",
     mau: "#FFB300",
     dauHieuOTre: "Kể chuyện, kết bạn nhanh, thích được chú ý",
   },
   S: {
     ten: "Ổn định",
+    tenTiengAnh: "Steadiness",
+    nghia: "Kiên định, bền bỉ, giữ nhịp ổn định",
+    motDong: "Kiên nhẫn, giữ nếp, cần được báo trước",
     nhanVat: "Rô Giữ Nhịp",
     mau: "#2E9E6B",
     dauHieuOTre: "Nhường bạn, thích nếp quen, chờ được lâu",
   },
   C: {
     ten: "Cẩn trọng",
+    tenTiengAnh: "Conscientiousness",
+    nghia: "Cẩn trọng, theo nguyên tắc, chú ý chi tiết",
+    motDong: "Cần lý do rõ, soát kỹ, ngại làm qua loa",
     nhanVat: "Rô Tỉ Mỉ",
     mau: MAU.timCongNghe,
     dauHieuOTre: "Làm theo hướng dẫn, soát lại, hỏi vì sao",
@@ -128,6 +146,75 @@ export const CHU_KET_QUA = {
   } as const,
   /** Câu rào bắt buộc mở đầu báo cáo của bộ MN và TH (DISC_BA.md §9.2). */
   cauRaoTre: "Đây là gợi ý để trò chuyện với con, không phải kết luận về con.",
+  /**
+   * Câu rào bản TỰ ĐỌC — bộ Tiểu học, nơi chính em học sinh cầm máy.
+   *
+   * 🔴 §9.2 luật 6 đòi bộ MN và TH đều mở đầu bằng câu rào, và bản dựng cũ dùng chung
+   * `cauRaoTre` cho cả hai. Nhưng `cauRaoTre` nói với PHỤ HUYNH ("trò chuyện với con") —
+   * một em lớp 4 đang đọc kết quả của chính mình bị gọi là "con". Giữ đủ hai câu rào theo
+   * đúng đặc tả, nhưng mỗi câu nói với đúng người đang đọc.
+   */
+  cauRaoTuMinh: "Đây là gợi ý để em hiểu mình hơn, không phải kết luận về em.",
+
+} as const;
+
+/* ── Đoạn mở đầu + bảng tra D-I-S-C (GĐ10) ───────────────────────────────── */
+
+/**
+ * ĐOẠN MỞ ĐẦU đặt trên biểu đồ.
+ *
+ * 🔴 VÌ SAO GIỌNG NÀY. Chủ dự án muốn đoạn này "tạo niềm tin, thấy nó đúng khoa học".
+ * Nhưng đặc tả CẤM tuyên bố "chuẩn quốc tế" (`DISC_BA.md:157-160`), và tới hôm nay bộ 104
+ * câu vẫn CHƯA ai ký duyệt, CHƯA sàng trên dữ liệu Việt. Nói quá lên là thứ sẽ vỡ đúng vào
+ * ngày một phụ huynh có chuyên môn đọc nó.
+ *
+ * Nên niềm tin ở đây đến từ chỗ khác: nói rõ mình đo gì, KHÔNG đo gì, con số nghĩa là gì,
+ * và mình sai được ở đâu. Với phụ huynh có học, đó là thứ duy nhất đứng vững — và nó cũng
+ * là thứ duy nhất đúng.
+ *
+ * ⚠️ Sửa đoạn này thì phải đọc lại `DISC_BA.md:150-160`: viết `DISC` in hoa (không `DiSC` —
+ * nhãn hiệu của Wiley), không mượn tên báo cáo của họ, không tuyên bố chuẩn hoá.
+ */
+export const CHU_MO_DAU = {
+  nhan: "Đọc bốn con số này thế nào",
+  doanVan: [
+    "DISC đo THIÊN HƯỚNG HÀNH VI — nghiêng về cách làm nào — chứ không đo giỏi hay dốt, và cũng không mô tả trọn vẹn một con người.",
+    "Không có nhóm nào tốt hơn nhóm nào. Mỗi người là pha trộn của cả bốn nhóm, chỉ khác nhau ở chỗ nhóm nào đậm hơn.",
+    "Bốn con số ở trên so với NHAU trong chính hồ sơ này. Chúng không phải phần trăm, và không so với bất kỳ ai khác.",
+    "Đây là ảnh chụp của khoảng hai tuần gần đây, không phải một kết luận. Trẻ đang lớn thì hồ sơ còn đổi — làm lại sau vài tháng thường cho hình ảnh rõ hơn.",
+    "Dùng đúng: để mở một cuộc trò chuyện. Dùng sai: để dán một cái nhãn.",
+  ],
+  nguonGoc: "Bộ câu hỏi do SATA ROBO biên soạn theo mô hình DISC.",
+  /**
+   * Nhãn cho khối tóm tắt 30 giây.
+   *
+   * 🔴 Khối tóm tắt là chỗ DUY NHẤT được phép nói lại điều đã nói ở dưới — và nó phải là
+   * CON TRỎ (mỗi ý một dòng), không phải một đoạn văn thứ hai. Viết thành đoạn văn là biến
+   * "ngắn gọn mà đầy đủ" thành "dài thêm một lần nữa".
+   */
+  tomTat: {
+    nhan: "Đọc trong 30 giây",
+    manhNhat: "Nổi nhất",
+    nheNhat: "Nhẹ nhất",
+    lamNgay: "Làm ngay",
+  },
+} as const;
+
+/**
+ * Bảng tra bốn chữ cái.
+ *
+ * 🔴 ĐẶT TRONG MỘT KHỐI GẬP RIÊNG, KHÔNG chèn vào nhãn biểu đồ. Đặc tả chốt: *"Trẻ dưới 12
+ * tuổi không đọc nổi Dominance"* (`DISC_BA.md:84`) — đó chính là lý do sản phẩm có bốn nhân
+ * vật robot. Nhét chữ tiếng Anh vào nhãn biểu đồ là đưa nó ra trước mắt một bé năm tuổi,
+ * và còn làm nhãn dài ra đủ để tràn khung ảnh PNG.
+ *
+ * Dùng bộ tên HIỆN HÀNH. Bản gốc 1928 của Marston dùng bộ từ khác (Inducement / Submission /
+ * Compliance) — đúng về lịch sử nhưng chỉ làm phụ huynh rối, nên không liệt kê ra.
+ */
+export const CHU_BANG_TRA = {
+  tieuDe: "Bốn chữ D-I-S-C nghĩa là gì",
+  ghiChu:
+    "Bốn nhóm này mô tả cách hành xử, không xếp hạng con người. Mô hình do nhà tâm lý học W.M. Marston mô tả lần đầu năm 1928.",
 } as const;
 
 /* ── Chọn đối tượng & định tuyến ─────────────────────────────────────────── */

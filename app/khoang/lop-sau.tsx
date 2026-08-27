@@ -29,6 +29,11 @@ export function LopSauKetQua({
   /** Thiếu callback thì không mời làm bộ Phụ huynh. */
   readonly onLamBoPhuHuynh?: () => void;
 }) {
+  // Chỉ bộ người lớn đọc về trẻ mới hiện bản của bố mẹ ở bước này. Bộ TH/THCS cũng đã CÓ
+  // `sau.banBoMe`, nhưng đứa trẻ đang cầm máy — dải riêng có chắn là việc của hạng mục 1.4.
+  const banBoMeHienDuoc = maBoDe === "MN" || maBoDe === "QS" ? sau.banBoMe : undefined;
+  const banTuDoc = sau.banCon ?? sau.banTuMinh;
+
   return (
     <>
     {/* ── LỚP BÓC SÂU ─────────────────────────────────────────────────────
@@ -76,11 +81,11 @@ export function LopSauKetQua({
         )}
       </LopSau>
 
-      {sau.loiKhuyen && (
+      {banBoMeHienDuoc && (
         <>
           <LopSau tieuDe={thayChuThe(TIEU_DE_LOP.noiChuyen, maBoDe)}>
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
-              {sau.loiKhuyen.noiTheNao}
+              {banBoMeHienDuoc.noiTheNao}
             </p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <div className="khoi-in">
@@ -91,7 +96,7 @@ export function LopSauKetQua({
                   {TIEU_DE_LOP.cauNenNoi}
                 </h3>
                 <ul className="mt-2 space-y-1.5 text-[15px] leading-relaxed text-neutral-800">
-                  {sau.loiKhuyen.cauNenNoi.map((c) => (
+                  {banBoMeHienDuoc.cauNenNoi.map((c) => (
                     <li key={c}>{c}</li>
                   ))}
                 </ul>
@@ -101,20 +106,20 @@ export function LopSauKetQua({
                   {TIEU_DE_LOP.cauNenTranh}
                 </h3>
                 <ul className="mt-2 space-y-1.5 text-[15px] leading-relaxed text-neutral-600">
-                  {sau.loiKhuyen.cauNenTranh.map((c) => (
+                  {banBoMeHienDuoc.cauNenTranh.map((c) => (
                     <li key={c}>{c}</li>
                   ))}
                 </ul>
               </div>
             </div>
             <p className="khoi-in mt-5 text-[15px] leading-relaxed text-neutral-800">
-              {sau.loiKhuyen.cungHocTheNao}
+              {banBoMeHienDuoc.cungHocTheNao}
             </p>
           </LopSau>
 
           <LopSau tieuDe={thayChuThe(TIEU_DE_LOP.cangThang, maBoDe)}>
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
-              {sau.loiKhuyen.khiCangThang}
+              {banBoMeHienDuoc.khiCangThang}
             </p>
           </LopSau>
 
@@ -122,33 +127,33 @@ export function LopSauKetQua({
             {/* 🔴 HAI VẾ PHẢI ĐI CÙNG NHAU. Bỏ vế bố mẹ tự chỉnh là biến lời khuyên thành
                 "sửa đứa trẻ" — đúng thứ ADR-002 dựng ra để chặn. */}
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
-              {sau.loiKhuyen.kyNangThem}
+              {banBoMeHienDuoc.kyNangThem}
             </p>
             <p className="khoi-in mt-3 text-[15px] leading-relaxed text-neutral-800">
-              {sau.loiKhuyen.boMeChinh}
+              {banBoMeHienDuoc.boMeChinh}
             </p>
             <p className="khoi-in mt-5 rounded-lg bg-amber-50 px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900">
               <strong className="font-semibold">{TIEU_DE_LOP.motViec} </strong>
-              {sau.loiKhuyen.motViecToiNay}
+              {banBoMeHienDuoc.motViecToiNay}
             </p>
           </LopSau>
         </>
       )}
 
-      {sau.tuMinh && (
+      {banTuDoc && (
         <>
           <LopSau tieuDe={thayChuThe(TIEU_DE_LOP.cangThang, maBoDe)}>
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
-              {sau.tuMinh.khiCangThang}
+              {banTuDoc.khiCangThang}
             </p>
           </LopSau>
           <LopSau tieuDe={TIEU_DE_LOP.linhHoat}>
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
-              {sau.tuMinh.tapThem}
+              {banTuDoc.tapThem}
             </p>
             <p className="khoi-in mt-5 rounded-lg bg-amber-50 px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900">
               <strong className="font-semibold">{TIEU_DE_LOP.motViec} </strong>
-              {sau.tuMinh.motViecToiNay}
+              {banTuDoc.motViecToiNay}
             </p>
           </LopSau>
         </>
@@ -238,7 +243,7 @@ export function LopSauKetQua({
  * Trạng thái mở mặc định là HẰNG SỐ `false`, không đọc localStorage lúc render — trang
  * dựng tĩnh (`output: 'export'`) mà đọc trạng thái lúc render là lệch hydrate.
  */
-function LopSau({
+export function LopSau({
   tieuDe,
   children,
 }: {

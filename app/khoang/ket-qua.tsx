@@ -1,27 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
-import { CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, CHU_M6, TRUC } from "@config/disc-tu-dien";
+import { CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe, MaTruc } from "@modules/core/bo-de/kieu";
-import { xoaBai } from "@modules/core/luu-tru/kho-bai";
 import { OLienHe } from "@/app/components/o-lien-he";
 import { ghiMoc } from "@modules/core/do-phieu";
 import { guiLienHeMacDinh } from "@modules/core/lien-he/luu-tam";
 import { BO_DE_BO_ME, BO_DE_CON } from "@modules/report/doi-chieu";
-import { MoiLamNot, useDoiChieu } from "./vung-lech";
 import type { MaBoDe } from "@modules/core/bo-de/kieu";
 import type { KetQua } from "@modules/report/cham";
 import { layDienGiai, layDienGiaiDay, thayChuThe } from "@modules/report/dien-giai";
 import { LopSauKetQua } from "./lop-sau";
+import { BangTraDisc, MoDauKetQua, TomTat30Giay } from "./mo-dau";
+import {
+  KhoiChuyenTay,
+  NutKetThucVaXoa,
+  NutLamLai,
+  NutTaiAnh,
+} from "./nut-ket-qua";
 import { BAN_KHOAN, MA_BAN_KHOAN, type MaBanKhoan } from "@config/disc-loi-khuyen";
 import { docTatCa, ghiBanKhoan } from "@modules/core/luu-tru/kho-bai";
 import { doiChieuPhongCach, type KetQuaPhongCach } from "@modules/report/doi-chieu-phong-cach";
-import { hoFontDangDung, veAnhKetQua } from "@modules/report/xuat-anh";
 
 /** M4 — màn kết quả. Bốn khối văn bản đọc từ `config/disc-dien-giai.ts`. */
 export function ManKetQua({
@@ -52,7 +56,15 @@ export function ManKetQua({
   /** Mã điều phụ huynh đang băn khoăn, nếu đã chọn. */
   readonly banKhoan?: string;
 }) {
-  const laBoTreNho = boDe.ma === "MN" || boDe.ma === "TH";
+  // §9.2 luật 6: bộ MN và TH đều PHẢI mở đầu bằng câu rào. Nhưng hai bộ có hai người đọc
+  // khác nhau — bộ MN là bố mẹ trả lời hộ, bộ TH là chính em học sinh cầm máy — nên hai câu
+  // rào khác nhau. Dùng chung một câu là gọi một em lớp 4 là "con".
+  const cauRao =
+    boDe.ma === "MN"
+      ? CHU_KET_QUA.cauRaoTre
+      : boDe.ma === "TH"
+        ? CHU_KET_QUA.cauRaoTuMinh
+        : null;
   const laTuDanhGia = boDe.ma === "TH" || boDe.ma === "THCS" || boDe.ma === "PH";
   const laNguoiLonDocVeTre = boDe.ma === "MN" || boDe.ma === "QS";
 
@@ -111,6 +123,13 @@ export function ManKetQua({
             .replace("{b}", TRUC[ketQua.kieu.cap[1]].ten.toLowerCase())
         : CHU_M4.phoDeu;
 
+  // Tóm tắt 30 giây lấy từ thứ ĐÃ CÓ, không viết mới: trục nổi nhất / nhẹ nhất do
+  // `viTriTrongHoSo` xếp, và "một việc làm ngay" là trường đã có sẵn ở cả ba bản.
+  const trucNoiNhat = sau.phoBonNhom.find((t) => t.viTri === "noiNhat")?.truc ?? ketQua.xepHang[0];
+  const trucNheNhat = sau.phoBonNhom.find((t) => t.viTri === "nheNhat")?.truc ?? ketQua.xepHang[3];
+  const motViecNgay =
+    sau.banBoMe?.motViecToiNay ?? sau.banCon?.motViecToiNay ?? sau.banTuMinh?.motViecToiNay;
+
   const boDeGhepCapDuoc =
     BO_DE_CON.includes(boDe.ma) || boDe.ma === BO_DE_BO_ME;
 
@@ -127,9 +146,9 @@ export function ManKetQua({
       </p>
 
       {/* 🔴 Câu rào BẮT BUỘC cho bộ trẻ nhỏ, đặt TRƯỚC kết quả (§9.2). */}
-      {laBoTreNho && (
+      {cauRao && (
         <p className="mt-3 text-[14px] leading-relaxed font-medium text-neutral-700">
-          {CHU_KET_QUA.cauRaoTre}
+          {cauRao}
         </p>
       )}
 
@@ -159,9 +178,22 @@ export function ManKetQua({
         </ul>
       )}
 
+      <TomTat30Giay
+        tieuDe={tieuDe}
+        trucNoiNhat={trucNoiNhat}
+        trucNheNhat={trucNheNhat}
+        motViec={motViecNgay}
+      />
+
       <section aria-label={CHU_M4.nhanBieuDo} className="mt-9">
         <BieuDoCot diem={ketQua.diem} noiBat={noiBat} />
       </section>
+
+      <MoDauKetQua />
+
+      <div className="mt-4">
+        <BangTraDisc />
+      </div>
 
       <div className="mt-10 space-y-7">
         {khoi.map((k) => (
@@ -207,7 +239,7 @@ export function ManKetQua({
       <LopSauKetQua
         sau={sau}
         maBoDe={boDe.ma}
-        phongCach={phongCach}
+        phongCach={laNguoiLonDocVeTre ? phongCach : null}
         onLamBoPhuHuynh={onLamBoConThieu ? () => onLamBoConThieu("PH", "") : undefined}
       />
 
@@ -259,160 +291,6 @@ export function ManKetQua({
         {idBai && <NutKetThucVaXoa idBai={idBai} onXong={onLamLai} />}
       </div>
     </section>
-  );
-}
-
-/**
- * 🔴 QĐ7 — MÁY DÙNG CHUNG.
- * Kênh "giáo viên đưa tận tay" nghĩa là một máy đi qua nhiều gia đình. Không có nút này
- * thì hồ sơ hành vi của từng đứa trẻ cứ tích lại trên một cái máy tính bảng đi mượn.
- */
-function NutKetThucVaXoa({
-  idBai,
-  onXong,
-}: {
-  readonly idBai: string;
-  readonly onXong: () => void;
-}) {
-  const [daXoa, datDaXoa] = useState(false);
-
-  async function xoa() {
-    if (!window.confirm(CHU_M6.hoiXoaBai)) return;
-    await xoaBai(idBai);
-    datDaXoa(true);
-    onXong();
-  }
-
-  if (daXoa) {
-    return (
-      <p role="status" className="basis-full text-[13px] text-neutral-600">
-        {CHU_M6.daXoaBai}
-      </p>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={() => void xoa()}
-      className="min-h-[48px] rounded-xl px-4 text-[14px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-      style={{ outlineColor: MAU.timCongNghe }}
-    >
-      {CHU_M6.nutKetThucVaXoa}
-    </button>
-  );
-}
-
-function NutTaiAnh({
-  noiDung,
-  tenTep,
-}: {
-  readonly noiDung: Parameters<typeof veAnhKetQua>[1];
-  readonly tenTep: string;
-}) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [dangVe, datDangVe] = useState(false);
-  const [loi, datLoi] = useState<string | null>(null);
-  const [biCat, datBiCat] = useState(false);
-
-  async function taiVe() {
-    const canvas = canvasRef.current;
-    if (!canvas || dangVe) return;
-    datDangVe(true);
-    datLoi(null);
-    try {
-      const { anh, ketQua } = await veAnhKetQua(canvas, noiDung, hoFontDangDung());
-      datBiCat(ketQua.biCat);
-      const url = URL.createObjectURL(anh);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${tenTep}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      datLoi(e instanceof Error ? e.message : CHU_M4.loiVeAnh);
-    } finally {
-      datDangVe(false);
-    }
-  }
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => void taiVe()}
-        disabled={dangVe}
-        className="min-h-[48px] rounded-xl px-6 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60"
-        style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
-      >
-        {dangVe ? CHU_M4.dangVeAnh : CHU_M4.nutTaiAnh}
-      </button>
-      {/* Canvas ẩn — chỉ là mặt bàn để vẽ, không phải thứ người dùng nhìn. */}
-      <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
-      {biCat && (
-        <p role="status" className="basis-full text-[13px] text-amber-800">
-          {CHU_M4.anhBiCat}
-        </p>
-      )}
-      {loi && (
-        <p role="alert" className="basis-full text-[13px] text-red-700">
-          {loi}
-        </p>
-      )}
-    </>
-  );
-}
-
-/**
- * 🔴 QĐ6 — CHUYỀN TAY CHỦ ĐỘNG.
- *
- * Vùng lệch ghép cặp trong IndexedDB CÙNG MỘT TRÌNH DUYỆT. Nếu để phụ huynh tự đi tìm
- * màn đối chiếu thì mũi nhọn của sản phẩm không bao giờ bật lên — và KHÔNG CÓ GÌ BÁO ĐỎ,
- * vì mọi thứ vẫn "chạy đúng". Nên ngay sau kết quả, nói thẳng còn thiếu bài nào.
- */
-function KhoiChuyenTay({
-  maTre,
-  onXem,
-  onLamBo,
-}: {
-  readonly maTre: string;
-  readonly onXem: (maTre: string) => void;
-  readonly onLamBo: (ma: MaBoDe) => void;
-}) {
-  const { ketQua } = useDoiChieu(maTre);
-  if (!ketQua) return null;
-
-  if (ketQua.ghepDuoc) {
-    return (
-      <button
-        type="button"
-        onClick={() => onXem(maTre)}
-        className="min-h-[48px] w-full rounded-xl border-l-4 px-4 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2"
-        style={{ backgroundColor: MAU.timRatNhat, borderColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
-      >
-        <span className="block text-[15px] font-semibold" style={{ color: MAU.timCongNghe }}>
-          Xem hai góc nhìn về {maTre}
-        </span>
-        <span className="mt-0.5 block text-[13px] text-neutral-700">
-          Đã đủ cả bài của con và bài của bố mẹ.
-        </span>
-      </button>
-    );
-  }
-
-  return <MoiLamNot lyDo={ketQua.lyDo} onLamBo={onLamBo} />;
-}
-
-function NutLamLai({ onLamLai }: { readonly onLamLai: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onLamLai}
-      className="min-h-[48px] rounded-xl border border-neutral-300 px-5 text-[15px] font-medium text-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2"
-      style={{ outlineColor: MAU.timCongNghe }}
-    >
-      {CHU_M4.nutLamLai}
-    </button>
   );
 }
 

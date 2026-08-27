@@ -127,31 +127,59 @@ describe("🔴 HỒI QUY — cặp pha mất thứ tự: DI đọc y hệt ID", 
   });
 });
 
-describe("đúng người đọc — lời khuyên không được gửi nhầm", () => {
+describe("đúng người đọc — ba bản, mỗi bản một người", () => {
   /**
    * Lỗi đã trả giá 27/08/2026: khối viết cho phụ huynh hỏi con bị dùng nguyên cho bộ THCS,
    * nơi người đọc là chính học sinh.
+   *
+   * 🔴 GĐ10 ĐỔI ĐẶC TẢ, không phải sửa test cho vừa code: trước đây bộ TH/THCS bị CHẶN khỏi
+   * `LOI_KHUYEN` — nghĩa là phụ huynh của một em lớp 4 không nhận được gì cả. Nay hai bộ đó
+   * có CẢ HAI bản, và điều phải canh không còn là "chặn" mà là "tách đúng người đọc".
    */
   const diem = { D: 80, I: 50, S: 40, C: 30 };
 
-  it.each(["MN", "QS"] as const)("bộ %s: người lớn đọc về trẻ ⇒ có lời khuyên đầy đủ", (ma) => {
+  it.each(["MN", "QS"] as const)("bộ %s: bố mẹ đọc về trẻ ⇒ có bản cho bố mẹ, KHÔNG có bản cho con", (ma) => {
     const dg = dung(diem, { maBoDe: ma });
-    expect(dg.loiKhuyen).toBeTruthy();
-    expect(dg.tuMinh).toBeUndefined();
-    expect(dg.loiKhuyen?.cauNenNoi).toHaveLength(3);
-    expect(dg.loiKhuyen?.cauNenTranh).toHaveLength(3);
+    expect(dg.banBoMe).toBeTruthy();
+    expect(dg.banBoMe?.cauNenNoi).toHaveLength(3);
+    expect(dg.banBoMe?.cauNenTranh).toHaveLength(3);
+    // Bé mẫu giáo chưa đọc được; bộ QS thì điểm do bố mẹ chấm nên dựng lời cho con là bịa.
+    expect(dg.banCon).toBeUndefined();
+    expect(dg.banTuMinh).toBeUndefined();
   });
 
-  it.each(["TH", "THCS", "PH"] as const)("bộ %s: tự đọc về mình ⇒ dùng bản tự đọc", (ma) => {
+  it.each(["TH", "THCS"] as const)("bộ %s: trẻ tự làm ⇒ có ĐỦ CẢ HAI bản", (ma) => {
     const dg = dung(diem, { maBoDe: ma });
-    expect(dg.tuMinh).toBeTruthy();
-    expect(dg.loiKhuyen).toBeUndefined();
+    expect(dg.banCon, "thiếu bản cho con").toBeTruthy();
+    expect(dg.banBoMe, "phụ huynh của em này lại không nhận được gì").toBeTruthy();
+    expect(dg.banTuMinh).toBeUndefined();
   });
 
-  it("🔴 bộ THCS: không một chữ 'con' nào lọt vào bản tự đọc", () => {
+  it("bộ PH: người lớn tự đánh giá ⇒ chỉ có bản tự đọc, KHÔNG có bản nói về một đứa trẻ", () => {
+    const dg = dung(diem, { maBoDe: "PH" });
+    expect(dg.banTuMinh).toBeTruthy();
+    expect(dg.banCon).toBeUndefined();
+    // Sinh "cách nói chuyện với con" từ trục của BỐ MẸ là bịa ra một đứa trẻ không tồn tại.
+    expect(dg.banBoMe).toBeUndefined();
+  });
+
+  it("🔴 bộ THCS: không một chữ 'con' nào lọt vào BẢN CHO CON", () => {
     const dg = dung(diem, { maBoDe: "THCS" });
-    const chu = [dg.tuMinh?.khiCangThang, dg.tuMinh?.tapThem, dg.tuMinh?.motViecToiNay].join(" ");
+    const chu = [dg.banCon?.khiCangThang, dg.banCon?.tapThem, dg.banCon?.motViecToiNay].join(" ");
     expect(/(?<!\p{L})con(?!\p{L})/iu.test(chu), chu).toBe(false);
+  });
+
+  it("🔴 bộ THCS: bản CHO BỐ MẸ thì PHẢI gọi là 'con', không gọi là 'bạn'", () => {
+    // Cùng một bài, hai người đọc, hai đại từ. Đây là thứ bảng đại từ một chiều không làm được.
+    const dg = dung(diem, { maBoDe: "THCS" });
+    const chu = [dg.banBoMe?.noiTheNao, dg.banBoMe?.khiCangThang, dg.banBoMe?.motViecToiNay].join(" ");
+    expect(/(?<!\p{L})con(?!\p{L})/iu.test(chu), chu).toBe(true);
+  });
+
+  it("🔴 bộ TH: bản cho con gọi 'em', bản cho bố mẹ gọi 'con' — trong CÙNG một lần chấm", () => {
+    const dg = dung(diem, { maBoDe: "TH" });
+    expect(/(?<!\p{L})em(?!\p{L})/iu.test(dg.banCon?.khiCangThang ?? "")).toBe(true);
+    expect(/(?<!\p{L})con(?!\p{L})/iu.test(dg.banBoMe?.noiTheNao ?? "")).toBe(true);
   });
 });
 

@@ -37,6 +37,8 @@ export type BaiDeGhep = {
   readonly ketThuc: string;
   readonly ketQua: KetQua;
   readonly phienBanBoDe: string;
+  /** Tuổi đứa trẻ. Chỉ bản ghi bộ QS mới có — dùng để mời ĐÚNG bộ con tự làm. */
+  readonly tuoi?: number;
 };
 
 export type LechMotTruc = {
@@ -52,7 +54,7 @@ export type LechMotTruc = {
 };
 
 export type LyDoChuaGhep =
-  | { readonly ma: "THIEU_BAI_CON" }
+  | { readonly ma: "THIEU_BAI_CON"; readonly tuoi?: number }
   | { readonly ma: "THIEU_BAI_BO_ME" }
   | { readonly ma: "KHAC_PHIEN_BAN" }
   | { readonly ma: "QUA_HAN"; readonly soNgay: number };
@@ -108,7 +110,11 @@ export function chonCapMoiNhat(
 
 export function doiChieu(ds: readonly BaiDeGhep[], maTre: string): KetQuaDoiChieu {
   const { con, boMe } = chonCapMoiNhat(ds, maTre);
-  if (!con) return { ghepDuoc: false, lyDo: { ma: "THIEU_BAI_CON" } };
+  // Kèm tuổi lấy từ bài bộ QS (nếu có) để lời mời chọn đúng bộ con tự làm — bộ QS trải
+  // 8–15 tuổi nên mã bộ đề một mình không đủ để suy ra.
+  if (!con) {
+    return { ghepDuoc: false, lyDo: { ma: "THIEU_BAI_CON", ...(boMe?.tuoi !== undefined ? { tuoi: boMe.tuoi } : {}) } };
+  }
   if (!boMe) return { ghepDuoc: false, lyDo: { ma: "THIEU_BAI_BO_ME" } };
 
   // Sửa nội dung câu là đổi ý nghĩa của điểm số — hai phiên bản khác nhau thì con số
@@ -127,7 +133,7 @@ export function doiChieu(ds: readonly BaiDeGhep[], maTre: string): KetQuaDoiChie
   }
 
   if (!con.ketQua.hopLe || !boMe.ketQua.hopLe) {
-    return { ghepDuoc: false, lyDo: { ma: "THIEU_BAI_CON" } };
+    return { ghepDuoc: false, lyDo: { ma: "THIEU_BAI_CON", ...(boMe.tuoi !== undefined ? { tuoi: boMe.tuoi } : {}) } };
   }
 
   const bang = MA_TRUC.map((t) =>

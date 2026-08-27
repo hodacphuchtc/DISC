@@ -40,6 +40,17 @@ export const NGUONG_PHA = 8;
  */
 export const NGUONG_NOI_RO = 70;
 
+/**
+ * Tuổi từ mốc này trở lên thì dùng bộ đề / nội dung của lứa THCS.
+ *
+ * 🔴 Dùng ở HAI chỗ và bắt buộc là CÙNG một con số: chọn lứa nội dung (`luaTuoiTu` ở
+ * `modules/report/dien-giai.ts`) và chọn bộ đề mời con tự làm ở màn vùng lệch
+ * (`boDeConTuLam` ở `modules/test/dinh-tuyen.ts`). Trước đây nó là hằng CỤC BỘ nằm trong
+ * `dien-giai.ts`, nên chỗ thứ hai không có gì bảo đảm dùng chung một mốc — và thực tế chỗ
+ * đó đã gõ cứng "THCS" cho mọi lứa tuổi.
+ */
+export const TUOI_VAO_THCS = 12;
+
 export const NGUONG_HOP_LE = {
   /**
    * HL-1 — TRẢ LỜI PHẲNG. Tỷ lệ câu chọn đúng mức giữa vượt ngưỡng này ⇒ KHÔNG trả kết quả.

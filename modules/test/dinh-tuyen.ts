@@ -11,6 +11,8 @@
  * cố ý.
  */
 
+import { TUOI_VAO_THCS } from "@config/disc-nguong";
+
 import type { MaBoDe } from "@modules/core/bo-de/kieu";
 
 export type MucTieuPhuHuynh = "toi" | "con";
@@ -64,4 +66,23 @@ export function dinhTuyen(dv: DauVaoDinhTuyen): KetQuaDinhTuyen {
       return { xong: true, boDe: "QS" };
     }
   }
+}
+
+/**
+ * Bộ đề mà một đứa trẻ TỰ LÀM ở tuổi này.
+ *
+ * 🔴 Sinh ra để vá một lỗi thật: màn vùng lệch gõ cứng `thieuBaiCon ? "THCS" : "QS"`, nên
+ * con 8–10 tuổi bị mời làm bộ THCS. Bộ QS trải từ 8 đến 15 tuổi — bắc qua CẢ hai bộ tự làm
+ * — nên không có cách nào chọn đúng nếu không nhìn vào tuổi.
+ *
+ * Không biết tuổi thì trả về bộ của lứa NHỎ HƠN, không phải bộ lớn hơn: bản ghi cũ (lưu
+ * trước khi trường `tuoi` tồn tại) có thể là của một bé vừa tròn 8, và đưa nhầm một em lớp
+ * 3 vào bộ THCS tệ hơn là đưa nhầm một em lớp 8 vào bộ Tiểu học.
+ *
+ * Dưới sàn tự đánh giá thì trả `null` — ADR-002: trẻ dưới 8 tuổi không tự đánh giá được,
+ * và mời em ấy tự làm bài là đi vòng qua đúng hàng rào đó.
+ */
+export function boDeConTuLam(tuoi: number | undefined): MaBoDe | null {
+  if (tuoi !== undefined && tuoi < TUOI_TU_DANH_GIA_TOI_THIEU) return null;
+  return tuoi !== undefined && tuoi >= TUOI_VAO_THCS ? "THCS" : "TH";
 }

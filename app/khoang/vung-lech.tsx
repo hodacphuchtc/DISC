@@ -10,6 +10,7 @@ import type { MaBoDe } from "@modules/core/bo-de/kieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
 import { docTatCa } from "@modules/core/luu-tru/kho-bai";
 import { doiChieu, type KetQuaDoiChieu, type LyDoChuaGhep } from "@modules/report/doi-chieu";
+import { boDeConTuLam } from "@modules/test/dinh-tuyen";
 
 /** Tính vùng lệch cho một biệt danh, đọc thẳng từ kho. */
 export function useDoiChieu(maTre: string | null) {
@@ -52,8 +53,14 @@ export function MoiLamNot({
     );
   }
 
+  // 🔴 Bộ QS trải 8–15 tuổi, bắc qua CẢ hai bộ con tự làm. Gõ cứng "THCS" ở đây là mời một
+  // em lớp 3 làm bộ dành cho lớp 9 — lỗi đã tồn tại từ GĐ5 và không test nào bắt được.
+  const boDeCon = lyDo.ma === "THIEU_BAI_CON" ? boDeConTuLam(lyDo.tuoi) : "QS";
+  // Dưới sàn tự đánh giá thì KHÔNG mời — đi vòng qua ADR-002 còn tệ hơn là không mời.
+  // Không xảy ra trên thực tế vì bộ QS chỉ mở khi con ≥ 8 tuổi; đây là chốt chặn.
+  if (boDeCon === null) return null;
   const thieuBaiCon = lyDo.ma === "THIEU_BAI_CON";
-  const ma: MaBoDe = thieuBaiCon ? "THCS" : "QS";
+  const ma: MaBoDe = boDeCon;
   const bo = napBoDe(ma);
   const than = (thieuBaiCon ? CHU_DOI_CHIEU.thieuBaiCon : CHU_DOI_CHIEU.thieuBaiBoMe)
     .replace("{soCau}", String(bo.cau.length))

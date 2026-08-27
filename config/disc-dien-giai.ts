@@ -201,11 +201,37 @@ export const DIEN_GIAI: Readonly<Record<MaKieu, KhoiDienGiai>> = {
   },
 };
 
-/** Đại từ thay vào {chuThe} theo từng bộ đề — người tự làm và người quan sát đọc khác nhau. */
-export const CHU_THE: Readonly<Record<string, { thuong: string; hoa: string }>> = {
-  MN: { thuong: "bé", hoa: "Bé" },
-  TH: { thuong: "em", hoa: "Em" },
-  THCS: { thuong: "bạn", hoa: "Bạn" },
-  PH: { thuong: "bạn", hoa: "Bạn" },
-  QS: { thuong: "con", hoa: "Con" },
+/**
+ * Ai đang ĐỌC bản báo cáo. Cùng một bài, hai người đọc gọi đứa trẻ bằng hai từ khác nhau.
+ *
+ * 🔴 TRỤC XOAY CỦA CẢ GĐ10. Bảng đại từ cũ khoá theo `maBoDe` MỘT CHIỀU, tức là ngầm giả
+ * định *"một bộ đề = một người đọc"*. Giả định đó đúng cho tới khi có ba bản: cùng một bài
+ * Tiểu học, **con đọc phần của con** ("em") còn **bố mẹ đọc phần của bố mẹ** ("con"). Không
+ * tách được hai chiều thì hoặc là gọi một em lớp 4 là "con", hoặc là bắt bố mẹ đọc "em" khi
+ * nói về chính con mình.
+ */
+export type BanDoc = "con" | "boMe";
+
+/**
+ * Đại từ thay vào {chuThe}, theo bộ đề VÀ theo người đọc.
+ *
+ * Cột `con` giữ đúng giá trị cũ ⇒ mọi nơi gọi `thayChuThe()` không truyền người đọc vẫn ra
+ * y hệt trước, không có chỗ nào âm thầm đổi chữ.
+ *
+ * Chỉ bộ TH và THCS mới thật sự dùng cả hai cột (trẻ tự làm bài thì có cả bản cho con lẫn
+ * bản cho bố mẹ). Ba bộ còn lại chỉ có một người đọc, hai cột trùng nhau — khai đủ để không
+ * có ô nào rơi vào `undefined`.
+ */
+export const CHU_THE: Readonly<
+  Record<string, Readonly<Record<BanDoc, { thuong: string; hoa: string }>>>
+> = {
+  // Bố mẹ trả lời hộ bé mẫu giáo; bé chưa đọc được bản nào.
+  MN: { con: { thuong: "bé", hoa: "Bé" }, boMe: { thuong: "bé", hoa: "Bé" } },
+  // Em học sinh tự làm: em đọc "em", bố mẹ đọc "con".
+  TH: { con: { thuong: "em", hoa: "Em" }, boMe: { thuong: "con", hoa: "Con" } },
+  THCS: { con: { thuong: "bạn", hoa: "Bạn" }, boMe: { thuong: "con", hoa: "Con" } },
+  // Người lớn tự đánh giá chính mình — chỉ một người đọc.
+  PH: { con: { thuong: "bạn", hoa: "Bạn" }, boMe: { thuong: "bạn", hoa: "Bạn" } },
+  // Bố mẹ quan sát con; con không đọc bản này.
+  QS: { con: { thuong: "con", hoa: "Con" }, boMe: { thuong: "con", hoa: "Con" } },
 };

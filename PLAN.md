@@ -19,41 +19,38 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — ý cũ còn giá trị thì dời về sổ miền rồi trỏ, đừng xếp chồng.
 
-**Phiên 27/08/2026 (chiều) — GĐ9: làm sâu bản báo cáo**
+**Phiên 27/08/2026 (tối) — GĐ10 chặng 1, mới xong 4/6 hạng mục**
 
-**1. Vừa xong.** 41/41 hạng mục · **676 test xanh** (đầu phiên 416) · `npm run kiem` và
-`npm run build` đều xanh. GĐ9 gồm 8 hạng mục `9.1`–`9.8`.
+**1. Vừa xong.** `10.1` `10.2` `10.3` `10.5` — **731 test xanh** (đầu phiên 676) ·
+`npm run kiem` + `npm run build` xanh · đã soi trên Chromium thật, 0 lỗi JS.
 
-**2. ĐANG DỞ.** Không còn hạng mục code nào. 🔴 **CHƯA COMMIT** — toàn bộ GĐ9 đang nằm
-ở cây làm việc, chưa `git add`. Đây là việc đầu tiên của phiên sau.
+**2. ĐANG DỞ — làm tiếp từ đây.** Còn `10.4` (ba dải + in theo từng bản) và `10.6`
+(sắp lại màn 1 hai nhánh). Cả hai đều `(e) chặn: MÁY` — giao là làm được ngay.
+Chặng 2 (`10.7`) chặn ở NGƯỜI: chờ chủ dự án bấm thử chặng 1.
 
-**3. Chặn ở NGƯỜI / NGOÀI.** Vẫn bốn việc cũ ở `CLAUDE.md` mục CHỜ NGOÀI. **Việc ký duyệt
-nội dung giờ đã gỡ được nút thắt**: chạy `node scripts/xuat-noi-dung-ky-duyet.mjs` ra
-`docs/noi-dung-cho-ky-duyet.md` (10.060 từ, đã thay sẵn đại từ) — đưa thẳng cho người
-chuyên môn, họ không phải mở file `.ts` nào.
+**3. Chạy thử thế nào.** `npm run xem-thu` → http://localhost:3100 (bản phát hành thật),
+chạy song song được với `npm run dev` ở cổng 3000. Nạp 8 bài mẫu bằng cách dán
+`tests/DATA_TEST/nap-vao-trinh-duyet.js` vào Console. Chi tiết ở README mục
+*"Chạy thử trên máy mình"*.
 
 **4. ĐÃ ĐO ĐƯỢC, ĐỪNG ĐO LẠI.**
-- **Bản in đã đo trên Chromium thật**: màn hình 0/5 lớp mở · bản in **5/5** lớp mở · bản in
-  có tầng lời khuyên · 5 tiêu đề chỉ-in hiện ra · **0** nút bấm lọt vào giấy · PDF **3 trang**
-  cho cả 5 bộ đề. `tests/ban-in.test.ts` khoá lại, và **đã thử phá luật để chắc test fail được**.
-- **Đại từ theo bộ đề đã soi bằng ảnh chụp**: QS→"con" (5 lớp) · MN→"bé" (5 lớp) ·
-  THCS→"bạn" (4 lớp, **không** có lớp "Nói chuyện với…" vì đó là lớp cho người lớn) ·
-  bài PHANG→**0 lớp** (lớp sâu không lọt vào nhánh không hợp lệ).
-- **Độ thô của phép đo, đã tính bằng số:** một nấc trả lời dịch điểm chuẩn hoá đi
-  **TH 10,0 · QS 6,25 · MN 5,0 · THCS/PH 4,17**. Đây là lý do KHÔNG có thang cao/vừa/thấp.
-- **Playwright vẫn KHÔNG sống qua phiên.** `npm i playwright` vào thư mục tạm; Chromium đã
-  nằm sẵn ở `~/Library/Caches/ms-playwright`.
-- **Có sẵn một dev server của dự án ở cổng 3000** (Next chặn mở bản thứ hai ở cổng khác).
+- Bốn lỗi im lặng đã sửa và **đã xác nhận trên trình duyệt thật**: con 9 tuổi được mời bộ
+  **TH** (không phải THCS) · bộ TH hiện câu rào *"để em hiểu mình hơn"* · học sinh TH/THCS
+  không còn đọc được khối viết cho bố mẹ · bộ PH hết mời chính mình.
+- **`next start` KHÔNG chạy được với `output: "export"`** — script `start` cũ trỏ vào đó và
+  chỉ ném lỗi suốt từ GĐ0. Đã thay bằng `scripts/xem-ban-phat-hanh.mjs`.
+- Số lớp gập trên màn kết quả: MN/QS **5**, TH/THCS/PH **4**, cộng 1 nếu máy có bài bộ PH.
+  Con số này có test canh — thêm/bớt một khối là đỏ ngay.
+- Đoạn mở đầu **136 từ** (trần 200). Kho chữ hiện ~6.000 từ.
 
-**5. Cạm bẫy vừa trả giá.** 5 mục mới đã ghi vào `CLAUDE.md` mục "CẢNH BÁO / CẠM BẪY".
-Đắt nhất: **hạng mục `4.2` đã tick ✅ từ GĐ4 nhưng nghiệm thu bằng tiêu chí sai** — test
-kiểm 11 KIỂU trong khi đặc tả đòi 4 TRỤC, nên ba trục im lặng suốt từ GĐ4 tới giờ.
+**5. Cạm bẫy vừa trả giá.** Đã ghi vào `CLAUDE.md`. Đắt nhất: **bảng đại từ khoá một chiều
+theo bộ đề** ngầm giả định *"một bộ đề = một người đọc"* — giả định đó chặn phụ huynh của
+học sinh TH/THCS khỏi TOÀN BỘ lời khuyên, suốt từ GĐ9, mà không test nào thấy.
 
 **6. Lệnh nên chạy đầu phiên sau.**
 ```bash
-git status                                  # GĐ9 chưa commit
-npm run kiem                                # 676 test
-node tests/DATA_TEST/tao-du-lieu-mau.mjs    # sinh lại 8 bài mẫu
+npm run kiem       # 731 test
+npm run xem-thu    # bản phát hành ở cổng 3100
 ```
 
 ---
@@ -674,6 +671,80 @@ copy** và **đúng một dòng cần thêm vào thanh bên**, mà không hỏi 
   - (b) Đưa file này cho người có chuyên môn đọc — họ không phải mở file `.ts` nào.
   - (c) Sinh lại được bất cứ lúc nào, không gõ tay nên không lạc hậu.
   - (d) 0,5 ngày.
+
+---
+
+## GIAI ĐOẠN 10 — Ba bản báo cáo + gỡ rối luồng vào (ước lượng: 10,5 ngày · 27/08/2026)
+
+> **Vì sao có giai đoạn này.** Chủ dự án chạy thử GĐ9 và nêu bốn việc: không hiểu D-I-S-C là
+> gì · không có gì tạo niềm tin trước khi đọc số · luồng vào rối và trùng lặp · thiếu phần
+> áp dụng (*"sau mỗi lần test sẽ có 3 bản: cho con, cho bố mẹ, và bản kết hợp"*).
+>
+> Khảo sát tìm ra **bốn lỗi im lặng** chưa ai biết: mời con 8–10 tuổi làm sai bộ đề · câu rào
+> gọi một em lớp 4 là "con" · học sinh THCS đọc được khối viết cho bố mẹ · bộ PH mời chính
+> người vừa làm xong đi làm lại. Không lỗi nào làm test đỏ, không lỗi nào làm trang vỡ.
+>
+> Và **một tiền đề phải sửa**: bản kết hợp cần HAI bài (hồ sơ con + bài bộ PH của bố mẹ), nên
+> sau bài đầu tiên nó tồn tại dưới dạng LỜI MỜI chứ không phải ô trống.
+>
+> **Sáu quyết định đã chốt:** luồng vào hai nhánh · ba dải luôn hiện · từ tiếng Anh nằm trong
+> khối tra cứu riêng (đặc tả: *"trẻ dưới 12 tuổi không đọc nổi Dominance"*) · đoạn mở đầu
+> thành thật về giới hạn · hai gói ký duyệt tách rời · hai chặng, duyệt giữa chặng.
+
+- [x] **10.1 — Lưới an toàn cho màn kết quả** ✅ (27/08/2026)
+  - (a) `tests/m4-ket-qua.test.tsx` — trước đó **0 test nào render `ManKetQua`**, màn quan
+    trọng nhất sản phẩm đang không có gì đỡ trong khi sắp bị tách ba bản.
+  - (b) Chốt: nhánh bị chặn không rò lời khuyên · đủ 4 cột · số lớp theo bộ đề · lớp đóng sẵn.
+  - (c) 23 test. (d) 0,5 ngày.
+
+- [x] **10.2 — Bốn lỗi sai người đọc / sai định tuyến** ✅ (27/08/2026)
+  - (a) `boDeConTuLam(tuoi)` + `TUOI_VAO_THCS` lên `config/` · câu rào tách hai bản theo người
+    đọc · khối so phong cách lọc bộ đề · bộ PH hết tự mời chính mình.
+  - (b) Đã soi trên Chromium thật: con 9 tuổi được mời bộ **Tiểu học**; bộ TH hiện *"để em
+    hiểu mình hơn"*; học sinh không còn đọc được phần của bố mẹ; bộ PH hết lời mời thừa.
+  - (c) `tests/bon-loi-nguoi-doc.test.tsx` — 17 test, mỗi lỗi một cụm. (d) 0,5 ngày.
+
+- [x] **10.3 — Trục xoay: đại từ hai chiều** ✅ (27/08/2026)
+  - (a) `CHU_THE[maBoDe][banDoc]` thay cho bảng một chiều; `layDienGiaiDay` trả
+    `banCon` / `banBoMe` / `banTuMinh` thay cho `loiKhuyen`/`tuMinh` phẳng.
+  - (b) 🔴 **Giá trị lớn nhất, hơi ngoài dự kiến:** phụ huynh của học sinh TH/THCS trước đây
+    **không nhận được gì cả** — hai bộ đó bị chặn khỏi toàn bộ `LOI_KHUYEN`. Nay họ nhận trọn
+    8 trường, gọi đúng "con", trong khi em học sinh vẫn đọc bản của mình gọi "em".
+  - (c) `tests/dien-giai-day.test.ts` chỉnh hướng (không xoá): canh "tách đúng người đọc" thay
+    cho "chặn". (d) 1 ngày.
+
+- [x] **10.5 — Tóm tắt 30 giây · bảng tra D-I-S-C · đoạn mở đầu** ✅ (27/08/2026)
+  - (a) `app/khoang/mo-dau.tsx` + `CHU_MO_DAU`/`CHU_BANG_TRA` + `tenTiengAnh`/`nghia`/`motDong`
+    trong `TRUC`. Đoạn mở đầu **136 từ**, dựng quanh hai câu vốn đã viết mà **chưa bao giờ
+    được render** (`CHU_DISC.tieuDe`/`.moTa`).
+  - (b) Bấm thử: tóm tắt nêu đúng trục nổi nhất/nhẹ nhất + một việc làm ngay; bảng tra có đủ
+    bốn từ tiếng Anh; nhãn biểu đồ **không** dính chữ tiếng Anh.
+  - (c) `tests/mo-dau.test.tsx` — 13 test, gồm: ≤200 từ · cấm tuyên bố chuẩn hoá · cấm viết
+    `DiSC` · tóm tắt dưới 60 từ. (d) 1 ngày.
+
+- [ ] **10.4 — Ba dải + in theo từng bản**
+  - (a) Một trang, ba `<section data-ban>`; dải 2/3 đóng sẵn + dải chắn *"đưa máy cho bố mẹ"*;
+    luật in tách bản.
+  - (b) In bản con KHÔNG ra chữ của bản bố mẹ; trẻ cầm máy không cuộn tới phần của bố mẹ.
+  - (c) Mở rộng `tests/ban-in.test.ts` — hiện nó **không** bắt được cơ chế ẩn mới.
+  - (d) 1 ngày.
+  - (e) chặn: MÁY.
+
+- [ ] **10.6 — Sắp lại màn 1 thành hai nhánh**
+  - (a) *"Ai đang cầm máy?"* → học sinh / phụ huynh. Mỗi bộ đề đúng MỘT cửa, tuổi-lớp hỏi một
+    lần. `dinhTuyen()` KHÔNG đổi nên `tests/dinh-tuyen.test.ts` vẫn xanh.
+  - (b) Bộ Mầm non còn đúng một cửa; bộ Bố mẹ-nhìn-con có cửa riêng; sửa mâu thuẫn nhãn 3–5 ↔ 3–7.
+  - (c) `m1-chon-doi-tuong.test.tsx` + `dieu-huong.test.tsx` sẽ đỏ — đặc tả đổi ⇒ sửa test,
+    và cập nhật `DISC_BA.md` §5.2.
+  - (d) 1 ngày.
+  - (e) chặn: MÁY.
+
+- [ ] **10.7 — CHẶNG 2: nội dung ba bản** (lời riêng cho con · góp ý cho bố mẹ về chính mình ·
+      thoả thuận hai chiều · cờ Gói B + hai hồ sơ ký duyệt)
+  - (a) ~2.400–3.000 từ mới, 8 khoá `[trục][hướng lệch]` chứ KHÔNG phải ma trận 16 cặp.
+  - (b) Ma trận ba bản không ô nào rỗng; không câu >60 ký tự nào xuất hiện ở hai bản.
+  - (c) Test không-trùng-câu + ma trận ba bản. (d) 5,5 ngày.
+  - (e) chặn: NGƯỜI — chờ chủ dự án bấm thử chặng 1 rồi mới quyết.
 
 ---
 

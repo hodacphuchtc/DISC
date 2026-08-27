@@ -12,7 +12,14 @@ import {
   type KhoiPha,
   type LuaTuoi,
 } from "@config/disc-bieu-hien";
-import { CHU_THE, DIEN_GIAI, type KhoiDienGiai, type MaKieu } from "@config/disc-dien-giai";
+import {
+  CHU_THE,
+  DIEN_GIAI,
+  type BanDoc,
+  type KhoiDienGiai,
+  type MaKieu,
+} from "@config/disc-dien-giai";
+import { TUOI_VAO_THCS } from "@config/disc-nguong";
 import {
   BAN_KHOAN,
   LOI_KHUYEN,
@@ -47,10 +54,19 @@ export function maKieuTu(kieu: Kieu): MaKieu {
   return cap.join("") as MaKieu;
 }
 
-/** Thay {chuThe} / {ChuThe} bằng đại từ đúng với bộ đề đang đọc. */
-export function thayChuThe(chuoi: string, maBoDe: MaBoDe): string {
-  const dt = CHU_THE[maBoDe];
-  if (!dt) throw new LoiDienGiai(`Bộ đề "${maBoDe}" chưa khai đại từ trong CHU_THE.`);
+/**
+ * Thay {chuThe} / {ChuThe} bằng đại từ đúng với bộ đề VÀ người đang đọc.
+ *
+ * Mặc định `banDoc = "con"` giữ nguyên hành vi cũ — mọi nơi gọi hàm này trước GĐ10 ra chữ
+ * y hệt, nên không có chỗ nào âm thầm đổi giọng.
+ */
+export function thayChuThe(chuoi: string, maBoDe: MaBoDe, banDoc: BanDoc = "con"): string {
+  const dt = CHU_THE[maBoDe]?.[banDoc];
+  if (!dt) {
+    throw new LoiDienGiai(
+      `Bộ đề "${maBoDe}" chưa khai đại từ cho người đọc "${banDoc}" trong CHU_THE.`,
+    );
+  }
   return chuoi.split("{ChuThe}").join(dt.hoa).split("{chuThe}").join(dt.thuong);
 }
 
@@ -95,12 +111,6 @@ export function layDienGiai(kieu: Kieu, maBoDe: MaBoDe): DienGiaiDaThay {
  *     luật 2 đòi đủ bốn trục ngay từ đầu.
  *  3. Cặp pha mất thứ tự ⇒ "D trội, I phụ" đọc y hệt "I trội, D phụ".
  * ══════════════════════════════════════════════════════════════════════════ */
-
-/** Bộ nào do NGƯỜI LỚN đọc về một đứa trẻ. Chỉ những bộ này mới hiện `LOI_KHUYEN`. */
-const BO_NGUOI_LON_DOC_VE_TRE: readonly MaBoDe[] = ["MN", "QS"];
-
-/** Tuổi từ mốc này trở lên thì bộ QS dùng nội dung lứa THCS. */
-const TUOI_VAO_THCS = 12;
 
 export function laMaBanKhoan(gia: unknown): gia is MaBanKhoan {
   return typeof gia === "string" && (MA_BAN_KHOAN as readonly string[]).includes(gia);
@@ -161,10 +171,18 @@ export type DienGiaiDay = DienGiaiDaThay & {
   readonly phoBonNhom: readonly TrucDaDoc[];
   /** Chỉ có khi kiểu là pha. Đã tính theo thứ tự trội/phụ thật. */
   readonly pha?: KhoiPha;
-  /** Bộ MN và QS: người lớn đọc về trẻ. */
-  readonly loiKhuyen?: KhoiLoiKhuyen;
-  /** Bộ TH, THCS, PH: chính người làm bài đọc về mình. KHÔNG phải bản dịch của `loiKhuyen`. */
-  readonly tuMinh?: KhoiTuMinh;
+  /**
+   * BẢN CHO CON — chính đứa trẻ đọc về mình. Chỉ bộ TH và THCS, hai bộ trẻ TỰ làm bài.
+   * Bộ MN thì bé chưa đọc được; bộ QS thì điểm do bố mẹ chấm, dựng "lời cho con" từ đó là bịa.
+   */
+  readonly banCon?: KhoiTuMinh;
+  /**
+   * BẢN CHO BỐ MẸ — người lớn đọc về đứa trẻ. Bộ MN, QS, và (mới từ GĐ10) cả TH, THCS.
+   * 🔴 Trước GĐ10 phụ huynh của học sinh tiểu học/THCS KHÔNG nhận được gì cả.
+   */
+  readonly banBoMe?: KhoiLoiKhuyen;
+  /** BẢN TỰ ĐỌC CỦA NGƯỜI LỚN — chỉ bộ PH, người lớn đánh giá chính mình. */
+  readonly banTuMinh?: KhoiTuMinh;
   readonly banKhoan?: { readonly nhan: string; readonly loiMoDau: string };
 };
 
@@ -191,6 +209,10 @@ export type DauVaoDienGiai = {
 export function layDienGiaiDay(dv: DauVaoDienGiai): DienGiaiDay {
   const { diem, xepHang, maBoDe } = dv;
   const kieu = xepKieu(diem, xepHang);
+  /** Trẻ TỰ làm bài ⇒ có bản cho chính em ấy đọc. */
+  const laConTuLam = maBoDe === "TH" || maBoDe === "THCS";
+  /** Có một đứa trẻ để người lớn đọc về. Bộ PH nói về chính người lớn nên không có. */
+  const coBanBoMe = maBoDe !== "PH";
   const goc = layDienGiai(kieu, maBoDe);
   const luaTuoi = luaTuoiTu(maBoDe, dv.tuoi);
   const thay = (chuoi: string) => thayChuThe(chuoi, maBoDe);
@@ -222,7 +244,6 @@ export function layDienGiaiDay(dv: DauVaoDienGiai): DienGiaiDay {
 
   const khoiPha = kieu.loai === "pha" ? THU_TU_PHA[maPhaCoThuTu(xepHang)] : undefined;
   const trucChinh = xepHang[0];
-  const laNguoiLonDocVeTre = BO_NGUOI_LON_DOC_VE_TRE.includes(maBoDe);
 
   const bk = laMaBanKhoan(dv.banKhoan) ? BAN_KHOAN[dv.banKhoan] : undefined;
 
@@ -239,15 +260,17 @@ export function layDienGiaiDay(dv: DauVaoDienGiai): DienGiaiDay {
           },
         }
       : {}),
-    ...(laNguoiLonDocVeTre
-      ? { loiKhuyen: thayKhoiLoiKhuyen(LOI_KHUYEN[trucChinh], maBoDe) }
-      : { tuMinh: thayKhoiTuMinh(TU_MINH[trucChinh], maBoDe) }),
+    // Ba bản, mỗi bản một người đọc. Tách bằng CẤU TRÚC chứ không bằng kỷ luật: giao diện
+    // không có đường nào đổ chữ của bố mẹ vào mục của con nếu chúng không nằm chung một trường.
+    ...(laConTuLam ? { banCon: thayKhoiTuMinh(TU_MINH[trucChinh], maBoDe, "con") } : {}),
+    ...(coBanBoMe ? { banBoMe: thayKhoiLoiKhuyen(LOI_KHUYEN[trucChinh], maBoDe, "boMe") } : {}),
+    ...(maBoDe === "PH" ? { banTuMinh: thayKhoiTuMinh(TU_MINH[trucChinh], maBoDe, "boMe") } : {}),
     ...(bk ? { banKhoan: { nhan: bk.nhan, loiMoDau: thay(bk.loiMoDau) } } : {}),
   };
 }
 
-function thayKhoiLoiKhuyen(k: KhoiLoiKhuyen, maBoDe: MaBoDe): KhoiLoiKhuyen {
-  const t = (c: string) => thayChuThe(c, maBoDe);
+function thayKhoiLoiKhuyen(k: KhoiLoiKhuyen, maBoDe: MaBoDe, banDoc: BanDoc): KhoiLoiKhuyen {
+  const t = (c: string) => thayChuThe(c, maBoDe, banDoc);
   return {
     noiTheNao: t(k.noiTheNao),
     cauNenNoi: [t(k.cauNenNoi[0]), t(k.cauNenNoi[1]), t(k.cauNenNoi[2])],
@@ -260,8 +283,8 @@ function thayKhoiLoiKhuyen(k: KhoiLoiKhuyen, maBoDe: MaBoDe): KhoiLoiKhuyen {
   };
 }
 
-function thayKhoiTuMinh(k: KhoiTuMinh, maBoDe: MaBoDe): KhoiTuMinh {
-  const t = (c: string) => thayChuThe(c, maBoDe);
+function thayKhoiTuMinh(k: KhoiTuMinh, maBoDe: MaBoDe, banDoc: BanDoc): KhoiTuMinh {
+  const t = (c: string) => thayChuThe(c, maBoDe, banDoc);
   return {
     khiCangThang: t(k.khiCangThang),
     tapThem: t(k.tapThem),

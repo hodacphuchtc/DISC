@@ -55,13 +55,14 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 27/08/2026 — chiều)
+## TRẠNG THÁI (cập nhật 27/08/2026 — tối)
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **41/41 hạng mục PLAN.md · 676 test xanh ·
+Ứng dụng chạy được đầu-cuối trên local. **45/48 hạng mục PLAN.md · 731 test xanh ·
 `npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
-🔴 **GĐ9 chưa commit** — bản đã push lên GitHub dừng ở GĐ8 (`fcbfeb8`).
+Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (README mục *Chạy thử*).
+🔴 **GĐ10 mới xong chặng 1 phần đầu** — còn `10.4`, `10.6`, và trọn chặng 2 (`10.7`).
 
 - **GĐ0–GĐ1** — khung Next 16 + Tailwind 4 + Vitest 4, thanh bên, hàng rào hai tầng,
   spike Canvas vẽ chữ tiếng Việt vừa khung.
@@ -81,14 +82,20 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
   bóc lớp dần + bản in mở sẵn, ô "điều đang băn khoăn", **so sánh phong cách bố mẹ ↔ con**,
   và `docs/noi-dung-cho-ky-duyet.md` để người chuyên môn ký.
 
+- **GĐ10** — **chặng 1 (đang dở)**: sửa bốn lỗi sai người đọc · đại từ hai chiều
+  (phụ huynh của học sinh TH/THCS lần đầu nhận được lời khuyên) · tóm tắt 30 giây ·
+  bảng tra D-I-S-C có từ tiếng Anh · đoạn mở đầu 136 từ nói thật về giới hạn.
+
 ### ĐANG DỞ
 
-Không còn hạng mục nào trong PLAN.md. 🔴 **GĐ9 chưa commit, chưa push.**
+**GĐ10** — xong `10.1` `10.2` `10.3` `10.5`. Còn `10.4` (ba dải + in theo từng bản) và
+`10.6` (sắp lại màn 1 hai nhánh), cả hai đều giao là làm được ngay. Chặng 2 (`10.7`) chờ
+chủ dự án bấm thử chặng 1 trước.
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
-1. 🔴 **Commit GĐ9** (điểm DỪNG BẮT BUỘC, cần chủ dự án duyệt). Kèm 4 file sổ của GĐ8
-   cũng đang treo từ phiên trước.
+1. 🔴 **Bấm thử chặng 1 của GĐ10** — `npm run xem-thu`, nạp 8 bài mẫu, soi ba khối mới
+   (tóm tắt 30 giây · bảng tra D-I-S-C · đoạn mở đầu). Quyết xong mới chạy chặng 2.
 2. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
 3. **Đọc `docs/noi-dung-cho-ky-duyet.md`** rồi đưa cho người có chuyên môn tâm lý/giáo dục.
@@ -141,6 +148,24 @@ toán. Ba việc đầu nên làm ngay tuần này.
 
 ## CẢNH BÁO / CẠM BẪY (đã trả giá, đừng lặp lại)
 
+- **Bảng đại từ khoá MỘT CHIỀU theo bộ đề đã âm thầm cắt cả một nhóm người dùng khỏi sản
+  phẩm** (27/08/2026, GĐ10). `CHU_THE[maBoDe]` ngầm giả định *"một bộ đề = một người đọc"*.
+  Giả định đó khiến bộ TH/THCS bị chặn khỏi TOÀN BỘ `LOI_KHUYEN` — nghĩa là **phụ huynh của
+  mọi học sinh tiểu học và THCS không nhận được một chữ lời khuyên nào**, suốt từ GĐ9. Không
+  test nào thấy vì test chỉ hỏi "bộ này có `tuMinh` không", chưa ai hỏi "phụ huynh của em này
+  đọc được gì". **Bài học: khi thêm một trường khoá theo X, hỏi ngay X có đủ chiều không.**
+- **Bốn lỗi "sai người đọc" cùng một họ, không lỗi nào làm test đỏ** (27/08/2026, GĐ10):
+  câu rào gọi em lớp 4 là "con" · học sinh THCS đọc được khối viết cho bố mẹ · bộ PH mời
+  chính người vừa làm xong đi làm lại · con 8–10 tuổi bị mời sai bộ đề vì `vung-lech.tsx` gõ
+  cứng `"THCS"` thay vì gọi `dinhTuyen`. Cả bốn chỉ lộ ra khi ngồi hỏi *ai đang cầm máy và
+  người đó nhìn thấy chữ gì* — không có cửa kiểm tự động nào thay được câu hỏi đó.
+- **`next start` KHÔNG chạy được với `output: "export"`** (27/08/2026). Script `start` trỏ vào
+  đó từ GĐ0 và chỉ ném lỗi — không ai phát hiện vì không ai chạy nó. Đã thay bằng
+  `scripts/xem-ban-phat-hanh.mjs` (`npm run xem-thu`). **Một script hỏng mà không ai gọi thì
+  im lặng y như một tính năng hỏng mà không ai mở.**
+- **Hằng nghiệp vụ nằm CỤC BỘ trong một file là mầm của hai nguồn sự thật** (27/08/2026).
+  `TUOI_VAO_THCS = 12` từng là `const` trong `dien-giai.ts`; chỗ thứ hai cần đúng con số đó
+  (màn vùng lệch) đã gõ cứng `"THCS"` cho mọi lứa tuổi. Ngưỡng đã chuyển lên `config/`.
 - **Hạng mục có thể TICK ✅ mà vẫn chưa làm đúng thứ đặc tả đòi** (27/08/2026, GĐ9 — đắt
   nhất phiên). Đặc tả §9.2 luật 2 ghi *"Mỗi trục nêu CẢ mặt mạnh LẪN mặt cần để ý"*, DEMO #5
   đòi *"mỗi trục có ít nhất một dòng chỗ cần để ý"*. Bản dựng làm theo **KIỂU** (11 kiểu) chứ
