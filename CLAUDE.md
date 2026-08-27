@@ -16,7 +16,9 @@
 
 Ứng dụng trắc nghiệm DISC dành cho phụ huynh và học sinh mầm non, tiểu học, THCS: người làm bài nhập thông tin đầu vào tương ứng với từng đối tượng, hệ thống chấm và trả về một bản báo cáo kết quả chính xác, đọc được ngay.
 Nguồn yêu cầu: `docs/brd/`. Lộ trình thi công: `PLAN.md` gốc dự án (checkbox, khuôn 4 dòng).
-Repo: https://github.com/hodacphuchtc/DISC (chưa push — `/B5_luu_code` mới đẩy lên).
+Repo: https://github.com/hodacphuchtc/DISC — **PUBLIC**, đã push (27/08/2026).
+🔴 Repo công khai: mọi thứ trong này internet đọc được. Đừng đưa dữ liệu thật của trẻ,
+họ tên, hay số điện thoại cá nhân vào bất kỳ file nào.
 Kiến trúc module: `core` (nền tảng) · `test` (bộ câu hỏi + luồng làm bài) · `report`
 (chấm điểm + sinh báo cáo) — ranh giới do `.semgrep/ranh-gioi-module.yml` canh.
 Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router, `output:'export'`)
@@ -57,8 +59,9 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 
 ### ĐÃ XONG
 
-Ứng dụng chạy được đầu-cuối trên local. **33/33 hạng mục PLAN.md · 413 test xanh ·
-`npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production.**
+Ứng dụng chạy được đầu-cuối trên local. **33/33 hạng mục PLAN.md · 416 test xanh ·
+`npm run kiem` và `npm run build` đều xanh · 12/12 DEMO đạt trên bản production ·
+đã push lên GitHub và CI xanh.**
 
 - **GĐ0–GĐ1** — khung Next 16 + Tailwind 4 + Vitest 4, thanh bên, hàng rào hai tầng,
   spike Canvas vẽ chữ tiếng Việt vừa khung.
@@ -75,14 +78,14 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 
 ### ĐANG DỞ
 
-Không còn hạng mục nào trong PLAN.md. **Toàn bộ code chưa commit** — 85 mục thay đổi đang
-nằm trong cây làm việc, chờ duyệt ở `/B5_luu_code` (commit/push là DỪNG BẮT BUỘC).
+Không còn hạng mục nào trong PLAN.md. Code đã commit và push lên `origin/main`.
 
 ### BƯỚC TIẾP THEO (theo thứ tự)
 
 1. **Bấm thử trên điện thoại thật** — phần duy nhất của `7.2` máy không làm được:
    `npm run dev`, mở bằng điện thoại trong cùng mạng WiFi, làm trọn một bài.
-2. `/B5_luu_code` để commit + push (cần duyệt).
+2. **Đọc 33 câu gợi chuyện** ở `config/disc-dien-giai.ts` — dòng `(b)` của hạng mục 4.3
+   đòi chủ dự án chỉ ra được ít nhất một câu sẽ thật sự hỏi con.
 3. **Gọi đội dev 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu ·
    nhận dạng nào. Bốn câu này quyết định phần giao diện có dùng lại được không.
 4. Ba việc ở mục CHỜ NGOÀI, bắt đầu bằng việc thu 30–50 phản hồi thật.
@@ -104,8 +107,8 @@ toán. Ba việc đầu nên làm ngay tuần này.
   *Nếu trượt thì kênh phân phối số 1 chết.*
 - **Số Zalo/hotline thật** để điền vào `LIEN_HE_SATA` trong `config/disc-tu-dien.ts`
   (hiện là số giữ chỗ `0900 000 000`).
-- **Quyền ghi vào repo https://github.com/hodacphuchtc/DISC** — để `/B5_luu_code` push
-  được (kiểm bằng `gh auth status`; repo đã khai remote `origin`, chưa push lần nào).
+> Quyền ghi vào repo: **đã có** (tài khoản `hodacphuchtc`, token có scope `repo` +
+> `workflow`). Push lần đầu ngày 27/08/2026.
 
 > **Không cần Supabase và không cần Vercel nữa** — xem `docs/decisions/ADR-001-khong-backend.md`.
 
