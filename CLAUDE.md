@@ -58,66 +58,65 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 27/08/2026 — tối, chặng 3)
+## TRẠNG THÁI (cập nhật 28/08/2026 — GĐ11→GĐ14 xong trọn)
 
 ### ĐÃ XONG
 
-**GĐ0–GĐ10 xong trọn: 48/48 hạng mục · 805 test xanh · `npm run kiem` + `npm run build`
-xanh · 12/12 DEMO đạt.** Chạy thử: `npm run xem-thu` → http://localhost:3100.
-Đã push `origin/main` tới `f31a3de`, CI xanh. Chi tiết từng giai đoạn: `PLAN.md`.
+**GĐ0–GĐ14 xong trọn: 68/68 hạng mục · 1.115 test xanh · `npm run kiem` + `npm run build`
+xanh.** Chạy thử: `npm run xem-thu` → http://localhost:3100.
+🔴 **Đã push tới `f31a3de` (GĐ0–GĐ10). GĐ11–GĐ14 CHƯA PUSH — còn ở local.**
 
-Ba mốc lớn: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo (đủ bốn trục,
-theo lứa tuổi, tầng lời khuyên) · **GĐ10** ba bản báo cáo (ba dải + in tách bản, màn 1 hai
-nhánh, nội dung ba bản, hai gói ký duyệt).
+Bốn mốc lớn: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo · **GĐ10** ba bản
+báo cáo · **GĐ11–GĐ14 DISC GIA ĐÌNH** — đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH.
 
-### ĐANG DỞ — chờ MỘT chữ
+Những gì GĐ11–GĐ14 thêm vào sản phẩm:
+- **Bảng gia đình** thay màn *Bài đã làm*: mỗi người một thẻ, nhìn một cái biết ai chưa làm.
+  Bấm *Làm bài* từ thẻ thì không bị hỏi tên lần nữa.
+- **Mã mời / QR tự viết** (không thêm thư viện): một hồ sơ DISC gói vừa 14 ký tự, hạn 7 ngày,
+  kiểm tổng 2 ký tự. Gỡ trần *"cả nhà phải dùng chung một máy"* mà không phá ADR-001.
+- **Phân tích cả nhà** tới 6 người: mỗi người một bản đọc riêng, in tách bản mỗi người một tờ.
+- **So sánh "hồi đó ↔ bây giờ"**, chỉ mở khi hai bài cách nhau ≥ 90 ngày.
+- **Màn *Số liệu máy này*** — mở cửa cho bộ đếm phễu vốn có từ GĐ6 mà chưa màn nào đọc.
+- 5 câu/màn cho mọi bộ đề (thẻ có khung, số theo cả bài) · lớp 1–12 + *đã qua lớp 12* ·
+  bỏ ô thu liên hệ · chú giải bốn nhóm + khối dẫn nguồn.
 
-🆕 **GĐ11–GĐ14 — DISC GIA ĐÌNH**, 20 hạng mục, **28 ngày**, đã viết vào `PLAN.md` (~dòng
-770–1160). **Chủ dự án nói chỉ khi gõ "DUYỆT" mới bắt đầu.** Duyệt rồi thì làm từ `11.1`.
-Thiết kế đầy đủ + phần thẩm định đầu tư: `~/.claude/plans/t-i-test-v-purrfect-star.md`.
+### 🔴 CÒN LẠI TOÀN VIỆC NGƯỜI — máy đã hết việc trong phạm vi plan
 
-Mục tiêu kinh doanh đã đổi: từ **mồi thu khách** sang **giữ chân hơn 1.000 gia đình đang học**.
-
-🔴 **GIẢ ĐỊNH ĐANG ĐỠ GĐ14 (9,5 ngày):** *một phụ huynh sẽ triệu tập được từ hai thành viên
-trở lên cùng làm bài.* Hiện **0 quan sát ủng hộ, 1 quan sát phản bác** — tính năng ghép 2
-người có từ GĐ5 và **chưa lần nào tự kích hoạt ngoài đời**; dưới 10 người ngoài vòng quen
-từng làm xong một bài (tiếp cận <1% tệp khách). Chủ dự án đã nghe phản biện và chọn xây trọn.
-Bảo hiểm đã cài: phát GĐ11 cho 30 nhà ngay ngày 5 · mốc đo `baiThuHai` ở `11.6` · `13.1`
-mã mời gỡ trần "cả nhà một máy" trước GĐ14.
-
-### BƯỚC TIẾP THEO (theo thứ tự)
-
-1. 🔴 **Chủ dự án gõ "DUYỆT"** cho lộ trình GĐ11–GĐ14 → bắt đầu `11.1` (spike mã QR).
-2. 🔴 **Gửi hai hồ sơ ký duyệt đi ký** — `docs/noi-dung-cho-ky-duyet.md` (gói A, 11.506 từ)
-   và `...-goi-b.md` (gói B, 1.537 từ). Phải gửi **trước** khi viết 3.000 từ của `14.3`.
-3. 🔴 **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
-   Họ sẽ ôm hệ 28 ngày này mà **chưa ai hỏi họ có nhận không**; trả lời khác đi thì con số
-   28 ngày sai.
-4. Hai việc NGƯỜI, 0 ngày dev: chốt **nghi thức mời** của trường (ai nói, ở đâu, lúc nào) ·
-   **gọi 5 phụ huynh vừa nghỉ** để biết lý do rời thật (hiện chưa đo).
-5. Bấm thử trên điện thoại thật (phần duy nhất của `7.2` máy không làm được).
+1. **Quét mã QR bằng điện thoại thật.** DEMO GĐ11 mục 6, và DEMO GĐ13 cần **hai máy**. Test
+   đã dựng lại lưới từ chính nét vẽ Canvas rồi giải mã ngược ra đúng chuỗi, cộng phép thử
+   hội chứng Reed–Solomon — nhưng ống kính, ánh sáng và độ tương phản thì không mô phỏng được.
+2. **Gửi hai hồ sơ ký duyệt.** 🔴 **Gói B nay RỘNG HƠN:** `14.3` thêm nội dung nói về quan hệ
+   giữa HAI NGƯỜI LỚN (vợ ↔ chồng). Chạy lại `node scripts/xuat-noi-dung-ky-duyet.mjs` rồi
+   mới gửi — bản `.md` đang nằm trong `docs/` là bản CŨ, chưa có phần đó.
+3. **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
+4. **Gọi 5 phụ huynh vừa nghỉ** · **chốt nghi thức mời của trường**.
+5. **Bấm thử trên điện thoại thật** (phần duy nhất của `7.2` máy không làm được).
+6. **Quyết có push GĐ11–GĐ14 lên `origin/main` không.**
 
 ### CHỜ NGOÀI (thiếu người/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
 
-- 🔴 **HAI chữ ký chuyên môn, hai mức trách nhiệm khác nhau.** Cả hai tệp đã sinh sẵn bằng
-  `node scripts/xuat-noi-dung-ky-duyet.mjs` — đưa thẳng cho người ký, họ không phải mở file
-  `.ts` nào. **Gói A** `docs/noi-dung-cho-ky-duyet.md` (11.506 từ), nội dung nói về TRẺ,
-  *chặn ngày ra người dùng thật*. **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (1.537 từ),
-  phản hồi tính cách cho NGƯỜI LỚN về chính họ — *chỉ chặn phần nội dung của chính nó*, chưa
-  ký được vẫn phát hành, chỉ cần tắt khối "Nhìn về phía bố mẹ" + bản tự đọc bộ PH.
-  🔴 Gửi **TRƯỚC** khi viết 3.000 từ của `14.3`, không phải sau.
-- 🔴 **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
-  Họ sẽ bảo trì hệ 28 ngày này mà **chưa ai hỏi họ có nhận không**. *Chặn: độ chính xác của
-  toàn bộ ước lượng GĐ11–14.*
+- 🔴 **HAI chữ ký chuyên môn, hai mức trách nhiệm khác nhau.** **Gói A**
+  `docs/noi-dung-cho-ky-duyet.md` — nội dung nói về TRẺ, *chặn ngày ra người dùng thật*.
+  **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` — phản hồi tính cách cho NGƯỜI LỚN về chính
+  họ **và về bạn đời của họ** (thêm ở 14.3); *chỉ chặn phần nội dung của chính nó*, chưa ký
+  được vẫn phát hành, chỉ cần tắt phần đó đi.
 - 🔴 **Đo lý do phụ huynh rời đi** — gọi 5 người vừa nghỉ. Mục tiêu là giữ chân mà **chưa ai
   đo vì sao họ rời**. *Chặn: cả bốn giai đoạn có nhắm đúng chỗ không.*
+- 🔴 **Gọi đội dev app chủ 30 phút.** Họ sẽ bảo trì hệ này mà **chưa ai hỏi họ có nhận không**.
 - **Chốt nghi thức mời của trường** (ai nói, ở đâu, lúc nào). Lý do chưa nhà nào làm 2 bài
   không phải phần mềm khó dùng — là chưa ai bảo họ làm. *Chặn: GĐ14 có ai dùng không.*
 - **Thu 30–50 phản hồi thật** rồi chạy `node scripts/phan-tich-item.mjs` → Cronbach's α. Đây
-  là thứ duy nhất biến bộ 104 câu từ *"do BA soạn"* thành *"đã sàng trên người Việt"*, và là
-  lúc DUY NHẤT được phép nói về độ tin cậy — bằng số của chính mình.
-- **Số Zalo/hotline thật** — hiện là số giữ chỗ `0900 000 000`. ⚠️ Sẽ bị gỡ ở `11.2` cùng ô
-  liên hệ; chỉ cần lại nếu sau này dựng kênh liên hệ khác.
+  là lúc DUY NHẤT được phép nói về độ tin cậy — bằng số của chính mình.
+
+### 🔴 CON SỐ CẦN THEO DÕI SAU KHI PHÁT
+
+**`baiThuHai`** — đọc ở khoang *Số liệu máy này*. Nó chính là giả định đang đỡ 9,5 ngày của
+GĐ14: *một phụ huynh sẽ triệu tập được từ hai thành viên trở lên cùng làm bài.* Tính tới hôm
+nay giả định đó vẫn có **0 quan sát ủng hộ và 1 quan sát phản bác**.
+
+Ba bảo hiểm đã cài xong và nay chạy được thật: GĐ11 phát được ngay · mốc `baiThuHai` ghi thật
+và đọc được · mã mời đã gỡ trần *"cả nhà một máy"*. **Bằng 0 sau 30 máy thật thì thứ cần xem
+lại là giả định, không phải phần mềm.**
 
 > Quyền ghi vào repo: **đã có** (tài khoản `hodacphuchtc`, token có scope `repo` +
 > `workflow`). Push lần đầu ngày 27/08/2026.
@@ -128,6 +127,11 @@ mã mời gỡ trần "cả nhà một máy" trước GĐ14.
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 28/08/2026 | **Mã mời KHÔNG mang tên đi** (hàng rào thứ 5 của ADR-005) | Mã đi qua tin nhắn và ảnh chụp màn hình. Máy nhận tự hỏi tên — vừa giữ được hàng rào, vừa làm hồ sơ vừa đúng 14 ký tự |
+| 28/08/2026 | **Hồ sơ nhận qua mã lưu ở trường riêng, KHÔNG dựng bài làm giả** | Mã chỉ mang bốn con số. Bịa một bảng câu trả lời khớp với chúng là tạo dữ liệu chưa ai từng nhập, và sáu tháng sau không ai phân biệt được với dữ liệu thật |
+| 28/08/2026 | **Trục quy chiếu nội dung cặp là NGƯỜI ĐỌC, không phải VAI** | Sang phân tích cả nhà thì cặp có thể là con↔anh hay bố↔mẹ, và câu hỏi "ai là bố mẹ?" không còn câu trả lời. Đổi trục giữ được **8 khoá** phủ mọi cặp |
+| 28/08/2026 | **Người thứ ba được tả GIỐNG NHAU cho hai người đọc** | Bố Nam là một người, không phải hai. Viết hai bản khác nhau cho cùng một sự thật chỉ để hai tờ giấy trông khác nhau là bịa thêm chữ. Ranh giới: cùng CẶP thì phải khác, cùng NGƯỜI THỨ BA thì được giống |
+| 28/08/2026 | **Sàn 90 ngày cho so sánh theo thời gian** | Một nấc trả lời dịch điểm 4–10 điểm. Hai bài cách ba tuần thì thứ hiện lên là nhiễu đo — và nó vẫn đọc lên đầy thuyết phục vì có số kèm theo |
 | 27/08/2026 | **Mục tiêu kinh doanh = GIỮ CHÂN học viên đang học**, không phải mồi thu khách | 1.000+ gia đình đang trả tiền, app chủ đang sống. Phễu thu số điện thoại thành thừa ⇒ gỡ ở `11.2` |
 | 27/08/2026 | **Đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH** (GĐ11–14, ADR-007 sẽ viết) | Sản phẩm chuyển từ *"đo một đứa trẻ"* sang *"giúp một gia đình hiểu nhau"* |
 | 27/08/2026 | **Bảng gia đình thay wizard 3 bước** | Ba bước tuần tự bắt đi hết bước 1 mới thấy bước 2. Một bảng ⇒ mỗi việc đúng một cú chạm, và nhìn một cái biết ai chưa làm |
@@ -158,6 +162,40 @@ mã mời gỡ trần "cả nhà một máy" trước GĐ14.
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
 
+- 🔴 **KHỨ HỒI KHÔNG ĐỦ ĐỂ CHỨNG MINH MỘT BỘ MÃ HOÁ ĐÚNG** (28/08/2026, `11.1`). Đa thức
+  sinh Reed–Solomon của mã QR bị dựng **ngược thứ tự hệ số** (`moi[j] ^= da[j]*α` thay vì
+  `moi[j] ^= da[j]`). Hậu quả: mã QR vẫn vẽ ra đẹp, bộ giải mã tự viết vẫn đọc ngược ra đúng
+  chuỗi — vì nó chỉ đọc phần dữ liệu, có sửa lỗi đâu mà biết — và **chỉ điện thoại thật là
+  chịu**. Cửa duy nhất bắt được là **phép thử hội chứng**: một từ mã hợp lệ chia hết cho đa
+  thức sinh, nên thay `x = α^i` phải ra 0. Viết phép thử đó bằng số học GF(256) theo lối
+  KHÁC (nhân bit, không tra bảng log) thì nó độc lập thật. **Bài học: kiểm một bộ mã hoá thì
+  phải có một cửa nhìn vào phần mà bộ giải mã của mình KHÔNG dùng tới.**
+- 🔴 **Vòng giữ chỗ bit định dạng QR quét cả `i = 6`** (28/08/2026) ⇒ xoá trắng hai ô NHỊP ở
+  `(cột 8, hàng 6)` và `(cột 6, hàng 8)` mà `veBitDinhDang()` không bao giờ ghi đè lại. Mã
+  vẫn vẽ ra rất đẹp. Vùng định dạng CỐ Ý chừa index 6 — nó là hàng/cột nhịp.
+- 🔴 **CẮT KHỐI THEO MỐC VĂN BẢN LÀM MẤT BA KHỐI NẰM CÙNG VÙNG** (28/08/2026, `13.1`). Xoá
+  `CHU_THU_MA_MOI` bằng `slice(dau, cuoi)` giữa hai tiêu đề đã cuốn theo cả `CHU_MA_HONG`,
+  `CHU_SO_LIEU` và `CHU_MOC` — ba khối chèn vào sau, nằm lọt giữa hai mốc. Typecheck bắt
+  được ngay, nhưng chỉ vì chúng có người dùng. **Cắt từ mốc A tới mốc B thì phải biết giữa
+  A và B hiện còn gì — mốc không tự bảo vệ vùng nằm giữa chúng.**
+- **Cửa kiểm soi CHUỖI CON trên tiếng Việt sẽ báo nhầm từ ghép** (28/08/2026, `13.2`). Luật
+  cấm `yếu` dính vào "chủ **yếu**". Giữ cửa nghiêm và đổi câu chữ, ĐỪNG nới cửa: ở nội dung
+  cho phụ huynh đọc về con, một lần báo nhầm chỉ tốn công đổi một chữ, còn một lần bỏ sót là
+  để chữ *"điểm yếu"* đi thẳng tới người đọc.
+- **Tên trong test càng NGẮN càng dễ khớp nhầm chữ giao diện** (28/08/2026, `11.6`). Biệt
+  danh bịa `"Bi"` nằm gọn trong `"**Bi**ệt danh khác nhau"` ngay trên màn, làm cửa kiểm riêng
+  tư đỏ oan. Chọn chuỗi không đụng chữ nào của giao diện (`"Zozo"`, `"Kiki"`).
+- **Vá thẳng lên `Element.prototype` mà quên gỡ thì bản vá sống sang mọi file test sau**
+  (28/08/2026). `Object.defineProperty(Element.prototype, "scrollIntoView", …)` không gỡ đã
+  gây hai lỗi lạ ở một file chẳng liên quan. `vi.spyOn` không bám được vào thuộc tính jsdom
+  chưa định nghĩa, nên phải tự gắn — và gỡ trong `finally`.
+- **Lời gọi bắn-rồi-quên (`void p.then(async …)`) phải có `.catch()`** (28/08/2026, `11.6`).
+  Thêm một `await` vào trong `.then` là biến nó thành nguồn unhandled rejection: người dùng
+  vừa làm xong 20 câu thì thấy lỗi đỏ ở màn kết quả. Mất một mốc ĐO là chuyện nhỏ.
+- **Suy cỡ chữ/cỡ nút từ `cauMoiMan` là một proxy TÌNH CỜ đúng** (28/08/2026, `11.3`). Số câu
+  trên màn nói về mật độ trình bày; cỡ nút nói về ngón tay một đứa bé sáu tuổi. Đổi
+  `cauMoiMan` sang 5 mà không đụng gì khác thì hai bộ dành cho trẻ nhỏ nhất lặng lẽ tụt xuống
+  chữ 14px và nút 44px — **không một test nào đỏ**. Nay khoá theo `canNutTo()` ở `config/`.
 - 🔴 **MÁY TẢI NẶNG LÀM 19–20 TEST ĐỎ GIẢ** (27/08/2026). Docker chiếm ~200% CPU (6 container
   không của dự án), load average 32,6 ⇒ `waitFor` của Testing Library đói CPU, mỗi test mất
   6–23 giây thay vì vài chục mili-giây và hết giờ chờ hàng loạt. Cùng bộ mã đó chạy

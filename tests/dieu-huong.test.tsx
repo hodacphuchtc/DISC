@@ -3,12 +3,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import Trang from "../app/page";
 import {
+  CHU_BANG_GIA_DINH,
   CHU_CHON,
-  CHU_LICH_SU,
   KHOA_KHOANG_DANG_MO,
   KHOANG_MAC_DINH,
+  TEN_KHOANG,
   chuanHoaMaKhoang,
 } from "../config/disc-tu-dien";
+
+/**
+ * 🔴 Nhãn mục lấy từ `TEN_KHOANG`, KHÔNG gõ cứng chuỗi.
+ *
+ * Bản trước gõ thẳng chữ "Bài đã làm" vào ba chỗ. Khi 12.3 đổi mục đó thành "Nhà mình"
+ * thì ba cửa kiểm đỏ cùng lúc — đỏ ĐÚNG, nhưng phải sửa ba chỗ cho một thay đổi, đúng
+ * bài học đã trả giá ở `tests/duong-m1.ts`. Đọc từ config thì lần sau không ai đỏ.
+ */
+const NHAN_NHA_MINH = new RegExp(TEN_KHOANG["lich-su"], "u");
 
 afterEach(() => {
   cleanup();
@@ -49,16 +59,16 @@ describe("khung ngoài", () => {
     window.localStorage.setItem(KHOA_KHOANG_DANG_MO, "lich-su");
     render(<Trang />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      CHU_LICH_SU.tieuDe,
+      CHU_BANG_GIA_DINH.tieuDe,
     );
   });
 
   it("bấm đổi khoang thì đổi nội dung và ghi nhớ lại", () => {
     render(<Trang />);
-    fireEvent.click(screen.getByRole("button", { name: /Bài đã làm/u }));
+    fireEvent.click(screen.getByRole("button", { name: NHAN_NHA_MINH }));
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      CHU_LICH_SU.tieuDe,
+      CHU_BANG_GIA_DINH.tieuDe,
     );
     expect(window.localStorage.getItem(KHOA_KHOANG_DANG_MO)).toBe("lich-su");
   });
@@ -84,9 +94,9 @@ describe("khung ngoài", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(CHU_CHON.tieuDe);
 
     // Vẫn phải đổi khoang được — chỉ mất khả năng NHỚ, không mất khả năng DÙNG.
-    fireEvent.click(screen.getByRole("button", { name: /Bài đã làm/u }));
+    fireEvent.click(screen.getByRole("button", { name: NHAN_NHA_MINH }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      CHU_LICH_SU.tieuDe,
+      CHU_BANG_GIA_DINH.tieuDe,
     );
   });
 });

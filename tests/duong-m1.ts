@@ -48,6 +48,17 @@ export const DUONG_M1 = {
     bam(NHANH.nguoiLon);
     bam(CHU_CHON.mucTieuToi);
   },
+  /**
+   * Cửa THỨ HAI vào bộ PH, mở ở 11.5: học sinh cấp ba trở lên.
+   *
+   * 🔴 Đây là ngoại lệ DUY NHẤT của luật "mỗi bộ đề đúng một cửa", và cố ý. Bộ PH vốn là
+   * bản TỰ ĐÁNH GIÁ cho người lớn — một em lớp 11 cần đúng bản đó, chứ không cần một bộ
+   * đề thứ sáu phải soạn và bảo trì riêng. Ghi rõ ở đây để người sau khỏi tưởng là sót.
+   */
+  PH_CAP_BA: (lop: number | "tren-12" = 11) => {
+    bam(NHANH.hocSinh);
+    bam(lop === "tren-12" ? CHU_CHON.nhanTren12 : nhanLop(lop));
+  },
   QS: (tuoiCon = 10) => {
     bam(NHANH.nguoiLon);
     bam(CHU_CHON.mucTieuCon);

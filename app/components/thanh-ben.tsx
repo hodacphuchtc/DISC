@@ -83,8 +83,22 @@ function IconKhien() {
   );
 }
 
+/** Số liệu máy này = một biểu đồ cột đơn sơ. Đúng nghĩa đen thứ mục này chứa. */
+function IconSoLieu() {
+  return (
+    <svg {...CHUNG_ICON} aria-hidden="true">
+      <path d="M4 20V10" />
+      <path d="M10 20V4" />
+      <path d="M16 20v-7" />
+      <path d="M3 20h18" />
+    </svg>
+  );
+}
+
 function icon(ma: MaKhoang, dangMo: boolean) {
-  return ma === "disc" ? <IconDisc dangMo={dangMo} /> : <IconLichSu />;
+  if (ma === "disc") return <IconDisc dangMo={dangMo} />;
+  if (ma === "so-lieu") return <IconSoLieu />;
+  return <IconLichSu />;
 }
 
 /* ── Thanh bên ────────────────────────────────────────────────────────────── */

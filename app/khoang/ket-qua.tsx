@@ -3,20 +3,18 @@
 import { useEffect, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
+import { KhoiMaMoi } from "@/app/components/khoi-ma-moi";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
 import { CHU_BA_BAN, CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe, MaTruc } from "@modules/core/bo-de/kieu";
-import { OLienHe } from "@/app/components/o-lien-he";
-import { ghiMoc } from "@modules/core/do-phieu";
-import { guiLienHeMacDinh } from "@modules/core/lien-he/luu-tam";
 import { BO_DE_BO_ME, BO_DE_CON } from "@modules/report/doi-chieu";
 import type { MaBoDe } from "@modules/core/bo-de/kieu";
 import type { KetQua } from "@modules/report/cham";
 import { layDienGiai, layDienGiaiDay, thayChuThe } from "@modules/report/dien-giai";
 import { LopSauKetQua } from "./lop-sau";
-import { BangTraDisc, MoDauKetQua, TomTat30Giay } from "./mo-dau";
+import { BangTraDisc, ChuGiaiBonNhom, MoDauKetQua, TomTat30Giay } from "./mo-dau";
 import {
   KhoiChuyenTay,
   NutIn,
@@ -29,6 +27,13 @@ import { docTatCa, ghiBanKhoan } from "@modules/core/luu-tru/kho-bai";
 import { doiChieuPhongCach, type KetQuaPhongCach } from "@modules/report/doi-chieu-phong-cach";
 
 /** M4 — màn kết quả. Bốn khối văn bản đọc từ `config/disc-dien-giai.ts`. */
+/** Ngày hôm nay theo giờ MÁY, dạng yyyy-mm-dd. Mã mời nhúng ngày phát để tính hạn 7 ngày. */
+function homNayChuoi(): string {
+  const d = new Date();
+  const hai = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${hai(d.getMonth() + 1)}-${hai(d.getDate())}`;
+}
+
 export function ManKetQua({
   boDe,
   bietDanh,
@@ -37,7 +42,6 @@ export function ManKetQua({
   onLamLai,
   onXemDoiChieu,
   onLamBoConThieu,
-  nguon = "truc-tiep",
   tuoi,
   banKhoan,
 }: {
@@ -50,8 +54,6 @@ export function ManKetQua({
   /** Có cặp để đối chiếu ⇒ mở màn M5. Thiếu callback thì khối chuyền tay không hiện. */
   readonly onXemDoiChieu?: (maTre: string) => void;
   readonly onLamBoConThieu?: (ma: MaBoDe, maTre: string) => void;
-  /** Kênh người dùng đến từ đâu — đi kèm phiếu liên hệ và mốc phễu, KHÔNG định danh ai. */
-  readonly nguon?: string;
   /** Tuổi người được đánh giá. Chỉ bộ QS cần — nó bắc qua cả lứa tiểu học lẫn THCS. */
   readonly tuoi?: number;
   /** Mã điều phụ huynh đang băn khoăn, nếu đã chọn. */
@@ -198,6 +200,7 @@ export function ManKetQua({
 
       <div className="mt-4">
         <BangTraDisc />
+        <ChuGiaiBonNhom />
       </div>
 
       <div className="mt-10 space-y-7">
@@ -243,6 +246,7 @@ export function ManKetQua({
 
       <LopSauKetQua
         sau={sau}
+        bietDanh={bietDanh}
         maBoDe={boDe.ma}
         // 🔴 GĐ10 chặng 2: KHÔNG còn lọc theo bộ đề ở đây nữa. Trước đây phải chặn thẳng
         // bộ TH/THCS vì cả khối viết bằng giọng nói với phụ huynh, nên học sinh cuộn
@@ -263,13 +267,14 @@ export function ManKetQua({
         </div>
       )}
 
-      <OLienHe
-        nguon={nguon}
-        onGui={(phieu) => {
-          guiLienHeMacDinh(phieu);
-          ghiMoc("deLaiSo", nguon, phieu.luc);
-        }}
-      />
+      {ketQua.hopLe && (
+        <KhoiMaMoi
+          boDe={boDe.ma}
+          diem={ketQua.diem}
+          vaiGoiY={boDe.ma === "PH" ? "me" : "con"}
+          homNay={homNayChuoi()}
+        />
+      )}
 
       <div data-khong-in className="mt-10 flex flex-wrap items-center gap-3">
         <NutTaiAnh

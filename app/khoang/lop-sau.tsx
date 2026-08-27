@@ -29,11 +29,14 @@ import type { KetQuaPhongCach } from "@modules/report/doi-chieu-phong-cach";
 export function LopSauKetQua({
   sau,
   maBoDe,
+  bietDanh,
   phongCach,
   onLamBoPhuHuynh,
 }: {
   readonly sau: DienGiaiDay;
   readonly maBoDe: MaBoDe;
+  /** 🔴 BIỆT DANH do người dùng tự đặt. Đứng ngay trong tiêu đề mỗi dải (11.4). */
+  readonly bietDanh: string;
   /** `null` khi còn đang đọc kho. Không dựng khối nào cho tới lúc biết chắc. */
   readonly phongCach?: KetQuaPhongCach | null;
   /** Thiếu callback thì không mời làm bộ Phụ huynh. */
@@ -51,6 +54,9 @@ export function LopSauKetQua({
 
   const chuThe = (c: string) => thayChuThe(c, maBoDe, banCon ? "con" : "boMe");
 
+  /** Tiêu đề một dải: thay đại từ theo bộ đề rồi ghép tên người vào. */
+  const tenDai = (mau: string) => chuThe(mau).split("{ten}").join(bietDanh);
+
   // Hai trục lệch lớn nhất, dùng chung cho CẢ BA dải — mỗi dải lấy một trường khác nhau
   // của cùng một chỗ vênh. Tầng lõi cố ý không chọn hộ người đọc; chỗ chọn là ở đây.
   const lechChoCon = phongCach?.ghepDuoc ? phongCach.dienGiai : [];
@@ -60,6 +66,7 @@ export function LopSauKetQua({
       {/* ── DẢI CHUNG ────────────────────────────────────────────────────────
           Bốn trục + pha. Không nói với riêng ai nên đi kèm MỌI bản in. */}
       <section data-ban="chung" className="space-y-3">
+        <TenDai>{tenDai(CHU_BA_BAN.tenChung)}</TenDai>
         <LopSau tieuDe={TIEU_DE_LOP.phoBonNhom}>
           {sau.banKhoan && (
             <p className="khoi-in mb-5 rounded-lg bg-neutral-50 px-3.5 py-3 text-[14px] leading-relaxed text-neutral-700">
@@ -128,7 +135,7 @@ export function LopSauKetQua({
           Cùng một khuôn `KhoiTuMinh`, khác người đọc nên khác `data-ban`. */}
       {banCon && (
         <section data-ban="con" className="space-y-3">
-          <TenDai>{chuThe(CHU_BA_BAN.tenCon)}</TenDai>
+          <TenDai>{tenDai(CHU_BA_BAN.tenCon)}</TenDai>
           <KhoiTuDoc ban={banCon} tieuDeCangThang={chuThe(TIEU_DE_LOP.cangThang)} />
 
           {/* 🔴 CHỖ VÊNH, KỂ CHO CHÍNH ĐỨA TRẺ NGHE (GĐ10 chặng 2).
@@ -158,7 +165,7 @@ export function LopSauKetQua({
 
       {banTuMinh && (
         <section data-ban="tuMinh" className="space-y-3">
-          <TenDai>{chuThe(CHU_BA_BAN.tenTuMinh)}</TenDai>
+          <TenDai>{tenDai(CHU_BA_BAN.tenTuMinh)}</TenDai>
           <KhoiTuDoc ban={banTuMinh} tieuDeCangThang={chuThe(TIEU_DE_LOP.cangThang)} />
         </section>
       )}
@@ -196,7 +203,24 @@ export function LopSauKetQua({
           sạch phần lời khuyên. `globals.css` ép mọi `[data-ban]` hiện lại khi in. */}
       {banBoMe && (
         <section data-ban="boMe" className={hienBoMe ? "space-y-3" : "hidden"}>
-          <TenDai>{CHU_BA_BAN.tenBoMe}</TenDai>
+          <TenDai>{tenDai(CHU_BA_BAN.tenBoMe)}</TenDai>
+
+          {/* 🔴 VIỆC LÀM ĐƯỢC NGAY, ĐẶT LÊN ĐẦU (11.4).
+              Trước đây câu này nằm cuối dải, lọt trong một lớp bóc sâu đang đóng — tức là
+              thứ DUY NHẤT trong cả tờ mà bố mẹ làm được tối nay lại là thứ phải bấm mở
+              rồi cuộn hết mới thấy. Trên giấy nó rơi xuống cuối trang thứ hai.
+
+              Nay nó mở đầu dải và KHÔNG bọc trong `LopSau`: bố mẹ nhìn phát đầu tiên là
+              thấy việc, còn muốn hiểu vì sao thì đọc tiếp xuống dưới. Cũng nhờ vậy tờ của
+              bố mẹ mở đầu bằng MỘT VIỆC, khác hẳn tờ của con vốn mở đầu bằng biểu đồ. */}
+          <p
+            data-thu="mot-viec"
+            className="khoi-in rounded-xl px-4 py-3.5 text-[15px] leading-relaxed text-neutral-900"
+            style={{ backgroundColor: "#FFF4E6" }}
+          >
+            <strong className="font-semibold">{TIEU_DE_LOP.motViec} </strong>
+            {banBoMe.motViecToiNay}
+          </p>
 
           <LopSau tieuDe={thayChuThe(TIEU_DE_LOP.noiChuyen, maBoDe, "boMe")}>
             <p className="khoi-in text-[15px] leading-relaxed text-neutral-800">
@@ -246,10 +270,6 @@ export function LopSauKetQua({
             </p>
             <p className="khoi-in mt-3 text-[15px] leading-relaxed text-neutral-800">
               {banBoMe.boMeChinh}
-            </p>
-            <p className="khoi-in mt-5 rounded-lg bg-amber-50 px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900">
-              <strong className="font-semibold">{TIEU_DE_LOP.motViec} </strong>
-              {banBoMe.motViecToiNay}
             </p>
           </LopSau>
 
@@ -375,15 +395,27 @@ function KhoiTuDoc({
 }
 
 /**
- * Tên dải — trên giấy nó là thứ cho biết tờ này viết cho ai.
+ * Tên dải — thứ cho biết tờ này viết cho ai.
  *
- * Trên màn hình cố ý để nhạt và nhỏ: người dùng đã biết mình là ai, nhãn to chỉ tổ chiếm chỗ.
+ * 🔴 TỪ 11.4 LÀ TIÊU ĐỀ THẬT SỰ, KHÔNG CÒN LÀ NHÃN NHỎ.
+ *
+ * Bản cũ để nó 11px, chữ hoa, xám nhạt, với lý lẽ "người dùng đã biết mình là ai". Lý lẽ
+ * đó đúng trên MÀN HÌNH và sai trên GIẤY: in ra hai tờ đặt cạnh nhau thì thứ duy nhất
+ * phân biệt chúng lại đang là dòng mờ nhất trang. Chủ dự án nhìn hai tờ và nói chúng
+ * "giống nhau" — chính là chỗ này.
+ *
+ * `<h2>` chứ không phải `<p>`: người đọc màn hình nhảy theo tiêu đề, và ba dải này đúng
+ * là ba mục ngang hàng của trang.
  */
 function TenDai({ children }: { readonly children: ReactNode }) {
   return (
-    <p className="px-1 text-[11px] font-semibold tracking-widest text-neutral-500 uppercase">
+    <h2
+      data-thu="ten-dai"
+      className="border-b pb-2 text-[20px] leading-snug font-bold"
+      style={{ color: MAU.timCongNghe, borderColor: MAU.vienMo }}
+    >
       {children}
-    </p>
+    </h2>
   );
 }
 

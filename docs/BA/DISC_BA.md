@@ -274,26 +274,35 @@ export const MO_TA_KHOANG: Record<MaKhoang, string> = {
 DISC (khoang)
  │
  ├── M1  Ai đang cầm máy?          2 thẻ: Em học sinh (tự làm) · Bố mẹ hoặc thầy cô
- │        ├─ nhánh HỌC SINH        hỏi lớp MỘT lần, trải lớp 1–9
- │        │     lớp 1–2 → bộ MN kèm hộp giải thích (ADR-002) · lớp 3–5 → TH · lớp 6–9 → THCS
+ │        ├─ nhánh HỌC SINH        hỏi lớp MỘT lần, trải lớp 1–12 + ô "Đã qua lớp 12"
+ │        │     lớp 1–2 → bộ MN kèm hộp giải thích (ADR-002) · lớp 3–5 → TH
+ │        │     lớp 6–9 → THCS · lớp 10–12 và đã-qua-lớp-12 → PH (ADR-005 §11.5)
  │        └─ nhánh NGƯỜI LỚN       "làm cho ai?" → về mình = PH
  │                                 → về con: hỏi tuổi · dưới 8 → MN kèm giải thích · từ 8 → QS
  │
  ├── M2  Trước khi bắt đầu       4 dòng: bao lâu · không có đúng sai · dữ liệu không rời máy
  │                                · trả lời theo phản xạ đầu tiên
- │        └─ Ô nhập "Tên gọi bài này" (biệt danh, KHÔNG phải họ tên — mục 10)
+ │        └─ Ô nhập TÊN (tên thật được phép — ADR-005 lật §10.2)
  │
- ├── M3  Làm bài                 MN & TH: 1 câu/màn, nút to
- │                               THCS & PH & QS: 5 câu/màn
+ ├── M3  Làm bài                 MỌI bộ đề: 5 câu/màn (ADR-006 lật luật cũ)
+ │                               mỗi câu một THẺ CÓ KHUNG, số thứ tự theo cả bài,
+ │                               viền trái tím → cam khi đã chọn
  │        · thanh tiến trình · nút Quay lại · tự lưu nháp sau mỗi câu
+ │        · bấm Tiếp khi còn trống ⇒ báo lỗi VÀ cuộn tới đúng câu thiếu
  │
  ├── M4  Kết quả                 biểu đồ 4 cột + nhân vật trội + phổ + 3 khối diễn giải
+ │        └─ ba dải theo người đọc (chung · con · bố mẹ / tự đọc), in tách bản
  │        └─ nút Tải ảnh kết quả (PNG) · nút Tải PDF · nút Làm lại
  │
  ├── M5  Vùng lệch               CHỈ hiện khi có đủ bài của con + bài QS của bố mẹ
  │                               (mục 8) — nếu chưa đủ thì hiện lời mời làm nốt bài kia
  │
- └── M6  Bài đã làm              danh sách bài trên máy này · mở lại · xoá · xuất .zip sao lưu
+ ├── M6  Bảng gia đình           một bảng liệt kê cả nhà: ai đã làm, ai chưa (ADR-007)
+ │                               thay màn "Bài đã làm" xếp theo thời gian
+ │        · mở lại · xoá · xuất .zip sao lưu
+ │
+ └── M7  Số liệu máy này         số bài · số người khác nhau · đã đạt 2 người chưa · phễu
+                                 CHỈ ĐỌC, không gửi đi đâu (§11.6)
 ```
 
 > **Cập nhật 27/08/2026 (GĐ10, hạng mục 10.6).** M1 trước đây bày bốn thẻ trộn hai câu
@@ -304,11 +313,23 @@ DISC (khoang)
 > lần. **`dinhTuyen()` không đổi một dòng** — chỉ đổi cách màn 1 thu thập đầu vào.
 
 **Quy tắc màn hình M3 với trẻ nhỏ (MN, TH):**
-- **Một câu một màn.** Trẻ nhìn thấy 20 câu cùng lúc là nản trước khi bắt đầu.
-- Nút trả lời cao tối thiểu `56px`, chữ tối thiểu `18px`, khoảng cách giữa các nút ≥ `12px`
-  — ngón tay trẻ con và ngón tay phụ huynh cầm điện thoại.
+
+> 🔴 **Cập nhật 27/08/2026 — ADR-006 lật luật "một câu một màn".** Luật cũ ghi *MN và TH:
+> một câu một màn*. Chạy thử GĐ10 cho thấy cái giá ở đầu kia: bộ TH 20 câu thành **20 lần
+> bấm *Tiếp***. Nay **mọi bộ đề đều 5 câu/màn**, và phần bảo vệ trẻ nhỏ chuyển sang khung
+> thẻ + cỡ chữ + cỡ nút. Đọc ADR-006 trước khi đụng vào con số này.
+
+- **Năm câu một màn**, mỗi câu là một **thẻ có khung** — không có khung thì năm câu dính
+  vào nhau và mắt không có gì để bám mà tách chúng ra.
+- **Số thứ tự đếm theo CẢ BÀI** (`11`), không theo trang. **Viền trái đổi tím → cam** khi
+  câu đã được chọn.
+- 🔴 Nút trả lời cao tối thiểu `56px`, chữ tối thiểu `18px`, khoảng cách giữa các nút ≥
+  `12px` — ngón tay trẻ con và ngón tay phụ huynh cầm điện thoại. **Luật này khoá theo
+  `canNutTo()` trong `config/disc-nguong.ts`, KHÔNG suy từ số câu trên màn.** Suy từ số câu
+  là đúng lỗi ADR-006 mục "Lý do" mô tả.
 - **Không có đồng hồ đếm ngược.** Áp lực thời gian làm hỏng dữ liệu.
 - Sau mỗi 5 câu: một dòng động viên nhẹ (*"Xong 5 câu rồi, giỏi lắm!"*).
+- Bấm *Tiếp* khi còn câu trống ⇒ báo lỗi **và cuộn tới đúng câu còn thiếu**.
 
 ### 5.3 Quy ước giao diện kế thừa
 
@@ -682,6 +703,17 @@ một bài luận và không nhớ được gì. Nói ít mà trúng.
 | Không so sánh với trẻ khác | — | "Con chủ động hơn 80% các bạn" |
 | Không gắn với học lực | — | "Nhóm C thường học giỏi Toán" |
 | Bộ MN/TH mở đầu bằng câu rào | "Đây là gợi ý để trò chuyện với con, không phải kết luận về con." | Vào thẳng kết quả |
+| 🔴 **Được nói KHÁC CÁCH, cấm nói AI HƠN AI** | "Mẹ quyết nhanh, con cần thời gian nghĩ — hai nhịp khác nhau" | "Mẹ quyết đoán hơn con" · "Con cần học cách quyết nhanh như mẹ" |
+
+> 🔴 **Luật cuối thêm ngày 27/08/2026 (11.7), và nó là luật khó giữ nhất khi bước sang phần
+> gia đình.** Từ GĐ12 trở đi, báo cáo đặt hai hồ sơ CẠNH NHAU — và đặt cạnh nhau là lời mời
+> xếp hạng. Một câu vô hại như *"bố kiên nhẫn hơn con"* biến một bản mô tả hành vi thành một
+> bảng điểm gia đình, và biến DISC thành thứ nó không phải.
+>
+> Ranh giới đặt ở đây: nói **chỗ vênh** và **hệ quả của chỗ vênh** thì được; nói **ai tốt
+> hơn ai** thì không. Cùng một sự thật, hai cách viết, và chỉ một cách còn dùng được ở bữa
+> cơm tối. Điều này nối thẳng với ADR-002 — DISC không phải mô hình khuyết thiếu, nên không
+> có trục nào "cần nâng lên cho bằng" ai cả.
 
 > **Một báo cáo toàn lời khen thì phụ huynh nào đọc cũng thấy đúng — và đó chính là dấu hiệu
 > nó không đo gì cả.** Mỗi trục bắt buộc có ít nhất một dòng "chỗ cần để ý".
@@ -710,23 +742,63 @@ export type MaBoDe = "MN" | "TH" | "THCS" | "PH" | "QS";
 export type BaiLam = {
   id: string;                    // uuid sinh tại máy
   boDe: MaBoDe;
-  maTre?: string;                // 🔴 BIỆT DANH do người dùng tự đặt — KHÔNG phải họ tên
-  lop?: string;                  // "1".."9" — chỉ để định tuyến, không đưa vào kết quả
+  maTre?: string;                // TÊN người làm — tên thật được phép (ADR-005)
+  lop?: string;                  // "1".."12" — chỉ để định tuyến, không đưa vào kết quả
   nguoiTraLoi: "tre" | "nguoi-lon";
   batDau: string;                // ISO 8601: "2026-08-26T14:03:00+07:00"
   ketThuc: string;
   traLoi: Record<string, number>; // { "THCS-D1": 4, ... }
   ketQua: KetQua;                // mục 7.5
-  phienBanBoDe: string;          // "1.0" — xem 10.3
+  phienBanBoDe: string;          // "1.1" — xem 10.3
+  thanhVienId?: string;          // 🆕 ADR-007 — khoá tới thành viên trong sổ gia đình
 };
 ```
 
+**🆕 Từ GĐ12 — đơn vị dữ liệu là MỘT GIA ĐÌNH (ADR-007), không phải một bài.**
+
+```ts
+export type GiaDinh = {
+  id: string;
+  lapLuc: string;                // ISO 8601
+};
+
+export type ThanhVien = {
+  id: string;
+  giaDinhId: string;
+  ten: string;                   // 🔴 tên thật được phép — bốn hàng rào ở ADR-005
+  vai: VaiGiaDinh;               // "con" | "me" | "bo" | "ba" | "ong" | … (8 vai)
+  themLuc: string;
+};
+```
+
+Hạn mức **2 bài mỗi thành viên** (đủ để so *"Bin hồi tháng 3 ↔ Bin bây giờ"*, đủ ít để bảng
+không thành danh sách dài). Con số nằm trong `config/`, không gõ cứng. Bài thứ ba đẩy bài cũ
+nhất ra — **và không bao giờ xoá im lặng, phải hỏi**.
+
+**KHÔNG có bảng nối** giữa gia đình và thành viên: một máy là một nhà, một thành viên thuộc
+đúng một nhà. Bảng nối chỉ có nghĩa với quan hệ nhiều-nhiều.
+
 ### 10.2 🔴 Hàng rào dữ liệu cá nhân (NĐ 13/2023)
+
+> 🔴 **LẬT NGÀY 27/08/2026 — ADR-005 cho phép nhập TÊN THẬT.** Luật "không thu họ tên" bên
+> dưới đã được thay. Lý do đầy đủ ở `docs/decisions/ADR-005-cho-nhap-ten-that.md`; tóm tắt:
+> người dùng nay là phụ huynh đã ký hợp đồng, đang ngồi trong app của chính trung tâm, và
+> một sổ gia đình mà mọi hàng đều là *"bé A"*, *"bé B"* thì vô dụng.
+>
+> **Rủi ro pháp lý thật sự nằm ở chỗ AI GIỮ dữ liệu, không ở chỗ người dùng gõ gì vào máy
+> của chính họ.** Chừng nào ADR-001 còn đứng, SATA ROBO không giữ một byte nào của trẻ. Nó
+> vỡ đúng vào ngày ai đó dựng đường gửi dữ liệu đi — nên **năm hàng rào dưới đây là cửa kiểm
+> chạy trong CI, không phải lời hứa.**
 
 | Luật | Chi tiết |
 | ---- | -------- |
-| **Không thu họ tên** | Ô nhập ở màn M2 ghi rõ: *"Đặt một tên gọi để nhận ra bài này — biệt danh cũng được. Đừng ghi họ tên đầy đủ."* Kèm `maxLength` và một dòng nhắc. |
-| **Không thu ngày sinh** | Chỉ hỏi **lớp**, và lớp chỉ dùng để định tuyến bộ đề. |
+| **Tên thật được phép** | Ô nhập ở M2 nhận tên thật. Câu nhắc "đừng ghi họ tên" đã gỡ. Trường vẫn tên `maTre`/`bietDanh` ở tầng dữ liệu — đổi tên trường là một cuộc di trú không mua thêm gì. |
+| 🔴 **Tên KHÔNG rời máy** | ADR-001 (không backend) · `tests/lien-he-sach.test.ts`. |
+| 🔴 **Tên KHÔNG vào tệp xuất** | Cửa kiểm ở `tests/luu-tru.test.ts`. |
+| 🔴 **Tên KHÔNG vào ảnh chia sẻ** | `modules/report/xuat-anh.ts` không nhận trường tên. |
+| 🔴 **Tên KHÔNG vào mã mời** | Hàng rào thứ 5, thêm ở 11.1. Mã mời đi ra khỏi máy qua tin nhắn và ảnh chụp màn hình. Máy nhận tự hỏi *"đây là ai trong nhà?"*. `tests/ma-moi.test.ts` soi thẳng mã nguồn. |
+| 🔴 **Test luôn dùng tên BỊA** | Luật trong `CLAUDE.md`. Không lấy bài làm thật làm dữ liệu mẫu, kể cả một lần. |
+| **Không thu ngày sinh** | Chỉ hỏi **lớp** (1–12) và tuổi con ở nhánh QS, đều chỉ dùng để định tuyến và phân lứa nội dung. Tuổi **không bao giờ suy từ lớp** — lớp 7 có cả bé 12 lẫn bé 13, suy ra rồi lưu như thể đã hỏi là bịa dữ liệu. |
 | **Không rời máy** | Lưu `localStorage` (bài đang làm dở) + `IndexedDB` (bài đã xong). Không fetch, không analytics trên câu trả lời, không gửi email. |
 | **Xoá được** | Màn M6 có nút xoá từng bài và nút **"Xoá sạch dữ liệu trên máy này"**, có hỏi lại. |
 | **Sao lưu đọc thẳng nguồn** | Nút xuất `.zip` phải đọc **thẳng IndexedDB**, không đọc danh sách đang lọc trên màn hình. *(Bẫy này đã cắn TAO_ANH ngày 24/08: người dùng bấm Sao lưu ở một khoang, nhận file trông như đủ, xoá dữ liệu duyệt web, rồi mất sạch phần kia.)* |

@@ -8,7 +8,15 @@
  * này nghĩa là gì*, và *D-I-S-C là chữ viết tắt của cái gì*.
  */
 
-import { CHU_BANG_TRA, CHU_MO_DAU, MA_TRUC, TRUC } from "@config/disc-tu-dien";
+import { DAC_DIEM_TRUC } from "@config/disc-bieu-hien";
+import {
+  CHU_BANG_TRA,
+  CHU_CHU_GIAI,
+  CHU_MO_DAU,
+  KHOI_DAN_NGUON,
+  MA_TRUC,
+  TRUC,
+} from "@config/disc-tu-dien";
 import type { MaTruc } from "@modules/core/bo-de/kieu";
 
 import { LopSau } from "./lop-sau";
@@ -125,6 +133,60 @@ export function BangTraDisc() {
       <p className="khoi-in mt-4 text-[13px] leading-snug text-neutral-600">
         {CHU_BANG_TRA.ghiChu}
       </p>
+    </LopSau>
+  );
+}
+
+/**
+ * CHÚ GIẢI BỐN NHÓM (12.5) — bốn khối mỗi trục, rồi tới khối dẫn nguồn.
+ *
+ * 🔴 Khối thứ tư (*mượn cách của nhóm khác*) là cách trả lời câu "làm sao cho cân bằng?"
+ * mà không đi ngược ADR-002: **thêm một lựa chọn**, không **vá một chỗ hổng**. Xem chú
+ * thích dài ở `DacDiemTruc.muonCach`.
+ */
+export function ChuGiaiBonNhom() {
+  return (
+    <LopSau tieuDe={CHU_CHU_GIAI.tieuDe}>
+      <p className="khoi-in text-[14px] leading-relaxed text-neutral-600">
+        {CHU_CHU_GIAI.moTa}
+      </p>
+
+      <div className="mt-5 space-y-6">
+        {MA_TRUC.map((t) => (
+          <section key={t} data-thu="chu-giai-truc" data-truc={t} className="khoi-in">
+            <h3 className="flex items-baseline gap-2 text-[15px] font-semibold text-neutral-900">
+              <span aria-hidden="true" style={{ color: TRUC[t].mau }}>
+                ■
+              </span>
+              {TRUC[t].ten}
+            </h3>
+            {(
+              [
+                ["dam", CHU_CHU_GIAI.nhanDam, DAC_DIEM_TRUC[t].diemManh],
+                ["gia", CHU_CHU_GIAI.nhanGia, DAC_DIEM_TRUC[t].choCanDeY],
+                ["nhat", CHU_CHU_GIAI.nhanNhat, DAC_DIEM_TRUC[t].khiNhe],
+                ["muon", CHU_CHU_GIAI.nhanMuon, DAC_DIEM_TRUC[t].muonCach],
+              ] as const
+            ).map(([ma, nhan, than]) => (
+              <div key={ma} data-thu={`khoi-${ma}`} className="mt-3">
+                <h4 className="text-[12px] font-semibold tracking-widest text-neutral-600 uppercase">
+                  {nhan}
+                </h4>
+                <p className="mt-1 text-[15px] leading-relaxed text-neutral-800">{than}</p>
+              </div>
+            ))}
+          </section>
+        ))}
+      </div>
+
+      <div data-thu="dan-nguon" className="khoi-in mt-8 border-t border-neutral-200 pt-4">
+        <h3 className="text-[14px] font-semibold text-neutral-900">{KHOI_DAN_NGUON.tieuDe}</h3>
+        {KHOI_DAN_NGUON.doan.map((d) => (
+          <p key={d.slice(0, 24)} className="mt-2 text-[14px] leading-relaxed text-neutral-600">
+            {d}
+          </p>
+        ))}
+      </div>
     </LopSau>
   );
 }

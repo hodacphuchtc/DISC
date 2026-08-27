@@ -159,3 +159,53 @@ describe("🔴 mỗi bộ đề ĐÚNG MỘT CỬA — đây là cả lý do 10.
     expect(boDeDangHien(), "quay lại nhánh học sinh mà lớp cũ vẫn còn").toBeNull();
   });
 });
+
+describe("🔴 11.5 — màn 1 nhận đủ lớp 1 tới 12 và 'đã qua lớp 12'", () => {
+  it("hiện đủ 12 ô lớp, không thiếu lớp nào", () => {
+    moM1();
+    bam(NHANH_M1.hocSinh);
+    for (let l = LOP_NHO_NHAT; l <= LOP_LON_NHAT; l += 1) {
+      expect(screen.getByRole("button", { name: nhanLop(l) }), `thiếu lớp ${l}`).toBeTruthy();
+    }
+    expect(LOP_LON_NHAT).toBe(12);
+  });
+
+  it("có ô 'Đã qua lớp 12' cho người đã ra khỏi trường phổ thông", () => {
+    moM1();
+    bam(NHANH_M1.hocSinh);
+    expect(screen.getByRole("button", { name: CHU_CHON.nhanTren12 })).toBeTruthy();
+  });
+
+  it.each([10, 11, 12])("chọn lớp %i ⇒ ra bộ Phụ huynh (bản tự đánh giá)", (lop) => {
+    moM1();
+    DUONG_M1.PH_CAP_BA(lop);
+    expect(boDeDangHien()).toMatch(/Phụ huynh/u);
+  });
+
+  it("chọn 'Đã qua lớp 12' ⇒ cũng ra bộ Phụ huynh", () => {
+    moM1();
+    DUONG_M1.PH_CAP_BA("tren-12");
+    expect(boDeDangHien()).toMatch(/Phụ huynh/u);
+  });
+
+  it("lớp 9 vẫn ra THCS — ranh giới cấp ba đặt đúng chỗ, không lấn xuống", () => {
+    moM1();
+    DUONG_M1.THCS(9);
+    expect(boDeDangHien()).toMatch(/Trung học cơ sở/u);
+  });
+
+  it("🔴 DEMO mục 5: lớp 1 vẫn ra Mầm non KÈM hộp giải thích (ADR-002 còn nguyên)", () => {
+    // Nới trần lớp lên 12 mà vô tình nới luôn sàn 8 tuổi là bịa số về một đứa trẻ.
+    moM1();
+    DUONG_M1.TH(1);
+    expect(boDeDangHien()).toMatch(/Mầm non/u);
+    expect(screen.getByText(CHU_CHON.giaiThichLop12.tieuDe)).toBeTruthy();
+  });
+
+  it("lớp 11 KHÔNG kèm hộp giải thích — không có gì bị chuyển hướng", () => {
+    moM1();
+    DUONG_M1.PH_CAP_BA(11);
+    expect(screen.queryByText(CHU_CHON.giaiThichLop12.tieuDe)).toBeNull();
+    expect(screen.queryByText(CHU_CHON.giaiThichConDuoi8.tieuDe)).toBeNull();
+  });
+});

@@ -18,7 +18,12 @@ import type { MaBoDe } from "@modules/core/bo-de/kieu";
 export type MucTieuPhuHuynh = "toi" | "con";
 
 export type DauVaoDinhTuyen = {
-  readonly doiTuong: "mam-non" | "tieu-hoc" | "thcs" | "phu-huynh";
+  /**
+   * `cap-ba-tro-len` gộp CẢ lớp 10–12 LẪN "đã qua lớp 12" (11.5). Gộp được vì cả hai ra
+   * cùng một bộ đề và cùng một tầng nội dung; tách ra chỉ để trưng bày một khác biệt
+   * không dẫn tới hành vi nào khác.
+   */
+  readonly doiTuong: "mam-non" | "tieu-hoc" | "thcs" | "cap-ba-tro-len" | "phu-huynh";
   /** Chỉ dùng ĐỊNH TUYẾN. Không đưa vào kết quả, không lưu kèm báo cáo. */
   readonly lop?: number;
   readonly mucTieu?: MucTieuPhuHuynh;
@@ -45,6 +50,12 @@ export function dinhTuyen(dv: DauVaoDinhTuyen): KetQuaDinhTuyen {
 
     case "thcs":
       return { xong: true, boDe: "THCS" };
+
+    // 🔴 Cấp ba trở lên dùng bộ PHỤ HUYNH — đó là bản TỰ ĐÁNH GIÁ cho người lớn, không
+    // phải "bản của bố mẹ". Tên bộ đề đọc lên dễ gây hiểu nhầm; chỗ chữ hiện ra cho người
+    // dùng thì nói "bản tự đánh giá", xem `CHU_CHON`.
+    case "cap-ba-tro-len":
+      return { xong: true, boDe: "PH" };
 
     case "tieu-hoc": {
       if (dv.lop === undefined) return { xong: false, hoiThem: "lop" };

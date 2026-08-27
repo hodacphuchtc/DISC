@@ -1,13 +1,29 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  LOP_CUOI_TIEU_HOC,
+  LOP_DAU_CAP_BA,
+  LOP_LON_NHAT,
+  LOP_NHO_NHAT,
+} from "../config/disc-nguong";
+import {
   LOP_CAO_NHAT_DUNG_BAN_QUAN_SAT,
   TUOI_TU_DANH_GIA_TOI_THIEU,
   dinhTuyen,
   type DauVaoDinhTuyen,
 } from "../modules/test/dinh-tuyen";
 
-const LOP = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+/**
+ * 🔴 ĐỌC TỪ `config/`, KHÔNG GÕ CỨNG.
+ *
+ * Trước 11.5 dòng này là `[1,2,3,4,5,6,7,8,9]`. Khi trần lớp nới lên 12, danh sách gõ cứng
+ * ấy vẫn xanh y như cũ — nó chỉ lặng lẽ thôi kiểm ba lớp mới. Một cửa kiểm không còn kiểm
+ * cái nó nói là đang kiểm thì tệ hơn không có, vì nó vẫn đọc lên đầy yên tâm.
+ */
+const LOP = Array.from(
+  { length: LOP_LON_NHAT - LOP_NHO_NHAT + 1 },
+  (_, i) => LOP_NHO_NHAT + i,
+);
 
 describe("định tuyến — bảng đầy đủ", () => {
   it("Mầm non ⇒ bộ MN, không hỏi thêm gì", () => {
@@ -34,7 +50,7 @@ describe("định tuyến — bảng đầy đủ", () => {
     expect(dinhTuyen({ doiTuong: "tieu-hoc", lop })).toEqual({ xong: true, boDe: "TH" });
   });
 
-  it("🔴 lớp 1 và lớp 2 KHÔNG BAO GIỜ ra bộ TH — quét toàn bộ 9 lớp", () => {
+  it("🔴 lớp 1 và lớp 2 KHÔNG BAO GIỜ ra bộ TH — quét toàn bộ 12 lớp", () => {
     for (const lop of LOP) {
       const kq = dinhTuyen({ doiTuong: "tieu-hoc", lop });
       if (!kq.xong) throw new Error("phải xong");
@@ -123,5 +139,62 @@ describe("định tuyến — bảng đầy đủ", () => {
         expect(["TH", "THCS"], `${JSON.stringify(dv)} ra bộ ${kq.boDe}`).not.toContain(kq.boDe);
       }
     }
+  });
+});
+
+describe("🔴 11.5 — cấp ba trở lên", () => {
+  /**
+   * Trước 11.5 trần lớp là 9. Một em lớp 10 mở khoang ra, không thấy lớp mình đâu, và
+   * cũng không có lối nào khác — trong khi em ấy chính là con của tệp gia đình mà cả
+   * GĐ11–14 sinh ra để giữ chân.
+   *
+   * Cách gỡ rẻ nhất: dùng lại bộ PH, vốn là bản TỰ ĐÁNH GIÁ cho người lớn, thang 5 mức,
+   * câu chữ người lớn — đúng thứ một em lớp 11 cần. Không dựng bộ đề thứ sáu.
+   */
+  it.each([10, 11, 12])("lớp %i ⇒ bộ PH, tự đánh giá", (lop) => {
+    expect(dinhTuyen({ doiTuong: "cap-ba-tro-len", lop })).toEqual({ xong: true, boDe: "PH" });
+  });
+
+  it("đã qua lớp 12 (không có số lớp) ⇒ vẫn ra bộ PH, không hỏi thêm gì", () => {
+    expect(dinhTuyen({ doiTuong: "cap-ba-tro-len" })).toEqual({ xong: true, boDe: "PH" });
+  });
+
+  it("🔴 quét ĐỦ 12 lớp: mỗi lớp ra đúng một bộ, không lớp nào rơi ra ngoài", () => {
+    const mong = (lop: number) => {
+      if (lop >= LOP_DAU_CAP_BA) return "PH";
+      if (lop <= LOP_CAO_NHAT_DUNG_BAN_QUAN_SAT) return "MN";
+      if (lop <= LOP_CUOI_TIEU_HOC) return "TH";
+      return "THCS";
+    };
+
+    for (let lop = LOP_NHO_NHAT; lop <= LOP_LON_NHAT; lop += 1) {
+      const doiTuong =
+        lop >= LOP_DAU_CAP_BA
+          ? "cap-ba-tro-len"
+          : lop <= LOP_CUOI_TIEU_HOC
+            ? "tieu-hoc"
+            : "thcs";
+      const kq = dinhTuyen({ doiTuong, lop });
+      if (!kq.xong) throw new Error(`lớp ${lop} chưa xong`);
+      expect(kq.boDe, `lớp ${lop}`).toBe(mong(lop));
+    }
+  });
+
+  it("🔴 ADR-002 KHÔNG bị nới theo: lớp 1–2 vẫn ra bộ MN kèm giải thích", () => {
+    // Nới trần lớp là chuyện của đầu trên. Sàn tự đánh giá 8 tuổi là chuyện khác hẳn, và
+    // nó là thứ đắt nhất trong cả sản phẩm — nới nhầm ở đây là bịa số về một đứa trẻ.
+    for (const lop of [1, 2]) {
+      expect(dinhTuyen({ doiTuong: "tieu-hoc", lop })).toEqual({
+        xong: true,
+        boDe: "MN",
+        giaiThich: "LOP_1_2",
+      });
+    }
+  });
+
+  it("cấp ba KHÔNG kèm mã giải thích — không có gì bị chuyển hướng cả", () => {
+    const kq = dinhTuyen({ doiTuong: "cap-ba-tro-len", lop: 11 });
+    if (!kq.xong) throw new Error("phải xong");
+    expect(kq.giaiThich).toBeUndefined();
   });
 });

@@ -96,6 +96,63 @@ export const NGUONG_VUNG_LECH = {
  */
 export const LOP_CUOI_TIEU_HOC = 5;
 
-/** Lớp nhỏ nhất và lớn nhất mà khoang này nhận. Ngoài khoảng đó là ngoài phạm vi sản phẩm. */
+/**
+ * Lớp nhỏ nhất và lớn nhất mà khoang này nhận.
+ *
+ * 🔴 11.5 nới trần từ 9 lên 12. Trước đó một em lớp 10 mở khoang ra là không thấy lớp
+ * của mình đâu — và đó không phải "ngoài phạm vi sản phẩm", đó là con của đúng tệp gia
+ * đình mà cả GĐ11–14 sinh ra để giữ chân.
+ */
 export const LOP_NHO_NHAT = 1;
-export const LOP_LON_NHAT = 9;
+export const LOP_LON_NHAT = 12;
+
+/**
+ * Từ lớp này trở lên, người làm bài dùng bộ PHỤ HUYNH (tự đánh giá, thang 5 mức, câu chữ
+ * người lớn) và đọc nội dung ở tầng `NGUOI_LON`.
+ *
+ * Vì sao không dựng bộ đề thứ sáu cho cấp ba: bộ PH vốn là bản TỰ ĐÁNH GIÁ cho người lớn,
+ * đúng thứ một em lớp 11 cần. Thêm một bộ 24 câu nữa là thêm một bộ phải soạn, phải sàng,
+ * phải bảo trì — trong khi cái sẵn có đã vừa. Bao giờ có 30–50 phản hồi thật của lứa này
+ * mà thấy nó chệch thì hẵng tách.
+ */
+export const LOP_DAU_CAP_BA = 10;
+
+/* ── Cỡ chữ và cỡ nút theo lứa (11.3) ────────────────────────────────────── */
+
+/**
+ * Những bộ đề mà NGƯỜI BẤM LÀ TRẺ NHỎ ⇒ chữ ≥ 18px, nút cao ≥ 56px, cách nhau ≥ 12px.
+ *
+ * 🔴 VÌ SAO PHẢI LÀ MỘT HẰNG RIÊNG, KHÔNG SUY TỪ `cauMoiMan`.
+ *
+ * Trước 11.3, màn làm bài quyết định cỡ chữ bằng `boDe.cauMoiMan === 1` — tiện, vì lúc đó
+ * đúng hai bộ MN và TH có một câu một màn. Nhưng đó là suy từ MỘT THỨ KHÁC HẲN: số câu
+ * trên màn nói về mật độ trình bày, còn cỡ nút nói về ngón tay của một đứa bé sáu tuổi.
+ * Hai khái niệm chỉ TÌNH CỜ trùng nhau.
+ *
+ * 11.3 đổi `cauMoiMan` của MN và TH sang 5. Nếu cứ để suy như cũ thì ngay lúc đó cả hai
+ * bộ dành cho trẻ nhỏ nhất lặng lẽ tụt xuống chữ 14px và nút 44px — không test nào đỏ,
+ * không ai thấy, đúng vết xe của bảng đại từ một chiều đã trả giá ở GĐ10.
+ */
+export const BO_DE_TRE_NHO = ["MN", "TH"] as const;
+
+/** Bộ đề này có phải trẻ nhỏ tự bấm không ⇒ dùng cỡ chữ và cỡ nút to. */
+export function canNutTo(maBoDe: string): boolean {
+  return (BO_DE_TRE_NHO as readonly string[]).includes(maBoDe);
+}
+
+/* ── So sánh theo thời gian (13.2) ───────────────────────────────────────── */
+
+/**
+ * Hai bài phải cách nhau ÍT NHẤT bấy nhiêu ngày thì mới đem so.
+ *
+ * 🔴 VÌ SAO CÓ SÀN NÀY, VÀ VÌ SAO NÓ CAO.
+ *
+ * Phép đo này thô. Một nấc trả lời dịch điểm chuẩn hoá đi 4–10 điểm tuỳ bộ đề — nghĩa là
+ * cùng một đứa trẻ, cùng một tuần, đổi ý ở hai câu là hồ sơ đã khác. Đem hai bài cách nhau
+ * ba tuần ra so thì thứ hiện lên KHÔNG phải là thay đổi của đứa trẻ, mà là nhiễu của phép
+ * đo — và nó vẫn đọc lên đầy thuyết phục vì có số kèm theo.
+ *
+ * 90 ngày không phải con số thần kỳ; nó là mốc mà một học kỳ đã trôi qua, tức là có thứ
+ * ngoài đời đủ lớn để giải thích một thay đổi. Dưới mốc đó thì im lặng còn hơn.
+ */
+export const NGAY_TOI_THIEU_DE_SO_SANH = 90;

@@ -1,5 +1,5 @@
 /**
- * ĐO PHỄU — bốn mốc, không hơn (QĐ9).
+ * ĐO PHỄU — ba mốc, không hơn (QĐ9, rút từ bốn xuống ba ở 11.2).
  *
  * KHÔNG thuộc tầng lõi: đọc `location` và ghi `localStorage`.
  *
@@ -8,11 +8,56 @@
  *
  * Vì sao cần: không có nó thì sau ba tháng, câu hỏi "cái này có đáng làm không" KHÔNG CÓ
  * câu trả lời — chỉ có cảm giác. Phễu này dài bất thường (mở → làm 24 câu → đưa máy cho
- * người khác làm tiếp → để lại số), nên phải biết người ta rơi ở đâu.
+ * người khác làm tiếp), nên phải biết người ta rơi ở đâu.
+ *
+ * 🔴 Mốc `deLaiSo` đã BỎ ở 11.2 cùng ô thu liên hệ: mục tiêu kinh doanh đổi từ *mồi thu
+ * khách* sang *giữ chân hơn 1.000 gia đình đang học*, nên cái phễu thu số điện thoại
+ * thành thừa. Đếm một mốc không đời nào tăng chỉ tổ làm bảng số liệu đọc lên như hỏng.
  */
 
-export const MOC = ["mo", "batDau", "xong", "deLaiSo"] as const;
+export const MOC = [
+  "mo",
+  "batDau",
+  "xong",
+  "themThanhVien",
+  "baiThuHai",
+  "phanTichGiaDinh",
+] as const;
 export type MaMoc = (typeof MOC)[number];
+
+/**
+ * 🔴 `baiThuHai` LÀ CON SỐ QUAN TRỌNG NHẤT CỦA CẢ GÓI GĐ11–GĐ14.
+ *
+ * Toàn bộ GĐ14 (9,5 ngày) đứng trên MỘT giả định: *một phụ huynh sẽ triệu tập được từ
+ * hai thành viên trở lên cùng làm bài.* Giả định đó hiện có **0 quan sát ủng hộ và 1
+ * quan sát phản bác** — tính năng ghép hai người đã có từ GĐ5 và chưa lần nào tự kích
+ * hoạt ngoài đời.
+ *
+ * Nên mốc này được làm SỚM, ở GĐ11, chứ không đợi tới GĐ14: nó là thứ duy nhất biến giả
+ * định thành một con số đo được, và biết mình sai ở ngày 5 rẻ hơn nhiều so với ngày 28.
+ *
+ * Định nghĩa ở GĐ11: *máy này đã lưu từ hai bài trở lên với biệt danh KHÁC NHAU.* Đo
+ * được ngay mà chưa cần sổ gia đình. GĐ12 có sổ rồi thì định nghĩa siết lại theo thành
+ * viên, còn con số cũ vẫn so sánh được vì cùng đo một hành vi.
+ */
+export function datDuocBaiThuHai(bietDanhDaLuu: readonly string[]): boolean {
+  return demBietDanhKhacNhau(bietDanhDaLuu) >= 2;
+}
+
+/**
+ * Đếm số biệt danh KHÁC NHAU, bỏ qua hoa thường và khoảng trắng thừa.
+ *
+ * "Bin" và "bin " là một đứa trẻ, không phải hai. Đếm chúng thành hai là tự tay làm con
+ * số quan trọng nhất của gói này đẹp lên — đúng thứ không được phép làm.
+ */
+export function demBietDanhKhacNhau(bietDanh: readonly string[]): number {
+  const tap = new Set<string>();
+  for (const b of bietDanh) {
+    const sach = String(b ?? "").trim().toLowerCase();
+    if (sach.length > 0) tap.add(sach);
+  }
+  return tap.size;
+}
 
 export const NGUON_MAC_DINH = "truc-tiep";
 const KHOA = "disc:phieu";
@@ -89,7 +134,14 @@ export function xoaPhieu(): void {
 
 /** Đếm số lượt mỗi mốc — để xem phễu rơi ở đâu. */
 export function demTheoMoc(ds: readonly BanGhiMoc[]): Record<MaMoc, number> {
-  const dem = { mo: 0, batDau: 0, xong: 0, deLaiSo: 0 };
+  // Dựng từ chính `MOC` chứ không gõ tay bảng khoá: thêm mốc mà quên thêm vào đây thì
+  // mốc mới im lặng đếm ra `undefined`, và bảng số liệu vẫn hiện ra đầy tự tin.
+  const dem = Object.fromEntries(MOC.map((m) => [m, 0])) as Record<MaMoc, number>;
   for (const b of ds) if (b.moc in dem) dem[b.moc] += 1;
   return dem;
+}
+
+/** Mốc này đã từng được ghi trên máy chưa — dùng để không đếm trùng mốc chỉ-một-lần. */
+export function daGhiMoc(moc: MaMoc): boolean {
+  return docPhieu().some((b) => b.moc === moc);
 }

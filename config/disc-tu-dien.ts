@@ -11,19 +11,28 @@ import { MAU } from "./thuong-hieu";
 
 /* ── Khoang (mục trên thanh bên) ─────────────────────────────────────────── */
 
-export const MA_KHOANG = ["disc", "lich-su"] as const;
+/**
+ * 🔴 Mã `lich-su` GIỮ NGUYÊN dù mục nay tên là "Nhà mình" (12.3, ADR-007).
+ *
+ * Mã khoang được lưu vào `localStorage` để nhớ mục đang mở. Đổi mã là mọi người đang có
+ * `"lich-su"` trong máy bị `chuanHoaMaKhoang()` đá về mặc định — mất chỗ đang đứng mà
+ * chẳng đổi lấy được gì. Tên hiển thị đổi, mã thì không.
+ */
+export const MA_KHOANG = ["disc", "lich-su", "so-lieu"] as const;
 export type MaKhoang = (typeof MA_KHOANG)[number];
 
 export const KHOANG_MAC_DINH: MaKhoang = "disc";
 
 export const TEN_KHOANG: Record<MaKhoang, string> = {
   disc: "DISC",
-  "lich-su": "Bài đã làm",
+  "lich-su": "Nhà mình",
+  "so-lieu": "Số liệu máy này",
 };
 
 export const MO_TA_KHOANG: Record<MaKhoang, string> = {
   disc: "Trắc nghiệm hành vi cho học sinh và phụ huynh",
-  "lich-su": "Kết quả đã lưu trên máy này",
+  "lich-su": "Cả nhà một bảng — ai đã làm, ai chưa",
+  "so-lieu": "Vài con số đo trên chính máy này, không gửi đi đâu",
 };
 
 /** Khoang chưa dựng xong — hiện nhãn "đang dựng" để đừng ai bấm vào rồi ngã ngửa. */
@@ -217,6 +226,55 @@ export const CHU_BANG_TRA = {
     "Bốn nhóm này mô tả cách hành xử, không xếp hạng con người. Mô hình do nhà tâm lý học W.M. Marston mô tả lần đầu năm 1928.",
 } as const;
 
+/* ── Chú giải bốn nhóm + khối dẫn nguồn (12.5) ───────────────────────────── */
+
+export const CHU_CHU_GIAI = {
+  tieuDe: "Đọc kỹ hơn về bốn nhóm",
+  moTa:
+    "Mỗi nhóm có bốn phần: khi nhóm đó nổi rõ, cái giá đi kèm, khi nhóm đó nhẹ, " +
+    "và lúc nào thì mượn cách của nhóm khác.",
+  nhanDam: "Khi nhóm này nổi rõ",
+  nhanGia: "Cái giá đi kèm",
+  nhanNhat: "Khi nhóm này nhẹ",
+  nhanMuon: "Khi nào mượn cách của nhóm khác",
+} as const;
+
+/**
+ * 🔴 KHỐI DẪN NGUỒN — VIẾT ĐỂ CHỊU ĐƯỢC MỘT CÂU HỎI KHÓ.
+ *
+ * Đây là chỗ một sản phẩm DISC cho trẻ em hoặc đứng vững, hoặc bịa. Ba sự thật khó chịu
+ * mà bản này chọn nói thẳng thay vì lấp liếm:
+ *
+ *  1. **Marston không tạo bài trắc nghiệm nào.** Ông mô tả mô hình năm 1928; bộ công cụ
+ *     đầu tiên là của Walter Clarke, 1956. Rất nhiều tài liệu bán hàng gộp hai chuyện đó
+ *     lại để mượn uy tín của một cái tên cũ hơn.
+ *  2. **Bộ câu hỏi này CHƯA chuẩn hoá trên dữ liệu người Việt.** Nó do BA soạn. Nó sẽ
+ *     thành *"đã sàng trên người Việt"* vào ngày có 30–50 phản hồi thật chạy qua
+ *     `scripts/phan-tich-item.mjs` — và chỉ ngày đó mới được phép nói về độ tin cậy, bằng
+ *     con số của chính mình.
+ *  3. **Nó để mở một cuộc trò chuyện, không phải để kết luận về một đứa trẻ.**
+ *
+ * 🔴 CẤM TUYỆT ĐỐI trong khối này và mọi nơi khác:
+ *  · bất kỳ con số tin cậy hay hiệu lực nào (α, r, %…)
+ *  · cụm "đã được khoa học chứng minh" và họ hàng của nó
+ *  · trích dẫn một nghiên cứu mà người đọc không tự kiểm được
+ * `tests/noi-dung-moi.test.ts` canh cả ba.
+ */
+export const KHOI_DAN_NGUON = {
+  tieuDe: "Bản này dựa trên cái gì",
+  doan: [
+    "Mô hình bốn nhóm hành vi do nhà tâm lý học W.M. Marston mô tả lần đầu năm 1928. " +
+      "Bản thân Marston không tạo ra bài trắc nghiệm nào — bộ công cụ đầu tiên theo mô hình " +
+      "này là của Walter Clarke, năm 1956.",
+    "Bộ câu hỏi bạn vừa làm do đội ngũ của chương trình soạn riêng cho gia đình Việt, và " +
+      "chưa được chuẩn hoá trên dữ liệu người Việt. Nghĩa là: nó chưa qua bước kiểm bằng số " +
+      "trên một mẫu đủ lớn.",
+    "Vì vậy hãy đọc kết quả này như một cách để bắt đầu một cuộc trò chuyện trong nhà, " +
+      "không phải như một kết luận về ai đó. Nếu có chỗ nào bạn thấy không đúng với con " +
+      "mình, thì bạn đúng — bạn biết con mình hơn một bảng câu hỏi.",
+  ],
+} as const;
+
 /* ── Chọn đối tượng & định tuyến ─────────────────────────────────────────── */
 
 export const MA_DOI_TUONG = ["mam-non", "tieu-hoc", "thcs", "phu-huynh"] as const;
@@ -261,9 +319,16 @@ export const NHANH_CAM_MAY: Record<MaNhanh, { ten: string; moTa: string }> = {
 export const CHU_CHON = {
   nhanTren: "5–8 phút · không có câu nào đúng hay sai",
   tieuDe: "Ai đang cầm máy?",
-  /** Hỏi MỘT lần cho cả hai cấp — lớp 1–9. Con số phân cấp ở `config/disc-nguong.ts`. */
-  hoiLop: "Em đang học lớp mấy?",
+  /** Hỏi MỘT lần cho cả ba cấp — lớp 1–12. Con số phân cấp ở `config/disc-nguong.ts`. */
+  hoiLop: "Bạn đang học lớp mấy?",
   nhanLop: "Lớp {so}",
+  /**
+   * 🔴 Ô cuối cùng, cho người đã qua tuổi đi học phổ thông (11.5).
+   *
+   * Không viết "Đã đi làm": nhánh này còn có sinh viên, người đang ôn thi lại, người ở
+   * nhà. Hỏi thẳng cái mình cần biết — đã qua lớp 12 hay chưa — thì không loại ai ra.
+   */
+  nhanTren12: "Đã qua lớp 12",
   hoiMucTieu: "Bạn muốn làm gì?",
   mucTieuToi: "Tìm hiểu về chính tôi",
   mucTieuCon: "Trả lời về con tôi",
@@ -308,12 +373,24 @@ export const CHU_TRUOC_KHI_BAT_DAU = {
       than: "Đừng cân nhắc lâu. Cảm giác đầu tiên thường đúng hơn.",
     },
   ],
-  nhanO: "Đặt một tên gọi để nhận ra bài này",
-  nhacO: "Biệt danh cũng được. Đừng ghi họ tên đầy đủ.",
-  nhacNghiHoTen: "Nghe như họ tên đầy đủ. Dùng biệt danh thì an toàn hơn cho con.",
-  oTrong: "Nhập một tên gọi rồi mới bắt đầu được.",
+  /**
+   * 🔴 ADR-005 (27/08/2026) — CHO NHẬP TÊN THẬT, và câu nhắc "đừng ghi họ tên" đã GỠ.
+   *
+   * Người dùng nay là phụ huynh đã ký hợp đồng, đang ngồi trong app của chính trung tâm.
+   * Với họ, câu nhắc cũ tạo ra một câu đố (nhà hai con thì đặt biệt danh gì cho khỏi lẫn?)
+   * và một lời cảnh báo lạc chỗ — nó đọc lên như thể sản phẩm sắp gửi tên con họ đi đâu
+   * đó, trong khi ADR-001 cấm backend.
+   *
+   * Bốn hàng rào thật sự vẫn nguyên và đều là cửa kiểm chạy trong CI, không phải lời hứa:
+   * tên không rời máy · không vào tệp xuất · không vào ảnh chia sẻ · không vào mã mời.
+   */
+  nhanO: "Tên của người làm bài này",
+  nhacO: "Tên gì cũng được, miễn là bạn nhận ra. Tên này chỉ nằm trên máy của bạn.",
+  oTrong: "Nhập một tên rồi mới bắt đầu được.",
   nutBatDau: "Bắt đầu",
   demKyTu: "{da}/{toiDa}",
+  /** Vào bài từ thẻ thành viên (12.4) — tên đã có trong sổ, không hỏi lại. */
+  lamBaiCho: "Đang làm bài cho {ten}",
 } as const;
 
 /**
@@ -344,6 +421,16 @@ export const CHU_LAM_BAI = {
     "Chỉ còn vài câu nữa thôi.",
   ],
   tiepTucNhap: "Bài đang làm dở đã được mở lại từ chỗ bạn dừng.",
+  /** Nhãn đọc màn hình cho số thứ tự câu. Người sáng mắt thấy con số trong vòng tròn. */
+  nhanSoCau: "Câu",
+  /**
+   * 🔴 Bộ câu hỏi đổi ⇒ nháp cũ hết nghĩa. Phải NÓI RA, không được im lặng vứt:
+   * người dùng nhớ mình đang làm dở, mở lại thấy trắng tinh, và kết luận là phần mềm
+   * ăn mất bài. Nói thẳng thì họ mất 2 phút; im lặng thì họ mất niềm tin.
+   */
+  nhapCuKhongDung:
+    "Bộ câu hỏi vừa được cập nhật nên bài làm dở lần trước không dùng lại được. " +
+    "Xin lỗi bạn — lần này làm từ đầu nhé, bài sẽ được nhớ lại nếu bạn dừng giữa chừng.",
 } as const;
 
 /* ── Lệch phong cách bố mẹ ↔ con ───────────────────────────────────────── */
@@ -410,10 +497,25 @@ export const CHU_M4 = {
  * khoá — nó là gờ giảm tốc, đủ để việc đọc nhầm thành cố ý chứ không còn là tình cờ.
  */
 export const CHU_BA_BAN = {
-  tenChung: "Phần đọc chung",
-  tenCon: "Phần của {chuThe}",
-  tenBoMe: "Phần của bố mẹ",
-  tenTuMinh: "Phần của {chuThe}",
+  /**
+   * 🔴 TIÊU ĐỀ DẢI PHẢI KHÁC NHAU NGAY TỪ CHỮ ĐẦU (11.4).
+   *
+   * Chủ dự án chạy thử GĐ10 và nói "hai bản in thấy thông tin giống nhau". Đo lại thì hai
+   * tờ KHÔNG dùng chung một câu nào — `ba-ban-noi-dung.test.ts` canh việc đó và nó xanh.
+   * Cái giống nhau là DÁNG: cùng mở bằng biểu đồ, cùng bốn khối trục, và cùng một nhãn
+   * nhỏ xám nhạt ở đầu mà không ai buồn đọc.
+   *
+   * Sửa bằng cách rẻ nhất và đúng chỗ nhất: cho tiêu đề mang TÊN người và nói thẳng tờ
+   * này viết cho ai — "Bin — bản của em" so với "Bin — phần dành cho bố mẹ". Đưa tờ giấy
+   * cho một người lạ, họ phải nói được ngay nó viết cho ai mà chưa cần đọc hết.
+   *
+   * `{ten}` là biệt danh do người dùng tự đặt; `{chuThe}` là đại từ theo bộ đề.
+   */
+  tenChung: "{ten} — phần đọc chung",
+  tenCon: "{ten} — bản của {chuThe}",
+  tenBoMe: "{ten} — phần dành cho bố mẹ",
+  /** Bộ PH: người lớn tự đánh giá chính mình. "bản của bạn" đọc lên rất kỳ. */
+  tenTuMinh: "{ten} — bản tự đọc",
 
   /** Dải chắn — CHỈ dựng khi chính người được đánh giá đang cầm máy. */
   chanTieuDe: "Phần dưới đây viết cho bố mẹ",
@@ -454,29 +556,285 @@ export const CHU_M6 = {
   daXoaBai: "Đã xoá bài khỏi máy này.",
 } as const;
 
-/* ── Thu liên hệ (GĐ6) ───────────────────────────────────────────────────── */
+/* ── Mã mời không mở được ────────────────────────────────────────────────── */
 
-/** 🔴 Số hotline/Zalo THẬT phải do chủ dự án điền — xem mục "CHỜ NGOÀI" trong CLAUDE.md. */
-export const LIEN_HE_SATA = {
-  soZalo: "0900000000",
-  hienThi: "0900 000 000",
+/** Vì sao một mã không mở được — nói rõ để người dùng biết phải làm gì tiếp. */
+export const CHU_MA_HONG: Readonly<Record<string, string>> = {
+  RONG: "Chưa có mã nào để mở.",
+  SAI_DO_DAI: "Mã phải có đúng 14 ký tự. Đếm lại giúp nhé.",
+  KY_TU_LA: "Trong mã có ký tự không thuộc bảng mã. Kiểm tra lại từng chữ.",
+  SAI_KIEM_TONG: "Mã sai ở đâu đó — gõ nhầm một chữ là đủ. Đọc lại rồi thử lần nữa.",
+  SAI_PHIEN_BAN: "Mã này thuộc phiên bản khác. Người gửi cần phát lại mã mới.",
+  SO_LIEU_LA: "Mã đọc được nhưng bên trong không hợp lệ.",
+  QUA_HAN: "Mã đã quá 7 ngày. Nhờ người gửi phát lại mã mới.",
+  NGAY_TUONG_LAI: "Mã ghi ngày phát ở tương lai. Kiểm tra lại đồng hồ của máy.",
+};
+
+/* ── Màn số liệu máy này (11.6) ──────────────────────────────────────────── */
+
+/**
+ * 🔴 VÌ SAO CÓ MÀN NÀY, VÀ VÌ SAO NÓ Ở NGAY TRONG SẢN PHẨM.
+ *
+ * Bộ đếm phễu đã có từ GĐ6 nhưng KHÔNG MÀN NÀO đọc nó — chỉ test dùng. Nghĩa là phát hành
+ * xong vẫn mù đúng như trước khi có nó. Một cửa đo mà không ai mở thì im lặng y hệt một
+ * cửa đo hỏng.
+ *
+ * Và nó phải nằm trong sản phẩm chứ không phải trong bảng điều khiển ở đâu đó, vì ADR-001
+ * cấm backend: số liệu KHÔNG rời máy người dùng. Muốn biết thì mở máy đó ra mà xem.
+ */
+export const CHU_SO_LIEU = {
+  tieuDe: "Số liệu trên máy này",
+  moTa:
+    "Vài con số đếm ngay trên máy bạn. Không có con số nào được gửi đi đâu, và không có " +
+    "câu trả lời hay kết quả nào nằm trong đây.",
+  soBai: "Bài đã lưu",
+  soBietDanh: "Biệt danh khác nhau",
+  datBaiThuHai: "Đã có từ 2 người trở lên cùng làm",
+  chuaDat: "Chưa",
+  daDat: "Rồi",
+  tieuDePheu: "Phễu",
+  trong: "Máy này chưa có bài nào.",
+  /** 🔴 Nhắc lại lời hứa ngay tại chỗ dễ bị phá nhất. */
+  nhacRiengTu: "Màn này chỉ ĐỌC. Không gửi, không đồng bộ, không phân tích ở đâu khác.",
 } as const;
 
-export const CHU_LIEN_HE = {
-  tieuDe: "Muốn nghe kỹ hơn về kết quả này?",
-  moTa: "Để lại số, SATA ROBO gọi hoặc nhắn Zalo trong giờ hành chính. Không bắt buộc — bạn vẫn xem và tải được trọn kết quả.",
-  nhanSo: "Số điện thoại",
-  nhanTen: "Gọi bạn là gì (không bắt buộc)",
-  nhanKenh: "Bạn muốn nhận qua",
-  kenhZalo: "Zalo",
-  kenhGoi: "Gọi điện",
-  nutGui: "Gửi số cho SATA ROBO",
-  dangGui: "Đang gửi…",
-  soSai: "Số điện thoại chưa đúng. Nhập 10 số bắt đầu bằng 0.",
-  chuaDongY: "Cần tick ô đồng ý trước khi gửi.",
-  oDongY:
-    "Tôi đồng ý để SATA ROBO liên hệ lại. Chỉ số điện thoại được gửi đi — câu trả lời và kết quả của con KHÔNG được gửi kèm.",
-  daGui: "Đã nhận số. SATA ROBO sẽ liên hệ lại.",
-  nutMoZalo: "Nhắn Zalo cho SATA ROBO",
-  loiGui: "Chưa gửi được. Bạn nhắn Zalo giúp mình nhé.",
+/** Chữ hiển thị cho từng mốc phễu. Thiếu mốc nào thì hiện thẳng mã, không im lặng bỏ qua. */
+export const CHU_MOC: Readonly<Record<string, string>> = {
+  mo: "Mở khoang",
+  batDau: "Bắt đầu làm bài",
+  xong: "Làm xong bài",
+  themThanhVien: "Thêm thành viên vào sổ",
+  baiThuHai: "Người thứ hai cùng làm",
+  phanTichGiaDinh: "Xem phân tích cả nhà",
+};
+
+/* ── Kho dữ liệu hỏng (12.1) ─────────────────────────────────────────────── */
+
+/**
+ * 🔴 Bản v1 trả `null` IM LẶNG cho cả trường hợp kho bị tab khác giữ. Nghĩa là người dùng
+ * mở DISC ở hai tab thì tab cũ đơn giản là… thôi lưu. Không lỗi, không cảnh báo, và bài
+ * vừa làm biến mất. Đây là câu nói ra điều đó.
+ */
+export const CHU_KHO_HONG: Readonly<Record<string, string>> = {
+  "chan-boi-tab-khac":
+    "Bạn đang mở DISC ở một cửa sổ khác. Đóng cửa sổ đó rồi tải lại trang này — " +
+    "nếu không, bài làm ở đây sẽ không được lưu.",
+  "khong-co-indexeddb":
+    "Trình duyệt đang chặn lưu dữ liệu (thường gặp ở cửa sổ ẩn danh). Bạn vẫn làm bài và " +
+    "xem kết quả được, nhưng bài sẽ không được nhớ lại.",
+  "loi-khac": "Không mở được kho dữ liệu trên máy này. Bài vẫn làm được, nhưng chưa lưu lại được.",
+};
+
+/* ── Hộp thoại hạn mức (12.2) ────────────────────────────────────────────── */
+
+/**
+ * 🔴 CÂU CHỮ Ở ĐÂY LÀ PHẦN QUAN TRỌNG NHẤT CỦA HẠN MỨC.
+ *
+ * Hạn mức mà xoá im lặng thì đó là mất dữ liệu, dù có ghi trong tài liệu hay không. Thứ
+ * biến nó thành một lựa chọn tử tế là: **nêu đích danh bài nào sắp mất** (ngày nào, bộ
+ * nào), **cho tải về trước**, và **cho huỷ**. Thiếu một trong ba là quay về xoá im lặng.
+ */
+export const CHU_HAN_MUC = {
+  tieuDe: "Bài cũ nhất sẽ được thay bằng bài mới",
+  moTa:
+    "Mỗi người giữ tối đa {gioiHan} bài trên máy này. Bắt đầu bài mới thì bài dưới đây " +
+    "sẽ bị xoá khỏi máy — tải về giữ lại trước nếu bạn cần.",
+  nhanDanhSach: "Bài sẽ bị xoá",
+  mauDong: "Bài {boDe} · làm ngày {ngay}",
+  nutTaiVe: "Tải về giữ lại",
+  daTaiVe: "Đã tải về máy.",
+  loiTaiVe: "Chưa tải về được. Bạn thử lại hoặc dùng nút Sao lưu ở màn Bài đã làm nhé.",
+  oXacNhan: "Tôi hiểu là bài trên sẽ bị xoá khỏi máy này.",
+  nutTiepTuc: "Xoá và bắt đầu bài mới",
+  nutHuy: "Huỷ",
+  chuaTick: "Cần tick ô xác nhận trước đã.",
+} as const;
+
+/* ── Bảng gia đình (12.3) + thông điệp nhân văn (12.6) ───────────────────── */
+
+/**
+ * 🔴 THÔNG ĐIỆP NHÂN VĂN — CHỈ XUẤT HIỆN Ở BẢNG GIA ĐÌNH.
+ *
+ * Rải nó vào màn kết quả và bản in là biến sự chân thành thành khẩu hiệu: đọc lần đầu
+ * thấy tử tế, đọc lần thứ tư thấy như quảng cáo. Một lần, đúng chỗ, rồi im.
+ *
+ * 🔴 CẤM chữ "phi lợi nhuận". Mục tiêu của khoang này là giữ chân hơn 1.000 gia đình
+ * đang trả học phí. Đó là một tiện ích miễn phí hoàn toàn chính đáng — nhưng gọi nó là
+ * phi lợi nhuận là một tuyên bố SAI, và sai theo hướng có lợi cho mình thì càng không nên.
+ * `tests/thong-diep.test.tsx` canh chuỗi này trong toàn bộ `config/`.
+ */
+export const CHU_THONG_DIEP = {
+  chinh: "Không ai trong nhà sai. Chỉ là mỗi người quen một nhịp.",
+  phu: "Làm cùng nhau, mỗi người mười phút.",
+  chan:
+    "Phần này miễn phí cho gia đình đang học và không bán gì cả. " +
+    "Câu trả lời của cả nhà không rời khỏi máy này.",
+} as const;
+
+export const CHU_BANG_GIA_DINH = {
+  tieuDe: "Nhà mình",
+  moTa: "Mỗi người một thẻ. Nhìn một cái là biết ai đã làm, ai chưa.",
+  trong: "Chưa có ai trong sổ. Thêm người đầu tiên để bắt đầu.",
+
+  nutThem: "Thêm người",
+  nutSua: "Sửa",
+  nutXoa: "Xoá",
+  nutLamBai: "Làm bài",
+  nutXemKetQua: "Xem kết quả",
+
+  nhanTen: "Tên gọi trong nhà",
+  nhanVai: "Vai",
+  nhanLop: "Lớp (nếu đang đi học)",
+  nhanGhiChu: "Ghi chú của bạn (không bắt buộc)",
+  chuaChonLop: "Chưa chọn",
+  nutLuu: "Lưu",
+  nutHuy: "Huỷ",
+  loiThieuTen: "Cần một tên gọi để nhận ra người này.",
+  loiTrungTen: "Trong nhà đã có người tên này rồi.",
+
+  demBai: "{so}/{gioiHan} bài",
+  chuaLamBai: "Chưa làm bài",
+
+  /** 🔴 Xoá người là chỗ mất dữ liệu nhanh nhất — phải hỏi, và mặc định là GIỮ bài. */
+  hoiXoaTieuDe: "Xoá {ten} khỏi sổ?",
+  hoiXoaMoTa:
+    "{ten} có {so} bài trên máy này. Bạn muốn giữ lại số bài đó hay xoá luôn?",
+  hoiXoaGiuBai: "Giữ bài lại (bài về mục chưa xếp)",
+  hoiXoaXoaBai: "Xoá luôn cả bài",
+  hoiXoaKhongCoBai: "{ten} chưa có bài nào. Xoá khỏi sổ nhé?",
+
+  nhomChuaXep: "Bài chưa xếp cho ai",
+  moTaChuaXep: "Những bài này còn nguyên. Thêm người rồi xếp về đúng chỗ.",
+  nutXepVe: "Xếp về",
+
+  nhomPhanTich: "Phân tích cả nhà",
+  phanTichChuaMo: "Phần này mở khi cả nhà có từ hai người làm xong bài.",
+} as const;
+
+/* ── Mã mời hoàn chỉnh (13.1) ────────────────────────────────────────────── */
+
+/**
+ * 🔴 CÂU CHỮ Ở ĐÂY PHẢI GIỮ ĐƯỢC MỘT LỜI HỨA.
+ *
+ * ADR-001 hứa câu trả lời của trẻ không rời máy. Mã mời là thứ DUY NHẤT trong sản phẩm
+ * đi ra khỏi máy, nên nó cũng là chỗ duy nhất lời hứa đó có thể thành lời nói dối. Người
+ * dùng cần biết chính xác cái gì đang đi: **bốn con số, một cái vai, một ngày phát**.
+ * Không có tên. Không có câu trả lời. Nói ra được thì mới đáng tin.
+ */
+export const CHU_MA_MOI = {
+  tieuDe: "Gửi kết quả này sang máy khác",
+  moTa:
+    "Người kia quét mã hoặc gõ lại chuỗi bên dưới. Máy của họ sẽ có thêm hồ sơ này " +
+    "trong sổ gia đình, và cả nhà xem chung được.",
+  nhacQuet: "Quét bằng camera điện thoại, hoặc gõ lại chuỗi này:",
+  nhacHan: "Mã dùng được trong {so} ngày.",
+  /** 🔴 Nói THẲNG cái gì đang đi ra khỏi máy. Đây là chỗ giữ lời hứa của ADR-001. */
+  nhacRiengTu:
+    "Mã chỉ chứa bốn con số của bài này, vai trong nhà và ngày phát. " +
+    "Không có tên, không có câu trả lời nào.",
+
+  nhanNhap: "Nhận một mã mời",
+  moTaNhap: "Ai đó gửi bạn một chuỗi mã? Gõ vào đây để thêm họ vào sổ nhà mình.",
+  oNhap: "Gõ hoặc dán chuỗi mã",
+  nutMo: "Thêm vào sổ",
+  hoiTen: "Đây là ai trong nhà?",
+  /** 🔴 Máy nhận PHẢI hỏi tên tại chỗ — mã không mang tên đi, và đó là chủ ý. */
+  nhacHoiTen:
+    "Mã không mang tên theo, nên bạn tự đặt tên trên máy mình. Tên này chỉ nằm ở đây.",
+  nutLuu: "Lưu vào sổ",
+  daThem: "Đã thêm {ten} vào sổ nhà mình.",
+  daCo: "Sổ nhà mình đã có hồ sơ này rồi — không thêm lần nữa.",
+  nhanNhanQuaMa: "Nhận qua mã mời",
+} as const;
+
+/* ── So sánh theo thời gian (13.2) ───────────────────────────────────────── */
+
+/**
+ * 🔴 LUẬT GIỌNG VĂN CỦA KHỐI NÀY — CẤM "TIẾN BỘ", CẤM "CẢI THIỆN".
+ *
+ * DISC không có chiều tốt/xấu, nên **không có gì để tiến bộ**. Nói *"con đã tiến bộ ở
+ * nhóm Chủ động"* là ngầm khẳng định Chủ động cao thì tốt hơn — sai về mô hình, và tệ hơn,
+ * nó biến một bản mô tả hành vi thành một bảng điểm mà đứa trẻ phải leo. Một phụ huynh đọc
+ * xong câu đó sẽ đi khen hoặc đi thúc, và cả hai đều là hệ quả không ai muốn.
+ *
+ * Khối này MỞ MỘT CÂU HỎI thay vì PHÁT MỘT BẰNG KHEN. `tests/so-sanh-thoi-gian.test.ts`
+ * quét mọi chuỗi ở đây tìm từ đánh giá.
+ */
+export const CHU_SO_SANH = {
+  tieuDe: "{ten} hồi đó và bây giờ",
+  nutXem: "Xem thay đổi",
+  nhanTruoc: "Hồi {ngay}",
+  nhanSau: "Bây giờ",
+  cachNhau: "Hai bài cách nhau {so} ngày.",
+
+  /** Câu mở — nói THAY ĐỔI, không nói HƯỚNG. */
+  moDau:
+    "Dưới đây là hai lần {ten} làm bài, đặt cạnh nhau. Không có lần nào đúng hơn lần nào — " +
+    "cách một người trả lời đổi theo lớp học, theo bạn bè, theo cả những chuyện ở nhà.",
+
+  /** Có trục đổi rõ. `{truc}` là tên nhóm, `{huong}` là "lên"/"xuống". */
+  coDoi:
+    "Nhóm {truc} lần này {huong} so với lần trước. Đó là một chỗ đáng hỏi hơn là đáng lo: " +
+    "điều gì đã đổi ở lớp hay ở nhà trong khoảng thời gian đó?",
+  huongLen: "hiện rõ hơn",
+  huongXuong: "nhẹ đi",
+
+  /** Không trục nào đổi rõ. */
+  khongDoi:
+    "Bốn nhóm gần như giữ nguyên. Với khoảng thời gian này thì đó là chuyện bình thường — " +
+    "cách hành xử của một người thường ổn định hơn ta tưởng.",
+
+  chuaDuBai: "Cần hai bài của cùng một người mới so được.",
+  /** 🔴 Nói rõ VÌ SAO chưa so, đừng để người dùng tưởng phần mềm hỏng. */
+  quaGan:
+    "Hai bài mới cách nhau {so} ngày. Gần quá thì chênh lệch đọc được phần lớn là sai số " +
+    "của phép đo, không phải thay đổi thật. Quay lại sau khoảng {toiThieu} ngày nhé.",
+  /** Lý do quay lại — đặt ngay trên bảng gia đình. */
+  nhacLamLai: "Làm lại sau khoảng 6 tháng để xem có gì đổi.",
+} as const;
+
+/* ── Bản tổng hợp cả nhà (14.4) ──────────────────────────────────────────── */
+
+export const CHU_TONG_HOP = {
+  nutPhanTich: "Phân tích cả nhà",
+  tieuDeChon: "Chọn bài cho mỗi người",
+  moTaChon:
+    "Mỗi người một bài. Mặc định là bài mới nhất — đổi được nếu bạn muốn so một mốc khác.",
+  nutChay: "Phân tích",
+  nutHuy: "Huỷ",
+  nutDong: "Đóng",
+
+  tieuDeBan: "{ten} đọc về cả nhà",
+  nhanLatCat: "{ten} và {nguoiKia}",
+  nhanViecCuaToi: "Một việc {ten} làm được",
+  nhanThoaThuan: "Thử cùng nhau",
+  nhanTrungKhop: "Chỗ hai người cùng nhịp",
+
+  nutInBan: "In phần của {ten}",
+  nhomNutIn: "In riêng từng người",
+
+  chuaDuHaiNguoi:
+    "Cần ít nhất hai người đã có hồ sơ thì mới so được. Thêm người vào sổ, hoặc mời họ " +
+    "làm bài trên máy này — hoặc gửi mã mời để họ làm ở máy của họ.",
+  quaNhieuNguoi:
+    "Một lần phân tích nhận tối đa {so} người. Bỏ bớt vài người rồi chạy lại nhé.",
+
+  /** Danh sách thư mục đã chạy. */
+  nhomThuMuc: "Các lần đã phân tích",
+  moTaThuMuc: "Giữ {so} lần gần nhất trên máy này.",
+  nutMoThuMuc: "Mở",
+} as const;
+
+/* ── Hạn mức thư mục phân tích (14.5) ────────────────────────────────────── */
+
+export const CHU_HAN_MUC_THU_MUC = {
+  tieuDe: "Lần phân tích cũ nhất sẽ được thay",
+  moTa:
+    "Máy này giữ {gioiHan} lần phân tích gần nhất. Chạy lần mới thì lần dưới đây bị xoá — " +
+    "tải về giữ lại trước nếu bạn cần.",
+  mauDong: "Lần chạy ngày {ngay} · {so} người",
+  /** 🔴 Kho đầy là chuyện của MÁY, nhưng hậu quả là người dùng mất bản vừa chạy. Nói ra. */
+  hetChoLuu:
+    "Máy đã hết chỗ lưu nên bản phân tích này chưa được giữ lại. Tải về máy trước, rồi " +
+    "xoá bớt vài lần chạy cũ ở danh sách bên dưới.",
 } as const;

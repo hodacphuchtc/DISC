@@ -18,7 +18,7 @@
   "eventsPublished": [],
   "eventsConsumed": [],
   "diemCam": [
-    { "ten": "onGuiLienHe", "noiO": "lien-he/kieu.ts", "moTa": "Đội dev nối vào backend của họ. Bản mặc định: lien-he/luu-tam.ts" },
+    { "ten": "onGuiLienHe", "noiO": "lien-he/kieu.ts", "moTa": "CHỈ CÒN KIỂU. Ô thu liên hệ đã gỡ ở 11.2 (mục tiêu đổi sang giữ chân, không thu khách lạ). Giữ lại vì đây là hàng rào biên dịch cấm dữ liệu trẻ lọt ra ngoài — xem timKhoaCam()" },
     { "ten": "onGhiMoc", "noiO": "do-phieu/index.ts", "moTa": "Đội dev nối vào hệ thống đo của họ qua datCachGhiMoc()" }
   ]
 }

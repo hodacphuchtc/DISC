@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { PHIEN_BAN_BO_DE } from "../config/disc-cau-hoi";
-import { docNhap, ghiNhap, khoaNhap, xoaNhap, type Nhap } from "../modules/core/luu-tru/nhap";
+import {
+  coNhapPhienBanCu,
+  docNhap,
+  ghiNhap,
+  khoaNhap,
+  xoaNhap,
+  type Nhap,
+} from "../modules/core/luu-tru/nhap";
 
 afterEach(() => {
   window.localStorage.clear();
@@ -100,5 +107,46 @@ describe("lưu nháp — cửa sổ ẩn danh", () => {
       throw new DOMException("Chặn", "SecurityError");
     });
     expect(() => xoaNhap("THCS")).not.toThrow();
+  });
+});
+
+describe("🔴 coNhapPhienBanCu — phân biệt 'không dùng được' với 'chưa từng có'", () => {
+  /**
+   * Hai chuyện này trông giống nhau từ phía mã (`docNhap()` trả `null` cả hai), nhưng
+   * khác hẳn từ phía người dùng: một bên họ chưa làm gì, một bên họ ĐÃ làm dở và bài đó
+   * vừa bị bộ câu hỏi mới làm cho vô nghĩa. Chỉ trường hợp sau đáng được nói ra và xin lỗi.
+   * Im lặng vứt bài của người ta rồi hiện màn trắng tinh là cách nhanh nhất để họ kết
+   * luận phần mềm ăn mất bài.
+   */
+  it("có nháp cũ khác phiên bản ⇒ true", () => {
+    ghiNhap(nhapMau({ phienBanBoDe: "0.9" }));
+    expect(coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).toBe(true);
+  });
+
+  it("nháp đúng phiên bản ⇒ false (dùng được thì có gì mà báo)", () => {
+    ghiNhap(nhapMau());
+    expect(coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).toBe(false);
+  });
+
+  it("chưa có nháp nào ⇒ false", () => {
+    expect(coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).toBe(false);
+  });
+
+  it("🔴 nháp của biệt danh KHÁC ⇒ false, không bao giờ nói hộ bé khác", () => {
+    // Máy giáo viên đi qua nhiều gia đình (QĐ7). Báo "bài dở của bạn" cho đúng đứa trẻ,
+    // không phải cho đứa ngồi vào máy sau.
+    ghiNhap(nhapMau({ bietDanh: "Bống", phienBanBoDe: "0.9" }));
+    expect(coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).toBe(false);
+  });
+
+  it("nháp của bộ đề khác ⇒ false", () => {
+    ghiNhap(nhapMau({ phienBanBoDe: "0.9" }));
+    expect(coNhapPhienBanCu("TH", "Bi", PHIEN_BAN_BO_DE)).toBe(false);
+  });
+
+  it("localStorage hỏng thì trả false, KHÔNG ném — mất lời nhắc, không mất bài", () => {
+    window.localStorage.setItem(khoaNhap("THCS"), "{ rác không phải JSON");
+    expect(() => coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).not.toThrow();
+    expect(coNhapPhienBanCu("THCS", "Bi", PHIEN_BAN_BO_DE)).toBe(false);
   });
 });

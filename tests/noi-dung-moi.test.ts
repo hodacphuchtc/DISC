@@ -7,6 +7,7 @@ import {
   MUC_DO_RO,
   THU_TU_PHA,
 } from "../config/disc-bieu-hien";
+import { KHOI_DAN_NGUON } from "../config/disc-tu-dien";
 import {
   BAN_KHOAN,
   LECH_PHONG_CACH,
@@ -266,5 +267,94 @@ describe("băn khoăn — giọng không được thành chẩn đoán", () => {
         expect(MA_TRUC as readonly string[]).toContain(t);
       }
     }
+  });
+});
+
+/* ────────────────────────────────────────────────────────────────────────────
+   12.5 — CHÚ GIẢI BỐN NHÓM + KHỐI DẪN NGUỒN
+   ──────────────────────────────────────────────────────────────────────────── */
+
+describe("🔴 12.5 — mỗi trục ĐỦ BỐN KHỐI, không trục nào thiếu", () => {
+  /**
+   * 🔴 Kiểm theo TRỤC, đúng danh từ mà đặc tả dùng.
+   *
+   * Bài học đắt nhất của GĐ9: đặc tả nói "mỗi TRỤC", bản dựng làm theo "mỗi KIỂU", test
+   * kiểm "mỗi kiểu" — nên test xanh, DEMO đạt, hạng mục tick ✅, mà phụ huynh nhìn biểu
+   * đồ bốn cột chỉ đọc được chữ về một nhóm, suốt bốn giai đoạn.
+   */
+  it.each(MA_TRUC)("trục %s có đủ bốn khối, không khối nào rỗng", (t) => {
+    const d = DAC_DIEM_TRUC[t];
+    for (const [ten, chu] of Object.entries({
+      diemManh: d.diemManh,
+      choCanDeY: d.choCanDeY,
+      khiNhe: d.khiNhe,
+      muonCach: d.muonCach,
+    })) {
+      expect(typeof chu, `${t}.${ten}`).toBe("string");
+      expect(chu.trim().length, `${t}.${ten} quá ngắn`).toBeGreaterThan(60);
+    }
+  });
+
+  it("🔴 bốn câu 'mượn cách' KHÁC NHAU — không trục nào bị dồn nhầm", () => {
+    // Ngày 27/08 một script sửa hàng loạt đã dồn cả 8 câu vào riêng trục D vì dò khoá
+    // bằng indexOf("  D: {"). Không cửa kiểm nào bắt được, vì độ dài vẫn đạt và luật
+    // "không trùng giữa các TRƯỜNG" vẫn thoả. Cửa này soi chiều còn lại: giữa các KHOÁ.
+    const cac = MA_TRUC.map((t) => DAC_DIEM_TRUC[t].muonCach);
+    expect(new Set(cac).size).toBe(MA_TRUC.length);
+  });
+
+  it("🔴 'mượn cách' KHÔNG dùng từ khuyết thiếu — DISC không phải mô hình thiếu sót", () => {
+    for (const t of MA_TRUC) {
+      expect(
+        DAC_DIEM_TRUC[t].muonCach,
+        `trục ${t} nói về khuyết thiếu — đụng thẳng ADR-002`,
+      ).not.toMatch(/thiếu|yếu|kém|khiếm khuyết|cần bổ sung|hạn chế của|khắc phục|cải thiện/iu);
+    }
+  });
+
+  it("'mượn cách' viết theo khuôn TÌNH HUỐNG, không theo khuôn sửa người", () => {
+    // "Có những lúc…" là cách nói rằng hoàn cảnh đổi, không phải người phải đổi.
+    for (const t of MA_TRUC) {
+      expect(DAC_DIEM_TRUC[t].muonCach, `trục ${t}`).toMatch(/có những lúc|những lúc đó/iu);
+    }
+  });
+});
+
+describe("🔴 12.5 — khối dẫn nguồn nói SỰ THẬT, kể cả sự thật khó chịu", () => {
+  const CA_KHOI = KHOI_DAN_NGUON.doan.join(" ");
+
+  it("nói rõ Marston KHÔNG tạo bài trắc nghiệm nào", () => {
+    // Rất nhiều tài liệu bán hàng gộp "mô hình 1928" với "bài trắc nghiệm" để mượn uy tín
+    // của một cái tên cũ hơn. Bản này tách hai chuyện đó ra.
+    expect(CA_KHOI).toMatch(/Marston/u);
+    expect(CA_KHOI).toMatch(/không tạo ra bài trắc nghiệm nào/iu);
+    expect(CA_KHOI).toMatch(/Clarke/u);
+  });
+
+  it("🔴 nói rõ bộ câu hỏi CHƯA chuẩn hoá trên dữ liệu người Việt", () => {
+    expect(CA_KHOI).toMatch(/chưa được chuẩn hoá trên dữ liệu người Việt/iu);
+  });
+
+  it("nói rõ đây là để mở một cuộc trò chuyện, không phải kết luận về ai", () => {
+    expect(CA_KHOI).toMatch(/trò chuyện/iu);
+    expect(CA_KHOI).toMatch(/không phải như một kết luận/iu);
+  });
+
+  it("🔴 KHÔNG có con số tin cậy hay hiệu lực nào", () => {
+    // Ngày duy nhất được phép nói về độ tin cậy là ngày có 30–50 phản hồi thật chạy qua
+    // scripts/phan-tich-item.mjs — và khi đó nói bằng con số của chính mình.
+    expect(CA_KHOI).not.toMatch(/cronbach|alpha|α|hệ số|độ tin cậy|\br\s*=|\d+\s*%/iu);
+  });
+
+  it("🔴 KHÔNG nói 'đã được khoa học chứng minh' hay họ hàng của nó", () => {
+    expect(CA_KHOI).not.toMatch(
+      /khoa học chứng minh|đã được chứng minh|nghiên cứu chỉ ra|kiểm chứng khoa học|độ chính xác/iu,
+    );
+  });
+
+  it("🔴 KHÔNG trích dẫn nghiên cứu nào mà người đọc không tự kiểm được", () => {
+    // Một cái tên + một năm là mốc lịch sử tra được. Một "theo nghiên cứu của…" không
+    // kèm gì thì người đọc không có đường nào kiểm.
+    expect(CA_KHOI).not.toMatch(/theo nghiên cứu|theo một khảo sát|các nhà khoa học/iu);
   });
 });

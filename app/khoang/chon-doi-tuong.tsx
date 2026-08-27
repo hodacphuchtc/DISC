@@ -12,7 +12,12 @@ import {
   TRUC,
   type MaNhanh,
 } from "@config/disc-tu-dien";
-import { LOP_CUOI_TIEU_HOC, LOP_LON_NHAT, LOP_NHO_NHAT } from "@config/disc-nguong";
+import {
+  LOP_CUOI_TIEU_HOC,
+  LOP_DAU_CAP_BA,
+  LOP_LON_NHAT,
+  LOP_NHO_NHAT,
+} from "@config/disc-nguong";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe } from "@modules/core/bo-de/kieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
@@ -22,6 +27,14 @@ const LOP = Array.from(
   { length: LOP_LON_NHAT - LOP_NHO_NHAT + 1 },
   (_, i) => LOP_NHO_NHAT + i,
 );
+
+/**
+ * Giá trị của ô "Đã qua lớp 12". CỐ Ý là một chuỗi chứ không phải số 13:
+ * một sentinel bằng số sẽ lặng lẽ chui vào `BoiCanhChon.lop` rồi được lưu như thể người
+ * dùng đang học lớp 13 — và sáu tháng sau không ai truy được con số đó ở đâu ra.
+ */
+const TREN_LOP_12 = "tren-12" as const;
+type ChonLop = number | typeof TREN_LOP_12;
 const TUOI_CON = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 /**
@@ -57,7 +70,7 @@ export function ManChonDoiTuong({
   readonly onXong: (boDe: BoDe, boiCanh: BoiCanhChon) => void;
 }) {
   const [nhanh, datNhanh] = useState<MaNhanh | null>(null);
-  const [lop, datLop] = useState<number | undefined>();
+  const [lop, datLop] = useState<ChonLop | undefined>();
   const [mucTieu, datMucTieu] = useState<MucTieuPhuHuynh | undefined>();
   const [tuoiCon, datTuoiCon] = useState<number | undefined>();
 
@@ -73,13 +86,19 @@ export function ManChonDoiTuong({
   const doiTuong: DauVaoDinhTuyen["doiTuong"] | null =
     nhanh === "nguoi-lon"
       ? "phu-huynh"
-      : nhanh === "hoc-sinh" && lop !== undefined
-        ? lop <= LOP_CUOI_TIEU_HOC
-          ? "tieu-hoc"
-          : "thcs"
-        : null;
+      : nhanh !== "hoc-sinh" || lop === undefined
+        ? null
+        : lop === TREN_LOP_12 || lop >= LOP_DAU_CAP_BA
+          ? "cap-ba-tro-len"
+          : lop <= LOP_CUOI_TIEU_HOC
+            ? "tieu-hoc"
+            : "thcs";
 
-  const tuyen = doiTuong ? dinhTuyen({ doiTuong, lop, mucTieu, tuoiCon }) : null;
+  // 🔴 "Đã qua lớp 12" KHÔNG có số lớp để chuyền đi. Đưa `undefined` chứ đừng đưa 13:
+  // trường này được LƯU LẠI cùng bài làm, và một con số bịa nằm trong dữ liệu thì đời sau
+  // đọc lên vẫn đầy thuyết phục.
+  const soLop = typeof lop === "number" ? lop : undefined;
+  const tuyen = doiTuong ? dinhTuyen({ doiTuong, lop: soLop, mucTieu, tuoiCon }) : null;
   const boDe = tuyen?.xong ? napBoDe(tuyen.boDe) : null;
   const giaiThich =
     tuyen?.xong && tuyen.giaiThich === "LOP_1_2"
@@ -124,6 +143,11 @@ export function ManChonDoiTuong({
                 onChon={() => datLop(l)}
               />
             ))}
+            <NutVien
+              nhan={CHU_CHON.nhanTren12}
+              dangChon={lop === TREN_LOP_12}
+              onChon={() => datLop(TREN_LOP_12)}
+            />
           </div>
         </fieldset>
       )}
@@ -181,7 +205,7 @@ export function ManChonDoiTuong({
               onXong(boDe, {
                 // Lớp đã HỎI THẬT ở nhánh học sinh nên lưu được — cả lớp 7 cũng vậy. Còn
                 // TUỔI thì tuyệt đối không suy từ lớp: lớp 4 có cả bé 9 lẫn bé 10.
-                ...(nhanh === "hoc-sinh" && lop !== undefined ? { lop } : {}),
+                ...(nhanh === "hoc-sinh" && soLop !== undefined ? { lop: soLop } : {}),
                 ...(tuoiCon !== undefined ? { tuoiCon } : {}),
               })
             }

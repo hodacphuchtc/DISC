@@ -57,7 +57,7 @@ làm tính năng đó thì không cần cài.
 ┌─ TẦNG GIAO DIỆN THAM CHIẾU ─────────────────────────────┐
 │  app/components/  ·  app/khoang/                         │
 │  modules/test/lam-bai/                                   │
-│  modules/core/luu-tru/ · do-phieu/ · lien-he/luu-tam.ts  │
+│  modules/core/luu-tru/ · do-phieu/                       │
 │  modules/report/xuat-anh.ts                              │
 │                                                          │
 │  Đụng trình duyệt. Viết lại theo quy ước của bạn cũng    │
@@ -112,26 +112,21 @@ Không muốn thêm alias thì tìm-thay `@modules/` và `@config/` thành đư�
 
 ---
 
-## 4. Hai điểm cắm bạn cần nối
+## 4. Điểm cắm bạn cần nối
 
-### 4.1 Thu liên hệ — `onGuiLienHe`
+### 4.1 Thu liên hệ — ĐÃ GỠ ở 11.2, phần còn lại là một hàng rào
 
-Bản bàn giao chỉ lưu phiếu vào `localStorage` rồi mở Zalo. Nối vào backend của bạn:
+🔴 **Ô thu số điện thoại không còn trong sản phẩm.** Ngày 27/08/2026 mục tiêu kinh doanh
+đổi từ *mồi thu khách lạ* sang *giữ chân hơn 1.000 gia đình đang học* — với người đã ký hợp
+đồng và đang ngồi trong app của chính trung tâm, xin lại số điện thoại của họ vừa thừa vừa
+làm màn kết quả nặng thêm một khối.
 
-```tsx
-// app/khoang/ket-qua.tsx — chỗ <OLienHe onGui={...} />
-import type { PhieuLienHe } from "@modules/core/lien-he/kieu";
+Thứ **cố ý giữ lại** là `modules/core/lien-he/kieu.ts`: kiểu `PhieuLienHe` và hàm
+`timKhoaCam()`. Đó là một **hàng rào biên dịch** — nếu sau này bạn dựng lại một kênh liên
+hệ, nó chặn dữ liệu của trẻ đi kèm ra ngoài. `tests/lien-he-sach.test.ts` canh nó. **Đừng
+gỡ file đó và đừng gỡ test đó.**
 
-async function guiLienHe(phieu: PhieuLienHe) {
-  await fetch("/api/lead", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(phieu),
-  });
-}
-```
-
-Hình dạng phiếu — **đúng bốn trường, không hơn**:
+Dựng lại kênh liên hệ thì luật cũ vẫn nguyên: payload **đúng bốn trường, không hơn**:
 
 ```ts
 {
@@ -154,7 +149,11 @@ Hình dạng phiếu — **đúng bốn trường, không hơn**:
 
 ### 4.2 Đo phễu — `onGhiMoc`
 
-Bốn mốc: `mo` · `batDau` · `xong` · `deLaiSo`. Bản bàn giao ghi vào `localStorage`.
+Sáu mốc: `mo` · `batDau` · `xong` · `themThanhVien` · `baiThuHai` · `phanTichGiaDinh`.
+Bản bàn giao ghi vào `localStorage`, và khoang *Số liệu máy này* đọc lại chúng.
+
+🔴 `deLaiSo` đã **bỏ** ở 11.2 cùng ô thu liên hệ. `baiThuHai` là mốc đáng theo dõi nhất
+trong sáu mốc — nó đo giả định đang đỡ toàn bộ phần phân tích gia đình (ADR-007).
 
 ```tsx
 // gọi MỘT LẦN lúc khởi động app
@@ -194,8 +193,8 @@ Toàn bộ chữ nghĩa nằm trong `config/`, sửa được trên giao diện 
 3. **Sửa xong chạy lại `node scripts/sinh-thu-tu.mjs`** để sinh lại thứ tự hiển thị.
 
 ⚠️ `config/` đi thẳng ra bundle công khai. **Đừng đặt họ tên, tên cơ sở, số điện thoại
-thật vào đó.** Số Zalo trong `disc-tu-dien.ts` (`LIEN_HE_SATA`) là số công khai của doanh
-nghiệp — đó là ngoại lệ có chủ đích.
+thật vào đó.** Từ 11.2 không còn ngoại lệ nào — ô thu liên hệ và hằng `LIEN_HE_SATA` đã
+được gỡ hẳn.
 
 ---
 
@@ -231,8 +230,9 @@ Ba việc **không phải việc code**, nhưng phải xong trước ngày chạ
 2. **Chạy `node scripts/phan-tich-item.mjs` trên 30–50 phản hồi thật.** Nó chỉ ra câu nào
    đang đo sai. Đây là thứ duy nhất biến bộ câu từ *"do BA soạn"* thành *"đã sàng trên
    người Việt"*.
-3. **Điền số Zalo/hotline thật** vào `LIEN_HE_SATA` trong `config/disc-tu-dien.ts`.
-   Hiện là số giữ chỗ `0900 000 000`.
+3. **Đọc `docs/decisions/ADR-005-cho-nhap-ten-that.md` trước khi dựng bất kỳ đường gửi dữ
+   liệu nào ra ngoài.** Sản phẩm cho nhập tên thật, và điều đó chỉ an toàn chừng nào ADR-001
+   còn đứng. Hai quyết định này an toàn khi đứng riêng, nguy hiểm khi đứng cạnh nhau.
 
 ---
 

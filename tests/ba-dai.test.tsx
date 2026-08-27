@@ -140,3 +140,104 @@ describe("🔴 nút in phải tách theo bản", () => {
     },
   );
 });
+
+describe("🔴 11.4 — hai tờ in ra phải nhận ra ngay là của ai", () => {
+  const tieuDeCua = (c: HTMLElement, ban: string) =>
+    dai(c, ban)?.querySelector('[data-thu="ten-dai"]')?.textContent?.trim() ?? "";
+
+  it("mỗi dải mở đầu bằng một TIÊU ĐỀ mang tên người", async () => {
+    const { container } = hien("TH");
+    await choXong();
+
+    expect(tieuDeCua(container, "con")).toBe("Bin — bản của em");
+    expect(tieuDeCua(container, "boMe")).toBe("Bin — phần dành cho bố mẹ");
+  });
+
+  it("tiêu đề là thẻ heading thật, không phải nhãn nhỏ — người đọc màn hình nhảy được", async () => {
+    const { container } = hien("TH");
+    await choXong();
+    const t = dai(container, "con")?.querySelector('[data-thu="ten-dai"]');
+    expect(t?.tagName).toBe("H2");
+  });
+
+  it("🔴 bộ PH nói 'bản tự đọc', không nói 'bản của bạn'", async () => {
+    const { container } = hien("PH");
+    await choXong();
+    expect(tieuDeCua(container, "tuMinh")).toBe("Bin — bản tự đọc");
+  });
+
+  it("🔴 dải bố mẹ MỞ ĐẦU bằng một việc làm được ngay, không bằng biểu đồ", async () => {
+    // Trước 11.4 câu này nằm CUỐI dải, lọt trong một lớp bóc sâu đang đóng: thứ duy nhất
+    // bố mẹ làm được tối nay lại là thứ phải bấm mở rồi cuộn hết mới thấy.
+    const { container } = hien("QS");
+    await choXong();
+
+    const d = dai(container, "boMe");
+    const viec = d?.querySelector('[data-thu="mot-viec"]');
+    expect(viec, "dải bố mẹ phải có khối việc làm được ngay").toBeTruthy();
+
+    // Nó phải đứng TRƯỚC mọi lớp bóc sâu của dải này.
+    const lopDau = d?.querySelector("[data-lop-sau]");
+    expect(viec!.compareDocumentPosition(lopDau!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("việc làm được ngay KHÔNG bị bọc trong lớp bấm mở", async () => {
+    const { container } = hien("QS");
+    await choXong();
+    const viec = dai(container, "boMe")?.querySelector('[data-thu="mot-viec"]');
+    expect(viec?.closest("[data-lop-sau]")).toBeNull();
+  });
+
+  it("câu việc-làm-được-ngay chỉ xuất hiện MỘT lần, không nhân đôi khi dời chỗ", async () => {
+    const { container } = hien("QS");
+    await choXong();
+    expect(container.querySelectorAll('[data-thu="mot-viec"]')).toHaveLength(1);
+  });
+});
+
+describe("🔴 12.5 — chú giải bốn nhóm hiện ra thật trên màn kết quả", () => {
+  it("có đủ bốn mục trục, mỗi mục đủ bốn khối", async () => {
+    const { container } = hien("TH");
+    await choXong();
+
+    const muc = container.querySelectorAll('[data-thu="chu-giai-truc"]');
+    expect(muc).toHaveLength(4);
+    for (const m of muc) {
+      for (const khoi of ["dam", "gia", "nhat", "muon"]) {
+        expect(
+          m.querySelector(`[data-thu="khoi-${khoi}"]`),
+          `trục ${m.getAttribute("data-truc")} thiếu khối ${khoi}`,
+        ).toBeTruthy();
+      }
+    }
+  });
+
+  it("bốn trục hiện bốn câu 'mượn cách' KHÁC NHAU trên màn, không lặp", async () => {
+    const { container } = hien("TH");
+    await choXong();
+
+    const cau = Array.from(container.querySelectorAll('[data-thu="khoi-muon"] p')).map(
+      (n) => n.textContent,
+    );
+    expect(cau).toHaveLength(4);
+    expect(new Set(cau).size).toBe(4);
+  });
+
+  it("🔴 TÌM CHỮ 'điểm yếu' TRONG CẢ TRANG — không được có", async () => {
+    // Đây đúng là câu chủ dự án sẽ tự làm khi nghiệm thu. Làm sẵn.
+    hien("TH");
+    await choXong();
+    expect(document.body.textContent).not.toMatch(/điểm yếu|khuyết điểm|khiếm khuyết/iu);
+  });
+
+  it("khối dẫn nguồn có mặt và nói đủ ba điều khó chịu", async () => {
+    const { container } = hien("QS");
+    await choXong();
+
+    const nguon = container.querySelector('[data-thu="dan-nguon"]');
+    expect(nguon).toBeTruthy();
+    expect(nguon?.textContent).toMatch(/không tạo ra bài trắc nghiệm nào/iu);
+    expect(nguon?.textContent).toMatch(/chưa được chuẩn hoá trên dữ liệu người Việt/iu);
+    expect(nguon?.textContent).toMatch(/trò chuyện/iu);
+  });
+});

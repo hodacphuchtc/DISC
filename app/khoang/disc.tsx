@@ -13,20 +13,31 @@ import { LamBai } from "./lam-bai";
 import { TruocKhiBatDau } from "./truoc-khi-bat-dau";
 import { ManVungLech, useDoiChieu } from "./vung-lech";
 import { napBoDe } from "@modules/core/bo-de/nap";
+import { LOP_CUOI_TIEU_HOC, LOP_DAU_CAP_BA } from "@config/disc-nguong";
+import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
+import { dinhTuyen } from "@modules/test/dinh-tuyen";
 import { PHIEN_BAN_BO_DE } from "@config/disc-cau-hoi";
 import type { BoDe, KetQua, MaBoDe } from "@modules/core/bo-de/kieu";
-import { docNguonTuUrl, ghiMoc } from "@modules/core/do-phieu";
-import { luuBai } from "@modules/core/luu-tru/kho-bai";
+import { daGhiMoc, datDuocBaiThuHai, docNguonTuUrl, ghiMoc } from "@modules/core/do-phieu";
+import { docTatCa, luuBai } from "@modules/core/luu-tru/kho-bai";
 import { cham } from "@modules/report/cham";
 
 type Buoc =
   | { readonly ten: "chon" }
-  | { readonly ten: "dan-do"; readonly boDe: BoDe; readonly bietDanhGoiY?: string }
+  | {
+      readonly ten: "dan-do";
+      readonly boDe: BoDe;
+      readonly bietDanhGoiY?: string;
+      /** Vào từ thẻ thành viên (12.4) — tên đã biết, không hỏi lại. */
+      readonly tenCoSan?: string;
+      readonly maThanhVien?: string;
+    }
   | {
       readonly ten: "lam-bai";
       readonly boDe: BoDe;
       readonly bietDanh: string;
       readonly batDau: string;
+      readonly maThanhVien?: string;
     }
   | {
       readonly ten: "ket-qua";
@@ -41,6 +52,25 @@ function nguoiTraLoiCua(ma: MaBoDe): "tre" | "nguoi-lon" {
   return ma === "TH" || ma === "THCS" ? "tre" : "nguoi-lon";
 }
 
+/**
+ * Bộ đề cho một thành viên, suy từ LỚP đã lưu trong sổ.
+ *
+ * 🔴 Dùng lại đúng `dinhTuyen()` — luật ADR-002 (sàn tự đánh giá 8 tuổi) là thứ đắt nhất
+ * trong sản phẩm, và có đúng MỘT nơi giữ nó. Chưa biết lớp thì trả `null` và người dùng
+ * đi qua màn 1 như bình thường: đoán bừa một bộ đề cho một đứa trẻ là chuyện không được
+ * phép làm để tiết kiệm một cú chạm.
+ */
+function boDeCuaThanhVien(tv: ThanhVien | undefined): BoDe | null {
+  if (!tv?.lop) return null;
+  const lop = Number(tv.lop);
+  if (!Number.isFinite(lop)) return null;
+
+  const doiTuong =
+    lop >= LOP_DAU_CAP_BA ? "cap-ba-tro-len" : lop <= LOP_CUOI_TIEU_HOC ? "tieu-hoc" : "thcs";
+  const tuyen = dinhTuyen({ doiTuong, lop });
+  return tuyen.xong ? napBoDe(tuyen.boDe) : null;
+}
+
 function maMoi(): string {
   try {
     return crypto.randomUUID();
@@ -50,8 +80,13 @@ function maMoi(): string {
   }
 }
 
-export function KhoangDisc() {
-  const [buoc, datBuoc] = useState<Buoc>({ ten: "chon" });
+export function KhoangDisc({ vaoTuThanhVien }: { readonly vaoTuThanhVien?: ThanhVien } = {}) {
+  // 🔴 12.4 — vào bài từ THẺ THÀNH VIÊN thì bỏ luôn màn hỏi tên: tên đã có trong sổ.
+  // Định tuyến bộ đề từ LỚP đã lưu của người đó; chưa có lớp thì vẫn phải qua màn 1.
+  const [buoc, datBuoc] = useState<Buoc>(() => {
+    const boDe = boDeCuaThanhVien(vaoTuThanhVien);
+    return boDe ? { ten: "dan-do", boDe, tenCoSan: vaoTuThanhVien!.ten } : { ten: "chon" };
+  });
   // Đọc nguồn MỘT LẦN lúc gắn — đọc lúc dựng HTML tĩnh thì máy chủ không có location.
   const [nguon, datNguon] = useState("truc-tiep");
   // Chặn ghi đôi mốc "mở": React StrictMode gọi effect hai lần ở chế độ dev. Bản
@@ -77,12 +112,16 @@ export function KhoangDisc() {
    */
   const [boiCanh, datBoiCanh] = useState<BoiCanhChon>({});
 
+  /** Người trong sổ đang làm bài này, nếu vào từ thẻ thành viên (12.4). */
+  const maThanhVienDangLam = vaoTuThanhVien?.id;
+
   function xongBai(
     boDe: BoDe,
     bietDanh: string,
     batDau: string,
     traLoi: Record<string, number>,
     giay: number,
+    maThanhVien?: string,
   ) {
     const ketQua = cham(boDe, traLoi, giay);
     ghiMoc("xong", nguon, new Date().toISOString());
@@ -100,14 +139,36 @@ export function KhoangDisc() {
       maTre: bietDanh,
       ...(boiCanh.lop !== undefined ? { lop: String(boiCanh.lop) } : {}),
       ...(boiCanh.tuoiCon !== undefined ? { tuoi: boiCanh.tuoiCon } : {}),
+      // 🔴 Đóng dấu thành viên NGAY LÚC LƯU. Gán sau bằng cách dò tên là dựng lại đúng
+      // cái mơ hồ mà sổ gia đình sinh ra để dẹp: hai người trùng tên, hoặc một người đổi
+      // tên giữa chừng, là bài về nhầm chỗ mà không ai biết.
+      ...(maThanhVien ? { maThanhVien } : {}),
       nguoiTraLoi: nguoiTraLoiCua(boDe.ma),
       batDau,
       ketThuc: new Date().toISOString(),
       traLoi,
       ketQua,
       phienBanBoDe: PHIEN_BAN_BO_DE,
-    }).then((daLuu) => {
+    }).then(async (daLuu) => {
       if (daLuu) datIdBai(id);
+      // 🔴 Ghi mốc SAU khi lưu xong và ĐỌC LẠI TỪ KHO, không cộng dồn trong đầu: kho là
+      // nơi duy nhất biết máy này thật sự có mấy biệt danh, kể cả bài của những lần mở
+      // trước. Và chỉ ghi MỘT lần — mốc này đo "đã từng đạt", không đo số lượt.
+      if (daLuu && !daGhiMoc("baiThuHai")) {
+        const kho = await docTatCa();
+        if (datDuocBaiThuHai(kho.map((b) => b.maTre))) {
+          ghiMoc("baiThuHai", nguon, new Date().toISOString());
+        }
+      }
+    }).catch(() => {
+      // 🔴 PHẢI CÓ. Đây là lời gọi kiểu bắn-rồi-quên (`void`), nên một lời từ chối bên
+      // trong `.then` không ai bắt — trình duyệt ghi "unhandled rejection", và người dùng
+      // vừa làm xong 20 câu thì thấy một lỗi đỏ ở màn kết quả.
+      //
+      // Khối `then` này có `await docTatCa()`, tức là nó CÓ THỂ từ chối (kho bị đóng giữa
+      // chừng, trình duyệt chặn IndexedDB). Mất một mốc ĐO là chuyện nhỏ; làm hỏng màn
+      // kết quả của người vừa làm xong bài mới là chuyện lớn. Luật của kho ghi rõ:
+      // hỏng kho thì mất tính năng LƯU, không mất khả năng DÙNG.
     });
   }
 
@@ -127,6 +188,7 @@ export function KhoangDisc() {
         <TruocKhiBatDau
           boDe={buoc.boDe}
           bietDanhGoiY={buoc.bietDanhGoiY}
+          tenCoSan={buoc.tenCoSan}
           onQuayLai={() => datBuoc({ ten: "chon" })}
           onBatDau={(bietDanh) => {
             ghiMoc("batDau", nguon, new Date().toISOString());
@@ -135,6 +197,7 @@ export function KhoangDisc() {
               boDe: buoc.boDe,
               bietDanh,
               batDau: new Date().toISOString(),
+              ...(maThanhVienDangLam ? { maThanhVien: maThanhVienDangLam } : {}),
             });
           }}
         />
@@ -148,7 +211,7 @@ export function KhoangDisc() {
           phienBanBoDe={PHIEN_BAN_BO_DE}
           onQuayLai={() => datBuoc({ ten: "dan-do", boDe: buoc.boDe })}
           onXong={(traLoi, giay) =>
-            xongBai(buoc.boDe, buoc.bietDanh, buoc.batDau, traLoi, giay)
+            xongBai(buoc.boDe, buoc.bietDanh, buoc.batDau, traLoi, giay, buoc.maThanhVien)
           }
         />
       );
@@ -165,7 +228,6 @@ export function KhoangDisc() {
           onLamBoConThieu={(ma, maTre) =>
             datBuoc({ ten: "dan-do", boDe: napBoDe(ma), bietDanhGoiY: maTre })
           }
-          nguon={nguon}
           tuoi={boiCanh.tuoiCon}
         />
       );

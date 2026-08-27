@@ -33,6 +33,9 @@ const PHAN_LOAI_TRUONG: Record<keyof BaiLamLuu, "cua-tre" | "vo-danh"> = {
   banKhoan: "cua-tre",
   traLoi: "cua-tre",
   ketQua: "cua-tre",
+  // 🆕 v2 (12.1). Khoá tới thành viên trong sổ gia đình — nó TRỎ TỚI một đứa trẻ có tên
+  // thật, nên lọt ra ngoài là lọt một định danh, không phải một con số vô hại.
+  maThanhVien: "cua-tre",
 };
 
 const PHIEU = {

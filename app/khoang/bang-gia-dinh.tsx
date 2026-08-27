@@ -1,0 +1,381 @@
+"use client";
+
+/**
+ * BẢNG GIA ĐÌNH (12.3) — thay màn *Bài đã làm* xếp theo thời gian.
+ *
+ * 🔴 VÌ SAO MỘT BẢNG, KHÔNG PHẢI WIZARD BA BƯỚC.
+ * Ba bước tuần tự bắt người dùng đi hết bước 1 mới thấy bước 2. Một bảng thì mỗi việc
+ * đúng một cú chạm, và — quan trọng hơn — **nhìn một cái là biết ai chưa làm**. Chính
+ * thông tin đó khiến phụ huynh đi nhắc người còn lại, và đó là hành vi mà cả GĐ14 đang
+ * đặt cược vào.
+ *
+ * 🔴 XOÁ NGƯỜI LÀ ĐƯỜNG MẤT DỮ LIỆU NHANH NHẤT. `xoaThanhVien` ở tầng lưu trữ cố ý không
+ * có chế độ mặc định; ở đây mặc định là "giữ bài" — bài rơi về mục *chưa xếp* và xếp lại
+ * được. Người dùng phải chủ động chọn "xoá luôn cả bài" thì mới mất.
+ *
+ * Thuộc TẦNG GIAO DIỆN THAM CHIẾU (ADR-004).
+ */
+
+import { useCallback, useEffect, useState } from "react";
+
+import { CHU_VAI, GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
+import {
+  CHU_BANG_GIA_DINH,
+  CHU_MA_MOI,
+  CHU_SO_SANH,
+  CHU_THONG_DIEP,
+  CHU_TONG_HOP,
+  TRUC,
+} from "@config/disc-tu-dien";
+import { MAU } from "@config/thuong-hieu";
+import { FormThanhVien, HoiXoa } from "@/app/components/form-thanh-vien";
+import { NhanMaMoi } from "@/app/components/nhan-ma-moi";
+import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
+import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
+import { soSanhTheoThoiGian } from "@modules/report/so-sanh-thoi-gian";
+import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
+import {
+  KENH_KHO,
+  docTatCa,
+  docThanhVien,
+  luuBai,
+  luuThanhVien,
+  xoaThanhVien,
+  type BaiLamLuu,
+} from "@modules/core/luu-tru/kho-bai";
+
+/** Ngày hôm nay theo giờ MÁY, dạng `yyyy-mm-dd`. Cùng lối với mọi chỗ khác trong khoang. */
+function homNay(): string {
+  const d = new Date();
+  const hai = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${hai(d.getMonth() + 1)}-${hai(d.getDate())}`;
+}
+
+export function KhoangBangGiaDinh({
+  onLamBai,
+  onXemBai,
+  onNhanMa,
+  onXemSoSanh,
+  onPhanTich,
+}: {
+  /** Bấm *Làm bài* trên thẻ một người. Thiếu callback thì nút không hiện. */
+  readonly onLamBai?: (tv: ThanhVien) => void;
+  readonly onXemBai?: (bai: BaiLamLuu) => void;
+  /** Nhận một mã mời (13.1). Trả `false` khi sổ đã có hồ sơ đó rồi. */
+  readonly onNhanMa?: (ten: string, hoSo: HoSoMoi) => Promise<boolean> | boolean;
+  /** Bấm *Xem thay đổi* trên thẻ (13.2). Nút chỉ hiện khi thật sự so được. */
+  readonly onXemSoSanh?: (tv: ThanhVien) => void;
+  /** Bấm *Phân tích cả nhà* (14.4). Nút chỉ hiện khi đã có từ hai người làm bài. */
+  readonly onPhanTich?: () => void;
+}) {
+  const [nguoi, datNguoi] = useState<ThanhVien[] | null>(null);
+  const [bai, datBai] = useState<BaiLamLuu[]>([]);
+  const [dangSua, datDangSua] = useState<ThanhVien | "moi" | null>(null);
+  const [hoiXoa, datHoiXoa] = useState<ThanhVien | null>(null);
+
+  const napLai = useCallback(async () => {
+    const [tv, ds] = await Promise.all([docThanhVien(), docTatCa()]);
+    datNguoi(tv);
+    datBai(ds);
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void napLai();
+  }, [napLai]);
+
+  // Tab khác vừa đổi kho (thường là do dọn hạn mức) ⇒ nạp lại, đừng hiện số liệu cũ.
+  useEffect(() => {
+    if (typeof BroadcastChannel === "undefined") return;
+    const kenh = new BroadcastChannel(KENH_KHO);
+    kenh.onmessage = () => void napLai();
+    return () => kenh.close();
+  }, [napLai]);
+
+  const baiCua = (id: string) => bai.filter((b) => b.maThanhVien === id);
+  const chuaXep = bai.filter((b) => !b.maThanhVien);
+  const soNguoiDaLam = (nguoi ?? []).filter((tv) => baiCua(tv.id).length > 0).length;
+
+  async function luu(tv: ThanhVien) {
+    await luuThanhVien(tv);
+    datDangSua(null);
+    await napLai();
+  }
+
+  async function xoa(tv: ThanhVien, cheDo: CheDoXoaThanhVien) {
+    await xoaThanhVien(tv.id, cheDo);
+    datHoiXoa(null);
+    await napLai();
+  }
+
+  async function xepVe(b: BaiLamLuu, maThanhVien: string) {
+    await luuBai({ ...b, maThanhVien });
+    await napLai();
+  }
+
+  return (
+    <section className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
+      {/* 🔴 THÔNG ĐIỆP NHÂN VĂN — dòng đầu tiên, trước mọi thứ khác, và chỉ ở đây. */}
+      <p
+        data-thu="thong-diep-chinh"
+        className="text-[20px] leading-snug font-bold md:text-[24px]"
+        style={{ color: MAU.timCongNghe }}
+      >
+        {CHU_THONG_DIEP.chinh}
+      </p>
+      <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_THONG_DIEP.phu}</p>
+      {/* 🔴 LÝ DO QUAY LẠI (13.2). Không có dòng này thì sản phẩm chỉ được dùng một lần
+          rồi thôi — mà mục tiêu của cả gói là GIỮ CHÂN, không phải đo một lần cho xong. */}
+      <p data-thu="nhac-lam-lai" className="mt-1 text-[14px] text-neutral-500">
+        {CHU_SO_SANH.nhacLamLai}
+      </p>
+
+      <div className="mt-8 flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="text-[18px] font-bold text-neutral-900">{CHU_BANG_GIA_DINH.tieuDe}</h1>
+        <button
+          type="button"
+          onClick={() => datDangSua("moi")}
+          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+          style={{ backgroundColor: MAU.timCongNghe }}
+        >
+          {CHU_BANG_GIA_DINH.nutThem}
+        </button>
+      </div>
+      <p className="mt-1.5 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTa}</p>
+
+      {nguoi === null ? (
+        <p className="mt-8 text-[15px] text-neutral-500">…</p>
+      ) : nguoi.length === 0 ? (
+        <p data-thu="bang-trong" className="mt-8 text-[15px] text-neutral-600">
+          {CHU_BANG_GIA_DINH.trong}
+        </p>
+      ) : (
+        <ul data-thu="luoi-thanh-vien" className="mt-5 grid gap-3 sm:grid-cols-2">
+          {nguoi.map((tv) => (
+            <TheThanhVien
+              key={tv.id}
+              tv={tv}
+              bai={baiCua(tv.id)}
+              onLamBai={onLamBai}
+              onXemBai={onXemBai}
+              onXemSoSanh={onXemSoSanh}
+              onSua={() => datDangSua(tv)}
+              onXoa={() => datHoiXoa(tv)}
+            />
+          ))}
+        </ul>
+      )}
+
+      {chuaXep.length > 0 && (
+        <section data-thu="chua-xep" className="mt-10">
+          <h2 className="text-[15px] font-semibold text-neutral-900">
+            {CHU_BANG_GIA_DINH.nhomChuaXep}
+          </h2>
+          <p className="mt-1 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTaChuaXep}</p>
+          <ul className="mt-3 space-y-2">
+            {chuaXep.map((b) => (
+              <li
+                key={b.id}
+                className="flex flex-wrap items-center gap-2 rounded-xl border p-3 text-[14px]"
+                style={{ borderColor: MAU.vienMo }}
+              >
+                <span className="text-neutral-800">
+                  {b.boDe} · {b.ketThuc.slice(0, 10)}
+                </span>
+                {(nguoi ?? []).length > 0 && (
+                  <select
+                    aria-label={`${CHU_BANG_GIA_DINH.nutXepVe} ${b.boDe}`}
+                    defaultValue=""
+                    onChange={(e) => e.target.value && void xepVe(b, e.target.value)}
+                    className="ml-auto rounded-lg border px-2 py-1.5"
+                    style={{ borderColor: MAU.vienMo }}
+                  >
+                    <option value="">{CHU_BANG_GIA_DINH.nutXepVe}…</option>
+                    {(nguoi ?? []).map((tv) => (
+                      <option key={tv.id} value={tv.id}>
+                        {tv.ten}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
+
+      <section data-thu="khoi-phan-tich" className="mt-10">
+        <h2 className="text-[15px] font-semibold text-neutral-900">
+          {CHU_BANG_GIA_DINH.nhomPhanTich}
+        </h2>
+        {soNguoiDaLam < 2 ? (
+          <p data-thu="phan-tich-chua-mo" className="mt-1 text-[14px] text-neutral-500">
+            {CHU_BANG_GIA_DINH.phanTichChuaMo}
+          </p>
+        ) : (
+          onPhanTich && (
+            <button
+              type="button"
+              data-thu="nut-phan-tich"
+              onClick={onPhanTich}
+              className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+              style={{ backgroundColor: MAU.timCongNghe }}
+            >
+              {CHU_TONG_HOP.nutPhanTich}
+            </button>
+          )
+        )}
+      </section>
+
+      <p data-thu="thong-diep-chan" className="mt-12 text-[13px] leading-relaxed text-neutral-500">
+        {CHU_THONG_DIEP.chan}
+      </p>
+
+      {dangSua && (
+        <FormThanhVien
+          tv={dangSua === "moi" ? null : dangSua}
+          daCo={nguoi ?? []}
+          onLuu={luu}
+          onHuy={() => datDangSua(null)}
+        />
+      )}
+
+      {hoiXoa && (
+        <HoiXoa
+          tv={hoiXoa}
+          soBai={baiCua(hoiXoa.id).length}
+          onHuy={() => datHoiXoa(null)}
+          onXoa={(cheDo) => void xoa(hoiXoa, cheDo)}
+        />
+      )}
+    </section>
+  );
+}
+
+/* ── Thẻ một người ───────────────────────────────────────────────────────── */
+
+function TheThanhVien({
+  tv,
+  bai,
+  onLamBai,
+  onXemBai,
+  onXemSoSanh,
+  onSua,
+  onXoa,
+}: {
+  readonly tv: ThanhVien;
+  readonly bai: readonly BaiLamLuu[];
+  readonly onLamBai?: (tv: ThanhVien) => void;
+  readonly onXemBai?: (bai: BaiLamLuu) => void;
+  readonly onXemSoSanh?: (tv: ThanhVien) => void;
+  readonly onSua: () => void;
+  readonly onXoa: () => void;
+}) {
+  // 🔴 Nút *Xem thay đổi* CHỈ hiện khi hai bài cách nhau đủ xa (13.2). Gần hơn thì thứ
+  // hiện lên là nhiễu của phép đo chứ không phải thay đổi của con người — và nó vẫn đọc
+  // lên đầy thuyết phục vì có số kèm theo. Không bày nút thì không ai đọc nhầm.
+  const soSanh = soSanhTheoThoiGian(
+    bai.filter((b) => b.ketQua.hopLe).map((b) => ({
+      id: b.id,
+      ketThuc: b.ketThuc,
+      diem: (b.ketQua as { diem: Record<MaTrucKieu, number> }).diem,
+    })),
+  );
+  const moiNhat = bai[0];
+  // Ưu tiên bài làm THẬT trên máy này; không có thì dùng hồ sơ nhận qua mã mời (13.1).
+  const diem = moiNhat?.ketQua.hopLe ? moiNhat.ketQua.diem : (tv.nhanQuaMa?.diem ?? null);
+  const chiCoMa = bai.length === 0 && Boolean(tv.nhanQuaMa);
+
+  return (
+    <li
+      data-thu="the-thanh-vien"
+      data-ten={tv.ten}
+      data-so-bai={bai.length}
+      className="rounded-2xl border p-4"
+      style={{ borderColor: MAU.vienMo }}
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <h3 className="text-[16px] font-semibold text-neutral-900">{tv.ten}</h3>
+        <span className="text-[13px] text-neutral-500">{CHU_VAI[tv.vaiTro]}</span>
+      </div>
+
+      {/* Sổ tiến độ: một chấm đầy cho mỗi bài đã làm. Nhìn lướt là biết ai chưa xong. */}
+      <p data-thu="so-tien-do" className="mt-2 text-[14px] text-neutral-600">
+        <span aria-hidden="true" className="mr-1.5 tracking-widest" style={{ color: MAU.camNangLuong }}>
+          {"●".repeat(bai.length)}
+          {"○".repeat(Math.max(GIOI_HAN_BAI_MOI_NGUOI - bai.length, 0))}
+        </span>
+        {chiCoMa
+          ? CHU_MA_MOI.nhanNhanQuaMa
+          : bai.length === 0
+          ? CHU_BANG_GIA_DINH.chuaLamBai
+          : CHU_BANG_GIA_DINH.demBai
+              .replace("{so}", String(bai.length))
+              .replace("{gioiHan}", String(GIOI_HAN_BAI_MOI_NGUOI))}
+      </p>
+
+      {diem && (
+        <ul className="mt-2.5 flex gap-3" aria-label="Bốn nhóm">
+          {MA_TRUC.map((t) => (
+            <li key={t} className="text-[13px] tabular-nums text-neutral-700">
+              <span aria-hidden="true" style={{ color: TRUC[t].mau }}>
+                ■
+              </span>{" "}
+              {t} {diem[t]}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-3.5 flex flex-wrap gap-2">
+        {onLamBai && (
+          <button
+            type="button"
+            onClick={() => onLamBai(tv)}
+            className="min-h-[44px] rounded-xl px-3.5 text-[14px] font-semibold text-white"
+            style={{ backgroundColor: MAU.timCongNghe }}
+          >
+            {CHU_BANG_GIA_DINH.nutLamBai}
+          </button>
+        )}
+        {onXemSoSanh && soSanh?.soSanhDuoc && (
+          <button
+            type="button"
+            data-thu="nut-xem-thay-doi"
+            onClick={() => onXemSoSanh(tv)}
+            className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-semibold"
+            style={{ borderColor: MAU.camNangLuong, color: MAU.camDamChoChu }}
+          >
+            {CHU_SO_SANH.nutXem}
+          </button>
+        )}
+        {onXemBai && moiNhat && (
+          <button
+            type="button"
+            onClick={() => onXemBai(moiNhat)}
+            className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-semibold"
+            style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
+          >
+            {CHU_BANG_GIA_DINH.nutXemKetQua}
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={onSua}
+          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+        >
+          {CHU_BANG_GIA_DINH.nutSua}
+        </button>
+        <button
+          type="button"
+          onClick={onXoa}
+          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+        >
+          {CHU_BANG_GIA_DINH.nutXoa}
+        </button>
+      </div>
+    </li>
+  );
+}

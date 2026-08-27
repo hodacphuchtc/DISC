@@ -415,7 +415,17 @@ export const GOI_KY_DUYET = {
   },
   B: {
     ten: "Gói B — phản hồi tính cách cho NGƯỜI LỚN về chính họ",
-    moTa: "Gần tham vấn hơn gói A. Người ký chịu trách nhiệm ở mức khác, nên tách riêng.",
-    nguon: ["TU_MINH (đọc ở bộ PH)", "LECH_PHONG_CACH.boMeTuNhin"],
+    moTa:
+      "Gần tham vấn hơn gói A. Người ký chịu trách nhiệm ở mức khác, nên tách riêng. " +
+      "Từ 14.3, gói này còn gồm nội dung nói về quan hệ giữa HAI NGƯỜI LỚN trong nhà " +
+      "(vợ ↔ chồng): nhận xét bạn đời của một người là bước xa hơn hẳn so với lời khuyên " +
+      "nuôi dạy con, và người ký cần biết mình đang ký cái đó.",
+    nguon: [
+      "TU_MINH (đọc ở bộ PH)",
+      "LECH_PHONG_CACH.boMeTuNhin",
+      // 🔴 Khai NGAY LÚC DỰNG BẢNG (14.3), không đợi tới lúc gửi hồ sơ. Khai sau nghĩa là
+      // có một quãng thời gian nội dung đã tồn tại mà hồ sơ ký duyệt không biết tới nó.
+      "MO_TA_LECH + VIEC_CUA_TOI + THOA_THUAN ở thế quyền \"ngang-vai\" giữa hai người lớn",
+    ],
   },
 } as const;

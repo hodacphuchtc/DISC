@@ -23,7 +23,7 @@
 import type { NganHang } from "@modules/core/bo-de/kieu";
 
 /** Tăng số này mỗi khi sửa nội dung câu. Xem luật 2 ở đầu file. */
-export const PHIEN_BAN_BO_DE = "1.0";
+export const PHIEN_BAN_BO_DE = "1.1";
 
 export const NGAN_HANG: NganHang = {
   MN: {
@@ -33,7 +33,7 @@ export const NGAN_HANG: NganHang = {
     veAi: "Bé 3–7 tuổi",
     loaiThang: "tan-suat",
     mucToiDa: 5,
-    cauMoiMan: 1,
+    cauMoiMan: 5,
     cauDan: "Nghĩ về hai tuần gần đây. Bé thường…",
     thang: [
       { giaTri: 1, nhan: "Hầu như không" },
@@ -92,7 +92,7 @@ export const NGAN_HANG: NganHang = {
     veAi: "Chính mình",
     loaiThang: "dong-y",
     mucToiDa: 3,
-    cauMoiMan: 1,
+    cauMoiMan: 5,
     cauDan: "Đọc từng câu và chọn cái giống em nhất. Không có câu nào đúng hay sai cả.",
     thang: [
       { giaTri: 1, nhan: "Không phải", mat: "🙁" },

@@ -46,8 +46,17 @@ export type BoDe = {
   readonly mucToiDa: number;
   readonly thang: readonly MucTraLoi[];
   readonly cauDan: string;
-  /** Số câu hiện trên một màn hình. Trẻ nhỏ: 1 câu/màn. */
-  readonly cauMoiMan: 1 | 5;
+  /**
+   * Số câu hiện trên một màn hình.
+   *
+   * Từ 11.3 là `number` chứ không còn `1 | 5`: chủ dự án chốt 5 câu/màn cho MỌI bộ đề
+   * (ADR-006, lật §5.2). Khoá cứng thành hai giá trị thì lần sau muốn thử 3 hay 4 câu
+   * lại phải sửa kiểu — mà con số này vốn là lựa chọn trình bày, không phải luật.
+   *
+   * 🔴 KHÔNG suy cỡ chữ hay cỡ nút từ trường này — dùng `canNutTo()` ở
+   * `config/disc-nguong.ts`. Xem lý do dài ở đó.
+   */
+  readonly cauMoiMan: number;
   readonly cau: readonly CauHoi[];
 };
 

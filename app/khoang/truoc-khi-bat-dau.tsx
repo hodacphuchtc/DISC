@@ -10,18 +10,26 @@ import {
   bietDanhHopLe,
   chuanHoaBietDanh,
   demKyTu,
-  nghiLaHoTen,
 } from "@modules/test/biet-danh";
 
 export function TruocKhiBatDau({
   boDe,
   bietDanhGoiY,
+  tenCoSan,
   onQuayLai,
   onBatDau,
 }: {
   readonly boDe: BoDe;
   /** Điền sẵn khi chuyền tay từ bài của con sang bài của bố mẹ (QĐ6). */
   readonly bietDanhGoiY?: string;
+  /**
+   * 🔴 12.4 — vào bài từ THẺ THÀNH VIÊN thì tên đã có trong sổ, KHÔNG hỏi lại.
+   *
+   * Đây là chỗ tiết kiệm thao tác lớn nhất của cả gói: một gia đình bốn người, mỗi người
+   * hai bài, là tám lần gõ lại cùng một cái tên. Hỏi lại thứ mình đã biết không phải chỉ
+   * là phiền — nó còn mở đường cho hai cách viết cùng một cái tên cùng tồn tại trong sổ.
+   */
+  readonly tenCoSan?: string;
   readonly onQuayLai: () => void;
   readonly onBatDau: (bietDanh: string) => void;
 }) {
@@ -30,7 +38,6 @@ export function TruocKhiBatDau({
 
   const bietDanh = chuanHoaBietDanh(tho);
   const hopLe = bietDanhHopLe(tho);
-  const nhacHoTen = nghiLaHoTen(tho);
   const soKyTu = demKyTu(bietDanh);
 
   function guiDi(e: React.FormEvent) {
@@ -38,6 +45,8 @@ export function TruocKhiBatDau({
     datDaThu(true);
     if (hopLe) onBatDau(bietDanh.trim());
   }
+
+  const coSan = tenCoSan?.trim();
 
   return (
     <section className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
@@ -70,6 +79,21 @@ export function TruocKhiBatDau({
         ))}
       </dl>
 
+      {coSan ? (
+        <div data-thu="ten-co-san" className="mt-10">
+          <p className="text-[16px] font-semibold text-neutral-900">
+            {CHU_TRUOC_KHI_BAT_DAU.lamBaiCho.replace("{ten}", coSan)}
+          </p>
+          <button
+            type="button"
+            onClick={() => onBatDau(coSan)}
+            className="mt-5 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+            style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
+          >
+            {CHU_TRUOC_KHI_BAT_DAU.nutBatDau}
+          </button>
+        </div>
+      ) : (
       <form onSubmit={guiDi} className="mt-10">
         <label htmlFor="biet-danh" className="block text-[15px] font-semibold text-neutral-900">
           {CHU_TRUOC_KHI_BAT_DAU.nhanO}
@@ -97,11 +121,7 @@ export function TruocKhiBatDau({
           </span>
         </div>
 
-        {nhacHoTen && (
-          <p role="status" className="mt-2 text-[13px]" style={{ color: MAU.timCongNghe }}>
-            {CHU_TRUOC_KHI_BAT_DAU.nhacNghiHoTen}
-          </p>
-        )}
+
         {daThu && !hopLe && (
           <p role="alert" className="mt-2 text-[13px] text-red-700">
             {CHU_TRUOC_KHI_BAT_DAU.oTrong}
@@ -116,6 +136,7 @@ export function TruocKhiBatDau({
           {CHU_TRUOC_KHI_BAT_DAU.nutBatDau}
         </button>
       </form>
+      )}
     </section>
   );
 }

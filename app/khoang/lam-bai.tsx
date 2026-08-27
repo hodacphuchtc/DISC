@@ -4,9 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ThanhTienTrinh, ThangTraLoi } from "@/app/components/thang-tra-loi";
 import { CHU_LAM_BAI } from "@config/disc-tu-dien";
+import { canNutTo } from "@config/disc-nguong";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe } from "@modules/core/bo-de/kieu";
-import { docNhap, ghiNhap, xoaNhap } from "@modules/core/luu-tru/nhap";
+import { coNhapPhienBanCu, docNhap, ghiNhap, xoaNhap } from "@modules/core/luu-tru/nhap";
 import {
   chiaTrang,
   nenDongVien,
@@ -41,6 +42,9 @@ export function LamBai({
   const [chiSoTrang, datChiSoTrang] = useState(0);
   const [daThuTiep, datDaThuTiep] = useState(false);
   const [moLaiNhap, datMoLaiNhap] = useState(false);
+  const [nhapCu, datNhapCu] = useState(false);
+  /** Ô DOM của từng câu, để cuộn tới đúng câu còn trống khi người dùng bấm Tiếp. */
+  const oCauRef = useRef<Record<string, HTMLLIElement | null>>({});
 
   const giayRef = useRef(0);
   // Khởi tạo là null rồi gán trong effect: `new Date()` và `Date.now()` là hàm KHÔNG
@@ -54,10 +58,14 @@ export function LamBai({
     nhipRef.current ??= Date.now();
 
     const nhap = docNhap(boDe.ma, bietDanh, phienBanBoDe);
-    if (!nhap) return;
+    if (!nhap) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      datNhapCu(coNhapPhienBanCu(boDe.ma, bietDanh, phienBanBoDe));
+      return;
+    }
     // Đọc trạng thái CHỈ CÓ ở trình duyệt sau khi hydrate xong — đọc lúc dựng HTML
     // tĩnh thì máy chủ và trình duyệt ra hai kết quả khác nhau ⇒ lệch hydration.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // (Chỉ thị tắt luật nằm ở nhánh trên — nó phủ cả thân effect này.)
     datTraLoi({ ...nhap.traLoi });
     giayRef.current = nhap.giayDaLam;
     batDauRef.current = nhap.batDau;
@@ -103,7 +111,13 @@ export function LamBai({
 
   function tiep() {
     datDaThuTiep(true);
-    if (!xongTrang) return;
+    if (!xongTrang) {
+      // Báo lỗi mà không chỉ chỗ thì với màn 5 câu người ta phải tự dò lại từng câu một.
+      const thieu = trangNay.find((c) => typeof traLoi[c.ma] !== "number");
+      // scrollIntoView không có dưới jsdom — gọi thủ thế để test không nổ.
+      oCauRef.current[thieu?.ma ?? ""]?.scrollIntoView?.({ block: "center" });
+      return;
+    }
     datDaThuTiep(false);
     if (laTrangCuoi) {
       xoaNhap(boDe.ma);
@@ -142,29 +156,80 @@ export function LamBai({
         </p>
       )}
 
+      {nhapCu && (
+        <p
+          role="status"
+          data-thu="nhap-cu"
+          className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px] leading-relaxed"
+          style={{ backgroundColor: "#FFF4E6", color: MAU.camDamChoChu }}
+        >
+          {CHU_LAM_BAI.nhapCuKhongDung}
+        </p>
+      )}
+
       <p className="mt-6 text-[14px] leading-relaxed text-neutral-600">{boDe.cauDan}</p>
 
-      <ol className="mt-6 space-y-9">
+      {/*
+        MỖI CÂU MỘT THẺ CÓ KHUNG (11.3). Trước đây năm câu nằm trần trên nền trắng, chỉ
+        cách nhau bằng khoảng trắng — chủ dự án chụp màn hình lại và nói chúng "dính vào
+        nhau". Đúng: mắt không có gì để bám mà tách câu này với câu kia.
+
+        Viền trái đổi TÍM → CAM khi đã chọn, nên nhìn lướt một cái là biết còn sót câu nào.
+        Số thứ tự đếm THEO CẢ BÀI (câu 11/20) chứ không theo trang (câu 1 của trang 3) —
+        người làm bài quan tâm còn bao nhiêu câu nữa, không quan tâm trang mấy.
+      */}
+      <ol className="mt-6 space-y-5">
         {trangNay.map((cau) => {
           const idNhan = `cau-${cau.ma}`;
+          const daChon = typeof traLoi[cau.ma] === "number";
+          const soThuTu = boDe.cau.findIndex((c) => c.ma === cau.ma) + 1;
+          const to = canNutTo(boDe.ma);
           return (
-            <li key={cau.ma}>
-              <p
-                id={idNhan}
-                className={
-                  boDe.cauMoiMan === 1
-                    ? "text-[20px] leading-snug font-semibold text-neutral-900"
-                    : "text-[16px] leading-snug text-neutral-900"
-                }
-              >
-                {cau.noiDung}
-              </p>
+            <li
+              key={cau.ma}
+              ref={(o) => {
+                oCauRef.current[cau.ma] = o;
+              }}
+              data-thu="the-cau"
+              data-da-chon={daChon ? "1" : "0"}
+              className="rounded-2xl border border-l-[3px] p-4 md:p-5"
+              style={{
+                borderColor: MAU.vienMo,
+                borderLeftColor: daChon ? MAU.camNangLuong : MAU.timCongNghe,
+              }}
+            >
+              <div className="flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  className={
+                    to
+                      ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[16px] font-semibold tabular-nums"
+                      : "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold tabular-nums"
+                  }
+                  style={{ backgroundColor: MAU.timRatNhat, color: MAU.timCongNghe }}
+                >
+                  {soThuTu}
+                </span>
+                <p
+                  id={idNhan}
+                  className={
+                    to
+                      ? "text-[18px] leading-snug font-semibold text-neutral-900"
+                      : "text-[16px] leading-snug text-neutral-900"
+                  }
+                >
+                  <span className="sr-only">
+                    {CHU_LAM_BAI.nhanSoCau} {soThuTu}.{" "}
+                  </span>
+                  {cau.noiDung}
+                </p>
+              </div>
               <div className="mt-3.5">
                 <ThangTraLoi
                   thang={boDe.thang}
                   daChon={traLoi[cau.ma]}
                   onChon={(v) => chon(cau.ma, v)}
-                  kichThuoc={boDe.cauMoiMan === 1 ? "to" : "gon"}
+                  kichThuoc={to ? "to" : "gon"}
                   moTaBoi={idNhan}
                 />
               </div>

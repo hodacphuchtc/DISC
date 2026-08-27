@@ -103,6 +103,19 @@ body {
     display: none !important;
   }
 
+  /* 🔴 14.4 — IN TÁCH BẢN CHO N NGƯỜI.
+     Luật trên khoá cứng hai giá trị "con"/"boMe" vì màn kết quả chỉ có hai người đọc. Bản
+     tổng hợp cả nhà có N dải, và CSS KHÔNG so được giá trị thuộc tính của tổ tiên với giá
+     trị của con cháu — nên không có cách nào viết một bộ chọn kiểu "giữ đúng dải tv-X".
+
+     Cách gỡ: ban-tong-hop.tsx đánh dấu THẲNG lên những dải cần giấu, ngay trước
+     window.print() rồi gỡ ở afterprint. Cùng lối với cờ data-in-ban ở trên, và cùng lý do:
+     window.print() chặn luồng đồng bộ nên state React chưa kịp vẽ lại.
+     Độ đặc hiệu 0-2-0, thắng luật "ép mở" 0-1-0 ở trên. */
+  [data-ban][data-an-khi-in] {
+    display: none !important;
+  }
+
   /* In màu thanh biểu đồ — mặc định trình duyệt bỏ nền khi in. */
   * {
     -webkit-print-color-adjust: exact;

@@ -69,12 +69,14 @@ describe("M2 — trước khi bắt đầu", () => {
     expect(screen.queryByRole("alert")).toBeNull();
   });
 
-  it("gõ giống họ tên đầy đủ ⇒ NHẮC nhẹ nhưng KHÔNG chặn", () => {
+  it("🔴 ADR-005: gõ họ tên đầy đủ thì KHÔNG bị nhắc gì nữa, và vẫn vào bài bình thường", () => {
+    // Luật cũ nhắc "dùng biệt danh thì an toàn hơn cho con". ADR-005 lật nó: người dùng
+    // là phụ huynh đang ngồi trong app của chính trung tâm, dữ liệu không rời máy, và
+    // một sổ gia đình toàn "bé A", "bé B" thì vô dụng. Bốn hàng rào thật sự vẫn nguyên —
+    // chúng nằm ở chỗ dữ liệu ĐI RA, không nằm ở ô nhập.
     vaoM2();
     go("Nguyễn Văn An");
-    expect(screen.getByRole("status")).toHaveTextContent(
-      CHU_TRUOC_KHI_BAT_DAU.nhacNghiHoTen,
-    );
+    expect(screen.queryByRole("status")).toBeNull();
     bam(CHU_TRUOC_KHI_BAT_DAU.nutBatDau);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Nguyễn Văn An");
   });

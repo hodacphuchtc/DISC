@@ -84,6 +84,12 @@ export const KHOA_CAM = [
   "tuoi",
   "banKhoan",
   "bietDanh",
+  // 🆕 Sổ gia đình (12.1, ADR-007). `ten` và `ghiChu` là trường của THÀNH VIÊN — tên thật
+  // của một đứa trẻ và ghi chú của bố mẹ về nó. Cả hai đều tuyệt đối không được rời máy.
+  "maThanhVien",
+  "ten",
+  "ghiChu",
+  "vaiTro",
 ] as const;
 
 /** Soát một object bất kỳ xem có khoá cấm ở BẤT KỲ độ sâu nào. Trả về danh sách vi phạm. */

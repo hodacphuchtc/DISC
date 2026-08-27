@@ -79,6 +79,33 @@ export function docNhap(
   }
 }
 
+/**
+ * Có nháp của ĐÚNG bộ đề và ĐÚNG biệt danh này, nhưng thuộc phiên bản bộ câu KHÁC không?
+ *
+ * `docNhap()` cố ý trả `null` cho trường hợp đó — đáp án cũ không còn nghĩa khi câu hỏi
+ * đã đổi. Nhưng "không dùng được" và "chưa từng có" là hai chuyện khác nhau với người
+ * dùng, và chỉ một trong hai đáng được xin lỗi. Hàm này phân biệt chúng.
+ */
+export function coNhapPhienBanCu(
+  maBoDe: MaBoDe,
+  bietDanh: string,
+  phienBanHienTai: string,
+): boolean {
+  const k = kho();
+  if (!k) return false;
+  try {
+    const tho = k.getItem(khoaNhap(maBoDe));
+    if (!tho) return false;
+    const doc: unknown = JSON.parse(tho);
+    if (!laNhapHopLe(doc)) return false;
+    return (
+      doc.boDe === maBoDe && doc.bietDanh === bietDanh && doc.phienBanBoDe !== phienBanHienTai
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function ghiNhap(nhap: Nhap): void {
   const k = kho();
   if (!k) return;

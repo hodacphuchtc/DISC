@@ -76,6 +76,20 @@ export type DacDiemTruc = {
   readonly choCanDeY: string;
   /** 🔴 Khi trục này NHẸ. Bắt buộc nêu cái ĐƯỢC trước, rồi mới tới cái giá. */
   readonly khiNhe: string;
+  /**
+   * 🔴 KHỐI THỨ TƯ (12.5) — MƯỢN CÁCH CỦA NHÓM KHÁC.
+   *
+   * Đây là chỗ trả lời câu "vậy làm sao cho cân bằng?" mà không đi ngược ADR-002.
+   *
+   * "Cân bằng DISC" theo nghĩa *nâng trục thấp lên cho bằng* là một cách đọc sai mô hình,
+   * và tệ hơn, nó ngầm nói với một đứa trẻ rằng nó đang thiếu cái gì đó. Nghĩa đúng là
+   * **linh hoạt tình huống**: biết khi nào thì mượn cách làm của nhóm khác, dùng xong thì
+   * trả lại. Thêm một lựa chọn, không phải vá một chỗ hổng.
+   *
+   * Vì vậy khối này viết theo khuôn *"có những lúc … thì cách của nhóm X hợp hơn"*, và
+   * TUYỆT ĐỐI không dùng từ khuyết thiếu. `tests/noi-dung-moi.test.ts` canh cả hai điều.
+   */
+  readonly muonCach: string;
 };
 
 export const DAC_DIEM_TRUC: Readonly<Record<MaTruc, DacDiemTruc>> = {
@@ -86,6 +100,8 @@ export const DAC_DIEM_TRUC: Readonly<Record<MaTruc, DacDiemTruc>> = {
       "Quyết nhanh đôi khi là quyết trước khi nghe hết. {ChuThe} dễ vô tình cắt lời người nói chậm, và sự thẳng thắn dễ bị hiểu thành gay gắt. Hỏi lại một câu trước khi chốt thường đủ để tránh chuyện đó.",
     khiNhe:
       "Nhẹ ở nhóm này không phải là {chuThe} không dám lên tiếng. Thường {chuThe} không thấy cần phải thắng trong mọi chuyện, nên nhường được những thứ người khác phải tranh nhau. Cái giá đi kèm: đến lúc thật sự cần lên tiếng cho mình thì {chuThe} hay chờ quá lâu.",
+    muonCach:
+      "Có những lúc việc không cần ai quyết nhanh — nó cần mọi người thấy mình được hỏi. Những lúc đó cách của nhóm Ổn định hợp hơn: chờ thêm một nhịp, để người khác nói hết, rồi mới chốt. Dùng xong thì trả lại, không phải đổi người.",
   },
   I: {
     diemManh:
@@ -94,6 +110,8 @@ export const DAC_DIEM_TRUC: Readonly<Record<MaTruc, DacDiemTruc>> = {
       "Câu chuyện hay dễ lấn mất phần việc phải xong. {ChuThe} cũng dễ nhận lời quá nhiều vì ngại làm người khác thất vọng, rồi vỡ kế hoạch của chính mình.",
     khiNhe:
       "Nhẹ ở nhóm này không phải là {chuThe} không có bạn. Thường {chuThe} chọn ít bạn mà thân, và không cần được chú ý mới thấy yên tâm. Cái giá đi kèm: chỗ đông người lạ làm {chuThe} tốn sức hơn hẳn, nên về nhà thường cần một quãng yên tĩnh.",
+    muonCach:
+      "Có những lúc câu chuyện không giúp được gì — việc cần một danh sách và một thứ tự. Những lúc đó cách của nhóm Cẩn trọng hợp hơn: viết ra, sắp thứ tự, làm từng cái. Mượn đúng lúc, không phải mượn mãi.",
   },
   S: {
     diemManh:
@@ -102,6 +120,8 @@ export const DAC_DIEM_TRUC: Readonly<Record<MaTruc, DacDiemTruc>> = {
       "Nhường nhiều quá thì phần của mình bị bỏ quên, và chỗ ấm ức đó tích lại chứ không tự mất đi. {ChuThe} cũng cần thêm thời gian để quen với thay đổi, nên bị giục là càng chậm.",
     khiNhe:
       "Nhẹ ở nhóm này thường đi cùng chuyện {chuThe} không bị mắc kẹt khi kế hoạch đổi — đổi thì đổi, {chuThe} xoay được ngay. Cái giá đi kèm: việc phải làm đều đặn mỗi ngày dễ làm {chuThe} chán trước khi kịp thấy kết quả.",
+    muonCach:
+      "Có những lúc giữ hoà khí lại làm chuyện kéo dài thêm. Những lúc đó cách của nhóm Chủ động hợp hơn: nói thẳng điều mình muốn, và chấp nhận là câu nói đó sẽ làm ai đó khó chịu một lúc.",
   },
   C: {
     diemManh:
@@ -110,6 +130,8 @@ export const DAC_DIEM_TRUC: Readonly<Record<MaTruc, DacDiemTruc>> = {
       "Muốn đúng tuyệt đối thì dễ chậm, và dễ tự trách khi kết quả chưa như ý. {ChuThe} cũng có thể vô tình làm người xung quanh thấy mình đang bị soi.",
     khiNhe:
       "Nhẹ ở nhóm này thường đi cùng chuyện {chuThe} bắt tay vào làm nhanh, không sa đà vào tiểu tiết, nên khởi động dễ hơn nhiều người. Cái giá đi kèm: những chỗ đòi chính xác thì {chuThe} dễ bỏ sót và phải làm lại.",
+    muonCach:
+      "Có những lúc chờ đủ thông tin nghĩa là chờ quá muộn. Những lúc đó cách của nhóm Chủ động hợp hơn: quyết với thứ đang có, và tính sẵn đường sửa nếu sai. Không phải bỏ sự kỹ càng — chỉ là biết lúc nào tạm cất nó đi.",
   },
 };
 

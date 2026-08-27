@@ -15,10 +15,10 @@ const TH = napBoDe("TH"); // 20 câu, 1 câu/màn
 const THCS = napBoDe("THCS"); // 24 câu, 5 câu/màn
 
 describe("chia trang", () => {
-  it("bộ trẻ nhỏ: MỘT câu một màn", () => {
-    expect(TH.cauMoiMan).toBe(1);
-    expect(chiaTrang(TH)).toHaveLength(20);
-    expect(chiaTrang(TH)[0]).toHaveLength(1);
+  it("bộ trẻ nhỏ: NĂM câu một màn từ 11.3 (ADR-006 lật §5.2)", () => {
+    expect(TH.cauMoiMan).toBe(5);
+    expect(chiaTrang(TH)).toHaveLength(4); // 20 câu ÷ 5 = 4 trang chẵn
+    expect(chiaTrang(TH)[0]).toHaveLength(5);
   });
 
   it("bộ tuổi lớn: năm câu một màn, trang cuối nhận phần dư", () => {
@@ -55,10 +55,11 @@ describe("tiến trình", () => {
     expect(trangDangDo(THCS, traLoi)).toBe(1); // trang 0 xong, trang 1 còn câu 9,10
   });
 
-  it("bộ một-câu-một-màn: làm dở 8 câu thì về ĐÚNG câu thứ 9 (chỉ số 8)", () => {
+  it("làm dở 8 câu ở bộ 5 câu/màn thì về ĐÚNG trang chứa câu thứ 9 (trang 1)", () => {
     const traLoi: Record<string, number> = {};
     TH.cau.slice(0, 8).forEach((c) => (traLoi[c.ma] = 2));
-    expect(trangDangDo(TH, traLoi)).toBe(8);
+    // Câu thứ 9 là chỉ số 8 ⇒ nằm ở trang 1 (trang 0 giữ câu 1–5, trang 1 giữ câu 6–10).
+    expect(trangDangDo(TH, traLoi)).toBe(1);
   });
 
   it("xong hết thì dừng ở trang cuối, không vượt ra ngoài", () => {

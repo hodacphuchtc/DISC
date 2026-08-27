@@ -23,7 +23,12 @@ import { describe, expect, it } from "vitest";
 const GOC = process.cwd();
 
 /** Thư mục thuộc tầng lõi — quét đệ quy mọi file .ts/.tsx bên trong. */
-const THU_MUC_LOI = ["modules/core/bo-de", "modules/core/tien-ich", "config"] as const;
+const THU_MUC_LOI = [
+  "modules/core/bo-de",
+  "modules/core/tien-ich",
+  "modules/core/gia-dinh",
+  "config",
+] as const;
 
 /** File lẻ thuộc tầng lõi. Chưa tồn tại thì bỏ qua, có mặt là bị quét ngay. */
 const FILE_LOI = [

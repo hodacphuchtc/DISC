@@ -131,13 +131,16 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
    */
   const soLop = () => screen.queryAllByRole("button", { expanded: false }).length;
 
-  // 🔴 GĐ10 THÊM MỘT LỚP CHO MỌI BỘ ĐỀ: khối gập "Bốn chữ D-I-S-C nghĩa là gì". Con số dưới
-  // đây tăng 1 so với lúc dựng lưới — đây là đặc tả đổi, không phải chỉnh test cho vừa code.
+  // 🔴 HAI LỚP DÙNG CHUNG CHO MỌI BỘ ĐỀ, cộng dần theo giai đoạn:
+  //  · GĐ10 — "Bốn chữ D-I-S-C nghĩa là gì"
+  //  · 12.5  — "Đọc kỹ hơn về bốn nhóm" (bốn khối mỗi trục + khối dẫn nguồn)
+  // Mỗi lần con số dưới đây tăng là một ĐẶC TẢ ĐỔI, không phải chỉnh test cho vừa code.
   // Vẫn giữ phép đếm vì nó là thứ duy nhất bắt được việc một khối bị rơi mất khi tách bản.
+  const LOP_DUNG_CHUNG = 2;
 
   it.each([
-    ["MN", 5],
-    ["QS", 5],
+    ["MN", 4 + LOP_DUNG_CHUNG],
+    ["QS", 4 + LOP_DUNG_CHUNG],
   ] as const)("bộ %s (người lớn đọc về trẻ): %i lớp", async (ma, mong) => {
     hien(ma);
     await choDocKhoXong();
@@ -145,8 +148,8 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
   });
 
   it.each([
-    ["TH", 8],
-    ["THCS", 8],
+    ["TH", 7 + LOP_DUNG_CHUNG],
+    ["THCS", 7 + LOP_DUNG_CHUNG],
   ] as const)("bộ %s (em học sinh cầm máy): %i lớp — có CẢ phần của bố mẹ", async (ma, mong) => {
     // 🔴 GĐ10 hạng mục 10.4: 4 → 8. Bốn lớp mới KHÔNG phải nội dung mới, mà là phần của
     // bố mẹ trước đây bị chặn thẳng khỏi bộ TH/THCS — ba lớp lời khuyên cộng nút dải chắn.
@@ -157,11 +160,14 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
     await waitFor(() => expect(soLop()).toBe(mong));
   });
 
-  it.each([["PH", 4]] as const)("bộ %s (người lớn tự đọc về mình): %i lớp", async (ma, mong) => {
-    hien(ma);
-    await choDocKhoXong();
-    await waitFor(() => expect(soLop()).toBe(mong));
-  });
+  it.each([["PH", 3 + LOP_DUNG_CHUNG]] as const)(
+    "bộ %s (người lớn tự đọc về mình): %i lớp",
+    async (ma, mong) => {
+      hien(ma);
+      await choDocKhoXong();
+      await waitFor(() => expect(soLop()).toBe(mong));
+    },
+  );
 
   it("🔴 mọi lớp ĐÓNG SẴN — màn hình phải ngắn như trước", async () => {
     hien("QS");
@@ -177,7 +183,7 @@ describe("🔴 lớp bóc sâu — số lớp và trạng thái mặc định", 
     // Con số tụt về 6 nghĩa là hai khối mới của chặng 2 đã rơi mất.
     await luuBai(baiPH());
     hien("QS");
-    await waitFor(() => expect(soLop()).toBe(8));
+    await waitFor(() => expect(soLop()).toBe(7 + LOP_DUNG_CHUNG));
   });
 });
 
@@ -225,5 +231,36 @@ describe("tiêu đề kiểu", () => {
     hien("QS", deu);
     await choDocKhoXong();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/cân bằng/iu);
+  });
+});
+
+describe("🔴 màn kết quả KHÔNG còn ô thu liên hệ (11.2)", () => {
+  /**
+   * Mục tiêu kinh doanh đổi ngày 27/08/2026: từ *mồi thu khách* sang *giữ chân hơn 1.000
+   * gia đình đang học*. Với 1.000 nhà đang trả tiền thì xin thêm số điện thoại của chính
+   * họ vừa thừa vừa làm màn kết quả nặng thêm một khối.
+   *
+   * Cửa kiểm này canh SỰ VẮNG MẶT. Nghe thì lạ, nhưng ô đó từng có thật và ai đó sẽ dựng
+   * lại nó bằng phản xạ. Bỏ một thứ mà không cắm cọc thì nó mọc lại.
+   */
+  it("không còn ô nhập số điện thoại nào", async () => {
+    hien("TH");
+    await choDocKhoXong();
+    expect(screen.queryByLabelText(/số điện thoại/iu)).toBeNull();
+    expect(document.querySelector('input[type="tel"]')).toBeNull();
+  });
+
+  it("không còn nút gửi số, và không còn chữ nào mời để lại số", async () => {
+    hien("TH");
+    await choDocKhoXong();
+    expect(screen.queryByRole("button", { name: /gửi số|để lại số/iu })).toBeNull();
+    expect(document.body.textContent).not.toMatch(/để lại số|gửi số cho/iu);
+  });
+
+  it("các nút Tải ảnh / In / Làm bài khác vẫn còn nguyên", async () => {
+    hien("TH");
+    await choDocKhoXong();
+    expect(screen.getByRole("button", { name: /tải ảnh/iu })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /làm lại|làm bài/iu })).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { KhoangDisc } from "../app/khoang/disc";
 import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
@@ -9,6 +9,7 @@ import { DUONG_M1 } from "./duong-m1";
 afterEach(() => {
   cleanup();
   window.localStorage.clear();
+  vi.restoreAllMocks();
 });
 
 const bam = (ten: string | RegExp) =>
@@ -37,10 +38,17 @@ function traLoiTrangNay(viTri: number) {
   }
 }
 
-describe("M3 — hai kiểu trình bày", () => {
-  it("bộ Tiểu học: MỘT câu một màn", () => {
+describe("M3 — trình bày", () => {
+  /**
+   * 🔴 ĐỔI ĐẶC TẢ, KHÔNG PHẢI SỬA TEST CHO XANH (ADR-006, 11.3).
+   *
+   * §5.2 cũ ghi "MN và TH: một câu một màn". Chủ dự án chốt lật luật đó: 5 câu/màn cho
+   * MỌI bộ đề. Bốn cửa kiểm đỏ khi đổi là ĐÚNG — chúng đang canh luật cũ. Cái được giữ
+   * lại nguyên vẹn là phần bảo vệ trẻ nhỏ: cỡ chữ và cỡ nút, xem `canNutTo()`.
+   */
+  it("bộ Tiểu học: NĂM câu một màn (ADR-006 lật §5.2)", () => {
     vaoTieuHoc();
-    expect(screen.getAllByRole("radiogroup")).toHaveLength(1);
+    expect(screen.getAllByRole("radiogroup")).toHaveLength(5);
   });
 
   it("bộ THCS: NĂM câu một màn", () => {
@@ -51,8 +59,8 @@ describe("M3 — hai kiểu trình bày", () => {
   it("bộ Tiểu học dùng thang 3 mức có mặt cười", () => {
     vaoTieuHoc();
     const nut = screen.getAllByRole("radio");
-    expect(nut).toHaveLength(3);
-    expect(nut.map((n) => n.textContent)).toEqual([
+    expect(nut).toHaveLength(3 * 5);
+    expect(nut.slice(0, 3).map((n) => n.textContent)).toEqual([
       "🙁Không phải",
       "😐Đôi khi",
       "😀Đúng rồi",
@@ -158,5 +166,158 @@ describe("M3 — lưu nháp", () => {
     vaoM3(DUONG_M1.THCS, "Bống");
     expect(screen.queryByText(CHU_LAM_BAI.tiepTucNhap)).toBeNull();
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "0");
+  });
+});
+
+describe("🔴 mỗi câu một THẺ CÓ KHUNG (11.3)", () => {
+  /**
+   * Chủ dự án chụp màn hình và nói năm câu "dính vào nhau". Đúng: chúng nằm trần trên
+   * nền trắng, chỉ cách nhau bằng khoảng trắng, mắt không có gì để bám mà tách câu này
+   * với câu kia. Cả nhóm cửa kiểm dưới đây canh phần sửa đó.
+   */
+  const the = () => Array.from(document.querySelectorAll('[data-thu="the-cau"]'));
+
+  it("năm câu là năm thẻ riêng, không phải một khối liền", () => {
+    vaoTieuHoc();
+    expect(the()).toHaveLength(5);
+  });
+
+  it("số thứ tự đếm THEO CẢ BÀI, không đếm lại từ 1 ở mỗi trang", () => {
+    vaoTieuHoc();
+    expect(the()[0].textContent).toMatch(/^\s*1/u);
+
+    traLoiTrangNay(1);
+    bam(CHU_LAM_BAI.nutTiep);
+
+    // Sang trang 2 phải là câu 6–10, KHÔNG phải câu 1–5 của trang 2.
+    expect(the()[0].textContent).toMatch(/^\s*6/u);
+    expect(the()[4].textContent).toMatch(/^\s*10/u);
+  });
+
+  it("🔴 viền trái đổi màu khi đã chọn — nhìn lướt là biết còn sót câu nào", () => {
+    vaoTieuHoc();
+    expect(the().every((t) => t.getAttribute("data-da-chon") === "0")).toBe(true);
+
+    const nhom = screen.getAllByRole("radiogroup")[2];
+    fireEvent.click(nhom.querySelectorAll('[role="radio"]')[0]);
+
+    const sau = the().map((t) => t.getAttribute("data-da-chon"));
+    expect(sau).toEqual(["0", "0", "1", "0", "0"]);
+  });
+
+  it("mỗi câu vẫn có nhãn đọc màn hình riêng, không gộp năm câu làm một", () => {
+    vaoTieuHoc();
+    expect(screen.getAllByRole("radiogroup")).toHaveLength(5);
+    const nhan = screen
+      .getAllByRole("radiogroup")
+      .map((g) => g.getAttribute("aria-labelledby"));
+    expect(nhan.every(Boolean)).toBe(true);
+    // Năm nhãn phải TRỎ VÀO NĂM CÂU KHÁC NHAU — trỏ chung một chỗ thì người dùng đọc
+    // màn hình nghe năm lần cùng một câu hỏi mà vẫn tưởng mình đang trả lời năm câu.
+    expect(new Set(nhan).size).toBe(5);
+  });
+});
+
+describe("🔴 bộ trẻ nhỏ GIỮ chữ to và nút to dù đã 5 câu/màn", () => {
+  /**
+   * ĐÂY LÀ CỬA KIỂM QUAN TRỌNG NHẤT CỦA 11.3.
+   *
+   * Trước 11.3, cỡ chữ và cỡ nút được suy từ `boDe.cauMoiMan === 1`. Đổi `cauMoiMan` của
+   * MN và TH sang 5 mà không đụng gì khác thì cả hai bộ dành cho trẻ NHỎ NHẤT lặng lẽ
+   * tụt xuống chữ 14px và nút 44px — không một test nào đỏ, không ai thấy. Đúng vết xe
+   * của bảng đại từ một chiều đã cắt mất lời khuyên của cả nhóm phụ huynh ở GĐ10.
+   *
+   * Nay cỡ chữ khoá theo `canNutTo(boDe.ma)`, và cửa kiểm này canh đúng con số mà
+   * `.claude/rules` đòi: chữ ≥ 18px, nút cao ≥ 56px.
+   */
+  it("bộ Tiểu học: chữ câu hỏi ≥ 18px", () => {
+    vaoTieuHoc();
+    const cauDau = document.querySelectorAll('[data-thu="the-cau"] p')[0];
+    expect(cauDau.className).toMatch(/text-\[18px\]/u);
+  });
+
+  it("bộ Tiểu học: nút trả lời cao ≥ 56px", () => {
+    vaoTieuHoc();
+    const nut = screen.getAllByRole("radio")[0];
+    expect(nut.className).toMatch(/min-h-\[56px\]/u);
+  });
+
+  it("bộ THCS vẫn dùng cỡ gọn — luật này chỉ dành cho trẻ nhỏ", () => {
+    vaoTHCS();
+    expect(screen.getAllByRole("radio")[0].className).toMatch(/min-h-\[44px\]/u);
+  });
+});
+
+describe("bỏ trống rồi bấm Tiếp", () => {
+  it("báo lỗi và KHÔNG sang trang", () => {
+    vaoTieuHoc();
+    const nhom = screen.getAllByRole("radiogroup")[0];
+    fireEvent.click(nhom.querySelectorAll('[role="radio"]')[0]);
+
+    bam(CHU_LAM_BAI.nutTiep);
+
+    expect(screen.getByRole("alert")).toHaveTextContent(CHU_LAM_BAI.conThieu);
+    // Vẫn ở trang 1: câu đầu vẫn là câu số 1.
+    expect(document.querySelectorAll('[data-thu="the-cau"]')[0].textContent).toMatch(/^\s*1/u);
+  });
+
+  it("🔴 cuộn tới ĐÚNG câu còn thiếu, không bắt người ta tự dò lại", () => {
+    vaoTieuHoc();
+    const daCuon: Element[] = [];
+
+    // jsdom KHÔNG định nghĩa `scrollIntoView`, nên `vi.spyOn` không bám vào được — phải
+    // tự gắn. 🔴 Và phải GỠ trong `finally`: vá thẳng lên prototype mà quên gỡ thì bản vá
+    // sống tiếp sang mọi file test chạy sau trong cùng tiến trình, rồi lộ ra dưới dạng
+    // một lỗi lạ ở một file chẳng liên quan gì tới màn làm bài.
+    const proto = Element.prototype as unknown as { scrollIntoView?: () => void };
+    proto.scrollIntoView = function (this: Element) {
+      daCuon.push(this);
+    };
+
+    try {
+      const nhom = screen.getAllByRole("radiogroup");
+      for (const i of [0, 1, 3, 4]) {
+        fireEvent.click(nhom[i].querySelectorAll('[role="radio"]')[0]);
+      }
+
+      bam(CHU_LAM_BAI.nutTiep);
+
+      expect(daCuon).toHaveLength(1);
+      // Câu thứ 3 (chỉ số 2) là câu duy nhất còn trống.
+      expect(daCuon[0]).toBe(document.querySelectorAll('[data-thu="the-cau"]')[2]);
+    } finally {
+      delete proto.scrollIntoView;
+    }
+  });
+});
+
+describe("🔴 nháp của phiên bản bộ câu CŨ — nói ra, không im lặng vứt", () => {
+  it("hiện dòng báo tử tế thay vì màn trắng tinh", () => {
+    // Dựng đúng cảnh đã xảy ra thật khi 11.3 đổi `cauMoiMan`: người dùng có bài làm dở
+    // từ bộ câu bản 1.0, mở lại sau khi bộ câu lên 1.1.
+    window.localStorage.setItem(
+      "disc:nhap:TH",
+      JSON.stringify({
+        boDe: "TH",
+        bietDanh: "Bi",
+        traLoi: { "TH-D1": 2 },
+        batDau: "2026-08-27T01:20:00+07:00",
+        giayDaLam: 30,
+        phienBanBoDe: "1.0",
+      }),
+    );
+
+    vaoTieuHoc();
+
+    expect(document.querySelector('[data-thu="nhap-cu"]')).toHaveTextContent(
+      CHU_LAM_BAI.nhapCuKhongDung,
+    );
+    // Và KHÔNG được đồng thời khoe "đã mở lại bài dở" — hai câu chỏi nhau.
+    expect(screen.queryByText(CHU_LAM_BAI.tiepTucNhap)).toBeNull();
+  });
+
+  it("không có nháp cũ thì KHÔNG hiện dòng đó — đừng doạ người chưa làm gì", () => {
+    vaoTieuHoc();
+    expect(document.querySelector('[data-thu="nhap-cu"]')).toBeNull();
   });
 });

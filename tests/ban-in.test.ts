@@ -2,6 +2,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { CHU_BA_BAN } from "../config/disc-tu-dien";
+import { thayChuThe } from "../modules/report/dien-giai";
+
 /**
  * 🔴 HÀNG RÀO CHO BẢN IN.
  *
@@ -113,5 +116,54 @@ describe("🔴 in tách bản — ba dải, mỗi dải một người đọc", 
     // hình — người dùng thấy trang nháy trắng rồi mới hiện hộp thoại in.
     const truocKhoiIn = CSS.slice(0, CSS.indexOf("@media print"));
     expect(truocKhoiIn).not.toMatch(/\[data-in-ban/u);
+  });
+});
+
+/* ────────────────────────────────────────────────────────────────────────────
+   11.4 — HAI TỜ IN RA PHẢI KHÁC NHAU NGAY DÒNG ĐẦU
+   ──────────────────────────────────────────────────────────────────────────── */
+
+describe("🔴 tiêu đề dải — thứ phân biệt hai tờ giấy đặt cạnh nhau", () => {
+  /**
+   * Chủ dự án nói "hai bản in thấy thông tin giống nhau". Đo lại: hai tờ không dùng chung
+   * một câu nào (`ba-ban-noi-dung.test.ts` canh việc đó, và nó xanh suốt). Cái giống nhau
+   * là DÁNG — cùng mở bằng biểu đồ, cùng bốn khối trục, cùng một nhãn xám nhạt 11px ở đầu.
+   *
+   * 🔴 Trước 11.4 KHÔNG MỘT CỬA KIỂM NÀO soi tiêu đề dải: đổi cả bốn chuỗi tiêu đề mà
+   * 867 test vẫn xanh. Đó chính là lỗ hổng để lỗi này sống sót qua cả GĐ10.
+   */
+  const MAU = CHU_BA_BAN;
+
+  it("bốn tiêu đề dải đều mang chỗ ghép TÊN người", () => {
+    for (const [khoa, chuoi] of Object.entries(MAU)) {
+      if (!khoa.startsWith("ten")) continue;
+      expect(chuoi, `${khoa} thiếu {ten}`).toContain("{ten}");
+    }
+  });
+
+  it("🔴 tờ của con và tờ của bố mẹ KHÁC NHAU ngay chữ đầu sau tên", () => {
+    const cua = (mau: string) => thayChuThe(mau, "TH", "con").split("{ten}").join("Bi");
+    const con = cua(MAU.tenCon);
+    const boMe = cua(MAU.tenBoMe);
+
+    expect(con).toBe("Bi — bản của em");
+    expect(boMe).toBe("Bi — phần dành cho bố mẹ");
+    // Không chỉ khác — phải khác ngay ở phần SAU dấu gạch, chỗ mắt dừng lại.
+    expect(con.split("—")[1]).not.toBe(boMe.split("—")[1]);
+  });
+
+  it("mỗi bộ đề cho ra một cặp tiêu đề riêng, không bộ nào trùng bộ nào", () => {
+    for (const bo of ["MN", "TH", "THCS", "QS"] as const) {
+      const con = thayChuThe(MAU.tenCon, bo, "con");
+      const boMe = thayChuThe(MAU.tenBoMe, bo, "boMe");
+      expect(con, `bộ ${bo}`).not.toBe(boMe);
+    }
+  });
+
+  it("bộ PH dùng 'bản tự đọc' — người lớn đọc về CHÍNH MÌNH", () => {
+    // Bê chữ viết cho phụ huynh sang bộ tự đánh giá rồi chỉ đổi tiêu đề là đúng lỗi đã
+    // trả giá sáng 27/08. "Bi — bản của bạn" đọc lên như người khác nói về mình.
+    expect(MAU.tenTuMinh).not.toContain("{chuThe}");
+    expect(MAU.tenTuMinh.split("{ten}").join("Bi")).toBe("Bi — bản tự đọc");
   });
 });
