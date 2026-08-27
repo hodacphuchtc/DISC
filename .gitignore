@@ -44,3 +44,8 @@ coverage/
 
 # Bài làm thật để phân tích item — KHÔNG BAO GIỜ commit (NĐ 13/2023)
 /du-lieu-thu/
+
+# Next tự sinh, và đổi qua lại giữa .next/types/ với .next/dev/types/ tuỳ lần cuối
+# chạy `dev` hay `build` — để trong git thì cây làm việc bẩn mãi. Đã kiểm: thiếu file
+# này `npm run typecheck` vẫn xanh, vì Next sinh lại nó ở cả `dev` lẫn `build`.
+next-env.d.ts
