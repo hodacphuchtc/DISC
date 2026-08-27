@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && node scripts/sinh-danh-sach-cache.mjs",
-    "start": "next start",
+    "start": "node scripts/xem-ban-phat-hanh.mjs",
+    "xem-thu": "npm run build && npm start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

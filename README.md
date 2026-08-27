@@ -12,6 +12,29 @@
 | `docs/decisions/` | Các quyết định kiến trúc (ADR) |
 | `*/OVERVIEW.md` | Não của từng thư mục/module: mục đích, phạm vi, trạng thái, quyết định |
 
+## Chạy thử trên máy mình
+
+```bash
+npm run dev        # bản đang phát triển — http://localhost:3000
+npm run xem-thu    # build rồi chạy BẢN PHÁT HÀNH — http://localhost:3100
+```
+
+Hai lệnh này chạy được **song song** (khác cổng), và nên dùng cả hai:
+
+- `npm run dev` nạp lại ngay khi sửa code, nhưng nó **không phải thứ sẽ phát hành** — không
+  có service worker thật, không có danh sách nạp sẵn cho lúc mất mạng.
+- `npm run xem-thu` phục vụ đúng thư mục `out/` sẽ đem đi đăng. Đây là bản phải soi trước
+  khi phát hành. Chạy lại `npm start` nếu đã có sẵn `out/`; đổi cổng bằng `npm start -- 4000`.
+
+> ⚠️ `next start` **không** dùng được ở dự án này — `output: "export"` không có máy chủ Next
+> để chạy. Script `start` đã trỏ sang máy chủ tĩnh tự viết (`scripts/xem-ban-phat-hanh.mjs`),
+> và nó ghim đúng kiểu MIME: trả HTML cho một request `.js` thì trang vẫn lên nhưng không
+> bấm được gì, mà không có lỗi nào hiện ra.
+
+**Nạp 8 bài mẫu để có thứ mà xem:** mở trang → DevTools → tab Console → dán trọn nội dung
+`tests/DATA_TEST/nap-vao-trinh-duyet.js` → Enter → mở màn *Bài đã làm*.
+Xoá đi bằng `tests/DATA_TEST/xoa-du-lieu-mau.js` (chỉ xoá bài mẫu, không đụng bài thật).
+
 ## Đóng & mở session (làm đúng để không mất context, tiết kiệm token)
 
 - **Mở mỗi phiên — LỆNH ĐẦU TIÊN: `/mo_session`.** Claude chỉ đọc CLAUDE.md → PLAN.md →
