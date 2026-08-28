@@ -2,6 +2,8 @@
   "id": "mau-disc-07",
   "boDe": "MN",
   "maTre": "Cà Rốt",
+  "lop": "mam-non",
+  "maThanhVien": "tv-mau-06",
   "nguoiTraLoi": "nguoi-lon",
   "batDau": "2026-08-26T01:45:00.000Z",
   "ketThuc": "2026-08-26T01:47:40.000Z",
@@ -31,5 +33,5 @@
     "hopLe": false,
     "lyDo": "PHANG"
   },
-  "phienBanBoDe": "1.0"
+  "phienBanBoDe": "1.1"
 }

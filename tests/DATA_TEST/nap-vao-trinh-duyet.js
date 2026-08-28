@@ -2,19 +2,91 @@
  * NẠP DỮ LIỆU MẪU DISC vào trình duyệt.  ⚠️ FILE NÀY DO MÁY SINH — đừng sửa tay.
  * Sinh lại: node tests/DATA_TEST/tao-du-lieu-mau.mjs
  *
- * Cách dùng: mở http://localhost:3000 → DevTools → Console → dán trọn file này → Enter.
- * Xong thì mở màn "Bài đã làm".
+ * Cách dùng: mở bản đang chạy (npm run xem-thu → http://localhost:3100)
+ *            → DevTools → Console → dán trọn file này → Enter → tải lại trang.
  *
- * 🔴 Toàn bộ biệt danh ở đây là BỊA. Không có dữ liệu thật của trẻ.
+ * 🔴 TOÀN BỘ TÊN Ở ĐÂY LÀ BỊA. Không có dữ liệu thật của trẻ.
+ *    Máy demo của giáo viên/sale chỉ được dùng bộ này, và bấm Xoá sạch sau mỗi lần demo.
  */
 (async () => {
   const TEN_KHO = "disc";
+  const PHIEN_BAN_KHO = 2;
   const TEN_BANG = "bai-lam";
+  const BANG_THANH_VIEN = "thanh-vien";
+  const BANG_PHAN_TICH = "phan-tich-gia-dinh";
+
+  const THANH_VIEN = [
+    {
+      "id": "tv-mau-01",
+      "ten": "Bé Bún",
+      "vaiTro": "con",
+      "lop": "mam-non",
+      "thuTu": 0,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-02",
+      "ten": "Su Kem",
+      "vaiTro": "con",
+      "lop": "4",
+      "thuTu": 1,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-03",
+      "ten": "Tí Nị",
+      "vaiTro": "con",
+      "lop": "7",
+      "thuTu": 2,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-04",
+      "ten": "Mẹ Bống",
+      "vaiTro": "me",
+      "thuTu": 3,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-05",
+      "ten": "Kem Bơ",
+      "vaiTro": "con",
+      "lop": "8",
+      "thuTu": 4,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-06",
+      "ten": "Cà Rốt",
+      "vaiTro": "con",
+      "lop": "mam-non",
+      "thuTu": 5,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    },
+    {
+      "id": "tv-mau-07",
+      "ten": "Nem Rán",
+      "vaiTro": "con",
+      "lop": "5",
+      "thuTu": 6,
+      "taoLuc": "2026-08-19T02:00:00.000Z",
+      "suaLuc": "2026-08-19T02:00:00.000Z"
+    }
+  ];
+
   const BAI = [
     {
       "id": "mau-disc-01",
       "boDe": "MN",
       "maTre": "Bé Bún",
+      "lop": "mam-non",
+      "maThanhVien": "tv-mau-01",
       "nguoiTraLoi": "nguoi-lon",
       "batDau": "2026-08-20T02:15:00.000Z",
       "ketThuc": "2026-08-20T02:17:40.000Z",
@@ -60,13 +132,14 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-02",
       "boDe": "TH",
       "maTre": "Su Kem",
       "lop": "4",
+      "maThanhVien": "tv-mau-02",
       "nguoiTraLoi": "tre",
       "batDau": "2026-08-21T07:30:00.000Z",
       "ketThuc": "2026-08-21T07:32:40.000Z",
@@ -115,12 +188,14 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-03",
       "boDe": "THCS",
       "maTre": "Tí Nị",
+      "lop": "7",
+      "maThanhVien": "tv-mau-03",
       "nguoiTraLoi": "tre",
       "batDau": "2026-08-22T12:05:00.000Z",
       "ketThuc": "2026-08-22T12:08:12.000Z",
@@ -170,13 +245,15 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-04",
       "boDe": "QS",
       "maTre": "Tí Nị",
+      "lop": "7",
       "tuoi": 13,
+      "maThanhVien": "tv-mau-03",
       "nguoiTraLoi": "nguoi-lon",
       "batDau": "2026-08-24T13:40:00.000Z",
       "ketThuc": "2026-08-24T13:42:08.000Z",
@@ -218,12 +295,13 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-05",
       "boDe": "PH",
       "maTre": "Mẹ Bống",
+      "maThanhVien": "tv-mau-04",
       "nguoiTraLoi": "nguoi-lon",
       "batDau": "2026-08-24T14:10:00.000Z",
       "ketThuc": "2026-08-24T14:13:12.000Z",
@@ -273,12 +351,14 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-06",
       "boDe": "THCS",
       "maTre": "Kem Bơ",
+      "lop": "8",
+      "maThanhVien": "tv-mau-05",
       "nguoiTraLoi": "tre",
       "batDau": "2026-08-25T09:20:00.000Z",
       "ketThuc": "2026-08-25T09:23:12.000Z",
@@ -327,12 +407,14 @@
         },
         "canhBao": []
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-07",
       "boDe": "MN",
       "maTre": "Cà Rốt",
+      "lop": "mam-non",
+      "maThanhVien": "tv-mau-06",
       "nguoiTraLoi": "nguoi-lon",
       "batDau": "2026-08-26T01:45:00.000Z",
       "ketThuc": "2026-08-26T01:47:40.000Z",
@@ -362,13 +444,14 @@
         "hopLe": false,
         "lyDo": "PHANG"
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     },
     {
       "id": "mau-disc-08",
       "boDe": "TH",
       "maTre": "Nem Rán",
       "lop": "5",
+      "maThanhVien": "tv-mau-07",
       "nguoiTraLoi": "tre",
       "batDau": "2026-08-26T10:00:00.000Z",
       "ketThuc": "2026-08-26T10:02:40.000Z",
@@ -416,12 +499,13 @@
           "MOT_COT"
         ]
       },
-      "phienBanBoDe": "1.0"
+      "phienBanBoDe": "1.1"
     }
   ];
 
   const db = await new Promise((ok, loi) => {
-    const yc = indexedDB.open(TEN_KHO, 1);
+    const yc = indexedDB.open(TEN_KHO, PHIEN_BAN_KHO);
+    // Dựng đúng ba bảng như `kho-bai.ts` — kể cả khi máy chưa từng mở khoang DISC.
     yc.onupgradeneeded = () => {
       const d = yc.result;
       if (!d.objectStoreNames.contains(TEN_BANG)) {
@@ -429,20 +513,64 @@
         b.createIndex("maTre", "maTre", { unique: false });
         b.createIndex("ketThuc", "ketThuc", { unique: false });
       }
+      const gd = yc.transaction;
+      if (gd) {
+        const b = gd.objectStore(TEN_BANG);
+        if (!b.indexNames.contains("maThanhVien")) {
+          b.createIndex("maThanhVien", "maThanhVien", { unique: false });
+        }
+      }
+      if (!d.objectStoreNames.contains(BANG_THANH_VIEN)) {
+        const b = d.createObjectStore(BANG_THANH_VIEN, { keyPath: "id" });
+        b.createIndex("thuTu", "thuTu", { unique: false });
+      }
+      if (!d.objectStoreNames.contains(BANG_PHAN_TICH)) {
+        d.createObjectStore(BANG_PHAN_TICH, { keyPath: "id" });
+      }
     };
     yc.onsuccess = () => ok(yc.result);
     yc.onerror = () => loi(yc.error);
+    // Tab khác đang giữ kho ở phiên bản cũ thì `onupgradeneeded` treo im lặng. Nói ra.
+    yc.onblocked = () =>
+      loi(new Error("Một tab DISC khác đang mở và giữ kho. Đóng tab đó rồi dán lại."));
   });
 
-  await new Promise((ok, loi) => {
-    const gd = db.transaction(TEN_BANG, "readwrite");
-    const bang = gd.objectStore(TEN_BANG);
-    for (const b of BAI) bang.put(b);
-    gd.oncomplete = ok;
-    gd.onerror = () => loi(gd.error);
-  });
+  const ghi = (bang, ds) =>
+    new Promise((ok, loi) => {
+      const gd = db.transaction(bang, "readwrite");
+      const b = gd.objectStore(bang);
+      for (const x of ds) b.put(x);
+      gd.oncomplete = ok;
+      gd.onerror = () => loi(gd.error);
+    });
+
+  await ghi(BANG_THANH_VIEN, THANH_VIEN);
+  await ghi(TEN_BANG, BAI);
   db.close();
 
-  console.log("✅ Đã nạp " + BAI.length + " bài mẫu. Mở màn \"Bài đã làm\" để xem.");
-  console.table(BAI.map((b) => ({ id: b.id, boDe: b.boDe, bietDanh: b.maTre })));
-})();
+  // 🔴 Đánh dấu ĐÃ nhận nuôi: bộ mẫu đã tự gắn `maThanhVien` cho từng bài rồi, nên để
+  // `nhanNuoiNeuCan()` chạy nữa là nó đẻ thêm một loạt thành viên trùng tên.
+  try {
+    window.localStorage.setItem("disc:da-nhan-nuoi-v2", "1");
+  } catch {
+    // Cửa sổ ẩn danh chặn localStorage — không sao, chỉ là có thể sinh thành viên trùng.
+  }
+
+  console.log(
+    "✅ Đã nạp " + THANH_VIEN.length + " người và " + BAI.length + " bài mẫu. Tải lại trang rồi mở bước 1.",
+  );
+  console.table(
+    BAI.map((b) => ({
+      id: b.id,
+      boDe: b.boDe,
+      cuaAi: b.maTre,
+      thanhVien: b.maThanhVien,
+      hopLe: b.ketQua.hopLe,
+    })),
+  );
+})().catch((loi) => {
+  // 🔴 PHẢI CÓ. Bản trước là một IIFE async không ai bắt lỗi: mở kho hỏng thì trình duyệt
+  // chỉ ghi "unhandled rejection", dòng ✅ không bao giờ in ra, và người dán nó ngồi đoán.
+  console.error("🔴 Nạp dữ liệu mẫu THẤT BẠI:", loi && loi.message ? loi.message : loi);
+  console.error("   Thử: đóng hết tab DISC khác, tải lại trang, rồi dán lại.");
+});

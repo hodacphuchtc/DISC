@@ -117,6 +117,61 @@ export const LOP_LON_NHAT = 12;
  */
 export const LOP_DAU_CAP_BA = 10;
 
+/* ── Bậc học của một thành viên trong sổ (V1.1) ──────────────────────────── */
+
+/**
+ * HAI BẬC KHÔNG PHẢI LÀ SỐ LỚP.
+ *
+ * 🔴 CỐ Ý LÀ CHUỖI, KHÔNG PHẢI SỐ. Một sentinel bằng số (kiểu `0` cho mầm non hay `13`
+ * cho đã qua lớp 12) sẽ lặng lẽ chui vào `ThanhVien.lop` rồi được lưu như thể có người
+ * đang học lớp 0 hoặc lớp 13 — và sáu tháng sau không ai truy được con số đó ở đâu ra.
+ *
+ * 🔴 Hai hằng này TRƯỚC ĐÂY nằm cục bộ trong `app/khoang/chon-doi-tuong.tsx` (`TREN_LOP_12`),
+ * còn mầm non thì không có cửa nào chọn được. Hằng nghiệp vụ nằm cục bộ trong một file là
+ * mầm của hai nguồn sự thật — đúng vết xe `TUOI_VAO_THCS` đã trả giá ở GĐ9.
+ */
+export const LOP_MAM_NON = "mam-non";
+export const LOP_TREN_12 = "tren-12";
+
+/** Một lựa chọn bậc học: giá trị đem đi lưu, và mã chữ để `disc-tu-dien` tra nhãn. */
+export type TuyChonLop = {
+  /** Giá trị lưu vào `ThanhVien.lop`. Số lớp thì là chuỗi số ("1".."12"). */
+  readonly gia: string;
+  /** Số lớp, nếu đây là một lớp phổ thông. `undefined` với mầm non và đã qua lớp 12. */
+  readonly so?: number;
+};
+
+/**
+ * Danh sách bậc học cho một người ĐANG ĐI HỌC trong sổ gia đình — đúng 14 mục:
+ * Mầm non · Lớp 1 … Lớp 12 · Trên lớp 12.
+ *
+ * Hàm thuần, không React, không DOM. Nhãn hiển thị nằm ở `config/disc-tu-dien.ts`.
+ */
+export function tuyChonLop(): readonly TuyChonLop[] {
+  return [
+    { gia: LOP_MAM_NON },
+    ...Array.from({ length: LOP_LON_NHAT - LOP_NHO_NHAT + 1 }, (_, i) => {
+      const so = LOP_NHO_NHAT + i;
+      return { gia: String(so), so };
+    }),
+    { gia: LOP_TREN_12 },
+  ];
+}
+
+/**
+ * Số lớp của một giá trị bậc học — `undefined` nếu đó là mầm non, đã qua lớp 12, hoặc
+ * một chuỗi rác nào đó nằm trong kho từ bản cũ.
+ *
+ * 🔴 Đây là chỗ DUY NHẤT được phép đổi `ThanhVien.lop` thành số. Gọi `Number(tv.lop)`
+ * rải rác là cách `boDeCuaThanhVien()` từng trả `NaN` cho mầm non rồi lặng lẽ đá người
+ * dùng về màn hỏi lại.
+ */
+export function soLopCua(lop: string | undefined): number | undefined {
+  if (lop === undefined || lop === LOP_MAM_NON || lop === LOP_TREN_12) return undefined;
+  const so = Number(lop);
+  return Number.isInteger(so) && so >= LOP_NHO_NHAT && so <= LOP_LON_NHAT ? so : undefined;
+}
+
 /* ── Cỡ chữ và cỡ nút theo lứa (11.3) ────────────────────────────────────── */
 
 /**

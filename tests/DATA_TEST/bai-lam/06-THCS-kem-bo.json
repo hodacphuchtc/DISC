@@ -2,6 +2,8 @@
   "id": "mau-disc-06",
   "boDe": "THCS",
   "maTre": "Kem Bơ",
+  "lop": "8",
+  "maThanhVien": "tv-mau-05",
   "nguoiTraLoi": "tre",
   "batDau": "2026-08-25T09:20:00.000Z",
   "ketThuc": "2026-08-25T09:23:12.000Z",
@@ -50,5 +52,5 @@
     },
     "canhBao": []
   },
-  "phienBanBoDe": "1.0"
+  "phienBanBoDe": "1.1"
 }

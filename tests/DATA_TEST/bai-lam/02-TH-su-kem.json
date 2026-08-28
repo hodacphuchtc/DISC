@@ -3,6 +3,7 @@
   "boDe": "TH",
   "maTre": "Su Kem",
   "lop": "4",
+  "maThanhVien": "tv-mau-02",
   "nguoiTraLoi": "tre",
   "batDau": "2026-08-21T07:30:00.000Z",
   "ketThuc": "2026-08-21T07:32:40.000Z",
@@ -51,5 +52,5 @@
     },
     "canhBao": []
   },
-  "phienBanBoDe": "1.0"
+  "phienBanBoDe": "1.1"
 }

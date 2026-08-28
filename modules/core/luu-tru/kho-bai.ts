@@ -25,8 +25,16 @@ export const TEN_BANG = "bai-lam";
 export const BANG_THANH_VIEN = "thanh-vien";
 export const BANG_PHAN_TICH = "phan-tich-gia-dinh";
 
-/** 🔴 Tăng số này là một cuộc DI TRÚ. Đọc `moKho()` trước khi đụng vào. */
-const PHIEN_BAN_KHO = 2;
+/**
+ * 🔴 Tăng số này là một cuộc DI TRÚ. Đọc `moKho()` trước khi đụng vào.
+ *
+ * 🔴 XUẤT RA CÓ CHỦ ĐÍCH (V0.3). Bộ sinh dữ liệu mẫu phải mở kho bằng ĐÚNG số này. Trước
+ * đó nó gõ cứng `open(TEN_KHO, 1)` — và khi kho lên v2, bộ nạp mẫu chết lặng: mở kho v1
+ * trên một kho đã v2 thì `VersionError`, lời hứa văng, và người dán nó vào Console chỉ
+ * thấy một lỗi đỏ lạ. Một script hỏng mà không ai gọi thì im lặng y như một tính năng
+ * hỏng mà không ai mở.
+ */
+export const PHIEN_BAN_KHO = 2;
 
 /** Khoá localStorage đánh dấu đã chạy xong việc nhận nuôi bài cũ. */
 const KHOA_DA_NHAN_NUOI = "disc:da-nhan-nuoi-v2";

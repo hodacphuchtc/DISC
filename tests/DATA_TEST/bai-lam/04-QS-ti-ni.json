@@ -2,7 +2,9 @@
   "id": "mau-disc-04",
   "boDe": "QS",
   "maTre": "Tí Nị",
+  "lop": "7",
   "tuoi": 13,
+  "maThanhVien": "tv-mau-03",
   "nguoiTraLoi": "nguoi-lon",
   "batDau": "2026-08-24T13:40:00.000Z",
   "ketThuc": "2026-08-24T13:42:08.000Z",
@@ -44,5 +46,5 @@
     },
     "canhBao": []
   },
-  "phienBanBoDe": "1.0"
+  "phienBanBoDe": "1.1"
 }

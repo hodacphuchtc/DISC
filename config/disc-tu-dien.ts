@@ -7,6 +7,7 @@
  * File này thuộc TẦNG LÕI (ADR-004): không React, không DOM.
  */
 
+import { LOP_MAM_NON, LOP_TREN_12 } from "./disc-nguong";
 import { MAU } from "./thuong-hieu";
 
 /* ── Khoang (mục trên thanh bên) ─────────────────────────────────────────── */
@@ -684,7 +685,12 @@ export const CHU_BANG_GIA_DINH = {
 
   nhanTen: "Tên gọi trong nhà",
   nhanVai: "Vai",
-  nhanLop: "Lớp (nếu đang đi học)",
+  /**
+   * 🔴 Bỏ đuôi "(nếu đang đi học)" từ V1.2: ô lớp nay CHỈ hiện với người đang đi học,
+   * nên câu điều kiện đó thành thừa — và một nhãn nói về trường hợp không thể xảy ra
+   * chỉ làm người đọc dừng lại tự hỏi mình có thuộc trường hợp đó không.
+   */
+  nhanLop: "Lớp",
   nhanGhiChu: "Ghi chú của bạn (không bắt buộc)",
   chuaChonLop: "Chưa chọn",
   nutLuu: "Lưu",
@@ -709,7 +715,29 @@ export const CHU_BANG_GIA_DINH = {
 
   nhomPhanTich: "Phân tích cả nhà",
   phanTichChuaMo: "Phần này mở khi cả nhà có từ hai người làm xong bài.",
+
+  /* ── Nhãn 14 bậc học (V1.1) ─────────────────────────────────────────── */
+  nhanMamNon: "Mầm non",
+  nhanLopSo: "Lớp {so}",
+  /**
+   * 🔴 Không viết "Đã đi làm": nhánh này còn có sinh viên, người đang ôn thi lại, người
+   * ở nhà. Hỏi thẳng cái mình cần biết — đã qua lớp 12 hay chưa — thì không loại ai ra.
+   */
+  nhanTren12: "Trên lớp 12",
 } as const;
+
+/**
+ * Nhãn hiển thị của một giá trị bậc học lấy từ `tuyChonLop()`.
+ *
+ * Tách thành hàm vì cả form thêm người, thẻ thành viên và màn chọn người làm bài đều cần
+ * đúng một cách gọi tên — ba nơi tự dựng chuỗi là ba nơi lệch nhau vào ngày ai đó sửa một.
+ */
+export function nhanLopCua(lop: string | undefined): string {
+  if (!lop) return CHU_BANG_GIA_DINH.chuaChonLop;
+  if (lop === LOP_MAM_NON) return CHU_BANG_GIA_DINH.nhanMamNon;
+  if (lop === LOP_TREN_12) return CHU_BANG_GIA_DINH.nhanTren12;
+  return CHU_BANG_GIA_DINH.nhanLopSo.replace("{so}", lop);
+}
 
 /* ── Mã mời hoàn chỉnh (13.1) ────────────────────────────────────────────── */
 

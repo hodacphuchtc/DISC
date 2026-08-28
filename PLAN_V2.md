@@ -84,20 +84,28 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
   - **(d)** 30 phút.
   - **(e) chặn:** NGƯỜI — cần hai điện thoại thật và một người cầm máy thứ hai.
 
-- [ ] **V0.3 — Sửa bộ nạp dữ liệu mẫu cho sale demo được**
-  - **(a)** `tests/DATA_TEST/nap-vao-trinh-duyet.js` đang mở `indexedDB.open("disc", 1)`
-    trong khi kho thật đã là `PHIEN_BAN_KHO = 2` với ba bảng
-    (`bai-lam` · `thanh-vien` · `phan-tich-gia-dinh`) — mở kho v1 trên kho đã v2 thì
-    `VersionError`, promise văng, IIFE **không có `.catch()`** nên chỉ hiện một lỗi đỏ lạ
-    trong Console và không nạp được gì. Sửa: mở đúng v2, tạo đủ ba bảng, **tạo sẵn 4 thành
-    viên tên bịa** (`Zozo` con lớp 7 · `Kiki` con mầm non · `Mimi` mẹ · `Popo` bố) và gắn
-    `maThanhVien` cho từng bài, thêm `.catch()`, sửa dòng nhắc cuối (màn *"Bài đã làm"* đã
-    không còn).
-  - **(b)** Mở link thật → DevTools → Console → dán trọn file → thấy dòng
-    `✅ Đã nạp ...` → mở bước 1 thấy **4 người trong sổ, mỗi người có bài**.
-  - **(c)** Thêm `tests/nap-du-lieu-mau.test.ts`: chạy bộ nạp dưới `fake-indexeddb`, khẳng
-    định đọc ra đúng 4 thành viên và mọi bài đều có `maThanhVien` trỏ tới một người có thật.
-  - **(d)** 1,5 giờ.
+- [x] **V0.3 — Sửa bộ nạp dữ liệu mẫu cho sale demo được** ✅ (28/08/2026)
+  - **(a)** `nap-vao-trinh-duyet.js` mở `indexedDB.open("disc", 1)` trong khi kho thật đã
+    là v2 ba bảng ⇒ `VersionError`, lời hứa văng, IIFE **không có `.catch()`** nên chỉ hiện
+    một lỗi đỏ lạ. 🔴 File đó **do máy sinh** — sửa **bộ sinh**
+    `tests/DATA_TEST/tao-du-lieu-mau.mjs`, sửa tay là mất công lần sau sinh lại.
+    Đã làm: xuất `PHIEN_BAN_KHO` từ `kho-bai.ts` và **import tên bảng + số phiên bản từ
+    đó**, không gõ lại (chính việc gõ lại đã gây ra lỗi này); dựng đủ ba bảng và index
+    `maThanhVien`; thêm `.catch()` + `onblocked`; đặt cờ `disc:da-nhan-nuoi-v2` để
+    `nhanNuoiNeuCan()` khỏi đẻ thêm người trùng tên; sửa dòng nhắc cuối (cổng 3100, màn
+    *"Bài đã làm"* đã không còn).
+    **Danh sách thành viên SUY RA từ chính 8 hồ sơ mẫu, không khai tay** — khai một danh
+    sách riêng bên cạnh danh sách bài là dựng nguồn sự thật thứ hai. Ra **7 người**, giữ
+    nguyên tên bịa cũ: `Bé Bún` (mầm non) · `Su Kem` (lớp 4) · `Tí Nị` (lớp 7, **2 bài** —
+    cặp vùng lệch) · `Mẹ Bống` (mẹ, **không lớp**) · `Kem Bơ` (lớp 8) · `Cà Rốt` (mầm non,
+    ca không hợp lệ) · `Nem Rán` (lớp 5).
+  - **(b)** Mở bản đang chạy → DevTools → Console → dán trọn file → thấy dòng
+    `✅ Đã nạp 7 người và 8 bài mẫu` → tải lại trang → bước 1 có **7 người, mỗi người có bài**.
+  - **(c)** `tests/nap-du-lieu-mau.test.ts` — **chạy chính bộ nạp đã sinh** dưới
+    `fake-indexeddb` rồi đọc lại bằng đúng hàm kho của sản phẩm: 7 người · 8 bài · **không
+    bài nào mồ côi** · hai bài của Tí Nị về cùng một người · người lớn không bị gán lớp ·
+    dán hai lần không đẻ người trùng · không tên nào trông như họ tên thật. **8/8 xanh.**
+  - **(d)** 1,5 giờ (thực tế ~1 giờ).
 
 ---
 
@@ -118,7 +126,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
 
 ---
 
-- [ ] **V1.1 — Lớp lên `config/`, thêm Mầm non và Trên lớp 12**
+- [x] **V1.1 — Lớp lên `config/`, thêm Mầm non và Trên lớp 12** ✅ (28/08/2026 — làm TRƯỚC V0.3 vì bộ sinh dữ liệu mẫu cần hằng `LOP_MAM_NON`)
   - **(a)** Hai sentinel đang nằm cục bộ trong `app/khoang/chon-doi-tuong.tsx` — đúng vết
     xe `TUOI_VAO_THCS` đã trả giá (hằng nghiệp vụ cục bộ là mầm của hai nguồn sự thật).
     Đưa lên `config/disc-nguong.ts`: `LOP_MAM_NON = "mam-non"`, `LOP_TREN_12 = "tren-12"`.

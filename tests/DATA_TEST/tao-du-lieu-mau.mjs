@@ -39,6 +39,14 @@ registerHooks({
 
 const { cham } = await import(new URL("modules/report/cham.ts", GOC).href);
 const { napBoDe, PHIEN_BAN_BO_DE } = await import(new URL("modules/core/bo-de/nap.ts", GOC).href);
+const { LOP_MAM_NON } = await import(new URL("config/disc-nguong.ts", GOC).href);
+const {
+  TEN_KHO,
+  TEN_BANG,
+  BANG_THANH_VIEN,
+  BANG_PHAN_TICH,
+  PHIEN_BAN_KHO,
+} = await import(new URL("modules/core/luu-tru/kho-bai.ts", GOC).href);
 
 const THU_MUC = new URL("tests/DATA_TEST/bai-lam/", GOC);
 const TIEN_TO_ID = "mau-disc-";
@@ -54,6 +62,8 @@ const MAU = [
     id: "01",
     boDe: "MN",
     maTre: "Bé Bún",
+    vai: "con",
+    lop: LOP_MAM_NON,
     batDau: "2026-08-20T09:15:00+07:00",
     minhHoa: "Mầm non — nhóm D nổi rõ. Phụ huynh trả lời hộ bé.",
     truc: { D: [5, 5, 5, 4, 4], I: [4, 4, 3, 3, 2], S: [3, 3, 2, 2, 2], C: [4, 3, 3, 2, 2] },
@@ -62,6 +72,7 @@ const MAU = [
     id: "02",
     boDe: "TH",
     maTre: "Su Kem",
+    vai: "con",
     lop: "4",
     batDau: "2026-08-21T14:30:00+07:00",
     minhHoa: "Tiểu học tự làm, thang 3 mức — pha I-S. Thang 3 mức là chỗ thô nhất của phép đo.",
@@ -71,6 +82,8 @@ const MAU = [
     id: "03",
     boDe: "THCS",
     maTre: "Tí Nị",
+    vai: "con",
+    lop: "7",
     batDau: "2026-08-22T19:05:00+07:00",
     minhHoa: "THCS tự làm — nhóm C nổi rõ. Ghép cặp vùng lệch với mẫu 04.",
     truc: {
@@ -84,6 +97,8 @@ const MAU = [
     id: "04",
     boDe: "QS",
     maTre: "Tí Nị",
+    vai: "con",
+    lop: "7",
     tuoi: 13,
     batDau: "2026-08-24T20:40:00+07:00",
     minhHoa:
@@ -94,6 +109,7 @@ const MAU = [
     id: "05",
     boDe: "PH",
     maTre: "Mẹ Bống",
+    vai: "me",
     batDau: "2026-08-24T21:10:00+07:00",
     minhHoa:
       "Phụ huynh tự đánh giá — nhóm S nổi rõ. Đặt cạnh mẫu 03 (con nhóm C) để thử phần so sánh phong cách bố mẹ ↔ con.",
@@ -108,6 +124,8 @@ const MAU = [
     id: "06",
     boDe: "THCS",
     maTre: "Kem Bơ",
+    vai: "con",
+    lop: "8",
     batDau: "2026-08-25T16:20:00+07:00",
     minhHoa: "PHỔ ĐỀU — bốn nhóm sát nhau, không được ép nhãn. Sạch cảnh báo.",
     // Cố ý rải nhiều giá trị khác nhau: bốn trục cùng dáng thì các câu liền kề trong thứ
@@ -123,6 +141,8 @@ const MAU = [
     id: "07",
     boDe: "MN",
     maTre: "Cà Rốt",
+    vai: "con",
+    lop: LOP_MAM_NON,
     batDau: "2026-08-26T08:45:00+07:00",
     minhHoa:
       "KHÔNG HỢP LỆ — 80% câu chọn mức giữa, hàng rào HL-1 phải CHẶN và không trả kết quả.",
@@ -132,6 +152,7 @@ const MAU = [
     id: "08",
     boDe: "TH",
     maTre: "Nem Rán",
+    vai: "con",
     lop: "5",
     batDau: "2026-08-26T17:00:00+07:00",
     minhHoa: "CẢNH BÁO MOT_COT — 9 câu liên tiếp cùng một đáp án, vẫn trả kết quả nhưng kèm cảnh báo.",
@@ -187,6 +208,42 @@ for (const f of readdirSync(THU_MUC)) {
   if (f.endsWith(".json")) unlinkSync(new URL(f, THU_MUC));
 }
 
+/* ── Suy DANH SÁCH THÀNH VIÊN từ chính tám hồ sơ mẫu (V0.3) ───────────────
+ *
+ * 🔴 SUY RA, KHÔNG KHAI TAY. Khai một danh sách thành viên riêng bên cạnh danh sách bài
+ * là dựng nguồn sự thật thứ hai: sửa tên ở một bên rồi quên bên kia thì bài thành mồ côi,
+ * và không cửa nào bắt được. Ở đây `maTre` của hồ sơ mẫu là khoá duy nhất.
+ *
+ * Mẫu 03 và 04 cùng là "Tí Nị" — cố ý: một bài em tự làm, một bài bố mẹ quan sát về em.
+ * Hai bài đó phải về CÙNG một thành viên thì màn Vùng lệch mới ghép được cặp, và người đó
+ * chạm đúng trần 2 bài mỗi người.
+ */
+const MOC_TAO = "2026-08-19T02:00:00.000Z";
+
+const thanhVien = [];
+for (const m of MAU) {
+  if (thanhVien.some((t) => t.ten === m.maTre)) continue;
+  thanhVien.push({
+    id: `tv-mau-${String(thanhVien.length + 1).padStart(2, "0")}`,
+    ten: m.maTre,
+    vaiTro: m.vai,
+    ...(m.lop ? { lop: m.lop } : {}),
+    thuTu: thanhVien.length,
+    taoLuc: MOC_TAO,
+    suaLuc: MOC_TAO,
+  });
+}
+
+const idThanhVienTheoTen = new Map(thanhVien.map((t) => [t.ten, t.id]));
+
+// Cửa kiểm ngay tại chỗ sinh: mỗi hồ sơ mẫu phải khai `vai`, và người đi học phải có bậc.
+for (const m of MAU) {
+  if (!m.vai) throw new Error(`Mẫu ${m.id} (${m.maTre}) thiếu trường \`vai\`.`);
+  if (m.vai === "con" && !m.lop) {
+    throw new Error(`Mẫu ${m.id} (${m.maTre}) là con nhưng thiếu \`lop\` — sẽ không vào được bài.`);
+  }
+}
+
 const tomTat = [];
 
 for (const m of MAU) {
@@ -210,6 +267,10 @@ for (const m of MAU) {
     maTre: m.maTre,
     ...(m.lop ? { lop: m.lop } : {}),
     ...(m.tuoi ? { tuoi: m.tuoi } : {}),
+    // 🔴 Đóng dấu thành viên NGAY LÚC SINH. Bài không có `maThanhVien` rơi vào nhóm
+    // "chưa xếp" và KHÔNG vào được phân tích cả nhà — tức là bộ mẫu sẽ không demo được
+    // đúng cái màn mà sale cần cho xem.
+    maThanhVien: idThanhVienTheoTen.get(m.maTre),
     nguoiTraLoi: m.boDe === "TH" || m.boDe === "THCS" ? "tre" : "nguoi-lon",
     batDau: batDau.toISOString(),
     ketThuc: ketThuc.toISOString(),
@@ -228,25 +289,36 @@ for (const m of MAU) {
     : `CHẶN: ${ketQua.lyDo}`;
   tomTat.push({ ten, maTre: m.maTre, boDe: m.boDe, moTa, bai });
 }
-
 /* ── Sinh kèm bộ nạp cho trình duyệt ──────────────────────────────────────
- * Repo KHÔNG có hàm nhập: `app/khoang/lich-su.tsx` chỉ có nút tải xuống, và `JSZip.loadAsync`
- * chỉ xuất hiện trong test. Nên đường nạp duy nhất là ghi thẳng vào IndexedDB.
- * Console của trình duyệt không đọc được file trên đĩa ⇒ dữ liệu phải nằm SẴN trong file js,
- * và file js phải do chính script này sinh ra thì mới không bao giờ lệch với bộ JSON.
+ * Repo KHÔNG có hàm nhập: nút sao lưu chỉ tải xuống, và `JSZip.loadAsync` chỉ xuất hiện
+ * trong test. Nên đường nạp duy nhất là ghi thẳng vào IndexedDB. Console của trình duyệt
+ * không đọc được file trên đĩa ⇒ dữ liệu phải nằm SẴN trong file js, và file js phải do
+ * chính script này sinh ra thì mới không bao giờ lệch với bộ JSON.
+ *
+ * 🔴 MỌI TÊN BẢNG VÀ SỐ PHIÊN BẢN ĐỀU IMPORT TỪ `kho-bai.ts`, không gõ lại.
+ * Bản trước gõ cứng `open(TEN_KHO, 1)`; kho lên v2 thì bộ nạp chết lặng — mở kho v1 trên
+ * một kho đã v2 là `VersionError`, lời hứa văng, và người dán vào Console chỉ thấy một
+ * lỗi đỏ lạ. Nay số phiên bản đi theo kho, nên chuyện đó không lặp lại được nữa.
  */
 const napJs = `/**
  * NẠP DỮ LIỆU MẪU DISC vào trình duyệt.  ⚠️ FILE NÀY DO MÁY SINH — đừng sửa tay.
  * Sinh lại: node tests/DATA_TEST/tao-du-lieu-mau.mjs
  *
- * Cách dùng: mở http://localhost:3000 → DevTools → Console → dán trọn file này → Enter.
- * Xong thì mở màn "Bài đã làm".
+ * Cách dùng: mở bản đang chạy (npm run xem-thu → http://localhost:3100)
+ *            → DevTools → Console → dán trọn file này → Enter → tải lại trang.
  *
- * 🔴 Toàn bộ biệt danh ở đây là BỊA. Không có dữ liệu thật của trẻ.
+ * 🔴 TOÀN BỘ TÊN Ở ĐÂY LÀ BỊA. Không có dữ liệu thật của trẻ.
+ *    Máy demo của giáo viên/sale chỉ được dùng bộ này, và bấm Xoá sạch sau mỗi lần demo.
  */
 (async () => {
-  const TEN_KHO = ${JSON.stringify("disc")};
-  const TEN_BANG = ${JSON.stringify("bai-lam")};
+  const TEN_KHO = ${JSON.stringify(TEN_KHO)};
+  const PHIEN_BAN_KHO = ${JSON.stringify(PHIEN_BAN_KHO)};
+  const TEN_BANG = ${JSON.stringify(TEN_BANG)};
+  const BANG_THANH_VIEN = ${JSON.stringify(BANG_THANH_VIEN)};
+  const BANG_PHAN_TICH = ${JSON.stringify(BANG_PHAN_TICH)};
+
+  const THANH_VIEN = ${JSON.stringify(thanhVien, null, 2).split("\n").join("\n  ")};
+
   const BAI = ${JSON.stringify(
     tomTat.map((t) => t.bai),
     null,
@@ -256,7 +328,8 @@ const napJs = `/**
     .join("\n  ")};
 
   const db = await new Promise((ok, loi) => {
-    const yc = indexedDB.open(TEN_KHO, 1);
+    const yc = indexedDB.open(TEN_KHO, PHIEN_BAN_KHO);
+    // Dựng đúng ba bảng như \`kho-bai.ts\` — kể cả khi máy chưa từng mở khoang DISC.
     yc.onupgradeneeded = () => {
       const d = yc.result;
       if (!d.objectStoreNames.contains(TEN_BANG)) {
@@ -264,23 +337,67 @@ const napJs = `/**
         b.createIndex("maTre", "maTre", { unique: false });
         b.createIndex("ketThuc", "ketThuc", { unique: false });
       }
+      const gd = yc.transaction;
+      if (gd) {
+        const b = gd.objectStore(TEN_BANG);
+        if (!b.indexNames.contains("maThanhVien")) {
+          b.createIndex("maThanhVien", "maThanhVien", { unique: false });
+        }
+      }
+      if (!d.objectStoreNames.contains(BANG_THANH_VIEN)) {
+        const b = d.createObjectStore(BANG_THANH_VIEN, { keyPath: "id" });
+        b.createIndex("thuTu", "thuTu", { unique: false });
+      }
+      if (!d.objectStoreNames.contains(BANG_PHAN_TICH)) {
+        d.createObjectStore(BANG_PHAN_TICH, { keyPath: "id" });
+      }
     };
     yc.onsuccess = () => ok(yc.result);
     yc.onerror = () => loi(yc.error);
+    // Tab khác đang giữ kho ở phiên bản cũ thì \`onupgradeneeded\` treo im lặng. Nói ra.
+    yc.onblocked = () =>
+      loi(new Error("Một tab DISC khác đang mở và giữ kho. Đóng tab đó rồi dán lại."));
   });
 
-  await new Promise((ok, loi) => {
-    const gd = db.transaction(TEN_BANG, "readwrite");
-    const bang = gd.objectStore(TEN_BANG);
-    for (const b of BAI) bang.put(b);
-    gd.oncomplete = ok;
-    gd.onerror = () => loi(gd.error);
-  });
+  const ghi = (bang, ds) =>
+    new Promise((ok, loi) => {
+      const gd = db.transaction(bang, "readwrite");
+      const b = gd.objectStore(bang);
+      for (const x of ds) b.put(x);
+      gd.oncomplete = ok;
+      gd.onerror = () => loi(gd.error);
+    });
+
+  await ghi(BANG_THANH_VIEN, THANH_VIEN);
+  await ghi(TEN_BANG, BAI);
   db.close();
 
-  console.log("✅ Đã nạp " + BAI.length + " bài mẫu. Mở màn \\"Bài đã làm\\" để xem.");
-  console.table(BAI.map((b) => ({ id: b.id, boDe: b.boDe, bietDanh: b.maTre })));
-})();
+  // 🔴 Đánh dấu ĐÃ nhận nuôi: bộ mẫu đã tự gắn \`maThanhVien\` cho từng bài rồi, nên để
+  // \`nhanNuoiNeuCan()\` chạy nữa là nó đẻ thêm một loạt thành viên trùng tên.
+  try {
+    window.localStorage.setItem("disc:da-nhan-nuoi-v2", "1");
+  } catch {
+    // Cửa sổ ẩn danh chặn localStorage — không sao, chỉ là có thể sinh thành viên trùng.
+  }
+
+  console.log(
+    "✅ Đã nạp " + THANH_VIEN.length + " người và " + BAI.length + " bài mẫu. Tải lại trang rồi mở bước 1.",
+  );
+  console.table(
+    BAI.map((b) => ({
+      id: b.id,
+      boDe: b.boDe,
+      cuaAi: b.maTre,
+      thanhVien: b.maThanhVien,
+      hopLe: b.ketQua.hopLe,
+    })),
+  );
+})().catch((loi) => {
+  // 🔴 PHẢI CÓ. Bản trước là một IIFE async không ai bắt lỗi: mở kho hỏng thì trình duyệt
+  // chỉ ghi "unhandled rejection", dòng ✅ không bao giờ in ra, và người dán nó ngồi đoán.
+  console.error("🔴 Nạp dữ liệu mẫu THẤT BẠI:", loi && loi.message ? loi.message : loi);
+  console.error("   Thử: đóng hết tab DISC khác, tải lại trang, rồi dán lại.");
+});
 `;
 writeFileSync(new URL("tests/DATA_TEST/nap-vao-trinh-duyet.js", GOC), napJs, "utf8");
 

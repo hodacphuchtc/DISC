@@ -3,6 +3,7 @@
   "boDe": "TH",
   "maTre": "Nem Rán",
   "lop": "5",
+  "maThanhVien": "tv-mau-07",
   "nguoiTraLoi": "tre",
   "batDau": "2026-08-26T10:00:00.000Z",
   "ketThuc": "2026-08-26T10:02:40.000Z",
@@ -50,5 +51,5 @@
       "MOT_COT"
     ]
   },
-  "phienBanBoDe": "1.0"
+  "phienBanBoDe": "1.1"
 }
