@@ -205,7 +205,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
 
 ---
 
-- [ ] **V2.1 — Khung ba bước + thanh bên một mục + giấu màn số liệu**
+- [x] **V2.1 — Khung ba bước + thanh bên một mục + giấu màn số liệu** ✅ (28/08/2026)
   - **(a)** Thêm `MA_BUOC = ["nha-minh", "lam-bai", "phan-tich"] as const` + `TEN_BUOC` +
     `MO_TA_BUOC` vào `config/disc-tu-dien.ts`. `app/khoang/disc.tsx` thành khung xếp dọc
     ba tấm: mỗi tấm có số thứ tự, tên, **một dòng trạng thái sống** (`3 người trong sổ` ·

@@ -249,25 +249,6 @@ describe("sổ tiến độ — nhìn một cái biết ai chưa làm", () => {
   });
 });
 
-describe("khối phân tích cả nhà", () => {
-  it("chưa đủ hai người làm bài thì nói rõ khi nào mở", async () => {
-    await luuThanhVien(nguoi("tv-1", "Zozo"));
-    await luuBai(bai({ maThanhVien: "tv-1" }));
-    await moBang();
-    expect(document.querySelector('[data-thu="phan-tich-chua-mo"]')).toBeTruthy();
-  });
-
-  it("đủ hai người làm bài thì thôi hiện dòng chờ", async () => {
-    await luuThanhVien(nguoi("tv-1", "Zozo", 0));
-    await luuThanhVien(nguoi("tv-2", "Kiki", 1));
-    await luuBai(bai({ maThanhVien: "tv-1" }));
-    await luuBai(bai({ maThanhVien: "tv-2", maTre: "Kiki" }));
-    await moBang();
-
-    await waitFor(() => expect(the()).toHaveLength(2));
-    expect(document.querySelector('[data-thu="phan-tich-chua-mo"]')).toBeNull();
-  });
-});
 
 describe("nút Làm bài trên thẻ", () => {
   it("không truyền callback thì KHÔNG hiện nút — đừng bày nút không đi đâu", async () => {

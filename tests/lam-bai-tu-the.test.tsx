@@ -7,10 +7,10 @@ import {
   CHU_BANG_GIA_DINH,
   CHU_HAN_MUC,
   CHU_LAM_BAI,
+  CHU_BUOC,
   CHU_TRUOC_KHI_BAT_DAU,
-  KHOA_KHOANG_DANG_MO,
-  TEN_KHOANG,
 } from "../config/disc-tu-dien";
+import { moBuocLamBai } from "./duong-vao-bai";
 import {
   docTatCa,
   luuBai,
@@ -75,7 +75,6 @@ beforeEach(async () => {
   await xoaSach();
   await xoaSachThanhVien();
   window.localStorage.clear();
-  window.localStorage.setItem(KHOA_KHOANG_DANG_MO, "lich-su");
 });
 afterEach(async () => {
   cleanup();
@@ -83,11 +82,13 @@ afterEach(async () => {
   await xoaSachThanhVien();
 });
 
-async function moNhaMinh() {
+/**
+ * 🔴 Đường vào bài từ V2.1: mở BƯỚC 2 rồi bấm nút trên thẻ. Chuỗi thao tác nằm ở
+ * `tests/duong-vao-bai.ts` — một chỗ duy nhất, để lần sau đổi luồng thì chỉ sửa một file.
+ */
+async function moBuocHai() {
   render(<Trang />);
-  await waitFor(() =>
-    expect(document.querySelector('[data-thu="thong-diep-chinh"]')).toBeTruthy(),
-  );
+  await moBuocLamBai();
 }
 
 const bamLamBai = () =>
@@ -96,8 +97,7 @@ const bamLamBai = () =>
 describe("🔴 vào bài từ thẻ — KHÔNG hỏi tên lần nữa", () => {
   it("người có lớp: vào thẳng màn dặn dò, nói rõ đang làm cho ai", async () => {
     await themNguoi("tv-1", "Zozo", "4");
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
 
     bamLamBai();
 
@@ -113,8 +113,7 @@ describe("🔴 vào bài từ thẻ — KHÔNG hỏi tên lần nữa", () => {
 
   it("người CHƯA có lớp thì vẫn đi qua màn 1 — không đoán bừa bộ đề cho một đứa trẻ", async () => {
     await themNguoi("tv-1", "Zozo");
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
 
     bamLamBai();
 
@@ -125,8 +124,7 @@ describe("🔴 vào bài từ thẻ — KHÔNG hỏi tên lần nữa", () => {
 
   it("🔴 làm xong thì bản ghi mang ĐÚNG mã thành viên", async () => {
     await themNguoi("tv-1", "Zozo", "4");
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
     bamLamBai();
 
     await waitFor(() => expect(document.querySelector('[data-thu="ten-co-san"]')).toBeTruthy());
@@ -159,8 +157,7 @@ describe("🔴 cửa hạn mức — chạy thật, từ chỗ người dùng th
   it("chưa chạm trần thì đi thẳng, KHÔNG hộp thoại nào", async () => {
     await themNguoi("tv-1", "Zozo", "4");
     await luuBai(bai());
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
 
     bamLamBai();
 
@@ -172,8 +169,7 @@ describe("🔴 cửa hạn mức — chạy thật, từ chỗ người dùng th
     await themNguoi("tv-1", "Zozo", "4");
     await luuBai(bai({ ketThuc: "2026-01-01T06:00:00+07:00" }));
     await luuBai(bai({ ketThuc: "2026-06-01T06:00:00+07:00" }));
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
 
     bamLamBai();
 
@@ -189,8 +185,7 @@ describe("🔴 cửa hạn mức — chạy thật, từ chỗ người dùng th
     await themNguoi("tv-1", "Zozo", "4");
     await luuBai(bai({ ketThuc: "2026-01-01T06:00:00+07:00" }));
     await luuBai(bai({ ketThuc: "2026-06-01T06:00:00+07:00" }));
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
     bamLamBai();
     await waitFor(() => expect(document.querySelector('[data-thu="hop-thoai-han-muc"]')).toBeTruthy());
 
@@ -205,8 +200,7 @@ describe("🔴 cửa hạn mức — chạy thật, từ chỗ người dùng th
     await themNguoi("tv-1", "Zozo", "4");
     await luuBai(bai({ ketThuc: "2026-01-01T06:00:00+07:00" }));
     await luuBai(bai({ ketThuc: "2026-06-01T06:00:00+07:00" }));
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
     bamLamBai();
     await waitFor(() => expect(document.querySelector('[data-thu="hop-thoai-han-muc"]')).toBeTruthy());
 
@@ -223,17 +217,17 @@ describe("🔴 cửa hạn mức — chạy thật, từ chỗ người dùng th
 describe("thoát ra vào lại thì hết dính người cũ", () => {
   it("bấm mục DISC trên thanh bên ⇒ làm bài tự do, hỏi tên như thường", async () => {
     await themNguoi("tv-1", "Zozo", "4");
-    await moNhaMinh();
-    await waitFor(() => expect(screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutLamBai })).toBeTruthy());
+    await moBuocHai();
     bamLamBai();
     await waitFor(() => expect(document.querySelector('[data-thu="ten-co-san"]')).toBeTruthy());
 
-    // Sang mục khác rồi quay lại DISC bằng thanh bên.
-    fireEvent.click(screen.getByRole("button", { name: new RegExp(TEN_KHOANG["lich-su"], "u") }));
-    fireEvent.click(screen.getByRole("button", { name: new RegExp(TEN_KHOANG.disc, "u") }));
-
-    await waitFor(() =>
-      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Ai đang cầm máy/u),
+    // 🔴 Thoát bằng nút quay lại rồi vào lại — thanh bên không còn điều hướng nữa.
+    fireEvent.click(
+      screen.getByRole("button", { name: new RegExp(`← ${CHU_BUOC.ten["lam-bai"]}`, "u") }),
     );
+
+    // Về lại bước 2, và bài dở của người cũ KHÔNG dính sang.
+    await moBuocLamBai();
+    expect(document.querySelector('[data-thu="ten-co-san"]')).toBeNull();
   });
 });

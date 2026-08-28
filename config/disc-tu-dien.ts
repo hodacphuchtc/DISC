@@ -13,46 +13,80 @@ import { MAU } from "./thuong-hieu";
 /* ── Khoang (mục trên thanh bên) ─────────────────────────────────────────── */
 
 /**
- * 🔴 Mã `lich-su` GIỮ NGUYÊN dù mục nay tên là "Nhà mình" (12.3, ADR-007).
+ * 🔴 CÒN ĐÚNG MỘT KHOANG (V2.1).
  *
- * Mã khoang được lưu vào `localStorage` để nhớ mục đang mở. Đổi mã là mọi người đang có
- * `"lich-su"` trong máy bị `chuanHoaMaKhoang()` đá về mặc định — mất chỗ đang đứng mà
- * chẳng đổi lấy được gì. Tên hiển thị đổi, mã thì không.
+ * Trước đó có ba: `disc` · `lich-su` (Nhà mình) · `so-lieu`. *Nhà mình* nay là BƯỚC 1 nằm
+ * bên trong DISC; *Số liệu* ẩn sau `?so-lieu=1`. Nên bộ mã khoang, hàm chuẩn hoá và khoá
+ * `localStorage` nhớ-khoang-đang-mở đều đã **bị gỡ, không phải bị bỏ quên**: chúng không
+ * còn ai gọi, và một hàm canh cửa không ai gọi thì im lặng y như một cửa canh hỏng.
+ *
+ * Giá trị `"lich-su"` còn sót trong `localStorage` của máy người dùng cũ **không gây hại**
+ * — nay không ai đọc khoá đó nữa, trang luôn mở vào khung ba bước.
  */
-export const MA_KHOANG = ["disc", "lich-su", "so-lieu"] as const;
-export type MaKhoang = (typeof MA_KHOANG)[number];
+export const TEN_KHOANG = { disc: "DISC" } as const;
 
-export const KHOANG_MAC_DINH: MaKhoang = "disc";
-
-export const TEN_KHOANG: Record<MaKhoang, string> = {
-  disc: "DISC",
-  "lich-su": "Nhà mình",
-  "so-lieu": "Số liệu máy này",
-};
-
-export const MO_TA_KHOANG: Record<MaKhoang, string> = {
-  disc: "Trắc nghiệm hành vi cho học sinh và phụ huynh",
-  "lich-su": "Cả nhà một bảng — ai đã làm, ai chưa",
-  "so-lieu": "Vài con số đo trên chính máy này, không gửi đi đâu",
-};
-
-/** Khoang chưa dựng xong — hiện nhãn "đang dựng" để đừng ai bấm vào rồi ngã ngửa. */
-export const KHOANG_DANG_DUNG: readonly MaKhoang[] = [];
+export const MO_TA_KHOANG = {
+  disc: "Cả nhà hiểu nhau hơn qua bốn nhóm hành vi",
+} as const;
 
 /**
- * Trả về một mã khoang LUÔN hợp lệ.
+ * Cửa sau vào màn *Số liệu máy này*: `?so-lieu=1` (V2.1).
  *
- * localStorage là thứ người dùng (và tiện ích trình duyệt) sửa được tuỳ ý. Một mã lạ
- * nằm trong đó không được phép làm trắng trang — nó rơi về mặc định, im lặng và đúng.
+ * 🔴 Không phải bảo mật — ai đọc mã nguồn cũng thấy, và repo thì công khai. Đây chỉ là
+ * cách giấu một màn KHÔNG DÀNH CHO PHỤ HUYNH khỏi đường đi của họ, mà vẫn giữ được chỗ
+ * đọc `baiThuHai`. Màn đó chỉ ĐỌC và không gửi gì đi đâu, nên lộ đường vào không hại ai.
  */
-export function chuanHoaMaKhoang(giaTri: unknown): MaKhoang {
-  return typeof giaTri === "string" && (MA_KHOANG as readonly string[]).includes(giaTri)
-    ? (giaTri as MaKhoang)
-    : KHOANG_MAC_DINH;
-}
+export const THAM_SO_SO_LIEU = "so-lieu";
 
-/** Khoá localStorage nhớ khoang đang mở. */
-export const KHOA_KHOANG_DANG_MO = "disc:khoang-dang-mo";
+/* ── BA BƯỚC trong khoang DISC (V2.1) ────────────────────────────────────── */
+
+/**
+ * 🔴 THỨ TỰ NÀY LÀ NỘI DUNG, KHÔNG PHẢI TRÌNH BÀY. Khai người → làm bài → đọc về nhau.
+ * Không có bước 1 thì bước 2 không có ai để chọn; không có bước 2 thì bước 3 không có gì
+ * để so. Đảo thứ tự là làm hỏng chính câu chuyện mà sản phẩm kể.
+ */
+export const MA_BUOC = ["nha-minh", "lam-bai", "phan-tich"] as const;
+export type MaBuoc = (typeof MA_BUOC)[number];
+
+/**
+ * Chữ của khung ba bước.
+ *
+ * 🔴 KHOÁ MỀM, KHÔNG GIẤU. Bước chưa mở được vẫn HIỆN RA, chỉ mờ đi kèm một câu nói rõ
+ * còn thiếu gì. Giấu hẳn thì người dùng không biết phía trước còn gì — mà chính cái "phía
+ * trước còn gì" mới là thứ khiến họ đi thêm một bước nữa.
+ */
+export const CHU_BUOC = {
+  nhanTren: "Cho cả nhà · mỗi người 5–8 phút",
+  tieuDe: "DISC gia đình",
+  moTa: "Ba bước. Xong bước nào thì bước sau tự mở.",
+
+  ten: {
+    "nha-minh": "Nhà mình",
+    "lam-bai": "Làm bài test",
+    "phan-tich": "Phân tích cả nhà",
+  },
+  moTaBuoc: {
+    "nha-minh": "Khai tên từng người trong nhà",
+    "lam-bai": "Mỗi người tự làm bài của mình",
+    "phan-tich": "Ai nên nói với ai thế nào cho thuận",
+  },
+
+  /* Dòng trạng thái SỐNG dưới mỗi tên bước — nhìn lướt là biết còn thiếu gì. */
+  chuaCoAi: "Chưa có ai trong sổ",
+  demNguoi: "{so} người trong sổ",
+  taCaDaLam: "Cả nhà đã làm xong",
+  conChuaLam: "Còn {so} người chưa làm",
+  chuaAiLam: "Chưa ai làm bài",
+  sanSangPhanTich: "{so} người đã xong — đọc được rồi",
+
+  /* Lý do một bước chưa mở. Luôn nói CÒN THIẾU GÌ, không nói "chưa đủ điều kiện". */
+  khoaChuaCoAi: "Thêm người ở bước 1 trước đã.",
+  khoaChuaDuHaiNguoi:
+    "Cần ít nhất 2 người làm xong bài thì mới có gì để so với nhau.",
+
+  nutMo: "Mở",
+  nutDong: "Thu lại",
+} as const;
 
 /* ── Bốn trục hành vi ────────────────────────────────────────────────────── */
 
@@ -837,6 +871,16 @@ export const CHU_SO_SANH = {
 /* ── Bản tổng hợp cả nhà (14.4) ──────────────────────────────────────────── */
 
 export const CHU_TONG_HOP = {
+  /**
+   * Dòng mở đầu bước 3.
+   *
+   * 🔴 Nói về VIỆC LÀM ĐƯỢC, không dán nhãn ai. Luật §9.2 và ADR-002 chạy suốt sản phẩm:
+   * DISC không phải mô hình khuyết thiếu, và bản phân tích cả nhà là chỗ dễ trượt sang
+   * giọng "người này thiếu cái kia" nhất, vì nó đặt hai người cạnh nhau.
+   */
+  moTa:
+    "Mỗi người một tờ riêng: người kia quen nhịp nào, và mình đổi một chút ở đâu thì " +
+    "nhà đỡ va nhau.",
   nutPhanTich: "Phân tích cả nhà",
   tieuDeChon: "Chọn bài cho mỗi người",
   moTaChon:

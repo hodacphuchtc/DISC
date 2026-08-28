@@ -110,9 +110,12 @@ describe("thông điệp CHỈ ở bảng gia đình", () => {
     expect(chinh).toHaveTextContent(CHU_THONG_DIEP.chinh);
 
     // "Trước mọi thứ khác": không có tiêu đề nào đứng trên nó.
-    const truoc = chinh?.compareDocumentPosition(
-      document.querySelector("h1")!,
-    );
+    // 🔴 Từ V2.1 bảng gia đình là BƯỚC 1 nằm trong khung ba bước, nên `h1` của trang đã
+    // lên khung; tiêu đề của bảng là `h2`. Neo vào "tiêu đề đầu tiên bất kỳ" thay vì gõ
+    // cứng một cấp — luật cần canh là THỨ TỰ, không phải cấp thẻ.
+    const tieuDe = document.querySelector("h1, h2, h3");
+    expect(tieuDe, "bảng gia đình phải có ít nhất một tiêu đề").toBeTruthy();
+    const truoc = chinh?.compareDocumentPosition(tieuDe!);
     expect(truoc! & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 

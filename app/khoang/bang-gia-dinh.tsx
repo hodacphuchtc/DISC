@@ -24,7 +24,6 @@ import {
   CHU_MA_MOI,
   CHU_SO_SANH,
   CHU_THONG_DIEP,
-  CHU_TONG_HOP,
   TRUC,
 } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
@@ -53,13 +52,22 @@ function homNay(): string {
 }
 
 export function KhoangBangGiaDinh({
+  cheDo = "quan-ly",
   onLamBai,
   onLamBaiQuanSat,
   onXemBai,
   onNhanMa,
   onXemSoSanh,
-  onPhanTich,
 }: {
+  /**
+   * 🔴 MỘT BẢNG, HAI VIỆC (V2.1). `"quan-ly"` là BƯỚC 1 — khai tên, sửa, xoá.
+   * `"lam-bai"` là BƯỚC 2 — chọn người rồi làm bài. Cùng một lưới thẻ, khác bộ nút.
+   *
+   * Không tách thành hai component vì thẻ thành viên là chỗ khó nhất của cả màn (sổ tiến
+   * độ, bốn cột mini, hồ sơ nhận qua mã, nút quan sát theo lớp) — hai bản sao của nó sẽ
+   * lệch nhau vào đúng ngày ai đó sửa một bên.
+   */
+  readonly cheDo?: "quan-ly" | "lam-bai";
   /** Bấm *Làm bài* trên thẻ một người. Thiếu callback thì nút không hiện. */
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). Nút chỉ mọc trên thẻ trẻ từ lớp 3. */
@@ -69,8 +77,6 @@ export function KhoangBangGiaDinh({
   readonly onNhanMa?: (ten: string, hoSo: HoSoMoi) => Promise<boolean> | boolean;
   /** Bấm *Xem thay đổi* trên thẻ (13.2). Nút chỉ hiện khi thật sự so được. */
   readonly onXemSoSanh?: (tv: ThanhVien) => void;
-  /** Bấm *Phân tích cả nhà* (14.4). Nút chỉ hiện khi đã có từ hai người làm bài. */
-  readonly onPhanTich?: () => void;
 }) {
   const [nguoi, datNguoi] = useState<ThanhVien[] | null>(null);
   const [bai, datBai] = useState<BaiLamLuu[]>([]);
@@ -98,7 +104,6 @@ export function KhoangBangGiaDinh({
 
   const baiCua = (id: string) => bai.filter((b) => b.maThanhVien === id);
   const chuaXep = bai.filter((b) => !b.maThanhVien);
-  const soNguoiDaLam = (nguoi ?? []).filter((tv) => baiCua(tv.id).length > 0).length;
 
   async function luu(tv: ThanhVien) {
     await luuThanhVien(tv);
@@ -117,49 +122,61 @@ export function KhoangBangGiaDinh({
     await napLai();
   }
 
-  return (
-    <section className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
-      {/* 🔴 THÔNG ĐIỆP NHÂN VĂN — dòng đầu tiên, trước mọi thứ khác, và chỉ ở đây. */}
-      <p
-        data-thu="thong-diep-chinh"
-        className="text-[20px] leading-snug font-bold md:text-[24px]"
-        style={{ color: MAU.timCongNghe }}
-      >
-        {CHU_THONG_DIEP.chinh}
-      </p>
-      <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_THONG_DIEP.phu}</p>
-      {/* 🔴 LÝ DO QUAY LẠI (13.2). Không có dòng này thì sản phẩm chỉ được dùng một lần
-          rồi thôi — mà mục tiêu của cả gói là GIỮ CHÂN, không phải đo một lần cho xong. */}
-      <p data-thu="nhac-lam-lai" className="mt-1 text-[14px] text-neutral-500">
-        {CHU_SO_SANH.nhacLamLai}
-      </p>
+  const quanLy = cheDo === "quan-ly";
 
-      <div className="mt-8 flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="text-[18px] font-bold text-neutral-900">{CHU_BANG_GIA_DINH.tieuDe}</h1>
-        <button
-          type="button"
-          onClick={() => datDangSua("moi")}
-          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
-          style={{ backgroundColor: MAU.timCongNghe }}
-        >
-          {CHU_BANG_GIA_DINH.nutThem}
-        </button>
-      </div>
-      <p className="mt-1.5 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTa}</p>
+  return (
+    <section className="max-w-3xl px-4 py-5 md:px-5">
+      {quanLy && (
+        <>
+          {/* 🔴 THÔNG ĐIỆP NHÂN VĂN — dòng đầu tiên, trước mọi thứ khác, và CHỈ ở đây.
+              Rải sang bước 2 và bước 3 là biến sự chân thành thành khẩu hiệu: đọc lần
+              đầu thấy tử tế, đọc lần thứ tư thấy như quảng cáo. */}
+          <p
+            data-thu="thong-diep-chinh"
+            className="text-[19px] leading-snug font-bold md:text-[22px]"
+            style={{ color: MAU.timCongNghe }}
+          >
+            {CHU_THONG_DIEP.chinh}
+          </p>
+          <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_THONG_DIEP.phu}</p>
+          {/* 🔴 LÝ DO QUAY LẠI (13.2). Không có dòng này thì sản phẩm chỉ được dùng một
+              lần rồi thôi — mà mục tiêu của cả gói là GIỮ CHÂN, không phải đo một lần. */}
+          <p data-thu="nhac-lam-lai" className="mt-1 text-[14px] text-neutral-500">
+            {CHU_SO_SANH.nhacLamLai}
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-3">
+            <h2 className="text-[16px] font-bold text-neutral-900">{CHU_BANG_GIA_DINH.tieuDe}</h2>
+            <button
+              type="button"
+              onClick={() => datDangSua("moi")}
+              className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+              style={{ backgroundColor: MAU.timCongNghe }}
+            >
+              {CHU_BANG_GIA_DINH.nutThem}
+            </button>
+          </div>
+          <p className="mt-1.5 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTa}</p>
+        </>
+      )}
 
       {nguoi === null ? (
-        <p className="mt-8 text-[15px] text-neutral-500">…</p>
+        <p className="text-[15px] text-neutral-500">…</p>
       ) : nguoi.length === 0 ? (
-        <p data-thu="bang-trong" className="mt-8 text-[15px] text-neutral-600">
+        <p data-thu="bang-trong" className="text-[15px] text-neutral-600">
           {CHU_BANG_GIA_DINH.trong}
         </p>
       ) : (
-        <ul data-thu="luoi-thanh-vien" className="mt-5 grid gap-3 sm:grid-cols-2">
+        <ul
+          data-thu="luoi-thanh-vien"
+          className={`grid gap-3 sm:grid-cols-2 ${quanLy ? "mt-5" : ""}`}
+        >
           {nguoi.map((tv) => (
             <TheThanhVien
               key={tv.id}
               tv={tv}
               bai={baiCua(tv.id)}
+              cheDo={cheDo}
               onLamBai={onLamBai}
               onLamBaiQuanSat={onLamBaiQuanSat}
               onXemBai={onXemBai}
@@ -171,7 +188,7 @@ export function KhoangBangGiaDinh({
         </ul>
       )}
 
-      {chuaXep.length > 0 && (
+      {quanLy && chuaXep.length > 0 && (
         <section data-thu="chua-xep" className="mt-10">
           <h2 className="text-[15px] font-semibold text-neutral-900">
             {CHU_BANG_GIA_DINH.nhomChuaXep}
@@ -209,34 +226,16 @@ export function KhoangBangGiaDinh({
         </section>
       )}
 
-      {onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
+      {quanLy && onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
 
-      <section data-thu="khoi-phan-tich" className="mt-10">
-        <h2 className="text-[15px] font-semibold text-neutral-900">
-          {CHU_BANG_GIA_DINH.nhomPhanTich}
-        </h2>
-        {soNguoiDaLam < 2 ? (
-          <p data-thu="phan-tich-chua-mo" className="mt-1 text-[14px] text-neutral-500">
-            {CHU_BANG_GIA_DINH.phanTichChuaMo}
-          </p>
-        ) : (
-          onPhanTich && (
-            <button
-              type="button"
-              data-thu="nut-phan-tich"
-              onClick={onPhanTich}
-              className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
-              style={{ backgroundColor: MAU.timCongNghe }}
-            >
-              {CHU_TONG_HOP.nutPhanTich}
-            </button>
-          )
-        )}
-      </section>
-
-      <p data-thu="thong-diep-chan" className="mt-12 text-[13px] leading-relaxed text-neutral-500">
-        {CHU_THONG_DIEP.chan}
-      </p>
+      {quanLy && (
+        <p
+          data-thu="thong-diep-chan"
+          className="mt-10 text-[13px] leading-relaxed text-neutral-500"
+        >
+          {CHU_THONG_DIEP.chan}
+        </p>
+      )}
 
       {dangSua && (
         <FormThanhVien
@@ -264,6 +263,7 @@ export function KhoangBangGiaDinh({
 function TheThanhVien({
   tv,
   bai,
+  cheDo,
   onLamBai,
   onLamBaiQuanSat,
   onXemBai,
@@ -273,6 +273,8 @@ function TheThanhVien({
 }: {
   readonly tv: ThanhVien;
   readonly bai: readonly BaiLamLuu[];
+  /** Bước 1 quản lý người (Sửa/Xoá); bước 2 làm bài (Làm bài/Xem kết quả). */
+  readonly cheDo: "quan-ly" | "lam-bai";
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn ngồi trả lời VỀ đứa trẻ này (bộ QS) — mở màn Vùng lệch. */
   readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
@@ -388,20 +390,27 @@ function TheThanhVien({
             {CHU_BANG_GIA_DINH.nutXemKetQua}
           </button>
         )}
-        <button
-          type="button"
-          onClick={onSua}
-          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
-        >
-          {CHU_BANG_GIA_DINH.nutSua}
-        </button>
-        <button
-          type="button"
-          onClick={onXoa}
-          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
-        >
-          {CHU_BANG_GIA_DINH.nutXoa}
-        </button>
+        {/* 🔴 Sửa và Xoá CHỈ ở bước 1. Ở bước 2 người ta đang chọn ai làm bài; để nút
+            Xoá ngay cạnh nút Làm bài là đặt lựa chọn không hoàn tác được vào đúng chỗ
+            ngón tay rơi vào theo phản xạ. */}
+        {cheDo === "quan-ly" && (
+          <>
+            <button
+              type="button"
+              onClick={onSua}
+              className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+            >
+              {CHU_BANG_GIA_DINH.nutSua}
+            </button>
+            <button
+              type="button"
+              onClick={onXoa}
+              className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+            >
+              {CHU_BANG_GIA_DINH.nutXoa}
+            </button>
+          </>
+        )}
       </div>
     </li>
   );

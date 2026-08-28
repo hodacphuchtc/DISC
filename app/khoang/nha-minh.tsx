@@ -16,10 +16,9 @@ import { useCallback, useState } from "react";
 
 import { KhoangBangGiaDinh } from "./bang-gia-dinh";
 import { ManKetQua } from "./ket-qua";
-import { HopThoaiHanMuc, HopThoaiThuMuc } from "@/app/components/hop-thoai-han-muc";
+import { HopThoaiHanMuc } from "@/app/components/hop-thoai-han-muc";
 import { KhoiSoSanh } from "@/app/components/khoi-so-sanh";
-import { ManBanTongHop, type NguoiCoBai } from "./ban-tong-hop";
-import { GIOI_HAN_BAI_MOI_NGUOI, GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
+import { GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
 import { CHU_M6 } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
@@ -29,7 +28,6 @@ import {
   type KetQuaSoSanh,
 } from "@modules/report/so-sanh-thoi-gian";
 import { ghiMoc } from "@modules/core/do-phieu";
-import type { PhanTichGiaDinh } from "@modules/core/gia-dinh/kieu";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
@@ -37,9 +35,7 @@ import {
   docTatCa,
   docThanhVien,
   donBaiThanhVien,
-  donThuMucPhanTich,
   luuThanhVien,
-  thuMucSapMat,
   xoaSach,
   type BaiLamLuu,
 } from "@modules/core/luu-tru/kho-bai";
@@ -47,8 +43,11 @@ import { TEN_TEP_SAO_LUU, saoLuuTatCa } from "@modules/core/luu-tru/sao-luu";
 import { taiXuong } from "@modules/core/luu-tru/tai-ve";
 
 export function KhoangNhaMinh({
+  cheDo = "quan-ly",
   onLamBai,
 }: {
+  /** Bước 1 quản lý người · bước 2 chọn người làm bài. Xem `KhoangBangGiaDinh`. */
+  readonly cheDo?: "quan-ly" | "lam-bai";
   /** `cheDo` = "quan-sat" ⇒ người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). */
   readonly onLamBai?: (tv: ThanhVien, cheDo?: "quan-sat") => void;
 }) {
@@ -63,40 +62,6 @@ export function KhoangNhaMinh({
     cheDo?: "quan-sat";
   } | null>(null);
   const [xemSoSanh, datXemSoSanh] = useState<{ ten: string; ketQua: KetQuaSoSanh } | null>(null);
-  const [dangPhanTich, datDangPhanTich] = useState<readonly NguoiCoBai[] | null>(null);
-  const [choThuMuc, datChoThuMuc] = useState<readonly PhanTichGiaDinh[] | null>(null);
-
-  /**
-   * Mở màn phân tích cả nhà (14.4).
-   *
-   * 🔴 Ghi mốc `phanTichGiaDinh` NGAY LÚC MỞ, không đợi tới lúc bấm *Phân tích*. Cái đáng
-   * đo là **có bao nhiêu nhà đi tới được đây** — nếu con số này bằng 0 sau ba mươi máy thì
-   * thứ cần xem lại là giả định của cả GĐ14, không phải nút bấm.
-   */
-  async function moPhanTich() {
-    // 🔴 CỬA HẠN MỨC THƯ MỤC (14.5). Đã đủ 5 lần chạy thì DỪNG LẠI và hỏi, nêu đích danh
-    // lần nào sắp mất. Cùng luật với hạn mức bài: không bao giờ xoá im lặng.
-    const sapMat = await thuMucSapMat(GIOI_HAN_THU_MUC);
-    if (sapMat.length > 0) {
-      datChoThuMuc(sapMat);
-      return;
-    }
-    await moThatSu();
-  }
-
-  async function moThatSu() {
-    const [tv, ds] = await Promise.all([docThanhVien(), docTatCa()]);
-    ghiMoc("phanTichGiaDinh", "bang-gia-dinh", new Date().toISOString());
-    datDangPhanTich(
-      tv.map((t) => ({ tv: t, bai: ds.filter((b) => b.maThanhVien === t.id && b.ketQua.hopLe) })),
-    );
-  }
-
-  async function xacNhanThuMuc() {
-    await donThuMucPhanTich(GIOI_HAN_THU_MUC);
-    datChoThuMuc(null);
-    await moThatSu();
-  }
 
   /** Mở màn "hồi đó và bây giờ" cho một người (13.2). */
   async function moSoSanh(tv: ThanhVien) {
@@ -191,10 +156,6 @@ export function KhoangNhaMinh({
     napLai();
   }
 
-  if (dangPhanTich) {
-    return <ManBanTongHop nguoi={dangPhanTich} onDong={() => datDangPhanTich(null)} />;
-  }
-
   if (xemSoSanh) {
     return (
       <section className="max-w-2xl px-5 py-8 md:px-12 md:py-12">
@@ -242,6 +203,7 @@ export function KhoangNhaMinh({
     <>
       <KhoangBangGiaDinh
         key={lanNap}
+        cheDo={cheDo}
         {...(onLamBai
           ? {
               onLamBai: (tv: ThanhVien) => void batDauBaiMoi(tv),
@@ -251,16 +213,7 @@ export function KhoangNhaMinh({
         onXemBai={(b) => datDangXem(b)}
         onNhanMa={nhanMa}
         onXemSoSanh={(tv) => void moSoSanh(tv)}
-        onPhanTich={() => void moPhanTich()}
       />
-
-      {choThuMuc && (
-        <HopThoaiThuMuc
-          sapMat={choThuMuc}
-          onHuy={() => datChoThuMuc(null)}
-          onTiepTuc={() => void xacNhanThuMuc()}
-        />
-      )}
 
       {choHanMuc && (
         <HopThoaiHanMuc
