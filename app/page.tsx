@@ -24,8 +24,14 @@ import {
 export default function Trang() {
   const [khoangDangMo, datKhoang] = useState<MaKhoang>(KHOANG_MAC_DINH);
   const [khoHong, datKhoHong] = useState<LyDoKhoHong | null>(null);
-  /** Người trong sổ vừa được bấm *Làm bài* (12.4). `null` = vào khoang DISC theo lối cũ. */
-  const [dangLamCho, datDangLamCho] = useState<ThanhVien | null>(null);
+  /**
+   * Người trong sổ vừa được bấm *Làm bài* (12.4). `null` = vào khoang DISC theo lối cũ.
+   * `cheDo: "quan-sat"` ⇒ người lớn trả lời VỀ người này, không phải người này tự làm (V1.4).
+   */
+  const [dangLamCho, datDangLamCho] = useState<{
+    tv: ThanhVien;
+    cheDo?: "quan-sat";
+  } | null>(null);
 
   // 🔴 DI TRÚ v1 → v2 (ADR-007). Chạy LƯỜI, một lần, ở transaction thường — cố ý KHÔNG
   // làm trong `onupgradeneeded`. Xem `modules/core/luu-tru/kho-bai.ts` để biết vì sao.
@@ -83,14 +89,19 @@ export default function Trang() {
           // *Làm bài* cho người thứ hai sẽ rơi vào một khoang đang giữ trạng thái của
           // người thứ nhất, và bài về nhầm chỗ.
           <KhoangDisc
-            key={dangLamCho?.id ?? "tu-do"}
-            {...(dangLamCho ? { vaoTuThanhVien: dangLamCho } : {})}
+            key={`${dangLamCho?.tv.id ?? "tu-do"}:${dangLamCho?.cheDo ?? "tu-lam"}`}
+            {...(dangLamCho
+              ? {
+                  vaoTuThanhVien: dangLamCho.tv,
+                  ...(dangLamCho.cheDo ? { cheDo: dangLamCho.cheDo } : {}),
+                }
+              : {})}
           />
         )}
         {khoangDangMo === "lich-su" && (
           <KhoangNhaMinh
-            onLamBai={(tv) => {
-              datDangLamCho(tv);
+            onLamBai={(tv, cheDo) => {
+              datDangLamCho({ tv, ...(cheDo ? { cheDo } : {}) });
               chon("disc");
             }}
           />

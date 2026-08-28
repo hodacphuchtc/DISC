@@ -4,11 +4,15 @@ import {
   LOP_CUOI_TIEU_HOC,
   LOP_DAU_CAP_BA,
   LOP_LON_NHAT,
+  LOP_MAM_NON,
   LOP_NHO_NHAT,
+  LOP_TREN_12,
 } from "../config/disc-nguong";
 import {
   LOP_CAO_NHAT_DUNG_BAN_QUAN_SAT,
   TUOI_TU_DANH_GIA_TOI_THIEU,
+  boDeChoThanhVien,
+  boDeQuanSatTheoLop,
   dinhTuyen,
   type DauVaoDinhTuyen,
 } from "../modules/test/dinh-tuyen";
@@ -196,5 +200,98 @@ describe("🔴 11.5 — cấp ba trở lên", () => {
     const kq = dinhTuyen({ doiTuong: "cap-ba-tro-len", lop: 11 });
     if (!kq.xong) throw new Error("phải xong");
     expect(kq.giaiThich).toBeUndefined();
+  });
+});
+
+/* ── Bộ đề cho MỘT NGƯỜI TRONG SỔ (V1.3) ─────────────────────────────────── */
+
+describe("boDeChoThanhVien — vai + bậc học, không hỏi lại gì", () => {
+  /**
+   * 🔴 BẢNG NÀY LÀ BẢN ĐẶC TẢ ĐỌC ĐƯỢC của luồng vào bài từ thẻ thành viên.
+   * Thêm một cửa thứ hai vào bộ nào là thấy ngay ở đây.
+   */
+  const BANG = [
+    { vai: "me", lop: undefined, boDe: "PH", ho: false, ghiChu: "mẹ tự đánh giá" },
+    { vai: "bo", lop: undefined, boDe: "PH", ho: false, ghiChu: "bố tự đánh giá" },
+    { vai: "ong", lop: undefined, boDe: "PH", ho: false, ghiChu: "ông tự đánh giá" },
+    { vai: "ba", lop: undefined, boDe: "PH", ho: false, ghiChu: "bà tự đánh giá" },
+    { vai: "nguoi-than", lop: undefined, boDe: "PH", ho: false, ghiChu: "người thân" },
+    { vai: "khac", lop: undefined, boDe: "PH", ho: false, ghiChu: "vai khác" },
+    { vai: "con", lop: LOP_MAM_NON, boDe: "MN", ho: true, ghiChu: "mầm non — người lớn trả lời hộ" },
+    { vai: "con", lop: "1", boDe: "MN", ho: true, giai: "LOP_1_2", ghiChu: "lớp 1" },
+    { vai: "con", lop: "2", boDe: "MN", ho: true, giai: "LOP_1_2", ghiChu: "lớp 2" },
+    { vai: "con", lop: "3", boDe: "TH", ho: false, ghiChu: "lớp 3 tự làm" },
+    { vai: "con", lop: "5", boDe: "TH", ho: false, ghiChu: "lớp 5 tự làm" },
+    { vai: "con", lop: "6", boDe: "THCS", ho: false, ghiChu: "lớp 6 tự làm" },
+    { vai: "con", lop: "9", boDe: "THCS", ho: false, ghiChu: "lớp 9 tự làm" },
+    { vai: "con", lop: "10", boDe: "PH", ho: false, ghiChu: "lớp 10 dùng bản người lớn" },
+    { vai: "con", lop: "12", boDe: "PH", ho: false, ghiChu: "lớp 12" },
+    { vai: "con", lop: LOP_TREN_12, boDe: "PH", ho: false, ghiChu: "đã qua lớp 12" },
+    { vai: "anh-chi-em", lop: "8", boDe: "THCS", ho: false, ghiChu: "anh chị em đang đi học" },
+  ] as const;
+
+  for (const d of BANG) {
+    it(`${d.ghiChu} → bộ ${d.boDe}`, () => {
+      const kq = boDeChoThanhVien(d.vai, d.lop);
+      expect(kq, `${d.ghiChu} không ra bộ đề nào`).not.toBeNull();
+      expect(kq!.boDe).toBe(d.boDe);
+      expect(kq!.nguoiLonTraLoiHo).toBe(d.ho);
+      expect(kq!.giaiThich).toBe("giai" in d ? d.giai : undefined);
+    });
+  }
+
+  it("🔴 KHÔNG người lớn nào bị đá về màn hỏi lại — đây là lỗi V1.3 sinh ra để sửa", () => {
+    for (const vai of ["me", "bo", "ong", "ba", "nguoi-than", "khac"] as const) {
+      expect(boDeChoThanhVien(vai, undefined), `vai ${vai} vẫn bị trả null`).not.toBeNull();
+    }
+  });
+
+  it("🔴 trẻ mầm non KHÔNG bị trả null vì Number('mam-non') ra NaN", () => {
+    expect(boDeChoThanhVien("con", LOP_MAM_NON)).not.toBeNull();
+  });
+
+  it("người đang đi học mà chưa chọn bậc thì trả null — không đoán bừa bộ đề cho trẻ", () => {
+    expect(boDeChoThanhVien("con", undefined)).toBeNull();
+    expect(boDeChoThanhVien("con", "")).toBeNull();
+    expect(boDeChoThanhVien("anh-chi-em", "lop bay")).toBeNull();
+  });
+
+  it("🔴 lớp 1–2 LUÔN kèm lý do chuyển bản — chuyển im lặng là lừa người dùng", () => {
+    for (const l of ["1", "2"]) {
+      expect(boDeChoThanhVien("con", l)!.giaiThich).toBe("LOP_1_2");
+    }
+    // Và lớp 3 thì KHÔNG có lý do nào, vì em ấy không bị chuyển đi đâu cả.
+    expect(boDeChoThanhVien("con", "3")!.giaiThich).toBeUndefined();
+  });
+});
+
+describe("boDeQuanSatTheoLop — nút phụ trên thẻ của trẻ", () => {
+  it("từ lớp 3 trở lên mở bộ QS", () => {
+    for (const l of ["3", "5", "7", "9", "12"]) {
+      expect(boDeQuanSatTheoLop(l), `lớp ${l}`).toBe("QS");
+    }
+  });
+
+  it("mầm non và lớp 1–2 ra bộ MN — bài chính của các em vốn đã là bản người lớn trả lời", () => {
+    expect(boDeQuanSatTheoLop(LOP_MAM_NON)).toBe("MN");
+    expect(boDeQuanSatTheoLop("1")).toBe("MN");
+    expect(boDeQuanSatTheoLop("2")).toBe("MN");
+  });
+
+  it("chưa có bậc thì không mở nút nào", () => {
+    expect(boDeQuanSatTheoLop(undefined)).toBeNull();
+    expect(boDeQuanSatTheoLop(LOP_TREN_12)).toBeNull();
+  });
+
+  it("🔴 cửa ADR-002 phát biểu bằng LỚP không được lệch khỏi bản phát biểu bằng TUỔI", () => {
+    // `dinhTuyen` gác bộ QS bằng `tuoiCon >= 8`; ở đây gác bằng `lop >= 3`. Hai cách nói
+    // về cùng một hàng rào, nên chúng phải cùng kết luận ở mọi lứa — nếu không thì sổ gia
+    // đình đang đi vòng qua đúng hàng rào đắt nhất của sản phẩm.
+    expect(boDeQuanSatTheoLop("2")).toBe(
+      (dinhTuyen({ doiTuong: "phu-huynh", mucTieu: "con", tuoiCon: 7 }) as { boDe: string }).boDe,
+    );
+    expect(boDeQuanSatTheoLop("3")).toBe(
+      (dinhTuyen({ doiTuong: "phu-huynh", mucTieu: "con", tuoiCon: 8 }) as { boDe: string }).boDe,
+    );
   });
 });

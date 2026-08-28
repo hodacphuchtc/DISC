@@ -681,6 +681,19 @@ export const CHU_BANG_GIA_DINH = {
   nutSua: "Sửa",
   nutXoa: "Xoá",
   nutLamBai: "Làm bài",
+  /**
+   * 🔴 MỘT hằng dùng cho CẢ nút chính lẫn nút phụ (V1.4), vì hai chỗ đó nói đúng một việc:
+   * người lớn ngồi trả lời về đứa trẻ này.
+   *
+   *  - Mầm non và lớp 1–2: đây là nút CHÍNH và là nút DUY NHẤT — các em chưa tự đánh giá
+   *    được (ADR-002), nên bài chính của các em vốn đã là bản quan sát.
+   *  - Lớp 3 trở lên: đây là nút PHỤ, đứng cạnh nút *Làm bài* của chính em — hai bài đó
+   *    ghép lại thành màn Vùng lệch.
+   *
+   * Viết hai chuỗi gần giống nhau cho hai vị trí là cách chúng lệch nhau vào ngày ai đó
+   * sửa một bên.
+   */
+  nutTraLoiHo: "Bố mẹ trả lời về {ten}",
   nutXemKetQua: "Xem kết quả",
 
   nhanTen: "Tên gọi trong nhà",

@@ -33,6 +33,7 @@ import { NhanMaMoi } from "@/app/components/nhan-ma-moi";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
 import { soSanhTheoThoiGian } from "@modules/report/so-sanh-thoi-gian";
+import { boDeChoThanhVien, boDeQuanSatTheoLop } from "@modules/test/dinh-tuyen";
 import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
   KENH_KHO,
@@ -53,6 +54,7 @@ function homNay(): string {
 
 export function KhoangBangGiaDinh({
   onLamBai,
+  onLamBaiQuanSat,
   onXemBai,
   onNhanMa,
   onXemSoSanh,
@@ -60,6 +62,8 @@ export function KhoangBangGiaDinh({
 }: {
   /** Bấm *Làm bài* trên thẻ một người. Thiếu callback thì nút không hiện. */
   readonly onLamBai?: (tv: ThanhVien) => void;
+  /** Người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). Nút chỉ mọc trên thẻ trẻ từ lớp 3. */
+  readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
   readonly onXemBai?: (bai: BaiLamLuu) => void;
   /** Nhận một mã mời (13.1). Trả `false` khi sổ đã có hồ sơ đó rồi. */
   readonly onNhanMa?: (ten: string, hoSo: HoSoMoi) => Promise<boolean> | boolean;
@@ -157,6 +161,7 @@ export function KhoangBangGiaDinh({
               tv={tv}
               bai={baiCua(tv.id)}
               onLamBai={onLamBai}
+              onLamBaiQuanSat={onLamBaiQuanSat}
               onXemBai={onXemBai}
               onXemSoSanh={onXemSoSanh}
               onSua={() => datDangSua(tv)}
@@ -260,6 +265,7 @@ function TheThanhVien({
   tv,
   bai,
   onLamBai,
+  onLamBaiQuanSat,
   onXemBai,
   onXemSoSanh,
   onSua,
@@ -268,11 +274,16 @@ function TheThanhVien({
   readonly tv: ThanhVien;
   readonly bai: readonly BaiLamLuu[];
   readonly onLamBai?: (tv: ThanhVien) => void;
+  /** Người lớn ngồi trả lời VỀ đứa trẻ này (bộ QS) — mở màn Vùng lệch. */
+  readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
   readonly onXemBai?: (bai: BaiLamLuu) => void;
   readonly onXemSoSanh?: (tv: ThanhVien) => void;
   readonly onSua: () => void;
   readonly onXoa: () => void;
 }) {
+  // Bộ đề của chính người này — dùng để gọi tên nút chính cho đúng việc sắp xảy ra.
+  // Mầm non bấm vào một nút ghi "Làm bài" rồi thấy câu hỏi dành cho bố mẹ là một cú hẫng.
+  const tuyen = boDeChoThanhVien(tv.vaiTro, tv.lop);
   // 🔴 Nút *Xem thay đổi* CHỈ hiện khi hai bài cách nhau đủ xa (13.2). Gần hơn thì thứ
   // hiện lên là nhiễu của phép đo chứ không phải thay đổi của con người — và nó vẫn đọc
   // lên đầy thuyết phục vì có số kèm theo. Không bày nút thì không ai đọc nhầm.
@@ -337,7 +348,23 @@ function TheThanhVien({
             className="min-h-[44px] rounded-xl px-3.5 text-[14px] font-semibold text-white"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
-            {CHU_BANG_GIA_DINH.nutLamBai}
+            {tuyen?.nguoiLonTraLoiHo
+              ? CHU_BANG_GIA_DINH.nutTraLoiHo.replace("{ten}", tv.ten)
+              : CHU_BANG_GIA_DINH.nutLamBai}
+          </button>
+        )}
+        {/* 🔴 Nút PHỤ chỉ mọc trên thẻ của trẻ TỪ LỚP 3 — dưới mốc đó bài chính đã là bản
+            quan sát rồi, thêm nút thứ hai làm cùng một việc chỉ tổ gây phân vân. Hai bài
+            (em tự làm + bố mẹ trả lời) ghép lại mới mở được màn Vùng lệch. */}
+        {onLamBaiQuanSat && boDeQuanSatTheoLop(tv.lop) === "QS" && (
+          <button
+            type="button"
+            data-thu="nut-quan-sat"
+            onClick={() => onLamBaiQuanSat(tv)}
+            className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-semibold"
+            style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
+          >
+            {CHU_BANG_GIA_DINH.nutTraLoiHo.replace("{ten}", tv.ten)}
           </button>
         )}
         {onXemSoSanh && soSanh?.soSanhDuoc && (

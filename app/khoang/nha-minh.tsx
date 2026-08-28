@@ -46,13 +46,22 @@ import {
 import { TEN_TEP_SAO_LUU, saoLuuTatCa } from "@modules/core/luu-tru/sao-luu";
 import { taiXuong } from "@modules/core/luu-tru/tai-ve";
 
-export function KhoangNhaMinh({ onLamBai }: { readonly onLamBai?: (tv: ThanhVien) => void }) {
+export function KhoangNhaMinh({
+  onLamBai,
+}: {
+  /** `cheDo` = "quan-sat" ⇒ người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). */
+  readonly onLamBai?: (tv: ThanhVien, cheDo?: "quan-sat") => void;
+}) {
   const [dangXem, datDangXem] = useState<BaiLamLuu | null>(null);
   const [dangSaoLuu, datDangSaoLuu] = useState(false);
   const [loi, datLoi] = useState<string | null>(null);
   const [lanNap, datLanNap] = useState(0);
   /** Người vừa bấm *Làm bài* mà đã chạm trần — giữ lại để hỏi trước khi xoá gì. */
-  const [choHanMuc, datChoHanMuc] = useState<{ tv: ThanhVien; sapMat: BaiLamLuu[] } | null>(null);
+  const [choHanMuc, datChoHanMuc] = useState<{
+    tv: ThanhVien;
+    sapMat: BaiLamLuu[];
+    cheDo?: "quan-sat";
+  } | null>(null);
   const [xemSoSanh, datXemSoSanh] = useState<{ ten: string; ketQua: KetQuaSoSanh } | null>(null);
   const [dangPhanTich, datDangPhanTich] = useState<readonly NguoiCoBai[] | null>(null);
   const [choThuMuc, datChoThuMuc] = useState<readonly PhanTichGiaDinh[] | null>(null);
@@ -113,14 +122,16 @@ export function KhoangNhaMinh({ onLamBai }: { readonly onLamBai?: (tv: ThanhVien
    * mất. Không có nhánh nào ở đây đi tắt qua câu hỏi đó — nếu sau này ai đó thêm một lối
    * vào bài mới, họ phải đi qua đúng hàm này.
    */
-  async function batDauBaiMoi(tv: ThanhVien) {
+  async function batDauBaiMoi(tv: ThanhVien, cheDo?: "quan-sat") {
     if (!onLamBai) return;
     const sapMat = await baiSapMat(tv.id, GIOI_HAN_BAI_MOI_NGUOI);
     if (sapMat.length === 0) {
-      onLamBai(tv);
+      onLamBai(tv, cheDo);
       return;
     }
-    datChoHanMuc({ tv, sapMat });
+    // 🔴 Bài quan sát ĐI CHUNG một hàng rào hạn mức với bài tự làm. Cho nó một lối đi
+    // riêng vòng qua đây là dựng đúng cái lối tắt mà chú thích của hàm này cấm.
+    datChoHanMuc({ tv, sapMat, cheDo });
   }
 
   /**
@@ -154,10 +165,10 @@ export function KhoangNhaMinh({ onLamBai }: { readonly onLamBai?: (tv: ThanhVien
   async function xacNhanHanMuc() {
     if (!choHanMuc) return;
     await donBaiThanhVien(choHanMuc.tv.id, GIOI_HAN_BAI_MOI_NGUOI);
-    const tv = choHanMuc.tv;
+    const { tv, cheDo } = choHanMuc;
     datChoHanMuc(null);
     napLai();
-    onLamBai?.(tv);
+    onLamBai?.(tv, cheDo);
   }
 
   async function taiSaoLuu() {
@@ -231,7 +242,12 @@ export function KhoangNhaMinh({ onLamBai }: { readonly onLamBai?: (tv: ThanhVien
     <>
       <KhoangBangGiaDinh
         key={lanNap}
-        {...(onLamBai ? { onLamBai: (tv: ThanhVien) => void batDauBaiMoi(tv) } : {})}
+        {...(onLamBai
+          ? {
+              onLamBai: (tv: ThanhVien) => void batDauBaiMoi(tv),
+              onLamBaiQuanSat: (tv: ThanhVien) => void batDauBaiMoi(tv, "quan-sat"),
+            }
+          : {})}
         onXemBai={(b) => datDangXem(b)}
         onNhanMa={nhanMa}
         onXemSoSanh={(tv) => void moSoSanh(tv)}

@@ -138,7 +138,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     bằng số sẽ lặng lẽ chui vào dữ liệu như thể có người học lớp 13).
   - **(d)** 1 giờ.
 
-- [ ] **V1.2 — Form thành viên: ô lớp chỉ hiện với người đang đi học**
+- [x] **V1.2 — Form thành viên: ô lớp chỉ hiện với người đang đi học** ✅ (28/08/2026)
   - **(a)** Sửa `app/components/form-thanh-vien.tsx`: ô lớp **chỉ render khi vai là `con`
     hoặc `anh-chi-em`**. Bố · mẹ · ông · bà · người thân · khác → không có ô lớp. Đổi vai
     đang chọn thì **xoá lớp đã chọn** (đừng để lại lớp mồ côi trên một người lớn). Danh
@@ -153,7 +153,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     **không có trường `lop`**.
   - **(d)** 3 giờ.
 
-- [ ] **V1.3 — Bộ đề suy từ VAI + LỚP, không hỏi lại**
+- [x] **V1.3 — Bộ đề suy từ VAI + LỚP, không hỏi lại** ✅ (28/08/2026)
   - **(a)** Đưa `boDeCuaThanhVien()` từ `app/khoang/disc.tsx` **xuống tầng lõi**
     (`modules/test/dinh-tuyen.ts`) và cho nó đọc **cả `vaiTro` lẫn `lop`**. Vẫn gọi xuyên
     qua `dinhTuyen()` — ADR-002 (sàn tự đánh giá 8 tuổi) là thứ đắt nhất trong sản phẩm và
@@ -180,7 +180,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     lõi, không được import React).
   - **(d)** 4 giờ.
 
-- [ ] **V1.4 — Nút phụ "Bố mẹ trả lời về {tên}" trên thẻ con từ lớp 3**
+- [x] **V1.4 — Nút phụ "Bố mẹ trả lời về {tên}" trên thẻ con từ lớp 3** ✅ (28/08/2026)
   - **(a)** `app/khoang/bang-gia-dinh.tsx`: thẻ của người có lớp **từ 3 trở lên** có thêm
     nút phụ mở bộ `QS` qua `boDeQuanSatTheoLop()`, dẫn tới màn **Vùng lệch con ↔ cha mẹ**
     đã có. Thẻ bố mẹ **chỉ có đúng một nút** (bài tự đánh giá). Thẻ mầm non và lớp 1–2 chỉ

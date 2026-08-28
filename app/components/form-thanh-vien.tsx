@@ -14,16 +14,14 @@
 
 import { useState } from "react";
 
-import { CHU_VAI, VAI_GIA_DINH, type VaiGiaDinh } from "@config/disc-gia-dinh";
-import { CHU_BANG_GIA_DINH } from "@config/disc-tu-dien";
-import { LOP_LON_NHAT, LOP_NHO_NHAT } from "@config/disc-nguong";
+import { CHU_VAI, VAI_GIA_DINH, coHoiLop, type VaiGiaDinh } from "@config/disc-gia-dinh";
+import { CHU_BANG_GIA_DINH, nhanLopCua } from "@config/disc-tu-dien";
+import { tuyChonLop } from "@config/disc-nguong";
 import { MAU } from "@config/thuong-hieu";
 import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
 
-const LOP = Array.from(
-  { length: LOP_LON_NHAT - LOP_NHO_NHAT + 1 },
-  (_, i) => LOP_NHO_NHAT + i,
-);
+/** 14 bậc: Mầm non · Lớp 1…12 · Trên lớp 12. Danh sách ở `config/`, không dựng tại chỗ. */
+const LOP = tuyChonLop();
 
 function maMoi(): string {
   return `tv-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
@@ -48,6 +46,21 @@ export function FormThanhVien({
   const [ghiChu, datGhiChu] = useState(tv?.ghiChu ?? "");
   const [loi, datLoi] = useState<string | null>(null);
 
+  const hoiLop = coHoiLop(vai);
+
+  /**
+   * 🔴 ĐỔI VAI THÌ XOÁ LỚP ĐANG CHỌN.
+   *
+   * Không xoá thì một người chọn "Con · Lớp 7" rồi đổi sang "Bố" sẽ được lưu kèm `lop: "7"`
+   * — ô lớp đã ẩn đi nên không ai nhìn thấy, mà `laTreEm()` lại suy trẻ em từ chính việc
+   * CÓ lớp. Kết quả: ông bố đó bị bản phân tích cả nhà đối xử như một đứa trẻ, và không
+   * màn nào cho biết vì sao.
+   */
+  function doiVai(moi: VaiGiaDinh) {
+    datVai(moi);
+    if (!coHoiLop(moi)) datLop("");
+  }
+
   function gui() {
     const sach = ten.trim();
     if (!sach) return datLoi(CHU_BANG_GIA_DINH.loiThieuTen);
@@ -61,7 +74,11 @@ export function FormThanhVien({
       id: tv?.id ?? maMoi(),
       ten: sach,
       vaiTro: vai,
-      ...(lop ? { lop } : {}),
+      // 🔴 `hoiLop &&` là hàng rào THỨ HAI, không thừa. `doiVai()` lo trường hợp người
+      // dùng đổi vai ngay tại form; dòng này lo trường hợp mở form SỬA một hồ sơ cũ vốn
+      // đã mang lớp mồ côi (bản trước hỏi lớp cho mọi vai). Ô đã ẩn nên không ai thấy giá
+      // trị đó, và lưu lại im lặng là cách nó sống thêm một vòng nữa.
+      ...(hoiLop && lop ? { lop } : {}),
       ...(tv?.tuoi !== undefined ? { tuoi: tv.tuoi } : {}),
       ...(ghiChu.trim() ? { ghiChu: ghiChu.trim() } : {}),
       thuTu: tv?.thuTu ?? daCo.length,
@@ -98,7 +115,7 @@ export function FormThanhVien({
           {CHU_BANG_GIA_DINH.nhanVai}
           <select
             value={vai}
-            onChange={(e) => datVai(e.target.value as VaiGiaDinh)}
+            onChange={(e) => doiVai(e.target.value as VaiGiaDinh)}
             className="mt-1.5 w-full rounded-xl border px-3 py-2.5 text-[16px]"
             style={{ borderColor: MAU.vienMo }}
           >
@@ -110,22 +127,26 @@ export function FormThanhVien({
           </select>
         </label>
 
-        <label className="mt-4 block text-[14px] font-semibold text-neutral-800">
-          {CHU_BANG_GIA_DINH.nhanLop}
-          <select
-            value={lop}
-            onChange={(e) => datLop(e.target.value)}
-            className="mt-1.5 w-full rounded-xl border px-3 py-2.5 text-[16px]"
-            style={{ borderColor: MAU.vienMo }}
-          >
-            <option value="">{CHU_BANG_GIA_DINH.chuaChonLop}</option>
-            {LOP.map((l) => (
-              <option key={l} value={String(l)}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </label>
+        {/* Ô lớp CHỈ hiện với vai còn đi học. Bố mẹ ông bà không phải nhìn một ô không
+            dành cho mình, và không thể vô tình để lại một số lớp trên hồ sơ của họ. */}
+        {hoiLop && (
+          <label className="mt-4 block text-[14px] font-semibold text-neutral-800">
+            {CHU_BANG_GIA_DINH.nhanLop}
+            <select
+              value={lop}
+              onChange={(e) => datLop(e.target.value)}
+              className="mt-1.5 w-full rounded-xl border px-3 py-2.5 text-[16px]"
+              style={{ borderColor: MAU.vienMo }}
+            >
+              <option value="">{CHU_BANG_GIA_DINH.chuaChonLop}</option>
+              {LOP.map((l) => (
+                <option key={l.gia} value={l.gia}>
+                  {nhanLopCua(l.gia)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
 
         <label className="mt-4 block text-[14px] font-semibold text-neutral-800">
           {CHU_BANG_GIA_DINH.nhanGhiChu}

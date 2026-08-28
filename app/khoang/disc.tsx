@@ -13,9 +13,12 @@ import { LamBai } from "./lam-bai";
 import { TruocKhiBatDau } from "./truoc-khi-bat-dau";
 import { ManVungLech, useDoiChieu } from "./vung-lech";
 import { napBoDe } from "@modules/core/bo-de/nap";
-import { LOP_CUOI_TIEU_HOC, LOP_DAU_CAP_BA } from "@config/disc-nguong";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
-import { dinhTuyen } from "@modules/test/dinh-tuyen";
+import {
+  boDeChoThanhVien,
+  boDeQuanSatTheoLop,
+  type MaGiaiThich,
+} from "@modules/test/dinh-tuyen";
 import { PHIEN_BAN_BO_DE } from "@config/disc-cau-hoi";
 import type { BoDe, KetQua, MaBoDe } from "@modules/core/bo-de/kieu";
 import { daGhiMoc, datDuocBaiThuHai, docNguonTuUrl, ghiMoc } from "@modules/core/do-phieu";
@@ -31,6 +34,8 @@ type Buoc =
       /** Vào từ thẻ thành viên (12.4) — tên đã biết, không hỏi lại. */
       readonly tenCoSan?: string;
       readonly maThanhVien?: string;
+      /** Lý do bị chuyển sang bản quan sát — màn dặn dò PHẢI hiện ra (DISC_BA.md §4.2). */
+      readonly giaiThich?: MaGiaiThich;
     }
   | {
       readonly ten: "lam-bai";
@@ -52,25 +57,6 @@ function nguoiTraLoiCua(ma: MaBoDe): "tre" | "nguoi-lon" {
   return ma === "TH" || ma === "THCS" ? "tre" : "nguoi-lon";
 }
 
-/**
- * Bộ đề cho một thành viên, suy từ LỚP đã lưu trong sổ.
- *
- * 🔴 Dùng lại đúng `dinhTuyen()` — luật ADR-002 (sàn tự đánh giá 8 tuổi) là thứ đắt nhất
- * trong sản phẩm, và có đúng MỘT nơi giữ nó. Chưa biết lớp thì trả `null` và người dùng
- * đi qua màn 1 như bình thường: đoán bừa một bộ đề cho một đứa trẻ là chuyện không được
- * phép làm để tiết kiệm một cú chạm.
- */
-function boDeCuaThanhVien(tv: ThanhVien | undefined): BoDe | null {
-  if (!tv?.lop) return null;
-  const lop = Number(tv.lop);
-  if (!Number.isFinite(lop)) return null;
-
-  const doiTuong =
-    lop >= LOP_DAU_CAP_BA ? "cap-ba-tro-len" : lop <= LOP_CUOI_TIEU_HOC ? "tieu-hoc" : "thcs";
-  const tuyen = dinhTuyen({ doiTuong, lop });
-  return tuyen.xong ? napBoDe(tuyen.boDe) : null;
-}
-
 function maMoi(): string {
   try {
     return crypto.randomUUID();
@@ -80,12 +66,37 @@ function maMoi(): string {
   }
 }
 
-export function KhoangDisc({ vaoTuThanhVien }: { readonly vaoTuThanhVien?: ThanhVien } = {}) {
-  // 🔴 12.4 — vào bài từ THẺ THÀNH VIÊN thì bỏ luôn màn hỏi tên: tên đã có trong sổ.
-  // Định tuyến bộ đề từ LỚP đã lưu của người đó; chưa có lớp thì vẫn phải qua màn 1.
+export function KhoangDisc({
+  vaoTuThanhVien,
+  cheDo,
+}: {
+  readonly vaoTuThanhVien?: ThanhVien;
+  /** `"quan-sat"` ⇒ người lớn trả lời VỀ người này (bộ QS), không phải họ tự làm (V1.4). */
+  readonly cheDo?: "quan-sat";
+} = {}) {
+  // 🔴 12.4 + V1.3 — vào bài từ THẺ THÀNH VIÊN thì bỏ luôn màn hỏi tên VÀ màn hỏi vai/lớp:
+  // sổ đã biết cả ba. Định tuyến từ VAI + BẬC HỌC đã lưu; thiếu dữ kiện thì mới qua màn 1.
   const [buoc, datBuoc] = useState<Buoc>(() => {
-    const boDe = boDeCuaThanhVien(vaoTuThanhVien);
-    return boDe ? { ten: "dan-do", boDe, tenCoSan: vaoTuThanhVien!.ten } : { ten: "chon" };
+    if (!vaoTuThanhVien) return { ten: "chon" };
+
+    // Chế độ quan sát: người lớn trả lời VỀ người này. Cửa ADR-002 nằm trong
+    // `boDeQuanSatTheoLop()` — mầm non và lớp 1–2 ra bộ MN, từ lớp 3 mới ra bộ QS.
+    if (cheDo === "quan-sat") {
+      const ma = boDeQuanSatTheoLop(vaoTuThanhVien.lop);
+      return ma
+        ? { ten: "dan-do", boDe: napBoDe(ma), tenCoSan: vaoTuThanhVien.ten }
+        : { ten: "chon" };
+    }
+
+    const tuyen = boDeChoThanhVien(vaoTuThanhVien.vaiTro, vaoTuThanhVien.lop);
+    return tuyen
+      ? {
+          ten: "dan-do",
+          boDe: napBoDe(tuyen.boDe),
+          tenCoSan: vaoTuThanhVien.ten,
+          ...(tuyen.giaiThich ? { giaiThich: tuyen.giaiThich } : {}),
+        }
+      : { ten: "chon" };
   });
   // Đọc nguồn MỘT LẦN lúc gắn — đọc lúc dựng HTML tĩnh thì máy chủ không có location.
   const [nguon, datNguon] = useState("truc-tiep");
@@ -115,6 +126,19 @@ export function KhoangDisc({ vaoTuThanhVien }: { readonly vaoTuThanhVien?: Thanh
   /** Người trong sổ đang làm bài này, nếu vào từ thẻ thành viên (12.4). */
   const maThanhVienDangLam = vaoTuThanhVien?.id;
 
+  /**
+   * Bậc học ghi kèm bản ghi bài.
+   *
+   * 🔴 Vào từ thẻ thành viên thì màn 1 không chạy, nên `boiCanh` rỗng và bản ghi bài mất
+   * trường `lop` — dù sổ biết thừa. Lấy thẳng từ hồ sơ người đó. Ưu tiên bậc của thành
+   * viên vì nó là sự thật mới nhất; `boiCanh` chỉ dùng cho lối vào tự do của màn 1.
+   *
+   * Giữ dạng CHUỖI suốt đường đi: `"mam-non"` không quy về số được, và đổi nó thành `NaN`
+   * ở giữa đường đúng là cách trẻ mầm non từng bị đá khỏi luồng làm bài.
+   */
+  const lopGhiKem =
+    vaoTuThanhVien?.lop ?? (boiCanh.lop !== undefined ? String(boiCanh.lop) : undefined);
+
   function xongBai(
     boDe: BoDe,
     bietDanh: string,
@@ -137,7 +161,7 @@ export function KhoangDisc({ vaoTuThanhVien }: { readonly vaoTuThanhVien?: Thanh
       id,
       boDe: boDe.ma,
       maTre: bietDanh,
-      ...(boiCanh.lop !== undefined ? { lop: String(boiCanh.lop) } : {}),
+      ...(lopGhiKem !== undefined ? { lop: lopGhiKem } : {}),
       ...(boiCanh.tuoiCon !== undefined ? { tuoi: boiCanh.tuoiCon } : {}),
       // 🔴 Đóng dấu thành viên NGAY LÚC LƯU. Gán sau bằng cách dò tên là dựng lại đúng
       // cái mơ hồ mà sổ gia đình sinh ra để dẹp: hai người trùng tên, hoặc một người đổi
@@ -189,6 +213,7 @@ export function KhoangDisc({ vaoTuThanhVien }: { readonly vaoTuThanhVien?: Thanh
           boDe={buoc.boDe}
           bietDanhGoiY={buoc.bietDanhGoiY}
           tenCoSan={buoc.tenCoSan}
+          giaiThich={buoc.giaiThich}
           onQuayLai={() => datBuoc({ ten: "chon" })}
           onBatDau={(bietDanh) => {
             ghiMoc("batDau", nguon, new Date().toISOString());

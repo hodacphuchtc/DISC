@@ -11,7 +11,15 @@
  * cố ý.
  */
 
-import { TUOI_VAO_THCS } from "@config/disc-nguong";
+import { coHoiLop, type VaiGiaDinh } from "@config/disc-gia-dinh";
+import {
+  LOP_CUOI_TIEU_HOC,
+  LOP_DAU_CAP_BA,
+  LOP_MAM_NON,
+  LOP_TREN_12,
+  TUOI_VAO_THCS,
+  soLopCua,
+} from "@config/disc-nguong";
 
 import type { MaBoDe } from "@modules/core/bo-de/kieu";
 
@@ -77,6 +85,90 @@ export function dinhTuyen(dv: DauVaoDinhTuyen): KetQuaDinhTuyen {
       return { xong: true, boDe: "QS" };
     }
   }
+}
+
+/* ── Bộ đề cho MỘT NGƯỜI TRONG SỔ GIA ĐÌNH (V1.3) ────────────────────────── */
+
+/** Những bộ đề mà NGƯỜI LỚN ngồi trả lời hộ, không phải người được đo tự làm. */
+export function laBanQuanSat(ma: MaBoDe): boolean {
+  return ma === "MN" || ma === "QS";
+}
+
+export type BoDeChoThanhVien = {
+  readonly boDe: MaBoDe;
+  /** Lý do bị chuyển sang bản quan sát — PHẢI hiện ra, không được chuyển im lặng. */
+  readonly giaiThich?: MaGiaiThich;
+  /** `true` ⇒ màn dặn dò phải nói rõ "bố mẹ trả lời giúp", không nói "em tự đọc". */
+  readonly nguoiLonTraLoiHo: boolean;
+};
+
+/**
+ * BỘ ĐỀ SUY TỪ VAI + BẬC HỌC CỦA MỘT NGƯỜI TRONG SỔ — không hỏi lại một câu nào.
+ *
+ * 🔴 HÀM NÀY SỬA MỘT LỖI CHẶN THẬT. Bản trước nằm trong `app/khoang/disc.tsx`, chỉ đọc
+ * `tv.lop` rồi `Number(tv.lop)`, và **không đọc `vaiTro` một lần nào**. Hậu quả:
+ *
+ *   - Bố mẹ · ông bà · người thân KHÔNG có lớp ⇒ `null` ⇒ bấm *Làm bài* trên thẻ của
+ *     chính mình thì bị đá về màn *"Ai đang cầm máy?"* và bị hỏi lại từ đầu.
+ *   - Trẻ mầm non ⇒ `Number("mam-non")` ra `NaN` ⇒ cũng `null`, cũng bị đá về.
+ *
+ * Tức là đúng nhóm người mà cả GĐ11–GĐ14 xây cho lại là nhóm không đi vào được.
+ *
+ * 🔴 LỖI THỨ HAI, ÂM THẦM HƠN: bản trước trả về mỗi bộ đề và **vứt `giaiThich`**. Một em
+ * lớp 1–2 vào bài từ thẻ sẽ bị chuyển sang bản quan sát mà KHÔNG có hộp giải thích —
+ * trong khi `DISC_BA.md` §4.2 ghi rõ văn bản đó là BẮT BUỘC hiện, và chuyển im lặng là
+ * lừa người dùng. Nay `giaiThich` được chuyền ra ngoài.
+ *
+ * Vẫn đi xuyên qua `dinhTuyen()`: luật ADR-002 (sàn tự đánh giá 8 tuổi) là thứ đắt nhất
+ * trong sản phẩm và chỉ được có ĐÚNG MỘT nơi giữ.
+ *
+ * Trả `null` khi chưa đủ dữ kiện (người đi học mà chưa chọn bậc) — đoán bừa một bộ đề cho
+ * một đứa trẻ là chuyện không được phép làm để tiết kiệm một cú chạm.
+ */
+export function boDeChoThanhVien(
+  vaiTro: VaiGiaDinh,
+  lop: string | undefined,
+): BoDeChoThanhVien | null {
+  const goi = (kq: KetQuaDinhTuyen): BoDeChoThanhVien | null =>
+    kq.xong
+      ? {
+          boDe: kq.boDe,
+          ...(kq.giaiThich ? { giaiThich: kq.giaiThich } : {}),
+          nguoiLonTraLoiHo: laBanQuanSat(kq.boDe),
+        }
+      : null;
+
+  // Vai không đi học ⇒ bản TỰ ĐÁNH GIÁ cho người lớn. Không hỏi mục tiêu: từ V1.3 thẻ của
+  // người lớn chỉ có bài về CHÍNH HỌ; bài quan sát về con nằm ở thẻ của đứa trẻ.
+  if (!coHoiLop(vaiTro)) return goi(dinhTuyen({ doiTuong: "phu-huynh", mucTieu: "toi" }));
+
+  if (lop === LOP_MAM_NON) return goi(dinhTuyen({ doiTuong: "mam-non" }));
+  if (lop === LOP_TREN_12) return goi(dinhTuyen({ doiTuong: "cap-ba-tro-len" }));
+
+  const so = soLopCua(lop);
+  if (so === undefined) return null; // đang đi học mà chưa chọn bậc — phải hỏi, không đoán.
+
+  if (so >= LOP_DAU_CAP_BA) return goi(dinhTuyen({ doiTuong: "cap-ba-tro-len", lop: so }));
+  if (so <= LOP_CUOI_TIEU_HOC) return goi(dinhTuyen({ doiTuong: "tieu-hoc", lop: so }));
+  return goi(dinhTuyen({ doiTuong: "thcs", lop: so }));
+}
+
+/**
+ * Bộ đề khi NGƯỜI LỚN trả lời về một đứa trẻ trong sổ — nút phụ trên thẻ của trẻ (V1.4).
+ *
+ * 🔴 GÁC BẰNG LỚP, KHÔNG BẰNG TUỔI SUY RA. `dinhTuyen()` gác bộ QS bằng `tuoiCon >= 8`,
+ * nhưng sổ gia đình chỉ có LỚP. Suy tuổi từ lớp rồi chuyền vào là bịa một con số chưa ai
+ * nhập — lớp 4 có cả bé 9 lẫn bé 10. Nên cửa ADR-002 ở đây phát biểu lại bằng lớp, và
+ * `tests/dinh-tuyen.test.ts` canh cho hai cách phát biểu không bao giờ lệch nhau.
+ *
+ * Mầm non và lớp 1–2 trả `MN`: bài chính của các em VỐN ĐÃ là bản người lớn trả lời, nên
+ * thẻ của các em không cần nút phụ nào.
+ */
+export function boDeQuanSatTheoLop(lop: string | undefined): MaBoDe | null {
+  if (lop === LOP_MAM_NON) return "MN";
+  const so = soLopCua(lop);
+  if (so === undefined) return null;
+  return so <= LOP_CAO_NHAT_DUNG_BAN_QUAN_SAT ? "MN" : "QS";
 }
 
 /**

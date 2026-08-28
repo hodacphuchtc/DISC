@@ -2,9 +2,23 @@
 
 import { useState } from "react";
 
+import { HopGiaiThich } from "@/app/components/the-doi-tuong";
 import { CHU_CHON, CHU_TRUOC_KHI_BAT_DAU, PHUT_UOC_LUONG } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe } from "@modules/core/bo-de/kieu";
+import type { MaGiaiThich } from "@modules/test/dinh-tuyen";
+
+/**
+ * Mã lý do chuyển bản → khoá trong `CHU_CHON`.
+ *
+ * 🔴 Bảng này là chỗ DUY NHẤT nối hai thứ đó. Màn 1 trước đây tự viết một chuỗi `? :`
+ * lồng nhau ngay tại chỗ; thêm một mã thứ ba là phải nhớ sửa cả hai nơi — và nơi quên sửa
+ * sẽ im lặng không hiện gì, đúng kiểu hỏng mà không ai biết.
+ */
+const GIAI_THICH: Readonly<Record<MaGiaiThich, "giaiThichLop12" | "giaiThichConDuoi8">> = {
+  LOP_1_2: "giaiThichLop12",
+  CON_DUOI_8: "giaiThichConDuoi8",
+};
 import {
   DO_DAI_BIET_DANH_TOI_DA,
   bietDanhHopLe,
@@ -16,6 +30,7 @@ export function TruocKhiBatDau({
   boDe,
   bietDanhGoiY,
   tenCoSan,
+  giaiThich,
   onQuayLai,
   onBatDau,
 }: {
@@ -30,6 +45,15 @@ export function TruocKhiBatDau({
    * là phiền — nó còn mở đường cho hai cách viết cùng một cái tên cùng tồn tại trong sổ.
    */
   readonly tenCoSan?: string;
+  /**
+   * 🔴 VĂN BẢN BẮT BUỘC HIỆN khi người làm bị chuyển sang bản quan sát (DISC_BA.md §4.2).
+   *
+   * Trước V1.3, hộp này CHỈ hiện ở màn 1. Vào bài từ thẻ thành viên thì `boDeCuaThanhVien()`
+   * trả về mỗi bộ đề và vứt luôn lý do chuyển — nên một em lớp 1–2 vào từ thẻ sẽ lặng lẽ
+   * nhận bản dành cho người lớn trả lời, không một chữ giải thích. Chuyển im lặng là lừa
+   * người dùng; không chuyển là bịa số. Phải làm cả hai: chuyển VÀ nói ra.
+   */
+  readonly giaiThich?: MaGiaiThich;
   readonly onQuayLai: () => void;
   readonly onBatDau: (bietDanh: string) => void;
 }) {
@@ -58,6 +82,17 @@ export function TruocKhiBatDau({
       >
         ← {CHU_CHON.nutQuayLai}
       </button>
+
+      {/* 🔴 Đặt TRƯỚC tên bộ đề, không nhét xuống cuối trang: người đọc phải biết vì sao
+          mình đang nhìn một bản khác với thứ mình bấm, ngay lúc nhìn thấy nó. */}
+      {giaiThich && (
+        <div className="mt-6" data-thu="giai-thich-chuyen-ban">
+          <HopGiaiThich
+            tieuDe={CHU_CHON[GIAI_THICH[giaiThich]].tieuDe}
+            than={CHU_CHON[GIAI_THICH[giaiThich]].than}
+          />
+        </div>
+      )}
 
       <p className="mt-6 text-[11px] tracking-widest text-neutral-600 uppercase">
         {boDe.ten} · {boDe.cau.length} câu

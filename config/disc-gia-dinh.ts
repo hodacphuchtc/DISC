@@ -34,6 +34,25 @@ export const VAI_GIA_DINH = [
 
 export type VaiGiaDinh = (typeof VAI_GIA_DINH)[number];
 
+/**
+ * VAI NÀO CÒN ĐANG ĐI HỌC ⇒ mới hỏi bậc học (V1.2).
+ *
+ * 🔴 Bố · mẹ · ông · bà · người thân · khác thì KHÔNG hỏi lớp. Trước V1.2 form hỏi lớp
+ * cho mọi vai, nhãn ghi *"Lớp (nếu đang đi học)"* — và vì bố mẹ để trống, `ThanhVien.lop`
+ * của họ là `undefined`, khiến `boDeCuaThanhVien()` trả `null` rồi đá họ về màn hỏi lại.
+ * Nói cách khác: một ô thừa trên form đã chặn nguyên nhóm người lớn khỏi sản phẩm.
+ *
+ * `anh-chi-em` NẰM TRONG danh sách này: anh chị em trong nhà gần như luôn còn đi học, và
+ * `laTreEm()` bên dưới vốn đã suy "là trẻ em" từ chính việc có lớp. Đoán sai thì lệch về
+ * phía hỏi thừa một ô — rẻ hơn nhiều so với việc khoá một người khỏi bài của họ.
+ */
+export const VAI_DANG_DI_HOC: readonly VaiGiaDinh[] = ["con", "anh-chi-em"];
+
+/** Vai này có được hỏi bậc học không. */
+export function coHoiLop(vai: VaiGiaDinh): boolean {
+  return VAI_DANG_DI_HOC.includes(vai);
+}
+
 /** Chữ hiển thị cho từng vai. Chữ hiển thị gom về `config/`, không gõ thẳng vào component. */
 export const CHU_VAI: Readonly<Record<VaiGiaDinh, string>> = {
   con: "Con",
