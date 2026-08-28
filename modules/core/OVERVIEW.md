@@ -85,6 +85,27 @@ trong tab này, RỒI mới đăng tin cho tab khác — và `gomBao()` gộp l�
 một lần báo. Kênh nhận và kênh gửi dùng CHUNG một đối tượng, cố ý: mở kênh thứ hai để gửi
 thì kênh nhận trong cùng tab vẫn nghe thấy, và người đăng ký bị gọi hai lần cho một lần ghi.
 
+### 🔴 HAI NÚT SAO LƯU RA HAI THỨ KHÁC NHAU — và người dùng bấm đúng cái sai (28/08/2026)
+
+Chủ dự án tải bản sao lưu về, nhận một tệp `.zip` **toàn JSON**: không thư mục tên người,
+không PDF. Tệp không hỏng — sản phẩm có **HAI** nút sao lưu và chúng gói ra hai thứ.
+
+Nút trong hộp nhắc (`nhac-sao-luu.tsx`, viết ở `V4.2`) gọi `saoLuuTatCa()`, vốn truyền
+mảng rỗng vào chỗ đính PDF. Nút ở bảng gia đình gọi `saoLuuTatCaKemTep()` nên đủ. Hộp nhắc
+viết **TRƯỚC** khi PDF vào tệp sao lưu (GĐ16–17), và khi PDF vào thì không ai quay lại hỏi
+nó. Đây là lần **THỨ BA** cùng một họ lỗi trong một tuần: nút *Xoá sạch* dọn thiếu (`V3.1`),
+`saoLuuTatCa()` đọc thiếu bảng (`16.5`), và lần này.
+
+**Vì sao cửa kiểm không thấy:** `tests/sao-luu-tron-luong.test.tsx` có 9 cửa soi rất kỹ cây
+thư mục `.zip` — nhưng chỉ `render(<KhoangNhaMinh />)`. Nó đứng canh **một trong hai cánh
+cửa** và im lặng về cánh kia.
+
+**Luật rút ra:** thêm một LỐI VÀO cho một việc thì phải đi hỏi lại MỌI lối vào khác của
+việc đó — không chỉ mọi hàm. Và cách chữa đúng là **gộp về một cửa** (`app/tai-sao-luu.ts`
+→ `taiBanSaoLuuVeMay()`), không phải chép đoạn sinh PDF sang nút thứ hai: chép là dựng bản
+sao thứ hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên. Có cửa đọc mã nguồn cấm
+mọi file trong `app/` tự nhập `saoLuuTatCa`.
+
 ### Sao lưu phải biết kho có mấy bảng (16.5)
 
 `saoLuuTatCa()` từng chỉ đọc bảng BÀI, suốt từ khi kho lên v2 ba bảng ở GĐ12. Nay bản sao

@@ -46,4 +46,21 @@ thời — xem `docs/decisions/ADR-001-khong-backend.md`.
 - **`eslint-disable-next-line` chỉ tác dụng lên ĐÚNG dòng kế tiếp** — chỉ thị viết thành
   hai dòng thì nó tắt dòng bình luận thứ hai, không tắt câu lệnh.
 - **`import.meta.url` không phải URL `file://` dưới jsdom** — trong test dùng `process.cwd()`.
+- 🔴 **Tailwind IM LẶNG với class không tồn tại.** Gõ `shadow-noi-4` hay `shadow-noi1`
+  thì không lỗi biên dịch, không cảnh báo, không bóng — chỉ là khối đó phẳng, và không ai
+  biết cho tới khi đặt hai màn cạnh nhau. Cách duy nhất bắt được là **cửa hai chiều**: soi
+  ngược từ mọi class `shadow-<tên>` trong `app/` về token khai trong `@theme`
+  (`tests/do-noi.test.tsx`).
+- 🔴 **CSS viết TRẦN trong `globals.css` thắng cả `@layer utilities`.** Với
+  `@import "tailwindcss"`, luật không nằm trong layer nào sẽ đè utility — nghĩa là
+  `shadow-none` viết tại chỗ để tắt bóng cho một khối sẽ **vô hiệu, im lặng**. Luật áp
+  hàng loạt phải bọc `@layer components { … }`.
+- 🔴 **`print-color-adjust: exact` in CẢ BÓNG ĐỔ.** `globals.css` áp luật đó cho `*` để in
+  được màu thanh biểu đồ; hệ quả là mỗi thẻ có `box-shadow` sẽ in ra một vệt xám. Thêm bóng
+  thì phải thêm `* { box-shadow: none !important; }` vào khối `@media print` — và thêm
+  **TRƯỚC** dòng bóng đầu tiên, vì lỗi này chỉ lộ khi có người bấm In.
+- **Tailwind v4 đọc CSS chứ không đọc TypeScript.** Token muốn sinh ra utility
+  (`shadow-*`, `text-*`) phải khai trong `@theme` của `globals.css`; khai ở `config/` chỉ
+  được một chuỗi chết. Đó là lý do bảng màu có hai bản, và tại sao chỉ màu nào cần lớp
+  tiện ích mới phải đồng bộ sang `@theme`.
 - **Node ESM cần đuôi `.ts` khi import giá trị**; import KIỂU thì bị xoá lúc chạy nên không sao.
