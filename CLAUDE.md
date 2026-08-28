@@ -18,7 +18,9 @@ Khoang trắc nghiệm DISC nhúng vào app chủ của SATA ROBO, cho **cả gi
 tới lớp 12, và bố mẹ. Hệ thống chấm rồi trả về bản báo cáo đọc được ngay — mỗi người đọc bản
 viết cho đúng mình. Mục tiêu kinh doanh: **giữ chân hơn 1.000 gia đình đang học** (đổi từ mồi
 thu khách, 27/08/2026). Hướng đang mở: **DISC gia đình** — GĐ11–GĐ14 trong `PLAN.md`.
-Nguồn yêu cầu: `docs/brd/`. Lộ trình thi công: `PLAN.md` gốc dự án (checkbox, khuôn 4 dòng).
+Nguồn yêu cầu: `docs/brd/`. 🔴 **Lộ trình đang có hiệu lực: `PLAN_V2.md`** (luồng 3 bước,
+chốt 28/08/2026). `PLAN.md` chỉ còn để TRA CỨU *vì sao* 68 hạng mục cũ làm như vậy —
+không còn là việc đang làm. Cả hai dùng khuôn 4 dòng + checkbox.
 Repo: https://github.com/hodacphuchtc/DISC — **PUBLIC**, đã push (27/08/2026).
 🔴 Repo công khai: mọi thứ trong này internet đọc được. Đừng đưa dữ liệu thật của trẻ,
 họ tên, hay số điện thoại cá nhân vào bất kỳ file nào.
@@ -58,13 +60,26 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 28/08/2026 — GĐ11→GĐ14 xong trọn)
+## TRẠNG THÁI (cập nhật 28/08/2026 — đang thi công `PLAN_V2.md`, luồng 3 bước)
 
-### ĐÃ XONG
+### ĐANG LÀM — `PLAN_V2.md`, 5/17 hạng mục
 
-**GĐ0–GĐ14 xong trọn: 68/68 hạng mục · 1.115 test xanh · `npm run kiem` + `npm run build`
-xanh.** Chạy thử: `npm run xem-thu` → http://localhost:3100.
-🔴 **Đã push tới `f31a3de` (GĐ0–GĐ10). GĐ11–GĐ14 CHƯA PUSH — còn ở local.**
+Chủ dự án chốt **dựng lại luồng thành BA BƯỚC** (Nhà mình → Làm bài → Phân tích) và
+**phát cho 30 gia đình trong 1–2 tuần**. Xong `V0.3` · `V1.1` · `V1.2` · `V1.3` · `V1.4`.
+Tiếp theo: `V2.1` khung ba bước.
+
+🔴 **Đã sửa một LỖI CHẶN THẬT tồn từ GĐ12:** `boDeCuaThanhVien()` chỉ đọc `tv.lop` rồi
+`Number()`, không đọc `vaiTro`. Bố mẹ (không có lớp) và trẻ mầm non (`Number("mam-non")`
+ra `NaN`) đều bị đá về màn *"Ai đang cầm máy?"* — tức là **đúng nhóm người mà GĐ11–GĐ14
+xây cho lại là nhóm không vào được bài của chính mình.** Lỗi thứ hai cùng chỗ: hàm đó vứt
+luôn `giaiThich`, nên em lớp 1–2 vào từ thẻ bị chuyển sang bản quan sát **không một chữ
+giải thích**, trái `DISC_BA.md` §4.2. Cả hai đã sửa, có test canh.
+
+### ĐÃ XONG TRƯỚC ĐÓ
+
+**GĐ0–GĐ14: 68/68 hạng mục.** Nay **1.185 test xanh** · `npm run kiem` + `npm run build`
+xanh. Chạy thử: `npm run xem-thu` → http://localhost:3100.
+✅ **Đã push tới `dcdfbe6` — remote đồng bộ, không còn commit tồn ở local** (28/08/2026).
 
 Bốn mốc lớn: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo · **GĐ10** ba bản
 báo cáo · **GĐ11–GĐ14 DISC GIA ĐÌNH** — đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH.
@@ -80,18 +95,25 @@ Những gì GĐ11–GĐ14 thêm vào sản phẩm:
 - 5 câu/màn cho mọi bộ đề (thẻ có khung, số theo cả bài) · lớp 1–12 + *đã qua lớp 12* ·
   bỏ ô thu liên hệ · chú giải bốn nhóm + khối dẫn nguồn.
 
-### 🔴 CÒN LẠI TOÀN VIỆC NGƯỜI — máy đã hết việc trong phạm vi plan
+### 🔴 VIỆC NGƯỜI ĐANG CHẶN MỐC PHÁT
 
-1. **Quét mã QR bằng điện thoại thật.** DEMO GĐ11 mục 6, và DEMO GĐ13 cần **hai máy**. Test
-   đã dựng lại lưới từ chính nét vẽ Canvas rồi giải mã ngược ra đúng chuỗi, cộng phép thử
-   hội chứng Reed–Solomon — nhưng ống kính, ánh sáng và độ tương phản thì không mô phỏng được.
-2. **Gửi hai hồ sơ ký duyệt.** 🔴 **Gói B nay RỘNG HƠN:** `14.3` thêm nội dung nói về quan hệ
-   giữa HAI NGƯỜI LỚN (vợ ↔ chồng). Chạy lại `node scripts/xuat-noi-dung-ky-duyet.mjs` rồi
-   mới gửi — bản `.md` đang nằm trong `docs/` là bản CŨ, chưa có phần đó.
-3. **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
-4. **Gọi 5 phụ huynh vừa nghỉ** · **chốt nghi thức mời của trường**.
-5. **Bấm thử trên điện thoại thật** (phần duy nhất của `7.2` máy không làm được).
-6. **Quyết có push GĐ11–GĐ14 lên `origin/main` không.**
+1. 🔴 **Tài khoản Cloudflare + một tên miền** (`V0.1`). Chốt phát cho 30 gia đình trong
+   1–2 tuần mà **chưa có host, chưa có tên miền, chưa ai bấm deploy lần nào** — không
+   `infra.json`, không cấu hình host nào trong repo. Sản phẩm mới chỉ chạy trên
+   `localhost:3100`. **Đây là blocker cứng của mốc phát, và không code nào cứu được.**
+2. 🔴 **Hai điện thoại thật, 30 phút** (`V0.2`) — quét thử mã QR bằng camera. Test đã dựng
+   lại lưới từ nét vẽ Canvas rồi giải mã ngược, cộng phép thử hội chứng Reed–Solomon; ống
+   kính, ánh sáng và độ tương phản thì không mô phỏng được. Hỏng thì phải ẩn nút QR trước
+   khi phát, và nói thẳng với sale là *"cả nhà dùng chung một máy"*.
+3. **Gửi hai hồ sơ ký duyệt.** 🔴 Gói B nay RỘNG HƠN: `14.3` thêm nội dung về quan hệ giữa
+   HAI NGƯỜI LỚN (vợ ↔ chồng). ⚠️ **Chạy lại `scripts/xuat-noi-dung-ky-duyet.mjs` KHÔNG
+   ĐỦ** — script đó không hề import `config/disc-noi-dung-cap.ts` (nơi chứa 56 đoạn nội
+   dung cặp), nên phải MỞ RỘNG script trước rồi mới sinh lại.
+4. **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
+5. **Gọi 5 phụ huynh vừa nghỉ** — mục tiêu cả dự án là giữ chân mà **chưa ai đo vì sao họ
+   đi**; lý do có thể chẳng liên quan gì tới thứ đang xây.
+6. **Duyệt câu chữ trang A4 cho giáo viên/sale** (`V4.3`) — kênh phân phối là con người,
+   mà con người đó chưa có câu nào soạn sẵn để nói.
 
 ### CHỜ NGOÀI (thiếu người/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
 
@@ -127,6 +149,10 @@ lại là giả định, không phải phần mềm.**
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 28/08/2026 | 🔴 **PHÁT ĐỦ CẢ PHẦN TRẺ KHI CHƯA CÓ CHỮ KÝ CHUYÊN MÔN** — chủ dự án chốt và chịu trách nhiệm | Máy đã trình bày rủi ro: 68KB nội dung nói về trẻ chưa ai chuyên môn duyệt, và người đọc là khách ĐANG TRẢ HỌC PHÍ nên thiệt hại rơi vào uy tín app chủ chứ không riêng khoang DISC. Chủ dự án nghe và vẫn chọn phát. **Không hỏi lại.** Bảo hiểm: cờ `V4.1` tắt riêng phần nội dung trẻ trong 30 giây khi cần |
+| 28/08/2026 | **Luồng 3 bước trong MỘT mục thanh bên**, lật phần "tuần tự" của ADR-007 | Chủ dự án chốt; **không hỏi lại vì sao khác luồng cũ**. Bảng gia đình GIỮ NGUYÊN bên trong bước 1, nên điều ADR-007 lo — *"nhìn một cái biết ai chưa làm"* — vẫn còn. Sổ mới `PLAN_V2.md`, sổ cũ `PLAN.md` chỉ để tra cứu |
+| 28/08/2026 | **Mọi bài phải thuộc một người trong sổ** · **bài quan sát chuyển sang thẻ của CON** · **màn Số liệu ẩn sau `?so-lieu=1`** | Thẻ bố mẹ chỉ còn bài về chính họ — đúng yêu cầu. Nhưng mầm non và lớp 1–2 BẮT BUỘC có người lớn trả lời hộ (ADR-002), nên nút đó chuyển về thẻ đứa trẻ chứ không xoá. Màn Số liệu ẩn khỏi phụ huynh nhưng giữ cửa sau, vì nó là chỗ DUY NHẤT đọc được `baiThuHai` |
+| 28/08/2026 | **Đồ cũ không dùng trong luồng mới thì CÁCH LY, không xoá** | Chủ dự án chốt. Ở `V5.1` chỉ **ẩn khỏi điều hướng**, chưa dời file: dời là hàng trăm dòng đổi đường dẫn + một đợt test đỏ, đổi lại 0 giá trị cho người dùng trước ngày phát |
 | 28/08/2026 | **Mã mời KHÔNG mang tên đi** (hàng rào thứ 5 của ADR-005) | Mã đi qua tin nhắn và ảnh chụp màn hình. Máy nhận tự hỏi tên — vừa giữ được hàng rào, vừa làm hồ sơ vừa đúng 14 ký tự |
 | 28/08/2026 | **Hồ sơ nhận qua mã lưu ở trường riêng, KHÔNG dựng bài làm giả** | Mã chỉ mang bốn con số. Bịa một bảng câu trả lời khớp với chúng là tạo dữ liệu chưa ai từng nhập, và sáu tháng sau không ai phân biệt được với dữ liệu thật |
 | 28/08/2026 | **Trục quy chiếu nội dung cặp là NGƯỜI ĐỌC, không phải VAI** | Sang phân tích cả nhà thì cặp có thể là con↔anh hay bố↔mẹ, và câu hỏi "ai là bố mẹ?" không còn câu trả lời. Đổi trục giữ được **8 khoá** phủ mọi cặp |
@@ -161,6 +187,33 @@ lại là giả định, không phải phần mềm.**
 
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
+
+- 🔴 **MỘT HÀM ĐỌC THIẾU MỘT TRƯỜNG ĐÃ KHOÁ NGUYÊN NHÓM NGƯỜI DÙNG SUỐT BA GIAI ĐOẠN**
+  (28/08/2026, `V1.3`). `boDeCuaThanhVien()` định tuyến bộ đề chỉ từ `tv.lop`, **không đọc
+  `vaiTro`**. Bố mẹ không có lớp ⇒ `null`; trẻ mầm non ⇒ `Number("mam-non")` ra `NaN` ⇒
+  cũng `null`. Cả hai bị đá về màn *"Ai đang cầm máy?"* — nghĩa là **bấm "Làm bài" trên
+  thẻ của Mẹ thì không vào được bài của Mẹ**, đúng nhóm người mà GĐ11–GĐ14 xây cho.
+  1.115 test xanh không thấy, vì test chỉ hỏi *"form lưu được không"*, chưa ai hỏi
+  *"người này rồi có vào được bài của họ không"*. **Cùng vết xe với bảng đại từ khoá một
+  chiều ở GĐ10: khi định tuyến theo X, hỏi ngay X có đủ chiều không.**
+- 🔴 **`Number()` trên một sentinel bằng CHỮ ra `NaN`, và `NaN` lọt qua mọi phép so sánh
+  mà không ai biết** (28/08/2026). Đó là nửa sau của lỗi trên. Nay chỉ `soLopCua()` ở
+  `config/disc-nguong.ts` được phép đổi bậc học thành số, và nó trả `undefined` chứ không
+  bao giờ trả `NaN`. Gọi `Number(tv.lop)` rải rác là cách lỗi này quay lại.
+- 🔴 **SỬA MỘT HÀM MÀ QUÊN THỨ NÓ TRẢ RA CŨNG LÀ MẤT DỮ LIỆU** (28/08/2026, `V1.3`). Cùng
+  hàm đó còn **vứt luôn `giaiThich`**: em lớp 1–2 vào bài từ thẻ bị chuyển sang bản người
+  lớn trả lời **không một chữ giải thích**, trong khi `DISC_BA.md` §4.2 ghi văn bản đó là
+  BẮT BUỘC hiện. Màn 1 có hộp giải thích nên không ai ngờ đường thứ hai lại thiếu.
+  **Thêm một lối vào cho một màn thì phải kiểm lối đó có mang đủ thứ màn kia mang không.**
+- **Bọc một IIFE async trong một hàm async khác mà không `await` là dựng một cuộc đua**
+  (28/08/2026, `V0.3`). Test đọc ra 7 người nhưng 0 bài — bảng ghi TRƯỚC kịp đáp, bảng ghi
+  SAU thì chưa — và nó trông y hệt "bộ nạp hỏng". Suýt đi sửa mã lành. `eval` trả về giá
+  trị của biểu thức cuối; phải `await` đúng lời hứa đó.
+- **Ô thừa trên form đẻ ra dữ liệu mồ côi, và dữ liệu mồ côi thì âm thầm đổi hành vi**
+  (28/08/2026, `V1.2`). Bản cũ hỏi lớp cho MỌI vai. Một ông bố từng chọn "Con · Lớp 7" rồi
+  đổi vai sẽ mang `lop:"7"` vĩnh viễn — ô đã ẩn nên không ai thấy — mà `laTreEm()` lại suy
+  trẻ em từ chính việc CÓ lớp. Kết quả: bản phân tích cả nhà đối xử với ông ấy như một đứa
+  trẻ. Phải có **hai** hàng rào: xoá lúc đổi vai, VÀ chặn lại lúc lưu cho hồ sơ cũ.
 
 - 🔴 **KHỨ HỒI KHÔNG ĐỦ ĐỂ CHỨNG MINH MỘT BỘ MÃ HOÁ ĐÚNG** (28/08/2026, `11.1`). Đa thức
   sinh Reed–Solomon của mã QR bị dựng **ngược thứ tự hệ số** (`moi[j] ^= da[j]*α` thay vì
