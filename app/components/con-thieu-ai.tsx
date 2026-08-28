@@ -88,7 +88,7 @@ export function KhoiConThieuAi({
               ghiMoc("bamMoi", "buoc-3", new Date().toISOString());
               datDangMoi(t);
             }}
-            className="min-h-[44px] rounded-xl px-4 text-[14px] font-semibold text-white"
+            className="min-h-[44px] rounded-xl px-4 text-[14px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.camDamChoChu }}
           >
             {CHU_MOI.nutMoi.replace("{ten}", t.ten)}
@@ -163,7 +163,7 @@ function HopMoi({
           <button
             type="button"
             onClick={() => void chepLink()}
-            className="min-h-[44px] w-full rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="min-h-[44px] w-full rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {CHU_MOI.nutChepLink}

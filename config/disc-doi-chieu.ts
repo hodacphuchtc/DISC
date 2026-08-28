@@ -55,6 +55,8 @@ export const VAN_BAN_LECH: Readonly<Record<MaTruc, Readonly<Record<HuongLech, st
 export const CHU_DOI_CHIEU = {
   tieuDe: "Hai góc nhìn về {ten}",
   nhanTren: "Vùng lệch",
+  /** Nút lùi ở đầu màn. Trước 18.8 chuỗi này gõ cứng thẳng trong JSX. */
+  nutQuayLai: "Quay lại",
   cotCon: "Con tự thấy",
   cotBoMe: "Bố mẹ thấy",
   cotLech: "Lệch",

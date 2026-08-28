@@ -87,7 +87,7 @@ export function NhacSaoLuu({
           type="button"
           disabled={trangThai === "dangTai"}
           onClick={() => void tai()}
-          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white disabled:opacity-60"
+          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white disabled:opacity-60 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
           style={{ backgroundColor: MAU.timCongNghe }}
         >
           {CHU_NHAC_SAO_LUU.nut}

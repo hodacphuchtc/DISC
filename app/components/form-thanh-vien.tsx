@@ -169,7 +169,7 @@ export function FormThanhVien({
           <button
             type="button"
             onClick={gui}
-            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {CHU_BANG_GIA_DINH.nutLuu}
@@ -227,7 +227,7 @@ export function HoiXoa({
           <button
             type="button"
             onClick={() => onXoa("giu-bai")}
-            className="min-h-[44px] w-full rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="min-h-[44px] w-full rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {soBai === 0 ? CHU_BANG_GIA_DINH.nutXoa : CHU_BANG_GIA_DINH.hoiXoaGiuBai}

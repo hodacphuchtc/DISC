@@ -1,5 +1,6 @@
 "use client";
 
+import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { useCallback, useEffect, useState } from "react";
 
 import { CHU_DOI_CHIEU } from "@config/disc-doi-chieu";
@@ -75,7 +76,7 @@ export function MoiLamNot({
       <button
         type="button"
         onClick={() => onLamBo(ma)}
-        className="mt-4 min-h-[48px] rounded-xl px-5 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="mt-4 min-h-[48px] rounded-xl px-5 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
         style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
       >
         {thieuBaiCon ? CHU_DOI_CHIEU.nutLamBaiCon : CHU_DOI_CHIEU.nutLamBaiBoMe}
@@ -106,15 +107,7 @@ export function ManVungLech({
 }) {
   return (
     <section className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
-      <button
-        type="button"
-        onClick={onDong}
-        data-khong-in
-        className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-        style={{ outlineColor: MAU.timCongNghe }}
-      >
-        ← Quay lại
-      </button>
+      <NutQuayLai nhan={CHU_DOI_CHIEU.nutQuayLai} onBam={onDong} />
 
       <p className="mt-6 text-[11px] tracking-widest text-neutral-600 uppercase">
         {CHU_DOI_CHIEU.nhanTren}
@@ -167,7 +160,7 @@ export function ManVungLech({
                   </td>
                   <td className="py-3 text-right">
                     <span
-                      className="inline-block rounded-full px-2.5 py-1 text-[12px] font-semibold text-white"
+                      className="inline-block rounded-full px-2.5 py-1 text-[12px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
                       style={{ backgroundColor: h.mau }}
                     >
                       {h.lech > 0 ? "+" : ""}

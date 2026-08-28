@@ -325,7 +325,7 @@ function ManBao({
       <button
         type="button"
         onClick={onThoat}
-        className="mt-6 min-h-[48px] rounded-xl px-5 text-[16px] font-semibold text-white"
+        className="mt-6 min-h-[48px] rounded-xl px-5 text-[16px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
         style={{ backgroundColor: MAU.timCongNghe }}
       >
         {CHU_THIEU_BAC.nut}

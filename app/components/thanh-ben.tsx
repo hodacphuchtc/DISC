@@ -75,7 +75,10 @@ function IconKhien() {
 export function ThanhBen() {
   return (
     <aside
-      className="w-full shrink-0 border-b border-neutral-200 bg-white md:h-dvh md:w-[264px] md:border-r md:border-b-0"
+      /* 🔴 Bóng CHỈ ở dải hẹp. Trên điện thoại đây là thanh TRÊN CÙNG, bóng đổ xuống đúng
+         hướng và tách nó khỏi nội dung. Trên máy tính nó là cột trái, đã có `md:border-r`
+         nên bóng thành thừa — và một cột cao hết màn mà đổ bóng ngang thì trông lệch. */
+      className="w-full shrink-0 border-b border-neutral-200 bg-white shadow-noi-1 md:h-dvh md:w-[264px] md:border-r md:border-b-0 md:shadow-none"
       style={{ borderColor: MAU.vienMo }}
     >
       {/* 🔴 TRÊN ĐIỆN THOẠI THU THÀNH MỘT DÒNG. Thanh này nay chỉ còn MỘT mục, nhưng ở

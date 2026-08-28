@@ -264,7 +264,7 @@ export function LamBai({
         <button
           type="button"
           onClick={tiep}
-          className="min-h-[48px] flex-1 rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-none"
+          className="min-h-[48px] flex-1 rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 sm:flex-none shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
           style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
         >
           {laTrangCuoi ? CHU_LAM_BAI.nutXemKetQua : CHU_LAM_BAI.nutTiep}

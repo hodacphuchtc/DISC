@@ -46,7 +46,9 @@ export function ThangTraLoi({
             onClick={() => onChon(m.giaTri)}
             className={[
               "rounded-xl border text-left",
-              "transition-colors duration-150 motion-reduce:transition-none",
+              // 🔴 CHỈ lún khi bấm, KHÔNG bóng tĩnh: năm nút một hàng ngang mà cái nào cũng
+              // nổi thì màn làm bài rối — và đó là màn trẻ ngồi trả lời 20 câu.
+              "transition-[color,background-color,box-shadow,transform] duration-150 active:translate-y-px active:shadow-lun motion-reduce:transition-none",
               "focus-visible:outline-2 focus-visible:outline-offset-2",
               to
                 ? "flex min-h-[56px] items-center gap-3 px-4 text-[18px]"

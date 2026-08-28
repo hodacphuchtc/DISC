@@ -4,14 +4,18 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**28/08/2026 (lượt 4) — GĐ16 + GĐ17 xong trọn; GĐ18 vừa BA, CHƯA thi công.**
+**28/08/2026 (lượt 4) — GĐ18 THI CÔNG XONG PHẦN MÁY, CHỜ CHỦ DỰ ÁN BẤM THỬ.**
 
-**1. Vừa xong.** GĐ17 `17.1`–`17.7`. **1.366 test xanh**, `npm run kiem` + `build` xanh,
-gói chính **290 KB gzip** (trần 300). Đã push `814cb40`, CI xanh.
+**1. Vừa xong.** GĐ18 `18.1`–`18.9` + bản vá **hai nút sao lưu ra hai thứ khác nhau**.
+**1.387 test xanh** (từ 1.366; +21 cửa mới ở `khoi-giu-du-lieu` và `do-noi`), `npm run kiem`
++ `build` xanh, gói chính **vẫn 290 KB gzip** (trần 300 — bóng đổ là CSS, không tốn JS).
 
-**2. Đang dở.** 🆕 **GĐ18 vừa BA, 9 hạng mục máy, chưa làm ô nào** (~3,3 ngày) —
-ba nút giữ dữ liệu ra chân trang · nút Xoá viền đỏ · nút lùi rõ nét · hệ độ nổi. Ngoài ra sổ
-còn hai ô cũ `V0.1`, `V0.2` — cả hai chờ người, GĐ18 không gỡ được ô nào trong đó.
+**2. Đang dở.** 🔴 **GĐ18 `18.1`–`18.9` đã viết xong mã và MỌI CỬA KIỂM XANH, nhưng
+CHÍN Ô VẪN CHƯA TICK** — luật tick của sổ này là *"(b) đã bấm thật VÀ (c) đã xanh"*, mà (b)
+là thao tác tay của chủ dự án thì chưa ai làm. Đây không phải sơ suất: dự án đã trả giá đắt
+nhất một phiên (GĐ9) vì một ô tick ✅ trong khi chưa làm đúng thứ đặc tả đòi. **Bấm thử theo
+danh sách ở DEMO CUỐI của 18A/18B/18C rồi mới tick.**
+Ngoài ra sổ còn hai ô cũ `V0.1`, `V0.2` — cả hai chờ người, GĐ18 không gỡ được ô nào.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
 `V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · duyệt
@@ -29,6 +33,12 @@ còn hai ô cũ `V0.1`, `V0.2` — cả hai chờ người, GĐ18 không gỡ đ
   kiểm đo pixel ở đó là cửa giả. Chi tiết ở `CLAUDE.md` mục *Cạm bẫy*.
 - **Bề rộng gom hết về `config/bo-cuc.ts`**; `tests/bo-cuc.test.tsx` canh **cả hai chiều**
   — nới cái cần nới, VÀ giữ khung hẹp cho bốn màn đọc-và-trả-lời.
+
+**4b. 🔴 MỘT LỖI TÌM THẤY, CHƯA SỬA (ngoài phạm vi GĐ18).** Ở `cac-buoc.tsx`, một bước
+đang mở **không đóng lại được**: bấm đóng làm `dangMo` về `null`, mà `useEffect` tự-mở-hộ
+có `dangMo` trong mảng phụ thuộc nên nó mở lại ngay. Chú thích tại chỗ ghi *"chỉ chọn hộ
+MỘT LẦN"* — mã không làm vậy. Phát hiện khi viết cửa `G5b`; cửa đó đã viết vòng qua và ghi
+rõ lý do. **Sửa hay không là quyết định của chủ dự án**, không phải việc tự nhận thêm.
 
 **5. Cạm bẫy vừa trả giá.** Ghi ở `CLAUDE.md` mục *CẢNH BÁO / CẠM BẪY* (3 bài mới) và
 `modules/core/OVERVIEW.md` mục 6 (miền lưu trữ). Không chép lại ở đây.

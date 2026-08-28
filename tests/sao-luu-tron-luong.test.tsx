@@ -17,7 +17,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { NhacSaoLuu } from "../app/components/nhac-sao-luu";
-import { KhoangNhaMinh } from "../app/khoang/nha-minh";
+import { KhoiGiuDuLieu } from "../app/components/khoi-giu-du-lieu";
 import { CHU_M6, CHU_NHAC_SAO_LUU } from "../config/disc-tu-dien";
 import { THU_MUC_MAY_DOC, THU_MUC_TONG_HOP } from "../modules/core/luu-tru/cay-sao-luu";
 import { DUONG_FONT, quenFontDaTai } from "../modules/report/xuat-pdf";
@@ -126,7 +126,7 @@ async function dungNha() {
  * một helper chỉ chạy được khi có sẵn dữ liệu thì không kiểm được trường hợp trống.
  */
 async function bamSaoLuu(): Promise<JSZip> {
-  render(<KhoangNhaMinh />);
+  render(<KhoiGiuDuLieu />);
   const nut = await screen.findByRole("button", { name: CHU_M6.nutSaoLuu });
   fireEvent.click(nut);
   await waitFor(() => expect(daTai).not.toBeNull(), { timeout: 30_000 });
@@ -258,7 +258,7 @@ describe("🔴 bấm Sao lưu ⇒ cây thư mục đọc được", () => {
     }));
     try {
       await dungNha();
-      const { KhoangNhaMinh: Tat } = await import("../app/khoang/nha-minh");
+      const { KhoiGiuDuLieu: Tat } = await import("../app/components/khoi-giu-du-lieu");
       render(<Tat />);
       fireEvent.click(await screen.findByRole("button", { name: CHU_M6.nutSaoLuu }));
       await waitFor(() => expect(daTai).not.toBeNull(), { timeout: 30_000 });
@@ -309,13 +309,13 @@ describe("🔴 HAI nút sao lưu phải ra ĐÚNG MỘT thứ", () => {
   it("🔴 cùng một nhà ⇒ hai nút cho ra DANH SÁCH TỆP GIỐNG HỆT NHAU", async () => {
     await dungNha();
 
-    const cayBuoc1 = duong(await bamSaoLuu()).sort();
+    const cayNutChan = duong(await bamSaoLuu()).sort();
     cleanup();
     daTai = null;
     const cayHopNhac = duong(await bamNutTrongHopNhac()).sort();
 
     // So cả danh sách chứ không chỉ đếm: thiếu một thư mục người vẫn có thể trùng số tệp.
-    expect(cayHopNhac).toEqual(cayBuoc1);
+    expect(cayHopNhac).toEqual(cayNutChan);
   }, 120_000);
 
   it("🔴 nút trong hộp nhắc có thư mục mang TÊN NGƯỜI và có PDF", async () => {

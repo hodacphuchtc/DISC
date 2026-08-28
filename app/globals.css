@@ -8,6 +8,86 @@
   --color-logo-sata: #ff6f00;
   --color-logo-robo: #800080;
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+
+  /* ── ĐỘ NỔI (18.5) ─────────────────────────────────────────────────────────
+     🔴 XOÁ THANG BÓNG MẶC ĐỊNH TRƯỚC. Bóng của Tailwind là bóng ĐEN trung tính; sản phẩm
+     này ám tím. Giữ nó lại là mở sẵn cửa cho `shadow-lg` lọt vào và làm lệch bộ nhận diện,
+     mà kiểu lệch đó không ai thấy trong diff — chỉ thấy khi đặt hai màn cạnh nhau. */
+  --shadow-*: initial;
+
+  /* Nấc 1 — KHỐI TĨNH: thẻ thành viên, khối thông tin, hộp nhắc.
+     Ba lớp có chủ đích: một bóng 1px làm sắc mép, một bóng vừa tạo khối, một bóng dài rất
+     nhạt tạo cảm giác nổi. Màu `rgba(47,12,66,…)` là tím-đen chứ không đen thuần — bóng ám
+     cùng tông với #610B8A thì nhìn sạch, đen thuần thì xám xịt. */
+  --shadow-noi-1:
+    0 1px 1px rgba(47, 12, 66, 0.05), 0 2px 5px -1px rgba(47, 12, 66, 0.07),
+    0 8px 14px -6px rgba(47, 12, 66, 0.07);
+
+  /* Nấc 2 — BẤM ĐƯỢC / ĐANG MỞ: tấm bước, nút khi rê chuột. */
+  --shadow-noi-2:
+    0 1px 2px rgba(47, 12, 66, 0.07), 0 4px 8px -2px rgba(47, 12, 66, 0.1),
+    0 14px 24px -10px rgba(47, 12, 66, 0.14);
+
+  /* Nấc 3 — NỔI TRÊN LỚP PHỦ: CHỈ hộp thoại. Không dùng ở đâu khác. */
+  --shadow-noi-3:
+    0 4px 8px -2px rgba(47, 12, 66, 0.1), 0 16px 28px -8px rgba(47, 12, 66, 0.18),
+    0 36px 56px -20px rgba(47, 12, 66, 0.24);
+
+  /* LÚN — trạng thái :active. Bóng ngoài co lại, bóng TRONG đẩy mặt nút xuống. */
+  --shadow-lun:
+    inset 0 2px 4px rgba(47, 12, 66, 0.2), inset 0 1px 1px rgba(47, 12, 66, 0.1),
+    0 1px 1px rgba(47, 12, 66, 0.04);
+
+  /* MÉP TRÊN SÁNG — chỉ cho mặt ĐẶC (nút tím). Trên nền trắng nó vô hình, nên đừng đem
+     dùng cho thẻ; đó là lý do nó tách riêng khỏi ba nấc trên. */
+  --shadow-nut-chinh:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(47, 12, 66, 0.24),
+    0 5px 12px -3px rgba(97, 11, 138, 0.38);
+}
+
+/* ── ÁP ĐỘ NỔI CHO KHỐI (18.5) ──────────────────────────────────────────────
+   🔴 MÓC VÀO `data-thu`, ÁP MỘT LẦN, 0 FILE .tsx PHẢI SỬA. Cùng kỹ thuật mà khối
+   @media print bên dưới đã dùng từ lâu (`[data-khong-in]`, `[data-lop-sau]`, `[data-ban]`).
+
+   🔴 PHẢI BỌC @layer components. Với `@import "tailwindcss"`, luật CSS viết TRẦN nằm NGOÀI
+   mọi layer và thắng cả @layer utilities — nghĩa là một ngày nào đó ai đó viết
+   `shadow-none` tại chỗ để tắt bóng cho một khối, và nó sẽ không có tác dụng gì, im lặng.
+
+   🔴 `data-thu` nay gánh HAI việc: móc CSS ở đây, và móc cửa kiểm trong tests/. Đổi tên
+   một cái là vỡ cả hai. `tests/do-noi.test.tsx` canh chiều đó. */
+@layer components {
+  [data-thu="the-thanh-vien"],
+  [data-thu="chuc-mung"],
+  [data-thu="con-thieu-ai"],
+  [data-thu="nhac-sao-luu"],
+  [data-thu="khoi-ma-moi"],
+  [data-thu="khoi-so-sanh"],
+  [data-thu="giu-du-lieu"] {
+    box-shadow: var(--shadow-noi-1);
+  }
+
+  /* Tấm bước là thứ người dùng bấm — nổi cao hơn thẻ tĩnh một nấc. */
+  [data-thu="tam-buoc"] {
+    box-shadow: var(--shadow-noi-2);
+  }
+
+  /* Panel TRẮNG bên trong lớp phủ đen 40% — bóng ở đây tách panel khỏi nền mờ, việc mà
+     một cái viền không làm được trên nền tối. */
+  [data-thu="form-thanh-vien"] > div,
+  [data-thu="hoi-xoa-thanh-vien"] > div,
+  [data-thu="hop-thoai-han-muc"] > div,
+  [data-thu="hop-thoai-thu-muc"] > div,
+  [data-thu="hop-moi"] > div {
+    box-shadow: var(--shadow-noi-3);
+  }
+
+  /* 🔴 DẢI HẸP: ở 320px một vệt mờ 24px đọc thành "màn hình bị nhoè", không đọc thành
+     "khối nổi". Thu bóng lại một nấc dưới mốc sm. */
+  @media (width < 40rem) {
+    [data-thu="tam-buoc"] {
+      box-shadow: var(--shadow-noi-1);
+    }
+  }
 }
 
 html {
@@ -120,6 +200,18 @@ body {
   * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  /* 🔴 GIẤY KHÔNG CÓ CHIỀU SÂU — VÀ LUẬT NGAY TRÊN KIA LÀM ĐIỀU NÀY BẮT BUỘC (18.4).
+     `print-color-adjust: exact` ép trình duyệt in đúng mọi thứ nó thấy, kể cả bóng đổ.
+     Từ 18.5 mỗi thẻ và mỗi tấm bước đều có bóng, nên không chặn ở đây thì bản in ra một
+     vệt xám quanh từng khối: tốn mực, và bản PDF gửi phụ huynh trông bẩn.
+
+     Luật này cố ý viết TRƯỚC khi thêm dòng bóng đầu tiên. Làm ngược lại là mở một cửa sổ
+     thời gian mà bản in đang hỏng — và hỏng theo kiểu không ai thấy, cho tới ngày có
+     người bấm In. `tests/do-noi.test.tsx` canh để nó không bị gỡ. */
+  * {
+    box-shadow: none !important;
   }
 }
 

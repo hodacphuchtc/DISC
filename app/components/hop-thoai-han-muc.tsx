@@ -118,7 +118,7 @@ export function HopThoaiHanMuc({
               }
               onTiepTuc();
             }}
-            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {CHU_HAN_MUC.nutTiepTuc}
@@ -235,7 +235,7 @@ export function HopThoaiThuMuc({
               }
               onTiepTuc();
             }}
-            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="min-h-[44px] flex-1 rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {CHU_HAN_MUC.nutTiepTuc}

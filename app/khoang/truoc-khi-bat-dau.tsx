@@ -1,5 +1,6 @@
 "use client";
 
+import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { useState } from "react";
 
 import { HopGiaiThich } from "@/app/components/the-doi-tuong";
@@ -74,14 +75,7 @@ export function TruocKhiBatDau({
 
   return (
     <section className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
-      <button
-        type="button"
-        onClick={onQuayLai}
-        className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-        style={{ outlineColor: MAU.timCongNghe }}
-      >
-        ← {CHU_CHON.nutQuayLai}
-      </button>
+      <NutQuayLai nhan={CHU_CHON.nutQuayLai} onBam={onQuayLai} />
 
       {/* 🔴 Đặt TRƯỚC tên bộ đề, không nhét xuống cuối trang: người đọc phải biết vì sao
           mình đang nhìn một bản khác với thứ mình bấm, ngay lúc nhìn thấy nó. */}
@@ -122,7 +116,7 @@ export function TruocKhiBatDau({
           <button
             type="button"
             onClick={() => onBatDau(coSan)}
-            className="mt-5 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="mt-5 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
           >
             {CHU_TRUOC_KHI_BAT_DAU.nutBatDau}
@@ -165,7 +159,7 @@ export function TruocKhiBatDau({
 
         <button
           type="submit"
-          className="mt-6 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="mt-6 min-h-[48px] rounded-xl px-6 text-[16px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
           style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
         >
           {CHU_TRUOC_KHI_BAT_DAU.nutBatDau}

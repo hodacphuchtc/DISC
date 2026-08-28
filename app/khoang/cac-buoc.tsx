@@ -26,6 +26,8 @@ import { KhoangNhaMinh } from "./nha-minh";
 import { KhoangPhanTich } from "./phan-tich";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { MinhHoa } from "@/app/components/nhan-vat";
+import { KhoiGiuDuLieu } from "@/app/components/khoi-giu-du-lieu";
+import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { NhacSaoLuu, daNhacSaoLuu } from "@/app/components/nhac-sao-luu";
 import { KHUNG } from "@config/bo-cuc";
 import { CHU_BUOC, MA_BUOC, type MaBuoc } from "@config/disc-tu-dien";
@@ -44,6 +46,16 @@ type Dem = {
 export function KhoangCacBuoc() {
   const [dem, datDem] = useState<Dem | null>(null);
   const [dangMo, datDangMo] = useState<MaBuoc | null>(null);
+  /**
+   * Kho vừa bị THAY TRỌN từ khối giữ dữ liệu ở chân trang ⇒ dựng lại bước 1 từ đầu.
+   *
+   * 🔴 KHÔNG phải để nạp lại dữ liệu (bảng gia đình đã tự nghe kho qua `useKhoDoi`). Việc
+   * của nó là ĐÓNG màn kết quả đang mở: trước 18.2, ba nút nằm trong `KhoangNhaMinh` vốn
+   * `return` sớm khi mở màn kết quả, nên bấm *Xoá sạch* lúc đó là bất khả thi. Nay chúng ở
+   * ngoài, nên có thể xoá sạch trong lúc đang đọc kết quả — và nếu không dựng lại thì người
+   * dùng ngồi đọc kết quả của một bài vừa bị xoá. Cùng họ với lỗi `V3.1`.
+   */
+  const [lanDonKho, datLanDonKho] = useState(0);
   /** Người đang làm bài — có giá trị thì khoang DISC chiếm trọn màn, không hiện ba tấm. */
   const [dangLamCho, datDangLamCho] = useState<{
     tv: ThanhVien;
@@ -156,7 +168,7 @@ export function KhoangCacBuoc() {
         <div
           data-thu="chuc-mung"
           className="mt-5 flex items-center gap-4 rounded-2xl border px-4 py-4"
-          style={{ borderColor: MAU.timCongNghe, backgroundColor: "#F6F3FF" }}
+          style={{ borderColor: MAU.timCongNghe, backgroundColor: MAU.timRatNhat }}
         >
           <MinhHoa ma="chuc-mung" kichThuoc={96} />
           <div className="min-w-0 flex-1">
@@ -208,7 +220,7 @@ export function KhoangCacBuoc() {
               >
                 <span
                   aria-hidden="true"
-                  className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-white"
+                  className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
                   style={{ backgroundColor: lyDoKhoa ? "#B8B8C0" : MAU.timCongNghe }}
                 >
                   {i + 1}
@@ -243,6 +255,7 @@ export function KhoangCacBuoc() {
                 >
                   {ma === "nha-minh" && (
                     <KhoangNhaMinh
+                      key={lanDonKho}
                       onLamBai={(tv, cheDo) => datDangLamCho({ tv, ...(cheDo ? { cheDo } : {}) })}
                     />
                   )}
@@ -263,6 +276,17 @@ export function KhoangCacBuoc() {
         })}
       </ol>
       )}
+
+      {/* 🔴 BA NÚT GIỮ DỮ LIỆU NẰM NGOÀI CẢ HAI BƯỚC — và đó là cả ý đồ (18.2).
+          Chúng không thuộc riêng bước *Nhà mình*: bản sao lưu gói TRỌN máy (tên từng
+          người, mọi bài, mọi bản phân tích), và nút *Khôi phục* là thứ người ta đi tìm
+          vào đúng ngày họ đã mất dữ liệu — ngày tệ nhất để phải mở đúng bước 1 rồi cuộn
+          hết bảng gia đình mới thấy.
+
+          🔴 ĐẶT SAU DẤU `)}` , ngoài toán tử ba ngôi. Nhét vào trong nhánh có `<ol>` là để
+          ba nút biến mất lúc `dem === null` , và biến mất HẲN nếu việc đếm kho hỏng — đúng
+          lúc người ta cần nút *Khôi phục* nhất. Sao lưu không được phụ thuộc dữ liệu. */}
+      <KhoiGiuDuLieu onDonKho={() => datLanDonKho((n) => n + 1)} />
     </div>
   );
 }
@@ -283,14 +307,7 @@ function KhoangDangLamBai({
   return (
     <div>
       <div data-khong-in className="px-5 pt-8 md:px-12">
-        <button
-          type="button"
-          onClick={onXong}
-          className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-          style={{ outlineColor: MAU.timCongNghe }}
-        >
-          ← {CHU_BUOC.ten["nha-minh"]}
-        </button>
+        <NutQuayLai nhan={CHU_BUOC.ten["nha-minh"]} onBam={onXong} />
       </div>
       <KhoangDisc
         key={`${dangLamCho.tv.id}:${dangLamCho.cheDo ?? "tu-lam"}`}

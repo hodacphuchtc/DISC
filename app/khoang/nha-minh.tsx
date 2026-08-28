@@ -6,15 +6,18 @@
  * Thay màn *Bài đã làm* xếp theo thời gian (ADR-007). Bảng nằm ở
  * `bang-gia-dinh.tsx`; file này lo ba việc quanh nó.
  *
- * 🔴 NÚT SAO LƯU `.zip` VÀ NÚT XOÁ SẠCH ĐƯỢC MANG NGUYÊN SANG. Chúng là hàng rào chống
- * mất dữ liệu theo `DISC_BA.md` §10.2, không phải tính năng phụ của màn cũ. Thay một màn
- * mà đánh rơi hàng rào của màn đó là cách mất dữ liệu tốn công nhất: không ai thấy cho
- * tới ngày có người cần khôi phục.
+ * 🔴 HÀNG RÀO CHỐNG MẤT DỮ LIỆU ĐÃ DỜI RA CHÂN TRANG (18.2), KHÔNG BỊ ĐÁNH RƠI.
+ * Ba nút *Sao lưu · Khôi phục · Xoá sạch* nay ở `app/components/khoi-giu-du-lieu.tsx`, cắm
+ * ở cuối `cac-buoc.tsx` — ngoài cả hai bước. Lý do: chúng gói TRỌN máy chứ không thuộc
+ * riêng bước này, và nút *Khôi phục* là thứ người ta đi tìm vào đúng ngày đã mất dữ liệu,
+ * ngày tệ nhất để phải mở đúng bước 1 rồi cuộn hết bảng gia đình mới thấy.
+ * **Đừng kéo chúng về đây cho "gọn"** — chúng ở ngoài là có chủ đích, và
+ * `tests/khoi-giu-du-lieu.test.tsx` có cửa canh đúng điều đó.
  */
 
+import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { useCallback, useState } from "react";
 
-import { taiBanSaoLuuVeMay } from "@/app/tai-sao-luu";
 import { KhoangBangGiaDinh } from "./bang-gia-dinh";
 import { ChonBanKetQua } from "@/app/components/chon-ban-ket-qua";
 import { ManKetQua } from "./ket-qua";
@@ -22,8 +25,6 @@ import { HopThoaiHanMuc } from "@/app/components/hop-thoai-han-muc";
 import { KhoiSoSanh } from "@/app/components/khoi-so-sanh";
 import { GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
 import { CHU_M6 } from "@config/disc-tu-dien";
-import { KHUNG } from "@config/bo-cuc";
-import { MAU } from "@config/thuong-hieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
 import { MA_TRUC, type MaTruc } from "@modules/core/bo-de/kieu";
 import {
@@ -39,10 +40,8 @@ import {
   docThanhVien,
   donBaiThanhVien,
   luuThanhVien,
-  xoaSachTatCa,
   type BaiLamLuu,
 } from "@modules/core/luu-tru/kho-bai";
-import { docTuZip, ghiDeKho, type SoTuTep } from "@modules/core/luu-tru/khoi-phuc";
 
 export function KhoangNhaMinh({
   onLamBai,
@@ -60,11 +59,6 @@ export function KhoangNhaMinh({
     cacBan: readonly BaiLamLuu[];
     chon: number;
   } | null>(null);
-  const [dangSaoLuu, datDangSaoLuu] = useState(false);
-  const [dangDocTep, datDangDocTep] = useState(false);
-  /** Đã khôi phục xong bao nhiêu — hiện một dòng xác nhận, không hiện hộp thoại nữa. */
-  const [daKhoiPhuc, datDaKhoiPhuc] = useState<{ nguoi: number; bai: number } | null>(null);
-  const [loi, datLoi] = useState<string | null>(null);
   const [lanNap, datLanNap] = useState(0);
   /** Người vừa bấm *Làm bài* mà đã chạm trần — giữ lại để hỏi trước khi xoá gì. */
   const [choHanMuc, datChoHanMuc] = useState<{
@@ -147,89 +141,10 @@ export function KhoangNhaMinh({
     onLamBai?.(tv, cheDo);
   }
 
-  /**
-   * Người dùng vừa chọn một tệp .zip.
-   *
-   * 🔴 ĐỌC TRƯỚC, HỎI SAU, GHI CUỐI. Ba bước tách bạch, và bước GHI chỉ chạy khi người
-   * dùng đã nhìn thấy cả hai con số rồi bấm đồng ý. Mọi nhánh thất bại đều thoát ra mà
-   * KHÔNG đụng vào kho — đó là điều kiện để nút này không trở thành nút mất dữ liệu.
-   */
-  async function chonTepKhoiPhuc(tep: File | null | undefined) {
-    if (!tep || dangDocTep) return;
-    datDangDocTep(true);
-    datLoi(null);
-    datDaKhoiPhuc(null);
-    try {
-      const kq = await docTuZip(await tep.arrayBuffer());
-      if (!kq.ok) {
-        datLoi(
-          kq.loi === "khong-mo-duoc"
-            ? CHU_M6.loiKhongMoDuoc
-            : kq.loi === "khong-phai-so-disc"
-              ? CHU_M6.loiKhongPhaiSo
-              : CHU_M6.loiDuLieuHong,
-        );
-        return;
-      }
-      await hoiRoiGhiDe(kq.so);
-    } catch {
-      datLoi(CHU_M6.loiKhongMoDuoc);
-    } finally {
-      datDangDocTep(false);
-    }
-  }
-
-  async function hoiRoiGhiDe(so: SoTuTep) {
-    const [nguoiCu, baiCu] = await Promise.all([docThanhVien(), docTatCa()]);
-    const cau = CHU_M6.hoiGhiDe
-      .replace("{cu}", String(nguoiCu.length))
-      .replace("{baiCu}", String(baiCu.length))
-      .replace("{moi}", String(so.thanhVien.length))
-      .replace("{baiMoi}", String(so.bai.length));
-    const themNhac = so.banCu ? `\n\n${CHU_M6.nhacBanCu}` : "";
-    if (!window.confirm(cau + themNhac)) return;
-
-    await ghiDeKho(so);
-    datDaKhoiPhuc({ nguoi: so.thanhVien.length, bai: so.bai.length });
-    napLai();
-  }
-
-  async function taiSaoLuu() {
-    if (dangSaoLuu) return;
-    datDangSaoLuu(true);
-    datLoi(null);
-    try {
-      if (!(await taiBanSaoLuuVeMay())) datLoi(CHU_M6.loiSaoLuu);
-    } catch {
-      datLoi(CHU_M6.loiSaoLuu);
-    } finally {
-      datDangSaoLuu(false);
-    }
-  }
-
-  /**
-   * 🔴 DỌN TRỌN BA BẢNG, không chỉ bảng bài.
-   *
-   * Bản trước gọi `xoaSach()` — chỉ dọn BÀI, để nguyên tên từng người và các bản phân
-   * tích đã chạy. Người bấm tin là mình vừa xoá sạch máy, mà tên thật của cả nhà vẫn còn
-   * đó. Luật máy demo của giáo viên/sale dựa thẳng vào nút này.
-   */
-  async function xoaTatCa() {
-    if (!window.confirm(CHU_M6.hoiXoaSach)) return;
-    await xoaSachTatCa();
-    napLai();
-  }
-
   if (xemSoSanh) {
     return (
       <section className="max-w-2xl px-5 py-8 md:px-12 md:py-12">
-        <button
-          type="button"
-          onClick={() => datXemSoSanh(null)}
-          className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4"
-        >
-          ← {CHU_M6.nutDong}
-        </button>
+        <NutQuayLai nhan={CHU_M6.nutDong} onBam={() => datXemSoSanh(null)} />
         <div className="mt-6">
           <KhoiSoSanh ten={xemSoSanh.ten} ketQua={xemSoSanh.ketQua} />
         </div>
@@ -242,14 +157,7 @@ export function KhoangNhaMinh({
     return (
       <div>
         <div data-khong-in className="px-5 pt-8 md:px-12">
-          <button
-            type="button"
-            onClick={() => datDangXem(null)}
-            className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{ outlineColor: MAU.timCongNghe }}
-          >
-            ← {CHU_M6.nutDong}
-          </button>
+          <NutQuayLai nhan={CHU_M6.nutDong} onBam={() => datDangXem(null)} />
         </div>
         {/* 🔴 Dải chọn nằm NGOÀI `ManKetQua` và ở TRÊN nó — màn kết quả vốn đã là màn
             dài nhất sản phẩm; nhét thêm một dải điều hướng vào giữa ruột nó là chôn dải
@@ -301,59 +209,6 @@ export function KhoangNhaMinh({
         />
       )}
 
-      <div data-thu="giu-du-lieu" className={`${KHUNG.trang} px-5 pb-12 md:px-12`}>
-        <div className="flex flex-wrap gap-2.5">
-          <button
-            type="button"
-            onClick={() => void taiSaoLuu()}
-            className="min-h-[44px] rounded-xl border px-4 text-[14px] font-semibold"
-            style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
-          >
-            {CHU_M6.nutSaoLuu}
-          </button>
-          {/* 🔴 Ô chọn tệp ẩn sau một nhãn trông như nút: `<input type="file">` không
-              tạo kiểu được cho tử tế, mà đây là nút người ta chỉ bấm vào ngày họ đã mất
-              dữ liệu — ngày tệ nhất để phải đoán xem cái gì bấm được. */}
-          <label
-            className="inline-flex min-h-[44px] cursor-pointer items-center rounded-xl border px-4 text-[14px] font-semibold"
-            style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
-          >
-            {dangDocTep ? CHU_M6.dangDocTep : CHU_M6.nutKhoiPhuc}
-            <input
-              type="file"
-              accept=".zip,application/zip"
-              className="sr-only"
-              onChange={(e) => {
-                const tep = e.target.files?.[0];
-                // Xoá giá trị để chọn LẠI CÙNG một tệp vẫn kích hoạt được onChange.
-                e.target.value = "";
-                void chonTepKhoiPhuc(tep);
-              }}
-            />
-          </label>
-          <button
-            type="button"
-            onClick={() => void xoaTatCa()}
-            className="min-h-[44px] rounded-xl px-3 text-[14px] text-neutral-600"
-          >
-            {CHU_M6.nutXoaSach}
-          </button>
-        </div>
-
-        {daKhoiPhuc && (
-          <p data-thu="da-khoi-phuc" role="status" className="mt-2 text-[13px] font-semibold" style={{ color: MAU.timCongNghe }}>
-            {CHU_M6.daKhoiPhuc
-              .replace("{nguoi}", String(daKhoiPhuc.nguoi))
-              .replace("{bai}", String(daKhoiPhuc.bai))}
-          </p>
-        )}
-        {loi && (
-          <p role="alert" className="mt-2 text-[13px]" style={{ color: MAU.camDamChoChu }}>
-            {loi}
-          </p>
-        )}
-        <p className="mt-3 text-[13px] leading-relaxed text-neutral-500">{CHU_M6.nhacMatDuLieu}</p>
-      </div>
     </>
   );
 }

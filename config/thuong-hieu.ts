@@ -25,6 +25,16 @@ export const MAU = {
    * Sắc đậm này (≈6,9:1) dành RIÊNG cho chữ. Viền và mảng màu vẫn dùng cam thương hiệu.
    */
   camDamChoChu: "#8A4B00",
+  /**
+   * 🔴 ĐỎ CẢNH BÁO — dành RIÊNG cho hành động XOÁ KHÔNG HOÀN TÁC.
+   * Đo được **6,54:1** trên nền trắng, qua ngưỡng chữ thường 4,5:1.
+   * (`#D32F2F` chỉ 4,98 — sát ngưỡng quá, một lần chỉnh nhẹ là rơi.)
+   *
+   * KHÔNG dùng làm nền mảng: Brand DNA cấm nền tối nặng, và một nút nền đỏ đặc đọc lên
+   * như một lời đe doạ chứ không phải một lựa chọn. Viền đỏ nói *"cẩn thận"*; nền đỏ đặc
+   * nói *"bấm tôi"* — mà đây là nút xoá sạch cả nhà, không lấy lại được.
+   */
+  doCanhBao: "#B3261E",
   /** Nền của mục đang mở trên thanh bên (DISC_BA.md §5.1). */
   timRatNhat: "rgba(97, 11, 138, 0.09)",
   muc: "#171717",

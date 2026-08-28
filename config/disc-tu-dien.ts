@@ -686,7 +686,7 @@ export const CHU_M6 = {
   trongMoi: "Làm một bài ở mục DISC, kết quả sẽ hiện ở đây.",
   nutMoLai: "Mở lại",
   nutXoa: "Xoá",
-  nutXoaSach: "Xoá sạch dữ liệu trên máy này",
+  nutXoaSach: "Xoá sạch DISC trên máy này",
   nutSaoLuu: "Sao lưu ra .zip",
   dangSaoLuu: "Đang nén…",
   loiSaoLuu: "Không tạo được file sao lưu. Thử lại giúp mình nhé.",

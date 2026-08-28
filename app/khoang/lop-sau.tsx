@@ -189,7 +189,7 @@ export function LopSauKetQua({
             type="button"
             aria-expanded={moBoMe}
             onClick={() => datMoBoMe(!moBoMe)}
-            className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
           >
             {moBoMe ? CHU_BA_BAN.chanDong : CHU_BA_BAN.chanNut}
@@ -355,7 +355,7 @@ export function LopSauKetQua({
               <button
                 type="button"
                 onClick={onLamBoPhuHuynh}
-                className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
                 style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
               >
                 {CHU_PHONG_CACH.moiNut}

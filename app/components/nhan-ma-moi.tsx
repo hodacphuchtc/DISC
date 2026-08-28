@@ -80,7 +80,7 @@ export function NhanMaMoi({
         <button
           type="button"
           onClick={mo}
-          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+          className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
           style={{ backgroundColor: MAU.timCongNghe }}
         >
           {CHU_MA_MOI.nutMo}
@@ -131,7 +131,7 @@ export function NhanMaMoi({
           <button
             type="button"
             onClick={() => void luu()}
-            className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+            className="mt-3 min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {CHU_MA_MOI.nutLuu}

@@ -800,7 +800,7 @@ nhất ra — **và không bao giờ xoá im lặng, phải hỏi**.
 | 🔴 **Test luôn dùng tên BỊA** | Luật trong `CLAUDE.md`. Không lấy bài làm thật làm dữ liệu mẫu, kể cả một lần. |
 | **Không thu ngày sinh** | Chỉ hỏi **lớp** (1–12) và tuổi con ở nhánh QS, đều chỉ dùng để định tuyến và phân lứa nội dung. Tuổi **không bao giờ suy từ lớp** — lớp 7 có cả bé 12 lẫn bé 13, suy ra rồi lưu như thể đã hỏi là bịa dữ liệu. |
 | **Không rời máy** | Lưu `localStorage` (bài đang làm dở) + `IndexedDB` (bài đã xong). Không fetch, không analytics trên câu trả lời, không gửi email. |
-| **Xoá được** | Màn M6 có nút xoá từng bài và nút **"Xoá sạch dữ liệu trên máy này"**, có hỏi lại. |
+| **Xoá được** | Màn M6 có nút xoá từng bài và nút **"Xoá sạch DISC trên máy này"**, có hỏi lại. |
 | **Sao lưu đọc thẳng nguồn** | Nút xuất `.zip` phải đọc **thẳng IndexedDB**, không đọc danh sách đang lọc trên màn hình. *(Bẫy này đã cắn TAO_ANH ngày 24/08: người dùng bấm Sao lưu ở một khoang, nhận file trông như đủ, xoá dữ liệu duyệt web, rồi mất sạch phần kia.)* |
 | **Cảnh báo mất dữ liệu** | Thẻ ở đáy thanh bên: *"Xoá dữ liệu duyệt web là mất. Sao lưu ra .zip trước khi dọn máy."* |
 

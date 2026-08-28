@@ -97,7 +97,7 @@ export function NutTaiAnh({
         type="button"
         onClick={() => void taiVe()}
         disabled={dangVe}
-        className="min-h-[48px] rounded-xl px-6 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60"
+        className="min-h-[48px] rounded-xl px-6 text-[15px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
         style={{ backgroundColor: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
       >
         {dangVe ? CHU_M4.dangVeAnh : CHU_M4.nutTaiAnh}

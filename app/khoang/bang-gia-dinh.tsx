@@ -144,7 +144,7 @@ export function KhoangBangGiaDinh({
             <button
               type="button"
               onClick={() => datDangSua("moi")}
-              className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white"
+              className="min-h-[44px] rounded-xl px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none disabled:shadow-none"
               style={{ backgroundColor: MAU.timCongNghe }}
             >
               {CHU_BANG_GIA_DINH.nutThem}
