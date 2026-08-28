@@ -4,12 +4,14 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**28/08/2026 (lượt 3) — GĐ16 + GĐ17 xong trọn. `PLAN_V2.md` HẾT VIỆC MÁY.**
+**28/08/2026 (lượt 4) — GĐ16 + GĐ17 xong trọn; GĐ18 vừa BA, CHƯA thi công.**
 
 **1. Vừa xong.** GĐ17 `17.1`–`17.7`. **1.366 test xanh**, `npm run kiem` + `build` xanh,
 gói chính **290 KB gzip** (trần 300). Đã push `814cb40`, CI xanh.
 
-**2. Đang dở.** Không còn hạng mục máy nào. Sổ còn hai ô: `V0.1`, `V0.2` — cả hai chờ người.
+**2. Đang dở.** 🆕 **GĐ18 vừa BA, 9 hạng mục máy, chưa làm ô nào** (~3,3 ngày) —
+ba nút giữ dữ liệu ra chân trang · nút Xoá viền đỏ · nút lùi rõ nét · hệ độ nổi. Ngoài ra sổ
+còn hai ô cũ `V0.1`, `V0.2` — cả hai chờ người, GĐ18 không gỡ được ô nào trong đó.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
 `V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · duyệt
@@ -646,6 +648,304 @@ disc-sao-luu.zip
 
 🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
 thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`.
+
+---
+
+## 🆕 GIAI ĐOẠN 18 — Cụm giữ dữ liệu ra chân trang · Nút rõ nét · Hệ độ nổi
+
+> **Chốt 28/08/2026** sau khi chủ dự án bấm thử bản thật vừa dựng xong GĐ17.
+> **Toàn bộ GĐ18 là việc MÁY** — không hạng mục nào chờ người hay dịch vụ ngoài, nên không
+> hạng mục nào có dòng `(e) chặn:`.
+
+**Bốn việc chủ dự án nêu:**
+
+1. Nút **"Xoá sạch dữ liệu trên máy này"** trông như chữ thường, không nhìn ra là nút bấm.
+   Và chữ phải đổi thành **"Xoá sạch DISC trên máy này"**.
+2. **Ba nút giữ dữ liệu** (Sao lưu · Khôi phục · Xoá sạch) đang bị chôn trong bước 1 —
+   chuyển ra **chân trang, sau cả hai bước**, cách ra một khoảng.
+3. **Nút lùi lại** ở mỗi bước quá mờ, chưa rõ nét — làm thành **nút tím** dễ thấy.
+4. Giao diện cần **nổi khối, bắt mắt, chuyên nghiệp hơn** trên cả web lẫn điện thoại.
+
+### 🔴 MỘT PHẦN YÊU CẦU ĐÃ CÓ SẴN — ĐỪNG XÂY LẠI
+
+| Thứ | Trạng thái thật |
+| --- | --- |
+| Nút *Xoá sạch* | **ĐÃ là `<button>`** ([nha-minh.tsx:334](app/khoang/nha-minh.tsx#L334)) — chỉ thiếu viền và nền. Đừng bọc lại từ đầu |
+| Dọn trọn ba bảng khi xoá | `xoaSachTatCa()` đã đúng từ `V3.1`, có [luu-tru.test.ts:187](tests/luu-tru.test.ts#L187) canh |
+| Tắt chuyển động | **ĐÃ có HAI lớp**: `motion-reduce:` tại chỗ, cộng luật quét-tất-cả ở [globals.css:150-159](app/globals.css#L150) |
+| Bóng đổ | Có đúng **một** `boxShadow`, và nó là vòng viền `inset` ở [the-doi-tuong.tsx:32](app/components/the-doi-tuong.tsx#L32) — **không phải** độ nổi. Hệ độ nổi là quy ước MỚI |
+| Bảng gia đình tự nạp lại | `bang-gia-dinh.tsx:99` đã `useKhoDoi`; `xoaSachTatCa()` và `ghiDeKho()` đều bắn `baoDoi()` ⇒ **đừng truyền `napLai` xuống**, dựng đường báo thứ hai là đúng lỗi [dung-kho-doi.ts](app/dung-kho-doi.ts) sinh ra để chữa |
+
+### 🔴 BỐN QUYẾT ĐỊNH ĐÃ CHỐT — không hỏi lại
+
+| Điểm | Chốt | Vì sao |
+| --- | --- | --- |
+| Vị trí ba nút | **Chân trang, sau cả hai bước** | Chúng gói TRỌN máy, không thuộc riêng bước *Nhà mình*; và nút *Khôi phục* là thứ người ta tìm vào đúng ngày đã mất dữ liệu — ngày tệ nhất để phải mở đúng bước 1 mới thấy |
+| Nhấp nháy nút lùi | **KHÔNG** — làm nổi bằng hình khối | Chủ dự án nêu ý nhấp nháy, nghe lý do rồi chốt bỏ. Cái gì nháy mãi thì thành nền, và người đọc thôi nhìn — đúng lý do `V4.2` chốt *"nhắc một lần rồi thôi"* |
+| Mức độ nổi | **Nổi khối rõ, vẫn sạch** — bóng ba lớp, nút lún khi bấm | Bóng đen của Tailwind là bóng trung tính; sản phẩm này ám tím, nên bóng dùng `rgba(47,12,66,…)` cho cùng tông |
+| Nút Xoá | **Viền đỏ, nền TRẮNG** | Viền đỏ nói *"cẩn thận"*; nền đỏ đặc nói *"bấm tôi"*. Đây là nút xoá sạch cả nhà, không lấy lại được |
+
+### 🔴 BA HẠNG MỤC RỦI RO CAO — XẾP SỚM NHẤT CÓ CHỦ ĐÍCH
+
+| Rủi ro | Vì sao không để cuối |
+| --- | --- |
+| **Dời cụm ba nút** (`18.2`) | Helper `bamSaoLuu()` ở [sao-luu-tron-luong.test.tsx:129](tests/sao-luu-tron-luong.test.tsx#L129) đang `render(<KhoangNhaMinh/>)` — **10 cửa đỏ cùng lúc** nếu nút rời đi. Cộng một bẫy thứ hai: khối mới lỡ chứa chữ *"Nhà mình"* thì [duong-vao-bai.ts:44](tests/duong-vao-bai.ts#L44) ném *"found multiple elements"*, đỏ lan sang **mọi** test gọi `moBuocNhaMinh()`. Đây là hạng mục duy nhất của GĐ18 có thể làm đỏ hàng loạt ⇒ làm đầu, khi còn tỉnh táo |
+| **Chặn bóng khi IN** (`18.4`) | [globals.css:118-121](app/globals.css#L118) áp `print-color-adjust: exact` cho `*` — thêm bóng mà quên chặn thì **mỗi thẻ in ra một vệt xám**, tốn mực, bản PDF gửi phụ huynh trông bẩn. Hậu quả **lộ muộn nhất**: chỉ khi có người bấm In. ⇒ Chặn TRƯỚC khi thêm dòng bóng đầu tiên |
+| **Tên trợ năng nút lùi** (`18.7`) | [lam-bai-tu-the.test.tsx:234](tests/lam-bai-tu-the.test.tsx#L234) khoá nút bằng `RegExp("← " + CHU_BUOC.ten["nha-minh"])`. Bọc mũi tên vào `aria-hidden` cho "sạch DOM" là làm tên trợ năng còn `"Nhà mình"` ⇒ đỏ, **và** người dùng trình đọc màn hình mất luôn dấu hiệu đây là nút LÙI |
+
+---
+
+## GIAI ĐOẠN 18A — Ba nút ra chân trang, nút Xoá thành nút đỏ
+
+**Ước lượng: 1,15 ngày**
+
+### DEMO CUỐI GĐ 18A
+> Cuộn xuống **chân trang** → thấy cụm ba nút, cách bước 2 một khoảng rõ và một đường kẻ;
+> nút thứ ba **viền đỏ, chữ đỏ, nền trắng**, đọc là *"Xoá sạch DISC trên máy này"*, tách
+> sang phải trên máy tính. Mở **bước 1** → ba nút **không còn ở trong đó**. Bấm *Sao lưu ra
+> .zip* → nhãn đổi sang *"Đang nén…"* rồi tệp rơi xuống, mở ra vẫn có thư mục tên người +
+> PDF. Mở màn *Xem kết quả* của một người rồi bấm *Xoá sạch* → **màn kết quả tự đóng**,
+> không còn ngồi đọc kết quả của một bài vừa bị xoá.
+
+---
+
+- [ ] **18.1 — Đổi chữ nút Xoá + thêm màu đỏ vào bảng màu**
+  - **(a)** [disc-tu-dien.ts:689](config/disc-tu-dien.ts#L689) `nutXoaSach` → `"Xoá sạch DISC
+    trên máy này"`; sửa kèm `docs/BA/DISC_BA.md:803` cho khỏi lệch tài liệu. Thêm
+    `doCanhBao: "#B3261E"` vào `MAU` ở [thuong-hieu.ts](config/thuong-hieu.ts) — **đo được
+    6,54:1 trên trắng** (`#D32F2F` chỉ 4,98, sát ngưỡng quá, một lần chỉnh nhẹ là rơi).
+    🔴 **Chỉ sửa file TS, KHÔNG đụng `@theme` của `globals.css`** — khối đó chỉ để Tailwind
+    sinh lớp `text-*`/`bg-*`, mà màu này dùng qua `style={{}}` như `camDamChoChu` đang dùng.
+  - **(b)** Chưa nhìn thấy gì trên màn — đây là hạng mục dọn đường. Kiểm bằng cách mở bước 1,
+    nhìn nút cuối cùng: chữ đã đổi thành *"Xoá sạch DISC trên máy này"*, còn dáng vẫn cũ.
+  - **(c)** `npx vitest run tests/m6-lich-su.test.tsx tests/mau-va-chuyen-dong.test.tsx` —
+    phải **xanh** (mọi test đi qua hằng `CHU_M6.nutXoaSach` nên hai đầu đổi cùng lúc).
+  - **(d)** 0,15 ngày.
+
+- [ ] 🔴 **18.2 — RỦI RO CAO: tách `KhoiGiuDuLieu` và dời ra chân trang**
+  - **(a)** Bốn bước, **theo đúng thứ tự này**, vì nó giữ cho 10 cửa không đỏ một giây nào:
+    **(1)** Tạo `app/components/khoi-giu-du-lieu.tsx` → `KhoiGiuDuLieu({ onDonKho })`, chép
+    nguyên bốn state (:63,64,66,67), bốn hàm (:150-221) **kèm cả hai khối chú thích 🔴
+    :150-156 và :210-216**, và khối JSX :304-356 — *chưa ai render nó*.
+    **(2)** Trỏ bốn chỗ của [sao-luu-tron-luong.test.tsx](tests/sao-luu-tron-luong.test.tsx)
+    sang component mới (import :20 · `bamSaoLuu()` :129 · lối vào lặp lại :261 · tên biến
+    `cayBuoc1` :312 nay là tên nói dối) — **13 cửa phải xanh trong khi bản cũ vẫn còn**;
+    đó là bằng chứng bản mới tương đương bản cũ.
+    **(3)** Gỡ khối + state + hàm + sáu import chết khỏi `nha-minh.tsx`, sửa chú thích đầu
+    file :9-12 (nó đang ghi *"nút được mang nguyên sang"* — sau khi chuyển là nói dối).
+    **(4)** Cắm `<KhoiGiuDuLieu onDonKho={…}/>` vào [cac-buoc.tsx](app/khoang/cac-buoc.tsx)
+    **giữa dòng 265 và 266** — tức SAU dấu `)}`, ngoài toán tử ba ngôi; chèn vào trong nhánh
+    :186-264 là để ba nút biến mất lúc `dem === null` và biến mất hẳn nếu việc đếm kho hỏng,
+    đúng lúc người ta cần nút *Khôi phục* nhất. Cách ra `mt-14` + `border-t` + `pt-8`.
+    Đổi kiểu nút Xoá sang viền đỏ + `sm:ml-auto`; thêm `data-thu="hang-nut"`,
+    `data-khong-in`; dùng nốt `CHU_M6.dangSaoLuu` cho lúc đang nén.
+    🔴 **Ba thứ cấm đổi khi bê sang:** nút *Khôi phục* vẫn là `<label>` bọc
+    `<input type="file" class="sr-only">` · `xoaTatCa()` vẫn gọi `xoaSachTatCa()` chứ không
+    `xoaSach()` · sao lưu vẫn đi qua `taiBanSaoLuuVeMay()`.
+    🔴 **Khối mới cấm chứa chữ "Nhà mình"** (bẫy `duong-vao-bai`). Tiêu đề khác chữ đó thì được.
+    🔴 **`onDonKho` chữa một lỗi MỚI** mà chính việc dời chỗ tạo ra: hôm nay ba nút *vắng
+    mặt khỏi DOM* khi mở màn kết quả (`nha-minh` return sớm ở :223 và :240), nên bấm *Xoá
+    sạch* lúc đó là bất khả thi. Đưa ra ngoài là gỡ tấm chắn tình cờ ấy ⇒ phải remount
+    `<KhoangNhaMinh key={lanDonKho}>`.
+  - **(b)** Cuộn xuống **chân trang** → thấy ba nút, nút thứ ba viền đỏ. Mở **bước 1** → ba
+    nút không còn ở đó. Bấm *Sao lưu ra .zip* → nhãn đổi *"Đang nén…"*, tệp `.zip` rơi
+    xuống, giải nén ra **vẫn có thư mục tên người và PDF**. Bấm *Xem kết quả* của một người,
+    rồi bấm *Xoá sạch DISC* và xác nhận → **màn kết quả đóng lại**, về lưới thẻ trống.
+  - **(c)** Cả bộ. Canh riêng: `npx vitest run tests/sao-luu-tron-luong.test.tsx
+    tests/lam-bai-tu-the.test.tsx tests/dieu-huong.test.tsx tests/nhac-sao-luu.test.tsx`.
+    ⚠️ Chỗ :261 tinh vi nhất — nó `vi.resetModules()` + `vi.doMock("@config/disc-nguong")`
+    rồi `import()` động; sửa thiếu một vế thì **cửa vẫn XANH nhưng canh nhầm module**. Phải
+    cố tình bỏ `vi.doMock` để thấy nó ĐỎ, rồi mới tin nó xanh.
+  - **(d)** 0,6 ngày.
+
+- [ ] **18.3 — Bảy cửa kiểm cho khối mới**
+  - **(a)** `tests/khoi-giu-du-lieu.test.tsx`: **G1** nút Xoá là `<button>` **có viền**,
+    `bg-white`, `min-h-[44px]`, `borderColor` khớp `MAU.doCanhBao` · **G2** đủ **ba** nút,
+    đếm bằng `textContent` của `[data-thu="hang-nut"]` chứ **không** `getAllByRole("button")`
+    (nút Khôi phục cố ý là `<label>`, đếm role ra 2 và cửa đỏ vì một thiết kế đúng) ·
+    **G3** `CHU_M6.nutXoaSach` chứa `"DISC"` **và** `"máy này"` — không `toBe()` nguyên câu,
+    đó là chép lại hằng số · 🔴 **G4** bấm Xoá sạch ⇒ kho sạch **cả ba bảng** ·
+    **G5** khối không nằm trong `[data-thu="than-buoc"]`, đứng **sau** tấm bước cuối
+    (`compareDocumentPosition`), và **thu cả hai bước lại vẫn còn** · **G6** có
+    `data-khong-in` · **G7** xoá sạch lúc đang xem kết quả ⇒ màn kết quả đóng.
+    🔴 **G4 là cửa quan trọng nhất nhóm.** [luu-tru.test.ts:187](tests/luu-tru.test.ts#L187)
+    canh *hàm* `xoaSachTatCa()`, không canh *cái nút có gọi đúng hàm đó không*. Chừng nào
+    handler còn nằm yên thì lỗ hổng vô hại; **chuyển handler sang file khác là đúng lúc nó
+    cắn** — ai gõ lại `xoaSach()` (bản dọn thiếu hai phần ba, `V3.1`) thì `luu-tru` vẫn xanh trơn.
+  - **(b)** Không phải bấm gì. Chạy lệnh ở (c) và **đọc `7 passed`**.
+  - **(c)** `npx vitest run tests/khoi-giu-du-lieu.test.tsx`. 🔴 **Mỗi cửa phải được làm ĐỎ
+    một lần có chủ đích rồi mới sửa lại** — cửa chưa từng đỏ là cửa chưa biết mình canh gì
+    (bài học `16.9`).
+  - **(d)** 0,4 ngày.
+
+---
+
+## GIAI ĐOẠN 18B — Hệ độ nổi, áp một lần ở CSS
+
+**Ước lượng: 1 ngày**
+
+### DEMO CUỐI GĐ 18B
+> Mở trang trên máy tính → **thẻ từng người và hai tấm bước nổi lên khỏi nền**, có bóng mềm
+> ám tím chứ không xám xịt; hộp thoại *Thêm người* nổi hẳn trên lớp phủ. Thu cửa sổ về
+> **320px** → bóng thu lại một nấc, **không** thành vệt nhoè. Bấm `Cmd+P` xem trước bản in →
+> **không một vệt xám nào**, và **không** thấy ba nút chân trang trên giấy.
+
+---
+
+- [ ] 🔴 **18.4 — RỦI RO CAO: chặn bóng khi in, TRƯỚC khi thêm bóng nào**
+  - **(a)** Thêm `* { box-shadow: none !important; }` vào **cuối** khối `@media print` của
+    [globals.css](app/globals.css). Đây là **ngoại lệ duy nhất** cho lệnh *"đừng đụng khối
+    print"*, và là phần **thêm**, không sửa dòng nào đang có.
+    🔴 Vì sao làm TRƯỚC: [globals.css:118-121](app/globals.css#L118) áp
+    `print-color-adjust: exact` cho `*`. Thêm bóng trước rồi chặn sau là mở một cửa sổ thời
+    gian mà bản in đang hỏng — và hỏng theo kiểu **không ai thấy** cho tới khi có người bấm In.
+  - **(b)** Chưa nhìn thấy gì (chưa có bóng nào). Đây là mũ bảo hiểm đội trước khi leo.
+  - **(c)** `npx vitest run tests/ban-in.test.ts` — phải xanh.
+  - **(d)** 0,1 ngày.
+
+- [ ] **18.5 — Sáu token độ nổi + áp cho khối bằng `data-thu`**
+  - **(a)** Trong `@theme` của [globals.css](app/globals.css): `--shadow-noi-1` (khối tĩnh) ·
+    `--shadow-noi-2` (bấm được / đang mở) · `--shadow-noi-3` (panel trên lớp phủ) ·
+    `--shadow-lun` (`inset`, cho `:active`) · `--shadow-nut-chinh` (có
+    `inset 0 1px 0 rgba(255,255,255,.28)` — chính là **viền sáng mép trên**, chỉ có nghĩa
+    trên mặt đặc) · và `--shadow-*: initial` để **xoá thang bóng mặc định của Tailwind**.
+    Mỗi nấc **ba lớp** (một bóng 1px sắc mép, một bóng vừa, một bóng dài rất nhạt), màu
+    `rgba(47,12,66,…)`.
+    Rồi một khối `@layer components` móc vào `data-thu` sẵn có: `the-thanh-vien` · `the-cau` ·
+    `chuc-mung` · `con-thieu-ai` · `nhac-sao-luu` · `khoi-ma-moi` · `khoi-so-sanh` ·
+    `giu-du-lieu` (nấc 1) · `tam-buoc` (nấc 2) · năm panel hộp thoại (nấc 3). Thêm
+    `@media (width < 40rem)` hạ `tam-buoc` về nấc 1. `thanh-ben.tsx:73` thêm
+    `shadow-noi-1 md:shadow-none`. Nới `#F6F3FF` gõ cứng ở `cac-buoc.tsx:159` về `MAU.timRatNhat`.
+    🔴 **Phải bọc `@layer components`.** Với `@import "tailwindcss"`, luật viết trần nằm
+    NGOÀI layer và thắng cả `@layer utilities` ⇒ `shadow-none` tại chỗ sẽ vô hiệu.
+    🔴 Bước này **0 file `.tsx` phải sửa** (trừ `thanh-ben` một chuỗi) mà đổi phần lớn hiệu
+    quả thị giác — cùng kỹ thuật khối `@media print` đã dùng.
+  - **(b)** Mở http://localhost:3100 trên máy tính: thẻ từng người và hai tấm bước **nổi
+    lên khỏi nền**. Bấm *Thêm người* → hộp thoại nổi hẳn trên lớp phủ. Thu cửa sổ về 320px →
+    bóng của tấm bước **nhạt hẳn đi**, không thành vệt nhoè. `Cmd+P` → **không vệt xám nào**.
+  - **(c)** Cả bộ (đặc biệt `bo-cuc` · `be-ngang` · `mau-va-chuyen-dong`).
+  - **(d)** 0,5 ngày.
+
+- [ ] **18.6 — Cửa kiểm cho hệ độ nổi**
+  - **(a)** `tests/do-noi.test.tsx`: sáu token tồn tại (gồm `--shadow-*: initial`) ·
+    🔴 **cửa hai chiều** — mọi token khai ra phải có nơi dùng, **và** mọi class
+    `shadow-<tên>` trong `app/` phải có token tương ứng · cấm `shadow-[` (arbitrary) và
+    `shadow-sm|md|lg|xl|2xl` · khối print chứa `box-shadow: none !important` · mọi dòng có
+    `hover:shadow-` phải có `active:shadow-` **cùng dòng** · 🔴 **cửa hai chiều thứ hai** —
+    mọi `[data-thu="X"]` trong `globals.css` phải tồn tại `data-thu="X"` trong `app/`.
+    Thêm `tuongPhan(MAU.doCanhBao, TRẮNG) ≥ 4.5` vào
+    [mau-va-chuyen-dong.test.tsx:77-85](tests/mau-va-chuyen-dong.test.tsx#L77).
+    🔴 Vì sao cần cửa hai chiều: **Tailwind im lặng bỏ qua class `shadow-*` không tồn tại**
+    — gõ sai tên thì không lỗi, không bóng, không ai biết. Và `data-thu` nay gánh **hai**
+    việc (móc CSS và móc test); đổi tên một cái là vỡ cả hai, im lặng.
+  - **(b)** Không phải bấm gì. Chạy lệnh ở (c), đọc số cửa xanh.
+  - **(c)** `npx vitest run tests/do-noi.test.tsx tests/mau-va-chuyen-dong.test.tsx`.
+  - **(d)** 0,4 ngày.
+
+---
+
+## GIAI ĐOẠN 18C — Nút lùi rõ nét, và nút lún khi bấm
+
+**Ước lượng: 1,15 ngày**
+
+### DEMO CUỐI GĐ 18C
+> Vào một bài rồi bấm lùi lại → nút lùi nay là **nút tím có viền, có khối**, không còn là
+> chữ xám gạch chân; **bấm xuống thấy nó lún**. Bấm thử các nút chính (*Làm bài*, *Tiếp*) →
+> cũng lún. Bật **Giảm chuyển động** của macOS rồi bấm lại mọi nút → **không hiệu ứng nào**,
+> nút vẫn dùng bình thường.
+
+---
+
+- [ ] 🔴 **18.7 — RỦI RO CAO: `NutQuayLai`, làm chỗ khoá nhãn TRƯỚC**
+  - **(a)** Tạo `app/components/nut-quay-lai.tsx` → `NutQuayLai({ nhan, onBam, khongIn?,
+    themLop? })`. Từ *chữ gạch chân* thành **chip có hình khối**: nền trắng · viền `1.5px`
+    tím · chữ tím `font-semibold` 14px (nâng từ 13) · `rounded-xl` · `min-h-[44px] px-4` ·
+    `shadow-noi-1` · rê chuột `shadow-noi-2` · bấm `translate-y-px` + `shadow-lun` · focus
+    ring tím. Rồi di dời **đúng một chỗ**: [cac-buoc.tsx:286](app/khoang/cac-buoc.tsx#L286).
+    🔴 **Mũi tên `←` phải nằm TRONG node chữ** — không `aria-hidden`, không đổi sang SVG.
+    Component tự gắn `"← "`, nơi gọi **không** tự gõ.
+    🔴 Đặt ở `app/components/` chứ không `config/`: nó có JSX, mà `config/` thuộc tầng lõi và
+    [ranh-gioi-hai-tang.test.ts](tests/ranh-gioi-hai-tang.test.ts) cấm React ở đó.
+    🔴 `transition-*` và `motion-reduce:transition-none` phải **cùng một dòng nguồn** —
+    [mau-va-chuyen-dong.test.tsx:113-128](tests/mau-va-chuyen-dong.test.tsx#L113) soi theo
+    TỪNG DÒNG. Và `transform` phải nằm trong `transition-[…]`, nếu không nút *nhảy* chứ
+    không *lún*.
+  - **(b)** Đang làm một bài → nhìn nút *← Nhà mình* ở góc trên: nay là **nút tím có viền**;
+    rê chuột thấy nổi lên, bấm giữ thấy **lún xuống**. Bấm nó → vẫn quay về đúng chỗ cũ.
+  - **(c)** `npx vitest run tests/lam-bai-tu-the.test.tsx` — chỗ duy nhất khoá nhãn; xanh ở
+    đây thì sáu chỗ còn lại chắc chắn xanh. Cộng một cửa mới trong `do-noi.test.tsx`: ký tự
+    `←` chỉ được xuất hiện trong `nut-quay-lai.tsx`, và
+    `getByRole("button", {name: /^← Nhà mình$/u})` chặn đúng bẫy `aria-hidden` ngay tại
+    component thay vì chờ một test luồng xa phát hiện.
+  - **(d)** 0,4 ngày.
+
+- [ ] **18.8 — Sáu chỗ lùi lại còn lại + nút lùi trong bài + thanh bên**
+  - **(a)** Di dời sang `NutQuayLai`: [nha-minh.tsx:245](app/khoang/nha-minh.tsx#L245) ·
+    [nha-minh.tsx:226](app/khoang/nha-minh.tsx#L226) ·
+    [ban-tong-hop.tsx:172](app/khoang/ban-tong-hop.tsx#L172) ·
+    [ban-tong-hop.tsx:223](app/khoang/ban-tong-hop.tsx#L223) ·
+    [truoc-khi-bat-dau.tsx:80](app/khoang/truoc-khi-bat-dau.tsx#L80) ·
+    [vung-lech.tsx:113](app/khoang/vung-lech.tsx#L113).
+    Việc gom vá luôn ba khiếm khuyết đang có: **3/7 thiếu focus ring**, **4/7 thiếu
+    `data-khong-in`**, và `vung-lech` gõ cứng chữ `"Quay lại"` thay vì lấy từ từ điển.
+    🔴 **KHÔNG gom [nut-ket-qua.tsx:53](app/khoang/nut-ket-qua.tsx#L53)** — nó dùng chung
+    chuỗi class nhưng là nút *"Kết thúc và xoá"*, một hành động **phá huỷ**. Quét theo class
+    rồi thay hàng loạt sẽ nuốt nhầm nó.
+    🔴 **Nút lùi thứ tám** [lam-bai.tsx:257-263](app/khoang/lam-bai.tsx#L257) (*Quay lại* câu
+    trước) **giữ viền xám**, chỉ thêm độ nổi + lún: nó đứng cạnh nút *Tiếp*, cho viền tím là
+    hai nút tím cạnh nhau và trẻ phải đọc chữ mới biết cái nào đi tiếp.
+    🔴 **Đừng đụng `<section className="max-w-2xl …">` bọc ngoài** — chỉ thay `<button>`;
+    [bo-cuc.test.tsx:101-113](tests/bo-cuc.test.tsx#L101) khoá chuỗi đó.
+  - **(b)** Đi hết một vòng: màn *Trước khi bắt đầu* → *Vùng lệch* → *Bản tổng hợp* → *Xem
+    kết quả*. **Mọi nút lùi đều cùng một dáng tím**. Trong bài, nút *Quay lại* câu trước vẫn
+    **xám** — không lẫn với nút *Tiếp*.
+  - **(c)** Cả bộ. `grep -rn "underline-offset-4" app/` chỉ còn **một** kết quả:
+    `nut-ket-qua.tsx:53`.
+  - **(d)** 0,35 ngày.
+
+- [ ] **18.9 — Rải chuỗi lún cho nút chính và nút phụ**
+  - **(a)** ~17 nút, thuần thay chuỗi `className`. Nút chính (nền tím đặc) dùng
+    `shadow-nut-chinh` + `disabled:shadow-none` — một nút mờ 60% mà vẫn nổi khối là nói dối
+    rằng nó bấm được. Nút phụ (viền tím, nền trắng) dùng `shadow-noi-1`. **Thang trả lời**
+    ([thang-tra-loi.tsx:49](app/components/thang-tra-loi.tsx#L49)) **chỉ `active:` lún, KHÔNG
+    bóng tĩnh** — 5 nút một hàng ngang, bóng ở đó làm màn làm bài rối, mà đó là màn trẻ ngồi
+    trả lời 20 câu. Chia 2–3 đợt nhỏ để dễ soi.
+  - **(b)** Bấm giữ từng loại nút: *Làm bài* trên thẻ · *Tiếp* trong bài · một mức trên thang
+    trả lời · *Sao lưu ra .zip* ở chân trang. **Tất cả đều lún.** Rồi bật **Giảm chuyển động**
+    của macOS, bấm lại → **không hiệu ứng nào**, nút vẫn dùng được.
+  - **(c)** `npm run kiem` + `npm run build`. Bản build phải in *"Gói chính trong giới hạn,
+    và không dính thư viện PDF"*.
+  - **(d)** 0,4 ngày.
+
+---
+
+## TỔNG ƯỚC LƯỢNG GĐ18
+
+| Giai đoạn | Máy | Người / Ngoài |
+| --- | --- | --- |
+| 18A — ba nút ra chân trang + nút đỏ | 1,15 ngày | — |
+| 18B — hệ độ nổi | 1 ngày | — |
+| 18C — nút lùi + nút lún | 1,15 ngày | — |
+| **Tổng** | **~3,3 ngày máy** | **không có** |
+
+🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
+thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`. **GĐ18 không
+gỡ được ô nào trong hai ô đó** — nó làm sản phẩm dễ dùng hơn, không làm nó phát được sớm hơn.
+
+## ❌ KHÔNG LÀM Ở GĐ18
+
+| Không làm | Vì sao |
+| --- | --- |
+| **Nhấp nháy nút lùi** | Chủ dự án nêu rồi tự chốt bỏ. Cái gì nháy mãi thì thành nền và người ta thôi nhìn — đúng lý do `V4.2` chốt *"nhắc một lần rồi thôi"*. Với trẻ tăng động và người nhạy cảm thị giác thì nó còn gây mệt |
+| **Nổi khối cho màn kết quả, bản phân tích, vùng lệch** | Chủ dự án chốt *"màn chính trước"*. Mở rộng ra ~10 file nữa và phải soát lại bản in lần hai |
+| **Bóng tĩnh cho thang trả lời** | Chỉ `active:` lún. Năm nút một hàng mà cái nào cũng nổi thì màn làm bài rối — và đó là màn trẻ ngồi 20 câu |
+| **Gradient trên nút và thẻ** | Chủ dự án chọn *"nổi khối rõ, vẫn sạch"* chứ không *"nổi khối mạnh"*. Gradient dễ đụng ngưỡng tương phản chữ và làm bản PDF lệch với màn hình |
+| **Gom nút *Kết thúc và xoá* vào `NutQuayLai`** | Nó dùng chung chuỗi class nhưng là hành động **phá huỷ**, không phải lối lùi. Gom là để một nút xoá mang dáng nút thoát |
+| **Đổi nhãn nút lùi** (bỏ `←`, thêm chữ) | `lam-bai-tu-the.test.tsx:234` khoá nhãn, và cái khoá đó **đúng**: mũi tên là dấu hiệu duy nhất phân biệt *lùi* với *đóng* cho người dùng trình đọc màn hình |
+| **Gõ chữ xác nhận trước khi Xoá sạch** | `window.confirm` vẫn đủ. Nút nay ở chân trang dễ chạm hơn, nhưng nền trắng + `sm:ml-auto` + vị trí cuối là ba lớp giảm nhầm rồi. Mở ra nếu có người bấm nhầm thật |
+| **Gỡ `lanNap`/`napLai` khỏi `nha-minh.tsx`** | Về lý thuyết đã dư (kho tự báo), nhưng gỡ `key` là đổi vòng đời của `NhanMaMoi` và `FormThanhVien` bên trong bảng — một rủi ro khác, thuộc một hạng mục khác. Trộn hai việc vào một lần sửa là làm cho cửa nào đỏ cũng không biết vì việc nào |
+| **Đưa chuỗi `className` vào `config/`** | [mau-va-chuyen-dong.test.tsx](tests/mau-va-chuyen-dong.test.tsx) chỉ quét `app/` ⇒ chuyển sang `config/` là **âm thầm đưa chúng ra ngoài vùng quét**, và cửa `motion-reduce` mất hiệu lực mà không ai biết |
+| **Đổi màu logo hay thêm nền tối** | Brand DNA cấm. Không đụng |
 
 ---
 
