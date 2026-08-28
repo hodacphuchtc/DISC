@@ -24,6 +24,7 @@ import {
   CHU_MA_MOI,
   CHU_SO_SANH,
   CHU_THONG_DIEP,
+  CHU_TRE_TAM_DONG,
   TRUC,
 } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
@@ -33,6 +34,7 @@ import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
 import { soSanhTheoThoiGian } from "@modules/report/so-sanh-thoi-gian";
 import { boDeChoThanhVien, boDeQuanSatTheoLop } from "@modules/test/dinh-tuyen";
+import { MO_NOI_DUNG_TRE, laBoDeTre } from "@config/disc-nguong";
 import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
   KENH_KHO,
@@ -286,6 +288,11 @@ function TheThanhVien({
   // Bộ đề của chính người này — dùng để gọi tên nút chính cho đúng việc sắp xảy ra.
   // Mầm non bấm vào một nút ghi "Làm bài" rồi thấy câu hỏi dành cho bố mẹ là một cú hẫng.
   const tuyen = boDeChoThanhVien(tv.vaiTro, tv.lop);
+  /**
+   * 🔴 CỜ TẮT NỘI DUNG TRẺ (V4.1). Tắt thì thẻ của trẻ KHÔNG bày nút làm bài — bày ra rồi
+   * bấm vào mới báo "đang đóng" là để người ta thất vọng thêm một nhịp không cần thiết.
+   */
+  const treDangDong = !MO_NOI_DUNG_TRE && Boolean(tuyen && laBoDeTre(tuyen.boDe));
   // 🔴 Nút *Xem thay đổi* CHỈ hiện khi hai bài cách nhau đủ xa (13.2). Gần hơn thì thứ
   // hiện lên là nhiễu của phép đo chứ không phải thay đổi của con người — và nó vẫn đọc
   // lên đầy thuyết phục vì có số kèm theo. Không bày nút thì không ai đọc nhầm.
@@ -342,8 +349,19 @@ function TheThanhVien({
         </ul>
       )}
 
+      {treDangDong && (
+        <p
+          data-thu="tre-tam-dong"
+          className="mt-3 rounded-xl px-3 py-2.5 text-[13px] leading-snug"
+          style={{ backgroundColor: "#FFF4E6", color: MAU.camDamChoChu }}
+        >
+          <strong className="font-semibold">{CHU_TRE_TAM_DONG.nhan}.</strong>{" "}
+          {CHU_TRE_TAM_DONG.than}
+        </p>
+      )}
+
       <div className="mt-3.5 flex flex-wrap gap-2">
-        {onLamBai && (
+        {onLamBai && !treDangDong && (
           <button
             type="button"
             onClick={() => onLamBai(tv)}
@@ -358,7 +376,7 @@ function TheThanhVien({
         {/* 🔴 Nút PHỤ chỉ mọc trên thẻ của trẻ TỪ LỚP 3 — dưới mốc đó bài chính đã là bản
             quan sát rồi, thêm nút thứ hai làm cùng một việc chỉ tổ gây phân vân. Hai bài
             (em tự làm + bố mẹ trả lời) ghép lại mới mở được màn Vùng lệch. */}
-        {onLamBaiQuanSat && boDeQuanSatTheoLop(tv.lop) === "QS" && (
+        {onLamBaiQuanSat && !treDangDong && boDeQuanSatTheoLop(tv.lop) === "QS" && (
           <button
             type="button"
             data-thu="nut-quan-sat"

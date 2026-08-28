@@ -332,7 +332,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
 
 ---
 
-- [ ] 🔴 **V4.1 — Cờ tắt riêng nội dung nói về TRẺ**
+- [x] 🔴 **V4.1 — Cờ tắt riêng nội dung nói về TRẺ** ✅ (28/08/2026)
   - **(a)** 68KB nội dung nói về trẻ (`docs/noi-dung-cho-ky-duyet.md`) **chưa ai có chuyên
     môn ký duyệt**. Chủ dự án đã chốt ngày 28/08/2026 là **phát đủ cả phần trẻ, chưa ký
     cũng phát**, và chịu trách nhiệm về quyết định đó — ghi lại ở đây để sau còn truy được.
@@ -347,7 +347,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     được và phân tích cả nhà vẫn chạy với 2 người lớn; cờ `true` thì mọi thứ như cũ.
   - **(d)** 3 giờ.
 
-- [ ] **V4.2 — Nhắc sao lưu đúng một lần, sau bài của người thứ hai**
+- [x] **V4.2 — Nhắc sao lưu đúng một lần, sau bài của người thứ hai** ✅ (28/08/2026)
   - **(a)** Mọi thứ nằm trong IndexedDB của một trình duyệt: xoá dữ liệu duyệt web, đổi
     điện thoại, chế độ ẩn danh — mất sạch, không khôi phục được. Nút sao lưu `.zip` có sẵn
     nhưng nằm im ở cuối màn. Hiện lời nhắc **đúng một lần**, ngay sau khi mốc `baiThuHai`
@@ -359,7 +359,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     không xuất hiện ở bài thứ nhất và bài thứ ba.
   - **(d)** 3 giờ.
 
-- [ ] **V4.3 — Bộ đồ nghề cho giáo viên và sale (0 dòng code)**
+- [x] **V4.3 — Bộ đồ nghề cho giáo viên và sale (0 dòng code)** ✅ (28/08/2026 — `docs/huong-dan-giao-vien-va-sale.md`, CHỜ chủ dự án duyệt câu chữ)
   - **(a)** Kênh phân phối là **con người** — giáo viên và sale trao đổi lúc chăm sóc khách
     hàng — mà hiện **chưa có câu nào soạn sẵn**. Sổ dự án đã ghi: *"Lý do chưa nhà nào làm
     2 bài không phải phần mềm khó dùng — là chưa ai bảo họ làm."* Viết

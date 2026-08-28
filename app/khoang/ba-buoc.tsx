@@ -20,6 +20,7 @@ import { useCallback, useEffect, useState } from "react";
 import { KhoangDisc } from "./disc";
 import { KhoangNhaMinh } from "./nha-minh";
 import { KhoangPhanTich } from "./phan-tich";
+import { NhacSaoLuu, daNhacSaoLuu } from "@/app/components/nhac-sao-luu";
 import { CHU_BUOC, MA_BUOC, type MaBuoc } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { KENH_KHO, docTatCa, docThanhVien } from "@modules/core/luu-tru/kho-bai";
@@ -41,6 +42,11 @@ export function KhoangBaBuoc() {
     tv: ThanhVien;
     cheDo?: "quan-sat";
   } | null>(null);
+  /**
+   * Có nhắc sao lưu không. Đọc localStorage trong `useEffect` — đọc lúc dựng HTML tĩnh thì
+   * máy chủ không có `localStorage` và lần dựng đầu sẽ khác lần dựng lại (lệch hydration).
+   */
+  const [choNhac, datChoNhac] = useState(false);
 
   const dem2 = useCallback(async () => {
     const [tv, bai] = await Promise.all([docThanhVien(), docTatCa()]);
@@ -51,6 +57,10 @@ export function KhoangBaBuoc() {
         bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa),
     ).length;
     datDem({ soNguoi: tv.length, soDaLam });
+
+    // 🔴 Khoảnh khắc ĐẦU TIÊN gia đình có thứ đáng để mất: hai người trở lên đã làm xong.
+    // Một bài lẻ thì làm lại mất tám phút; hai bài là một bức tranh không dựng lại được.
+    if (soDaLam >= TOI_THIEU_DE_PHAN_TICH && !daNhacSaoLuu()) datChoNhac(true);
   }, []);
 
   useEffect(() => {
@@ -136,6 +146,12 @@ export function KhoangBaBuoc() {
         {CHU_BUOC.tieuDe}
       </h1>
       <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_BUOC.moTa}</p>
+
+      {choNhac && (
+        <div className="mt-5">
+          <NhacSaoLuu hien onDong={() => datChoNhac(false)} />
+        </div>
+      )}
 
       {/* 🔴 CHƯA ĐẾM XONG THÌ CHƯA VẼ BƯỚC NÀO.
           Vẽ sớm thì có một khoảnh khắc `dem` còn `null`, và lúc đó "đang tải" trông y hệt

@@ -17,7 +17,8 @@ import { LamBai } from "./lam-bai";
 import { TruocKhiBatDau } from "./truoc-khi-bat-dau";
 import { ManVungLech, useDoiChieu } from "./vung-lech";
 import { napBoDe } from "@modules/core/bo-de/nap";
-import { CHU_THIEU_BAC } from "@config/disc-tu-dien";
+import { CHU_THIEU_BAC, CHU_TRE_TAM_DONG } from "@config/disc-tu-dien";
+import { MO_NOI_DUNG_TRE, laBoDeTre } from "@config/disc-nguong";
 import { MAU } from "@config/thuong-hieu";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
@@ -38,6 +39,8 @@ type Buoc =
    * Nhánh này chỉ xảy ra khi hồ sơ thiếu bậc học, và nó phải NÓI RA, không được trắng màn.
    */
   | { readonly ten: "khong-tuyen-duoc" }
+  /** Cờ `MO_NOI_DUNG_TRE` đang tắt và người này dùng bộ đề nói về trẻ (V4.1). */
+  | { readonly ten: "tre-tam-dong" }
   | {
       readonly ten: "dan-do";
       readonly boDe: BoDe;
@@ -96,12 +99,16 @@ export function KhoangDisc({
     // `boDeQuanSatTheoLop()` — mầm non và lớp 1–2 ra bộ MN, từ lớp 3 mới ra bộ QS.
     if (cheDo === "quan-sat") {
       const ma = boDeQuanSatTheoLop(vaoTuThanhVien.lop);
-      return ma
-        ? { ten: "dan-do", boDe: napBoDe(ma), tenCoSan: vaoTuThanhVien.ten }
-        : { ten: "khong-tuyen-duoc" };
+      if (!ma) return { ten: "khong-tuyen-duoc" };
+      if (!MO_NOI_DUNG_TRE && laBoDeTre(ma)) return { ten: "tre-tam-dong" };
+      return { ten: "dan-do", boDe: napBoDe(ma), tenCoSan: vaoTuThanhVien.ten };
     }
 
     const tuyen = boDeChoThanhVien(vaoTuThanhVien.vaiTro, vaoTuThanhVien.lop);
+    // 🔴 CỬA CHẶN CUỐI, không chỉ ẩn nút ở thẻ. Ẩn nút là chuyện trình bày; cửa này là
+    // chuyện nội dung. Ai đó dựng thẳng khoang (test, hoặc một lối vào thêm sau này) cũng
+    // không đi vòng qua được.
+    if (tuyen && !MO_NOI_DUNG_TRE && laBoDeTre(tuyen.boDe)) return { ten: "tre-tam-dong" };
     return tuyen
       ? {
           ten: "dan-do",
@@ -205,6 +212,16 @@ export function KhoangDisc({
     case "khong-tuyen-duoc":
       return <KhongTuyenDuoc ten={vaoTuThanhVien.ten} onThoat={onThoat} />;
 
+    case "tre-tam-dong":
+      return (
+        <ManBao
+          thu="tre-tam-dong"
+          tieuDe={CHU_TRE_TAM_DONG.nhan}
+          than={CHU_TRE_TAM_DONG.than}
+          onThoat={onThoat}
+        />
+      );
+
     case "dan-do":
       return (
         <TruocKhiBatDau
@@ -282,6 +299,42 @@ function ManDoiChieu({
 }
 
 /**
+ * MỘT MÀN BÁO, DÙNG CHO MỌI CA "CHƯA LÀM BÀI ĐƯỢC".
+ *
+ * 🔴 Hai ca hiện có — thiếu bậc học, và nội dung trẻ đang tạm đóng — khác nhau ĐÚNG ở câu
+ * chữ. Dựng hai component gần giống nhau là dựng hai chỗ để lệch: sửa khoảng cách ở một
+ * bên rồi quên bên kia, và sáu tháng sau hai màn cùng một sản phẩm trông khác nhau.
+ *
+ * Luôn có lối ra. Một màn báo không có nút thoát là một ngõ cụt, dù câu chữ tử tế tới đâu.
+ */
+function ManBao({
+  thu,
+  tieuDe,
+  than,
+  onThoat,
+}: {
+  readonly thu: string;
+  readonly tieuDe: string;
+  readonly than: string;
+  readonly onThoat: () => void;
+}) {
+  return (
+    <section data-thu={thu} className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
+      <h1 className="text-[22px] leading-snug font-extrabold text-neutral-900">{tieuDe}</h1>
+      <p className="mt-3 text-[15px] leading-relaxed text-neutral-700">{than}</p>
+      <button
+        type="button"
+        onClick={onThoat}
+        className="mt-6 min-h-[48px] rounded-xl px-5 text-[16px] font-semibold text-white"
+        style={{ backgroundColor: MAU.timCongNghe }}
+      >
+        {CHU_THIEU_BAC.nut}
+      </button>
+    </section>
+  );
+}
+
+/**
  * KHÔNG SUY RA ĐƯỢC BỘ ĐỀ CHO NGƯỜI NÀY.
  *
  * 🔴 Chỉ xảy ra với một người ĐANG ĐI HỌC mà hồ sơ chưa có bậc học. Trước V2.2, ca này rơi
@@ -299,21 +352,11 @@ function KhongTuyenDuoc({
   readonly onThoat: () => void;
 }) {
   return (
-    <section data-thu="khong-tuyen-duoc" className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
-      <h1 className="text-[22px] leading-snug font-extrabold text-neutral-900">
-        {CHU_THIEU_BAC.tieuDe.replace("{ten}", ten)}
-      </h1>
-      <p className="mt-3 text-[15px] leading-relaxed text-neutral-700">
-        {CHU_THIEU_BAC.than.replace("{ten}", ten)}
-      </p>
-      <button
-        type="button"
-        onClick={onThoat}
-        className="mt-6 min-h-[48px] rounded-xl px-5 text-[16px] font-semibold text-white"
-        style={{ backgroundColor: MAU.timCongNghe }}
-      >
-        {CHU_THIEU_BAC.nut}
-      </button>
-    </section>
+    <ManBao
+      thu="khong-tuyen-duoc"
+      tieuDe={CHU_THIEU_BAC.tieuDe.replace("{ten}", ten)}
+      than={CHU_THIEU_BAC.than.replaceAll("{ten}", ten)}
+      onThoat={onThoat}
+    />
   );
 }

@@ -211,3 +211,36 @@ export function canNutTo(maBoDe: string): boolean {
  * ngoài đời đủ lớn để giải thích một thay đổi. Dưới mốc đó thì im lặng còn hơn.
  */
 export const NGAY_TOI_THIEU_DE_SO_SANH = 90;
+
+/* ── Cờ tắt riêng nội dung nói về TRẺ (V4.1) ─────────────────────────────── */
+
+/**
+ * 🔴 BẢO HIỂM CHO MỘT QUYẾT ĐỊNH ĐÃ GHI VÀO SỔ.
+ *
+ * Ngày 28/08/2026 chủ dự án chốt **phát đủ cả phần trẻ khi chưa có chữ ký chuyên môn**,
+ * sau khi đã nghe rủi ro: 68KB nội dung nói về trẻ (`docs/noi-dung-cho-ky-duyet.md`) chưa
+ * ai có chuyên môn tâm lý/giáo dục duyệt, và người đọc là khách ĐANG TRẢ HỌC PHÍ — nên
+ * thiệt hại nếu sai rơi vào uy tín app chủ, không riêng khoang DISC.
+ *
+ * Cờ này không lật quyết định đó. Nó chỉ làm cho quyết định đó **rút lại được trong 30
+ * giây**: đặt `false`, dựng lại, và toàn bộ phần nói về trẻ biến mất — phần dành cho người
+ * lớn còn nguyên và vẫn chạy hết luồng. Không có cờ thì lựa chọn duy nhất lúc có khiếu nại
+ * đầu tiên là gỡ cả sản phẩm.
+ *
+ * 🔴 KHÔNG xoá cờ này khi có chữ ký. Để nguyên `true` — ngày mai còn có bộ đề mới, còn có
+ * nội dung mới chưa duyệt, và cửa đã có sẵn thì rẻ hơn dựng lại.
+ */
+export const MO_NOI_DUNG_TRE = true;
+
+/**
+ * Bộ đề nào nói về TRẺ.
+ *
+ * `MN` và `QS` là người lớn trả lời VỀ một đứa trẻ; `TH` và `THCS` là chính đứa trẻ tự
+ * làm. Cả bốn đều sinh ra nội dung nói về một đứa trẻ, nên cả bốn cùng nằm sau cờ.
+ * `PH` là bản tự đánh giá cho NGƯỜI LỚN — không thuộc nhóm này.
+ */
+export const BO_DE_TRE: readonly string[] = ["MN", "TH", "THCS", "QS"];
+
+export function laBoDeTre(ma: string): boolean {
+  return BO_DE_TRE.includes(ma);
+}

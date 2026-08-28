@@ -384,6 +384,51 @@ export const CHU_CHON = {
   },
 } as const;
 
+/* ── Nhắc sao lưu sau bài của người thứ hai (V4.2) ────────────────────────── */
+
+/**
+ * 🔴 NHẮC ĐÚNG MỘT LẦN, ĐÚNG KHOẢNH KHẮC.
+ *
+ * Mọi thứ nằm trong IndexedDB của một trình duyệt: xoá dữ liệu duyệt web, đổi điện thoại,
+ * chế độ ẩn danh — mất sạch, không khôi phục được. Nút sao lưu `.zip` có sẵn từ GĐ8 nhưng
+ * nằm im ở cuối màn, và chưa bao giờ chủ động nhắc.
+ *
+ * Nhắc khi người THỨ HAI làm xong, vì đó là khoảnh khắc ĐẦU TIÊN gia đình có thứ đáng để
+ * mất: một bài lẻ thì làm lại mất tám phút, hai bài trở lên là một bức tranh không dựng
+ * lại được. Nhắc sớm hơn thì phiền và bị bỏ qua; muộn hơn thì đã có người mất.
+ *
+ * Nhắc MỘT lần rồi thôi — nhắc mãi thì nó thành nền, và cái gì thành nền thì không ai đọc.
+ */
+export const CHU_NHAC_SAO_LUU = {
+  tieuDe: "Giữ lại bức tranh của cả nhà",
+  than:
+    "Nhà mình đã có hai người làm xong. Toàn bộ nằm trong trình duyệt máy này — xoá dữ " +
+    "duyệt web hay đổi máy là mất, không lấy lại được. Tải một bản về máy cho chắc nhé.",
+  nut: "Tải bản sao lưu về máy",
+  nutBoQua: "Để sau",
+  daTai: "Đã tải về máy.",
+  loiTai: "Chưa tải về được. Bạn thử lại bằng nút Sao lưu ở bước 1 nhé.",
+} as const;
+
+/** Khoá localStorage đánh dấu đã nhắc rồi — nhắc lại là thành nền, và nền thì không ai đọc. */
+export const KHOA_DA_NHAC_SAO_LUU = "disc:da-nhac-sao-luu";
+
+/* ── Nội dung về trẻ đang tạm đóng (V4.1) ────────────────────────────────── */
+
+/**
+ * 🔴 NÓI THẬT VÌ SAO, và nói theo hướng KHÔNG hạ thấp đứa trẻ.
+ *
+ * Câu này hiện trên thẻ của một đứa trẻ khi cờ `MO_NOI_DUNG_TRE` tắt. Người đọc là bố mẹ
+ * của em ấy, nên không được viết kiểu "chưa hỗ trợ đối tượng này" — nghe như em ấy nằm
+ * ngoài lề. Viết đúng sự thật: phần nội dung đang chờ người chuyên môn xem lại.
+ */
+export const CHU_TRE_TAM_DONG = {
+  nhan: "Phần dành cho trẻ đang tạm đóng",
+  than:
+    "Nội dung nói về trẻ đang chờ một người có chuyên môn xem lại trước khi đưa ra. " +
+    "Phần dành cho người lớn trong nhà vẫn dùng bình thường.",
+} as const;
+
 /* ── CÒN THIẾU AI (V3.2) — đòn bẩy của con số `baiThuHai` ────────────────── */
 
 /**

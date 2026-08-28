@@ -23,6 +23,7 @@ import {
   SO_THANH_VIEN_TOI_DA,
   laTreEm,
 } from "@config/disc-gia-dinh";
+import { MO_NOI_DUNG_TRE } from "@config/disc-nguong";
 import { thayDaiTuCap } from "@config/disc-lech-cap";
 import {
   MO_TA_LECH,
@@ -82,7 +83,18 @@ export function ManBanTongHop({
   const [ketQua, datKetQua] = useState<readonly BanPhanTich[] | null>(banCoSan ?? null);
   const [loi, datLoi] = useState<string | null>(null);
 
-  const coHoSo = nguoi.filter((n) => diemCua(n, chon[n.tv.id]) !== null);
+  /**
+   * 🔴 CỜ TẮT NỘI DUNG TRẺ (V4.1) LOẠI TRẺ KHỎI PHÂN TÍCH.
+   *
+   * Không đủ nếu chỉ chặn ở màn làm bài: bản phân tích cả nhà VIẾT VỀ từng người, và một
+   * lát cắt "Mẹ Lan ↔ bé Na" là nội dung nói về bé Na dù bé chưa làm bài hôm nay — bé có
+   * thể có bài từ trước khi tắt cờ. Lọc ở ĐÂY mới là lọc đúng chỗ nội dung sinh ra.
+   */
+  const coHoSo = nguoi.filter(
+    (n) =>
+      diemCua(n, chon[n.tv.id]) !== null &&
+      (MO_NOI_DUNG_TRE || !laTreEm(n.tv.vaiTro, n.tv.lop)),
+  );
 
   function chay() {
     const dauVao: NguoiTrongPhanTich[] = coHoSo.map((n) => ({
