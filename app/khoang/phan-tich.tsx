@@ -16,6 +16,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { ManBanTongHop, type NguoiCoBai } from "./ban-tong-hop";
+import { useKhoDoi } from "@/app/dung-kho-doi";
 import { KhoiConThieuAi } from "@/app/components/con-thieu-ai";
 import { HopThoaiThuMuc } from "@/app/components/hop-thoai-han-muc";
 import { GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
@@ -29,7 +30,6 @@ import {
 } from "@modules/report/phan-tich-gia-dinh";
 import type { PhanTichGiaDinh } from "@modules/core/gia-dinh/kieu";
 import {
-  KENH_KHO,
   docTatCa,
   docPhanTich,
   docThanhVien,
@@ -69,12 +69,7 @@ export function KhoangPhanTich({
     void demLai();
   }, [demLai]);
 
-  useEffect(() => {
-    if (typeof BroadcastChannel === "undefined") return;
-    const kenh = new BroadcastChannel(KENH_KHO);
-    kenh.onmessage = () => void demLai();
-    return () => kenh.close();
-  }, [demLai]);
+  useKhoDoi(demLai);
 
   /**
    * 🔴 CỬA HẠN MỨC THƯ MỤC. Đã đủ 5 lần chạy thì DỪNG LẠI và hỏi, nêu đích danh lần nào

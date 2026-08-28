@@ -99,3 +99,92 @@ export function chuoiSvgNhanVat(truc: MaTruc, mau: string): string {
     `stroke-width="${KHUNG_NHAN_VAT.doDamNet}" stroke-linecap="round" stroke-linejoin="round">${than}</svg>`
   );
 }
+
+/* ── Minh hoạ cảnh (16.7) ─────────────────────────────────────────────────── */
+
+/**
+ * 🔴 CÙNG MỘT NGUỒN NÉT VỚI BỐN ROBOT, cố ý — không mở file thứ hai.
+ *
+ * Hai nguồn hình là hai nơi lệch nhau vào đúng ngày ai đó sửa một bên, và ảnh chia sẻ PNG
+ * cũng đọc từ nguồn này. Nên minh hoạ dùng lại `Net`, dùng lại độ dày nét, dùng lại bảng
+ * màu trục — thứ khác duy nhất là khung, vì cảnh thì nằm ngang còn nhân vật thì đứng.
+ *
+ * 🔴 TRÀN VIEWBOX LÀ LỖI CHỈ LỘ RA KHI NHÌN, nên bộ này có một cửa canh riêng:
+ * `tests/hinh-minh-hoa.test.ts` tự tính khung bao từ nét vẽ, tính cả nửa độ dày nét, và
+ * giải cực trị đường cong bậc hai bằng công thức chứ không lấy mẫu. Bộ đọc đó hiểu
+ * `M L H V Q T Z` — thêm một lệnh path ngoài danh sách ấy thì cửa kiểm NÉM, cố ý: đo bừa
+ * rồi báo xanh còn tệ hơn không đo.
+ */
+export const MA_MINH_HOA = [
+  "moi-them-nguoi",
+  "cho-nguoi-thu-hai",
+  "chuc-mung",
+  "huy-hieu",
+] as const;
+
+export type MaMinhHoa = (typeof MA_MINH_HOA)[number];
+
+export const KHUNG_MINH_HOA = { rong: 160, cao: 120, doDamNet: 3.2 } as const;
+
+/** Một người trong khung thẻ: đầu tròn + vai. Dùng lại ở nhiều cảnh. */
+function nguoiNho(x: number, y: number): readonly Net[] {
+  return [
+    { loai: "circle", cx: x, cy: y, r: 9 },
+    { loai: "path", d: `M${x - 14} ${y + 28}v-7h28v7` },
+  ];
+}
+
+const CANH: Readonly<Record<MaMinhHoa, readonly Net[]>> = {
+  // Bước 1 còn trống: một thẻ đã có người, một thẻ trống chờ thêm.
+  "moi-them-nguoi": [
+    { loai: "rect", x: 10, y: 22, rong: 60, cao: 76, rx: 12 },
+    ...nguoiNho(40, 48),
+    { loai: "rect", x: 90, y: 22, rong: 60, cao: 76, rx: 12 },
+    { loai: "path", d: "M120 46v28M106 60h28" },
+  ],
+
+  // Một người xong, đang chờ người thứ hai — đòn bẩy của `baiThuHai`.
+  "cho-nguoi-thu-hai": [
+    { loai: "rect", x: 10, y: 22, rong: 60, cao: 76, rx: 12 },
+    ...nguoiNho(40, 48),
+    { loai: "rect", x: 90, y: 22, rong: 60, cao: 76, rx: 12 },
+    { loai: "circle", cx: 120, cy: 60, r: 18 },
+    { loai: "path", d: "M120 60v-11M120 60l9 6" },
+  ],
+
+  // Cả nhà đã xong.
+  "chuc-mung": [
+    ...nguoiNho(36, 64),
+    ...nguoiNho(80, 58),
+    ...nguoiNho(124, 64),
+    { loai: "path", d: "M30 26l6 8M80 18v10M130 26l-6 8M56 30l4 6M104 30l-4 6" },
+  ],
+
+  // Huy hiệu tiến độ: vòng tròn + dấu tích.
+  "huy-hieu": [
+    { loai: "circle", cx: 80, cy: 60, r: 34 },
+    { loai: "path", d: "M64 60l12 12 22-26" },
+    { loai: "path", d: "M80 12v10M80 98v10M22 60h10M118 60h10" },
+  ],
+};
+
+export function netMinhHoa(ma: MaMinhHoa): readonly Net[] {
+  return CANH[ma];
+}
+
+/** Chuỗi SVG hoàn chỉnh của một cảnh — cùng khuôn với `chuoiSvgNhanVat`. */
+export function chuoiSvgMinhHoa(ma: MaMinhHoa, mau: string): string {
+  const than = netMinhHoa(ma).map(netThanhThe).join("");
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${KHUNG_MINH_HOA.rong} ${KHUNG_MINH_HOA.cao}" ` +
+    `width="${KHUNG_MINH_HOA.rong}" height="${KHUNG_MINH_HOA.cao}" fill="none" stroke="${mau}" ` +
+    `stroke-width="${KHUNG_MINH_HOA.doDamNet}" stroke-linecap="round" stroke-linejoin="round">${than}</svg>`
+  );
+}
+
+/** Một nét thành thẻ SVG. Tách ra vì cả nhân vật lẫn minh hoạ đều cần. */
+export function netThanhThe(n: Net): string {
+  if (n.loai === "path") return `<path d="${n.d}"/>`;
+  if (n.loai === "circle") return `<circle cx="${n.cx}" cy="${n.cy}" r="${n.r}"/>`;
+  return `<rect x="${n.x}" y="${n.y}" width="${n.rong}" height="${n.cao}" rx="${n.rx}"/>`;
+}

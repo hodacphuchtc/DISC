@@ -1,16 +1,20 @@
 "use client";
 
 /**
- * KHUNG BA BƯỚC (V2.1) — khai người → làm bài → đọc về nhau.
+ * KHUNG CÁC BƯỚC (V2.1, gộp còn hai ở 16.2) — khai người và làm bài → đọc về nhau.
+ *
+ * 🔴 VÌ SAO HAI CHỨ KHÔNG BA. Bước *Làm bài* cũ hiện đúng cái lưới thẻ của bước 1, chỉ
+ * khác bộ nút. Người dùng vừa khai tên xong phải đóng bước 1, mở bước 2, rồi tìm lại đúng
+ * người mình vừa gõ tên. Nay nút *Làm bài* nằm ngay trên thẻ vừa tạo.
  *
  * 🔴 VÌ SAO KHOÁ MỀM, KHÔNG GIẤU. Bước chưa mở được vẫn hiện ra, mờ đi kèm một câu nói rõ
  * còn thiếu gì. Giấu hẳn thì người dùng không biết phía trước còn gì — mà chính cái "phía
  * trước còn gì" mới là thứ khiến họ đi thêm một bước nữa. Đây cũng là điều ADR-007 lo khi
  * bác wizard ba bước, và là lý do bảng gia đình được GIỮ NGUYÊN bên trong bước 1.
  *
- * 🔴 SỐ LIỆU ĐỌC Ở ĐÂY CHỈ ĐỂ VẼ DÒNG TRẠNG THÁI VÀ MỞ/KHOÁ. Ba bước con vẫn tự đọc kho
- * của chúng. Hai chỗ đọc cùng một kho thì phải cùng nghe `KENH_KHO`, nếu không thì xoá một
- * người ở bước 1 xong quay lên thấy tiêu đề vẫn đếm người đó.
+ * 🔴 SỐ LIỆU ĐỌC Ở ĐÂY CHỈ ĐỂ VẼ DÒNG TRẠNG THÁI VÀ MỞ/KHOÁ. Các bước con vẫn tự đọc kho
+ * của chúng. Hai chỗ đọc cùng một kho thì phải cùng nghe kho báo (`useKhoDoi`), nếu không
+ * thì xoá một người ở bước 1 xong quay lên thấy tiêu đề vẫn đếm người đó.
  *
  * Thuộc TẦNG GIAO DIỆN THAM CHIẾU (ADR-004).
  */
@@ -20,10 +24,12 @@ import { useCallback, useEffect, useState } from "react";
 import { KhoangDisc } from "./disc";
 import { KhoangNhaMinh } from "./nha-minh";
 import { KhoangPhanTich } from "./phan-tich";
+import { useKhoDoi } from "@/app/dung-kho-doi";
+import { MinhHoa } from "@/app/components/nhan-vat";
 import { NhacSaoLuu, daNhacSaoLuu } from "@/app/components/nhac-sao-luu";
 import { CHU_BUOC, MA_BUOC, type MaBuoc } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
-import { KENH_KHO, docTatCa, docThanhVien } from "@modules/core/luu-tru/kho-bai";
+import { docTatCa, docThanhVien } from "@modules/core/luu-tru/kho-bai";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 
 /** Đủ ngần này người có bài hợp lệ thì bước 3 mở. Dưới mức đó không có gì để so. */
@@ -34,7 +40,7 @@ type Dem = {
   readonly soDaLam: number;
 };
 
-export function KhoangBaBuoc() {
+export function KhoangCacBuoc() {
   const [dem, datDem] = useState<Dem | null>(null);
   const [dangMo, datDangMo] = useState<MaBuoc | null>(null);
   /** Người đang làm bài — có giá trị thì khoang DISC chiếm trọn màn, không hiện ba tấm. */
@@ -69,29 +75,18 @@ export function KhoangBaBuoc() {
   }, [dem2]);
 
   // Bước con vừa đổi kho (thêm người, xoá người, làm xong bài) ⇒ đếm lại.
-  useEffect(() => {
-    if (typeof BroadcastChannel === "undefined") return;
-    const kenh = new BroadcastChannel(KENH_KHO);
-    kenh.onmessage = () => void dem2();
-    return () => kenh.close();
-  }, [dem2]);
+  useKhoDoi(dem2);
 
   /**
-   * Bước nào tự mở khi vào: chưa có ai → 1; có người chưa làm → 2; đủ để đọc → 3.
+   * Bước nào tự mở khi vào: đủ người đã xong → bước 2; còn lại → bước 1.
    *
    * 🔴 Chỉ chọn hộ MỘT LẦN, lúc đếm xong lần đầu. Chọn lại mỗi lần số đổi thì người dùng
-   * đang xem bước 1 mà vừa có ai đó làm xong bài sẽ bị bật sang bước 3 giữa chừng.
+   * đang xem bước 1 mà vừa có ai đó làm xong bài sẽ bị bật sang bước 2 giữa chừng.
    */
   useEffect(() => {
     if (!dem || dangMo !== null) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    datDangMo(
-      dem.soNguoi === 0
-        ? "nha-minh"
-        : dem.soDaLam >= TOI_THIEU_DE_PHAN_TICH
-          ? "phan-tich"
-          : "lam-bai",
-    );
+    datDangMo(dem.soDaLam >= TOI_THIEU_DE_PHAN_TICH ? "phan-tich" : "nha-minh");
   }, [dem, dangMo]);
 
   // Đang làm bài thì khoang DISC chiếm trọn màn — ba tấm lùi đi, không để người ta vừa
@@ -110,27 +105,31 @@ export function KhoangBaBuoc() {
 
   const khoa = (ma: MaBuoc): string | null => {
     if (!dem) return null;
-    if (ma === "lam-bai" && dem.soNguoi === 0) return CHU_BUOC.khoaChuaCoAi;
+    // Bước 1 KHÔNG bao giờ khoá — nó là chỗ duy nhất để bắt đầu.
     if (ma === "phan-tich" && dem.soDaLam < TOI_THIEU_DE_PHAN_TICH) {
       return dem.soNguoi === 0 ? CHU_BUOC.khoaChuaCoAi : CHU_BUOC.khoaChuaDuHaiNguoi;
     }
     return null;
   };
 
+  /**
+   * Bước 1 nay gánh cả hai tin cũ: có mấy người, VÀ còn ai chưa làm. Bỏ vế thứ hai đi là
+   * đánh rơi đúng thứ khiến phụ huynh đi nhắc người còn lại — thứ mà cả GĐ14 đặt cược vào.
+   */
   const trangThai = (ma: MaBuoc): string => {
     if (!dem) return "…";
     if (ma === "nha-minh") {
-      return dem.soNguoi === 0
-        ? CHU_BUOC.chuaCoAi
-        : CHU_BUOC.demNguoi.replace("{so}", String(dem.soNguoi));
-    }
-    if (ma === "lam-bai") {
-      const con = dem.soNguoi - dem.soDaLam;
       if (dem.soNguoi === 0) return CHU_BUOC.chuaCoAi;
-      if (dem.soDaLam === 0) return CHU_BUOC.chuaAiLam;
-      return con === 0
-        ? CHU_BUOC.taCaDaLam
-        : CHU_BUOC.conChuaLam.replace("{so}", String(con));
+      const con = dem.soNguoi - dem.soDaLam;
+      const veSau =
+        dem.soDaLam === 0
+          ? CHU_BUOC.chuaAiLam
+          : con === 0
+            ? CHU_BUOC.taCaDaLam
+            : CHU_BUOC.conChuaLam.replace("{so}", String(con));
+      return CHU_BUOC.noiTrangThai
+        .replace("{a}", CHU_BUOC.demNguoi.replace("{so}", String(dem.soNguoi)))
+        .replace("{b}", veSau);
     }
     return dem.soDaLam >= TOI_THIEU_DE_PHAN_TICH
       ? CHU_BUOC.sanSangPhanTich.replace("{so}", String(dem.soDaLam))
@@ -138,7 +137,7 @@ export function KhoangBaBuoc() {
   };
 
   return (
-    <div data-thu="khung-ba-buoc" className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
+    <div data-thu="khung-buoc" className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
       <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
         {CHU_BUOC.nhanTren}
       </p>
@@ -146,6 +145,27 @@ export function KhoangBaBuoc() {
         {CHU_BUOC.tieuDe}
       </h1>
       <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_BUOC.moTa}</p>
+
+      {/* 🔴 NHỊP CHÚC MỪNG chỉ hiện khi MỌI người trong sổ đã xong, và nhà có ít nhất
+          hai người — một nhà một người thì "cả nhà đã làm xong" là một câu nói dối nhỏ,
+          và nó cũng chẳng mở được bước 2. */}
+      {dem !== null && dem.soNguoi >= TOI_THIEU_DE_PHAN_TICH && dem.soDaLam === dem.soNguoi && (
+        <div
+          data-thu="chuc-mung"
+          className="mt-5 flex items-center gap-4 rounded-2xl border px-4 py-4"
+          style={{ borderColor: MAU.timCongNghe, backgroundColor: "#F6F3FF" }}
+        >
+          <MinhHoa ma="chuc-mung" kichThuoc={96} />
+          <div className="min-w-0 flex-1">
+            <p className="text-[16px] font-bold" style={{ color: MAU.timCongNghe }}>
+              {CHU_BUOC.chucMungTieuDe}
+            </p>
+            <p className="mt-1 text-[14px] leading-relaxed text-neutral-700">
+              {CHU_BUOC.chucMungPhu}
+            </p>
+          </div>
+        </div>
+      )}
 
       {choNhac && (
         <div className="mt-5">
@@ -170,7 +190,7 @@ export function KhoangBaBuoc() {
               data-thu="tam-buoc"
               data-buoc={ma}
               data-khoa={lyDoKhoa ? "1" : undefined}
-              className="rounded-2xl border"
+              className="rounded-2xl border transition-colors duration-200 motion-reduce:transition-none"
               style={{ borderColor: mo ? MAU.timCongNghe : MAU.vienMo }}
             >
               <button
@@ -210,21 +230,26 @@ export function KhoangBaBuoc() {
               </button>
 
               {mo && (
-                <div data-thu="than-buoc" className="border-t" style={{ borderColor: MAU.vienMo }}>
-                  {ma === "nha-minh" && <KhoangNhaMinh cheDo="quan-ly" />}
-                  {ma === "lam-bai" && (
+                <div
+                  data-thu="than-buoc"
+                  /* 🔴 Hiện dần khi mở bước — và `motion-reduce` tắt hẳn. Người bật
+                     *Giảm chuyển động* thường có lý do sức khoẻ (chóng mặt, tiền đình);
+                     với họ một hiệu ứng "nhẹ" không nhẹ. */
+                  className="animate-[hien-dan_220ms_ease-out] border-t motion-reduce:animate-none"
+                  style={{ borderColor: MAU.vienMo }}
+                >
+                  {ma === "nha-minh" && (
                     <KhoangNhaMinh
-                      cheDo="lam-bai"
                       onLamBai={(tv, cheDo) => datDangLamCho({ tv, ...(cheDo ? { cheDo } : {}) })}
                     />
                   )}
                   {ma === "phan-tich" && (
                     <KhoangPhanTich
                       onLamNgay={() => {
-                        // 🔴 Mở BƯỚC 2, không nhảy thẳng vào bài. Thẻ mới là chỗ chọn được
+                        // 🔴 Mở BƯỚC 1, không nhảy thẳng vào bài. Thẻ mới là chỗ chọn được
                         // "em tự làm" hay "bố mẹ trả lời hộ" — nhảy thẳng là chọn hộ người
                         // dùng một trong hai, và chọn sai thì bài về sai loại.
-                        datDangMo("lam-bai");
+                        datDangMo("nha-minh");
                       }}
                     />
                   )}
@@ -261,7 +286,7 @@ function KhoangDangLamBai({
           className="inline-flex min-h-[44px] items-center text-[13px] text-neutral-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
           style={{ outlineColor: MAU.timCongNghe }}
         >
-          ← {CHU_BUOC.ten["lam-bai"]}
+          ← {CHU_BUOC.ten["nha-minh"]}
         </button>
       </div>
       <KhoangDisc

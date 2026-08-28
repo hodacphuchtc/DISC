@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { ThanhBen } from "./components/thanh-ben";
-import { KhoangBaBuoc } from "./khoang/ba-buoc";
+import { KhoangCacBuoc } from "./khoang/cac-buoc";
 import { KhoangSoLieu } from "./khoang/so-lieu";
 import { MAU } from "@config/thuong-hieu";
 import {
@@ -64,7 +64,7 @@ export default function Trang() {
             {CHU_KHO_HONG[khoHong]}
           </p>
         )}
-        {moSoLieu ? <KhoangSoLieu /> : <KhoangBaBuoc />}
+        {moSoLieu ? <KhoangSoLieu /> : <KhoangCacBuoc />}
       </main>
     </div>
   );

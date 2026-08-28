@@ -5,7 +5,7 @@
   "description": "Trắc nghiệm hành vi DISC cho học sinh và phụ huynh — chạy 100% trong trình duyệt, không backend.",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/sinh-danh-sach-cache.mjs",
+    "build": "next build && node scripts/sinh-danh-sach-cache.mjs && node scripts/kiem-co-goi.mjs",
     "start": "node scripts/xem-ban-phat-hanh.mjs",
     "xem-thu": "npm run build && npm start",
     "lint": "eslint .",
@@ -14,9 +14,11 @@
     "test:watch": "vitest",
     "check:structure": "node scripts/check-structure.mjs",
     "check:sast": "semgrep --config .semgrep --error --quiet .",
-    "kiem": "npm run typecheck && npm run lint && npm run test && npm run check:structure && npm run check:sast"
+    "kiem": "npm run typecheck && npm run lint && npm run test && npm run check:structure && npm run check:sast",
+    "check:goi": "node scripts/kiem-co-goi.mjs"
   },
   "dependencies": {
+    "jspdf": "^4.2.1",
     "jszip": "^3.10.1",
     "next": "^16.3.3",
     "react": "^19.2.8",

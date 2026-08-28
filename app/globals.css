@@ -122,3 +122,38 @@ body {
     print-color-adjust: exact;
   }
 }
+
+/* ── Chuyển động nhẹ (16.8) ───────────────────────────────────────────────── */
+
+/**
+ * 🔴 MỘT KHUÔN DUY NHẤT, VÀ NÓ TỰ TẮT.
+ *
+ * Mọi chuyển động trong sản phẩm đi qua đây hoặc qua tiện ích `transition-*` của Tailwind
+ * kèm `motion-reduce:`. Người bật *Giảm chuyển động* trong cài đặt máy thường có lý do sức
+ * khoẻ — chóng mặt, tiền đình, đau nửa đầu. Với họ một hiệu ứng "nhẹ" không nhẹ.
+ *
+ * Chặn ở HAI lớp có chủ đích: `motion-reduce:` trên từng chỗ dùng (đọc được ngay tại chỗ,
+ * và `tests/mau-va-chuyen-dong.test.tsx` soi được), CỘNG luật quét-tất-cả bên dưới (bắt cả
+ * chỗ ai đó quên). Một lớp thì cứ mỗi lần thêm hiệu ứng mới là một lần có thể quên.
+ */
+@keyframes hien-dan {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

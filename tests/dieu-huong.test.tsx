@@ -65,7 +65,7 @@ const tam = (ma: string) => document.querySelector(`[data-thu="tam-buoc"][data-b
 /**
  * 🔴 CHỜ ĐÚNG THỨ MÌNH SẮP KHẲNG ĐỊNH.
  *
- * Chờ mỗi `khung-ba-buoc` là chờ hụt: khung ngoài có ngay từ lần dựng đầu, còn BA TẤM chỉ
+ * Chờ mỗi `khung-buoc` là chờ hụt: khung ngoài có ngay từ lần dựng đầu, còn CÁC TẤM chỉ
  * hiện sau khi đếm xong kho. Chờ sai chỗ thì test xanh trên máy rảnh và đỏ lác đác khi máy
  * tải nặng — mỗi lượt một cửa khác nhau, kiểu đỏ khó truy nhất.
  */
@@ -101,7 +101,7 @@ describe("thanh bên", () => {
     expect(document.querySelector('[data-thu="muc-khoang"]')!.tagName).not.toBe("BUTTON");
 
     // 🔴 Hỏi TRONG THANH BÊN, không hỏi cả trang. "Nhà mình" nay VẪN là một nút — nhưng
-    // là tấm bước 1 trong khung ba bước, đúng chỗ của nó. Hỏi cả trang thì cửa kiểm này
+    // là tấm bước 1 trong khung các bước, đúng chỗ của nó. Hỏi cả trang thì cửa kiểm này
     // cấm luôn thứ nó lẽ ra phải cho phép.
     const thanhBen = document.querySelector("aside")!;
     expect(thanhBen.querySelectorAll("button")).toHaveLength(0);
@@ -109,35 +109,35 @@ describe("thanh bên", () => {
   });
 });
 
-describe("ba bước", () => {
-  it("cả ba tấm LUÔN hiện ra, kể cả trên máy trống", async () => {
+describe("hai bước", () => {
+  it("cả hai tấm LUÔN hiện ra, kể cả trên máy trống", async () => {
     await moTrang();
     for (const ma of MA_BUOC) {
       expect(tam(ma), `thiếu tấm ${ma}`).toBeTruthy();
     }
   });
 
-  it("🔴 máy trống: bước 2 và 3 bị khoá, và nói rõ CÒN THIẾU GÌ", async () => {
+  it("🔴 máy trống: bước 2 bị khoá và nói rõ CÒN THIẾU GÌ; bước 1 KHÔNG bao giờ khoá", async () => {
     await moTrang();
     // 🔴 PHẢI `waitFor`. Khung dựng xong TRƯỚC khi đọc kho xong, nên có một khoảnh khắc
     // chưa bước nào bị khoá. Khẳng định ngay lúc đó thì test xanh trên máy rảnh và đỏ khi
     // máy tải nặng — đúng kiểu đỏ giả đã trả giá một lần với `waitFor` đói CPU.
-    await waitFor(() => expect(tam("lam-bai")!.getAttribute("data-khoa")).toBe("1"));
-    expect(tam("phan-tich")!.getAttribute("data-khoa")).toBe("1");
+    await waitFor(() => expect(tam("phan-tich")!.getAttribute("data-khoa")).toBe("1"));
+    // 🔴 Bước 1 là chỗ DUY NHẤT bắt đầu được. Khoá nó là khoá cả sản phẩm.
     expect(tam("nha-minh")!.getAttribute("data-khoa")).toBeNull();
     // Câu nói phải nêu việc phải làm, không phải "chưa đủ điều kiện".
-    expect(tam("lam-bai")).toHaveTextContent(CHU_BUOC.khoaChuaCoAi);
+    expect(tam("phan-tich")).toHaveTextContent(CHU_BUOC.khoaChuaCoAi);
   });
 
-  it("có 1 người: bước 2 mở, bước 3 vẫn khoá và nói cần thêm mấy người", async () => {
+  it("có 1 người: bước 2 vẫn khoá và nói cần thêm mấy người", async () => {
     await themNguoi(0, true);
     await moTrang();
-    await waitFor(() => expect(tam("lam-bai")!.getAttribute("data-khoa")).toBeNull());
-    expect(tam("phan-tich")!.getAttribute("data-khoa")).toBe("1");
+    await waitFor(() => expect(tam("phan-tich")!.getAttribute("data-khoa")).toBe("1"));
+    expect(tam("nha-minh")!.getAttribute("data-khoa")).toBeNull();
     expect(tam("phan-tich")).toHaveTextContent(CHU_BUOC.khoaChuaDuHaiNguoi);
   });
 
-  it("có 2 người đã làm xong: cả ba bước cùng mở được", async () => {
+  it("có 2 người đã làm xong: cả hai bước cùng mở được", async () => {
     await themNguoi(0, true);
     await themNguoi(1, true);
     await moTrang();
@@ -147,22 +147,24 @@ describe("ba bước", () => {
     }
   });
 
-  it("🔴 người CÓ TÊN mà CHƯA làm bài thì chưa tính vào bước 3", async () => {
+  it("🔴 người CÓ TÊN mà CHƯA làm bài thì chưa tính vào bước 2", async () => {
     // Hai người trong sổ nhưng chỉ một người có bài ⇒ không có gì để so với nhau.
     await themNguoi(0, true);
     await themNguoi(1, false);
     await moTrang();
-    await waitFor(() => expect(tam("lam-bai")!.getAttribute("data-khoa")).toBeNull());
+    await waitFor(() => expect(tam("nha-minh")!.getAttribute("data-khoa")).toBeNull());
     expect(tam("phan-tich")!.getAttribute("data-khoa")).toBe("1");
   });
 
-  it("dòng trạng thái đếm đúng số người còn phải làm", async () => {
+  it("🔴 dòng trạng thái bước 1 mang CẢ HAI tin: mấy người, và còn ai chưa làm", async () => {
     await themNguoi(0, true);
     await themNguoi(1, false);
     await themNguoi(2, false);
     await moTrang();
+    // Gộp bước làm bài vào bước 1 mà đánh rơi vế "còn ai chưa làm" là đánh rơi đúng thứ
+    // khiến phụ huynh đi nhắc người còn lại — đòn bẩy của cả GĐ14.
     await waitFor(() =>
-      expect(tam("lam-bai")).toHaveTextContent(CHU_BUOC.conChuaLam.replace("{so}", "2")),
+      expect(tam("nha-minh")).toHaveTextContent(CHU_BUOC.conChuaLam.replace("{so}", "2")),
     );
     expect(tam("nha-minh")).toHaveTextContent(CHU_BUOC.demNguoi.replace("{so}", "3"));
   });
@@ -187,8 +189,8 @@ describe("màn số liệu ẩn khỏi phụ huynh", () => {
     try {
       render(<Trang />);
       await waitFor(() => expect(screen.getByText(CHU_SO_LIEU.tieuDe)).toBeTruthy());
-      // Và khung ba bước phải nhường chỗ, không chồng lên nhau.
-      expect(document.querySelector('[data-thu="khung-ba-buoc"]')).toBeNull();
+      // Và khung các bước phải nhường chỗ, không chồng lên nhau.
+      expect(document.querySelector('[data-thu="khung-buoc"]')).toBeNull();
     } finally {
       window.history.replaceState({}, "", cu || "/");
     }

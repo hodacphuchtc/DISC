@@ -58,6 +58,8 @@
     "docs/decisions/ADR-005-cho-nhap-ten-that.md",
     "docs/decisions/ADR-006-nam-cau-moi-man.md",
     "docs/decisions/ADR-007-don-vi-du-lieu-la-gia-dinh.md",
+    "docs/decisions/ADR-008-ba-buoc-trong-mot-khoang.md",
+    "docs/decisions/ADR-009-them-thu-vien-pdf.md",
     "docs/sop/SU-CO-LO-KEY.md",
     "eslint.config.mjs",
     "next.config.mjs",

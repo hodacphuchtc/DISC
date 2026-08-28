@@ -9,7 +9,7 @@
 | Giao diện | Tailwind CSS v4 | Màu sinh ra ở dạng `oklch()` — nhớ điều này khi tự đo tương phản |
 | Kiểm thử | Vitest + Testing Library + jsdom | `fake-indexeddb` cho test lưu trữ |
 | Lưu dữ liệu | **Trình duyệt người dùng** — IndexedDB + localStorage | Không backend, không CSDL |
-| Thư viện ngoài | **Chỉ `jszip`** | Cho nút sao lưu `.zip`. Không thêm gì khác nếu chưa có ADR |
+| Thư viện ngoài | **`jszip`** + **`jspdf`** (ADR-009) | `jszip` cho nút sao lưu. `jspdf` cho bản PDF của từng người — 🔴 **chỉ được vào bằng `await import()`**, hai cửa canh: `tests/co-goi-chinh.test.ts` và `scripts/kiem-co-goi.mjs`. Không thêm gì khác nếu chưa có ADR |
 | Nơi chạy | Trang tĩnh (`out/`) | Cloudflare Pages cho dùng thương mại ở gói miễn phí; Vercel Hobby thì KHÔNG |
 
 🔴 **Không có Supabase, không có auth, không có API.** Mọi tài liệu còn nhắc chúng là lỗi

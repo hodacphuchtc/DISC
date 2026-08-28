@@ -60,27 +60,36 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 28/08/2026 — luồng ba bước xong; GĐ16 chờ duyệt)
+## TRẠNG THÁI (cập nhật 28/08/2026 — `PLAN_V2.md` HẾT VIỆC MÁY)
 
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V2.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
-### 🟢 ĐÃ XONG — luồng ba bước, 15 hạng mục
+### 🟢 ĐÃ XONG — luồng ba bước (15 mục) VÀ TRỌN GĐ16 (9 mục)
 
-`V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
-`V5.1`–`V5.2`. **1.208 test xanh** · `npm run kiem` + `npm run build` xanh.
-🔴 **6 commit còn ở LOCAL, chưa push** — remote đang ở `9dabcf2`.
+**1.292 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 288 KB gzip**
+(trần 300; nền cũ 282). Sổ `PLAN_V2.md` còn đúng **HAI** ô chưa tick — `V0.1` và `V0.2` —
+và cả hai chặn bởi NGƯỜI/NGOÀI. **Không còn việc máy nào trong sổ này.**
 
-### ⏸ ĐANG DỞ — GĐ16, chờ chủ dự án gõ DUYỆT
+Luồng ba bước: `V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
+`V5.1`–`V5.2`. GĐ16: `16.1`–`16.9`, ba đợt 16A/16B/16C.
 
-Chủ dự án bấm thử bản thật (28/08) và nêu bảy điểm; sổ `PLAN_V2.md` đã có **GĐ16** với 9
-hạng mục chia ba đợt (~7 ngày máy). **Chưa viết một dòng code nào.** Vào việc là làm
-`16.1` — sửa `modules/core/luu-tru/kho-bai.ts`.
+**GĐ16 thêm vào sản phẩm:**
+- **Kho tự báo mọi thay đổi, kể cả trong CÙNG một tab** (`16.1`) — làm xong bài, bấm quay
+  lại, thẻ đổi số ngay, không F5. Hook `useKhoDoi()` thay ba chỗ tự gõ `BroadcastChannel`.
+- **HAI bước thay ba** (`16.2`) — nút *Làm bài* nằm ngay trên thẻ vừa tạo; *Xoá* đứng cuối
+  cụm nút, xa nhất khỏi thứ ngón tay rơi vào theo phản xạ.
+- **Ô chọn bản có GIỜ** (`16.3`) — hai bài cùng ngày không còn hiện lên hai dòng giống hệt
+  nhau. Logic *"mặc định bài mới nhất"* đã đúng sẵn, chỉ khoá lại bằng test.
+- **Giao diện `KhoDisc`** (`16.4`) — đội dev app chủ viết một bản dựng gọi server của họ,
+  gọi `datKho()` một lần lúc khởi động, **không sửa một dòng giao diện nào**.
+- **Nút KHÔI PHỤC từ `.zip`** (`16.5`) — hai pha: đọc-kiểm → hỏi kèm cả hai con số → mới
+  ghi. Và bản sao lưu nay chứa **đủ ba bảng** (xem mục cạm bẫy).
+- **PDF mỗi người một tệp** (`16.6`, ADR-009) — `jspdf` nạp lười + font Việt SIL OFL.
+- **Bộ minh hoạ, màu nhóm trên thẻ, chuyển động tắt được** (`16.7`, `16.8`).
+- **Dải hẹp 320px** (`16.9`) — thanh bên thu một dòng trên điện thoại.
 
-Ba việc lớn của GĐ16: **gộp ba bước còn HAI** (tạo người xong là làm bài ngay tại thẻ) ·
-**xuất PDF + nút Khôi phục từ `.zip`** · **giao diện sinh động + tối ưu điện thoại**.
-
-🔴 **Đã sửa một LỖI CHẶN THẬT tồn từ GĐ12:** `boDeCuaThanhVien()` chỉ đọc `tv.lop` rồi
+🔴 **Đã sửa một LỖI CHẶN THẬT tồn từ GĐ12 (từ đợt trước):** `boDeCuaThanhVien()` chỉ đọc `tv.lop` rồi
 `Number()`, không đọc `vaiTro`. Bố mẹ (không có lớp) và trẻ mầm non (`Number("mam-non")`
 ra `NaN`) đều bị đá về màn *"Ai đang cầm máy?"* — tức là **đúng nhóm người mà GĐ11–GĐ14
 xây cho lại là nhóm không vào được bài của chính mình.** Lỗi thứ hai cùng chỗ: hàm đó vứt
@@ -154,6 +163,11 @@ lại là giả định, không phải phần mềm.**
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 28/08/2026 | **Thêm `jspdf` — nhưng NẠP LƯỜI là ĐIỀU KIỆN KÈM THEO** (ADR-009) | Ràng buộc *"chỉ `jszip`"* không phải luật đạo đức; nó là cách kiểm soát hai rủi ro. Rủi ro chuỗi cung ứng trả bằng `quet-ma-doc` **trước khi import một dòng nào** (verdict 🟢 XANH). Rủi ro cỡ gói trả bằng `await import()` **cộng hai cửa canh**. Người không bấm *Sao lưu* trả thêm đúng **5 KB** |
+| 28/08/2026 | **Mặt tiền kho giữ NGUYÊN tên hàm cũ, không đổi 13 file giao diện** | `kho-bai.ts` thành mặt tiền đi qua sổ đăng ký `KhoDisc`. Đổi 13 file sang `kho().luuBai(...)` là hàng trăm dòng đổi, một đợt test đỏ, và **0 giá trị** cho người dùng trước ngày phát — trong khi `datKho()` vẫn thay được toàn bộ. Bản dựng GIẢ trong test chứng minh ổ cắm là ổ cắm thật |
+| 28/08/2026 | **`saoLuuTatCa()` giữ chữ ký MỘT tham số; PDF đi qua hàm thứ hai** | Chữ ký một-tham-số LÀ một hàng rào, có test khẳng định `toHaveLength(1)` để chặn đúng cái bẫy cũ (thêm `boDe?` rồi nút sao lưu chỉ lấy một phần). Nới cửa cho một lý do chính đáng hôm nay là mở sẵn nó cho một lý do không chính đáng ngày mai |
+| 28/08/2026 | **Thẻ của người CHƯA có hồ sơ thì KHÔNG mang màu nhóm** | Đoán một nhóm cho người chưa làm bài là dán nhãn họ bằng một con số chưa từng tồn tại — đúng thứ ADR-002 cấm. Thẻ trung tính là câu trả lời đúng: *chưa biết* |
+| 28/08/2026 | **Font PDF để ở `public/`, KHÔNG nhúng base64 vào JS** | Nhúng thì +33% cỡ và nằm trong chunk JS; đặt ở `public/` thì trình duyệt cache riêng, tệp `.ttf` chỉ tải một lần trong đời máy đó. Đổi lại: xuất PDF cần một lượt `fetch` cùng nguồn — đã ghi rõ trong mã để người sau khỏi tưởng là bỏ sót |
 | 28/08/2026 | **GIỮ ADR-001 — không backend.** Dữ liệu lên server là việc của app chủ, khoang DISC chỉ **tách tầng lưu trữ sẵn** (`16.4`) | Chủ dự án muốn "đăng nhập máy khác vẫn thấy". Làm ngay thì công ty thành bên xử lý dữ liệu cá nhân TRẺ EM (NĐ 13/2023) — đúng thứ ADR-001 đã cố ý mua đường tránh — và cần đội dev app chủ, những người **chưa ai hỏi họ có nhận không**. Tách tầng tốn 5 giờ, cắm server sau không phải sửa một dòng giao diện |
 | 28/08/2026 | **Thêm thư viện PDF, nhưng NẠP LƯỜI là điều kiện kèm theo** (ADR-009 sẽ viết) | Sinh PDF có dấu tiếng Việt buộc phải nhúng font. `await import()` giữ gói chính ở **282 KB nén**; ai không sao lưu thì không trả đồng nào. Kèm cửa kiểm cỡ gói vì một `import` tĩnh lỡ tay thì build vẫn xanh, test vẫn xanh, chỉ điện thoại 3G là chịu |
 | 28/08/2026 | **Sao lưu `.zip` giữ CẢ PDF lẫn JSON** | Chủ dự án muốn "chỉ PDF", nhưng nút Khôi phục cần thứ máy đọc được. PDF nằm ngoài cho người, JSON trong `du-lieu/` cho máy — mở zip vẫn thấy PDF trước |
@@ -199,6 +213,30 @@ lại là giả định, không phải phần mềm.**
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
 
+- 🔴 **NÚT SAO LƯU CHỈ ĐỌC MỘT TRONG BA BẢNG — LỜI HỨA CỨU DỮ LIỆU LÀ LỜI HỨA SUÔNG**
+  (28/08/2026, `16.5`). `saoLuuTatCa()` gọi `docTatCa()` rồi thôi. Kho lên v2 ba bảng từ
+  GĐ12 mà hàm sao lưu không ai đụng tới — nên phụ huynh bấm *Sao lưu*, nhận một tệp trông
+  như đủ, yên tâm, rồi mất máy là mất **tên của cả nhà và mọi bản phân tích**. Đây là lần
+  thứ HAI cùng một lỗi trong một tuần (lần đầu: nút *Xoá sạch*, `V3.1`). **Thêm một bảng
+  vào kho thì phải đi hỏi lại MỌI hàm nói "tất cả" xem chúng có biết bảng mới không** — và
+  danh sách đó gồm cả hàm ĐỌC, không chỉ hàm XOÁ.
+- 🔴 **CỬA KIỂM CHẠY TRONG jsdom KHÔNG ĐO ĐƯỢC LAYOUT, VÀ NÓ IM LẶNG KHI KHÔNG ĐO ĐƯỢC**
+  (28/08/2026, `16.9`). jsdom không có bộ dựng layout: `offsetWidth` luôn 0,
+  `getBoundingClientRect()` trả về số không. Một test *"không phần tử nào rộng hơn 320px"*
+  viết ở đó **luôn xanh, kể cả trên một trang tràn ngang thảm hại** — tệ hơn không có cửa,
+  vì nó khiến người ta thôi kiểm bằng mắt. Cửa phải canh thứ jsdom ĐO ĐƯỢC THẬT, và phải
+  nói thẳng phần nó không phủ.
+- 🔴 **CỬA KIỂM TỰ NÉM CŨNG LÀ ĐỎ — ĐỌC KỸ TRƯỚC KHI ĐI SỬA THỨ ĐANG ĐÚNG** (28/08/2026,
+  `16.7`). Cửa đo tràn viewBox báo đỏ ở robot S. Lỗi không ở hình: bộ đọc `path` của chính
+  cửa kiểm chưa hiểu lệnh cong `q`. Suýt đi sửa một hình đang đúng. Bản vá đầu tiên còn sai
+  theo hướng ngược lại: lớp ký tự phủ định `[^MmLlHhVvQqTtZz]*` **nuốt luôn** chữ `C` của
+  lệnh cong bậc ba, nên cửa im lặng đúng lúc cần nó kêu. **Phát hiện lệnh lạ phải soi CHỮ
+  CÁI, không soi "phần thừa còn lại sau khi cắt".**
+- **Sổ kế hoạch trỏ vào một cửa kiểm KHÔNG làm việc nó tưởng** (28/08/2026, `16.8`). Sổ ghi
+  *"mở rộng `tests/do-chu.test.ts` (đo tương phản)"*, nhưng file đó đo **chữ có vừa khung
+  không**; còn mã đo tương phản kiểu canvas 1×1 mà mục cạm bẫy này nhắc thì **không còn
+  trong repo** — nó là phép đo Playwright thời GĐ7, chỉ còn lại bài học. **Đo trên mã thật
+  trước dòng code đầu tiên**, kể cả khi sổ nói rất chắc chắn.
 - 🔴 **"ĐANG TẢI" TRÔNG Y HỆT "ĐÃ MỞ" — và đó là một lỗi ĐUA nhìn như lỗi giao diện**
   (28/08/2026, `V2.1`). Khung ba bước dựng xong TRƯỚC khi đếm xong kho, nên có một khoảnh
   khắc `dem` còn `null` và hàm khoá trả `null` cho mọi bước. Người dùng thấy bước 3 sáng

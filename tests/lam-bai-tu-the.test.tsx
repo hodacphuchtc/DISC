@@ -11,7 +11,7 @@ import {
   CHU_THIEU_BAC,
   CHU_TRUOC_KHI_BAT_DAU,
 } from "../config/disc-tu-dien";
-import { moBuocLamBai } from "./duong-vao-bai";
+import { moBuocNhaMinh } from "./duong-vao-bai";
 import {
   docTatCa,
   luuBai,
@@ -89,7 +89,7 @@ afterEach(async () => {
  */
 async function moBuocHai() {
   render(<Trang />);
-  await moBuocLamBai();
+  await moBuocNhaMinh();
 }
 
 const bamLamBai = () =>
@@ -231,11 +231,11 @@ describe("thoát ra vào lại thì hết dính người cũ", () => {
 
     // 🔴 Thoát bằng nút quay lại rồi vào lại — thanh bên không còn điều hướng nữa.
     fireEvent.click(
-      screen.getByRole("button", { name: new RegExp(`← ${CHU_BUOC.ten["lam-bai"]}`, "u") }),
+      screen.getByRole("button", { name: new RegExp(`← ${CHU_BUOC.ten["nha-minh"]}`, "u") }),
     );
 
     // Về lại bước 2, và bài dở của người cũ KHÔNG dính sang.
-    await moBuocLamBai();
+    await moBuocNhaMinh();
     expect(document.querySelector('[data-thu="ten-co-san"]')).toBeNull();
   });
 });

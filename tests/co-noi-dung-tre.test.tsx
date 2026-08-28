@@ -47,7 +47,7 @@ async function dungBang(moNoiDungTre: boolean) {
     MO_NOI_DUNG_TRE: moNoiDungTre,
   }));
   const { KhoangBangGiaDinh } = await import("../app/khoang/bang-gia-dinh");
-  render(<KhoangBangGiaDinh cheDo="lam-bai" onLamBai={vi.fn()} onLamBaiQuanSat={vi.fn()} />);
+  render(<KhoangBangGiaDinh onLamBai={vi.fn()} onLamBaiQuanSat={vi.fn()} />);
   await waitFor(() => expect(screen.getByText(TV.me.ten)).toBeTruthy());
 }
 

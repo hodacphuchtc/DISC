@@ -104,6 +104,74 @@ describe("chọn bài rồi chạy", () => {
   });
 });
 
+/**
+ * 🔴 16.3 — Ô CHỌN BẢN PHẢI PHÂN BIỆT ĐƯỢC HAI BÀI CÙNG NGÀY.
+ *
+ * Chủ dự án báo *"ô chọn hình như lấy sai bài"*. Đo trên mã thì việc chọn ĐÚNG SẴN:
+ * `docTatCa()` sắp giảm dần theo `ketThuc` và ô chọn lấy `bai[0]`. Thứ hỏng là cái NHÃN —
+ * nó chỉ in `ketThuc.slice(0, 10)`, nên hai bài cách nhau ba tiếng trong cùng một buổi
+ * chiều hiện lên hai dòng GIỐNG HỆT NHAU. Người dùng không có cách nào biết mình đang
+ * chọn cái nào, và kết luận hợp lý nhất là máy chọn sai.
+ *
+ * Nên nhóm này khoá lại CẢ HAI: nhãn phải khác nhau, VÀ mặc định phải là bài mới nhất.
+ */
+describe("🔴 ô chọn bài: có NGÀY và GIỜ, mặc định bài mới nhất", () => {
+  /** Hai bài CÙNG NGÀY, cách nhau ba tiếng. Mới nhất đứng đầu, như `docTatCa()` trả về. */
+  const HAI_BAI_CUNG_NGAY: NguoiCoBai[] = [
+    {
+      tv: tv("me", "Mẹ Lan", "me"),
+      bai: [
+        bai("b-me-chieu", diem(75, 50, 40, 55), "2026-08-27T16:20:00+07:00"),
+        bai("b-me-sang", diem(30, 80, 60, 35), "2026-08-27T09:05:00+07:00"),
+      ],
+    },
+    { tv: tv("bin", "Bin", "con", "7"), bai: [bai("b-bin", diem(45, 62, 70, 48))] },
+  ];
+
+  const oChon = () =>
+    screen.getByRole("combobox", { name: "Chọn bài cho Mẹ Lan" }) as HTMLSelectElement;
+
+  it("hai bài CÙNG NGÀY ⇒ hai nhãn KHÁC NHAU, vì có giờ", () => {
+    render(<ManBanTongHop nguoi={HAI_BAI_CUNG_NGAY} onDong={() => {}} />);
+    const nhan = [...oChon().options].map((o) => o.textContent?.trim());
+    expect(nhan).toHaveLength(2);
+    expect(nhan[0]).not.toBe(nhan[1]);
+    expect(nhan[0]).toContain("16:20");
+    expect(nhan[1]).toContain("09:05");
+  });
+
+  it("🔴 mặc định là bài MỚI NHẤT — không sửa logic, chỉ khoá lại", () => {
+    render(<ManBanTongHop nguoi={HAI_BAI_CUNG_NGAY} onDong={() => {}} />);
+    expect(oChon().value).toBe("b-me-chieu");
+  });
+
+  it("🔴 chọn bài CŨ ⇒ engine nhận đúng điểm của bài cũ, không phải bài mới", async () => {
+    render(<ManBanTongHop nguoi={HAI_BAI_CUNG_NGAY} onDong={() => {}} />);
+    fireEvent.change(oChon(), { target: { value: "b-me-sang" } });
+    fireEvent.click(screen.getByRole("button", { name: CHU_TONG_HOP.nutChay }));
+    await waitFor(() => expect(ban()).toHaveLength(2));
+
+    // Bài SÁNG có I = 80 (trục nổi trội là I); bài CHIỀU có D = 75. Bản của Bin nói về
+    // Mẹ Lan, nên chỗ vênh phải tính từ bộ điểm của bài vừa chọn.
+    const banBin = ban().find((b) => b.querySelector("h2")?.textContent?.includes("Bin"))!;
+    const latVeMe = banBin.querySelector('[data-thu="lat-cat"][data-nguoi-kia="me"]')!;
+    expect(latVeMe).toBeTruthy();
+
+    // Đối chứng: chạy lại với bài CHIỀU phải ra chữ khác — nếu hai lần ra y hệt nhau thì
+    // ô chọn không hề đi tới engine, và cửa kiểm này chẳng canh gì cả.
+    const chuBaiSang = latVeMe.textContent;
+    cleanup();
+    render(<ManBanTongHop nguoi={HAI_BAI_CUNG_NGAY} onDong={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: CHU_TONG_HOP.nutChay }));
+    await waitFor(() => expect(ban()).toHaveLength(2));
+    const banBin2 = ban().find((b) => b.querySelector("h2")?.textContent?.includes("Bin"))!;
+    const chuBaiChieu = banBin2.querySelector(
+      '[data-thu="lat-cat"][data-nguoi-kia="me"]',
+    )!.textContent;
+    expect(chuBaiSang).not.toBe(chuBaiChieu);
+  });
+});
+
 describe("🔴 thế quyền — ai đang nói với ai", () => {
   it("bản của Bin nói với Bin bằng 'em', gọi mẹ bằng TÊN", async () => {
     chay();

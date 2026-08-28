@@ -98,7 +98,9 @@ describe("sao lưu .zip", () => {
     expect(soBai).toBe(3);
 
     const zip = await JSZip.loadAsync(duLieu);
-    const tep = Object.keys(zip.files).filter((t) => t.endsWith(".json") && t !== "ban-ke.json");
+    // Chỉ đếm tệp trong `bai/`: từ 16.5 bản sao lưu còn mang thêm hai tệp `du-lieu/`
+    // (tên từng người + các bản phân tích), và chúng KHÔNG phải bài.
+    const tep = Object.keys(zip.files).filter((t) => t.startsWith("bai/") && t.endsWith(".json"));
     expect(tep).toHaveLength(3);
 
     const banKe = JSON.parse(await zip.file("ban-ke.json")!.async("string"));
@@ -133,11 +135,22 @@ describe("sao lưu .zip", () => {
     expect(duLieu).toBeInstanceOf(Uint8Array);
   });
 
-  it("kho rỗng vẫn sao lưu được, ra file chỉ có bản kê", async () => {
+  it("kho rỗng vẫn sao lưu được, và KHÔNG có tệp bài nào", async () => {
     const { duLieu, soBai } = await saoLuuTatCa(LUC);
     expect(soBai).toBe(0);
     const zip = await JSZip.loadAsync(duLieu);
-    expect(Object.keys(zip.files).filter((t) => t.endsWith(".json"))).toEqual(["ban-ke.json"]);
+    expect(Object.keys(zip.files).filter((t) => t.startsWith("bai/"))).toEqual([]);
+    /**
+     * 🔴 HAI TỆP `du-lieu/` VẪN PHẢI CÓ MẶT, dù rỗng (16.5). Vắng mặt nghĩa là *bản sao
+     * lưu đời cũ, không mang tên ai*; có mà rỗng nghĩa là *nhà này chưa khai ai*. Gộp hai
+     * trạng thái đó lại là để lúc khôi phục không phân biệt được, và người dùng nhận một
+     * câu báo sai về chính dữ liệu của họ.
+     */
+    expect(Object.keys(zip.files).filter((t) => t.endsWith(".json")).sort()).toEqual([
+      "ban-ke.json",
+      "du-lieu/phan-tich.json",
+      "du-lieu/thanh-vien.json",
+    ]);
   });
 
   it("tên tệp không lộ biệt danh ra ngoài tên file", async () => {

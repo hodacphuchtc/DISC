@@ -20,6 +20,7 @@
 
 import { useState } from "react";
 
+import { MinhHoa } from "@/app/components/nhan-vat";
 import { CHU_MOI } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { ghiMoc } from "@modules/core/do-phieu";
@@ -60,9 +61,19 @@ export function KhoiConThieuAi({
       className="rounded-2xl border px-4 py-4"
       style={{ borderColor: MAU.camNangLuong, backgroundColor: "#FFF8F0" }}
     >
-      <p className="text-[15px] leading-snug font-semibold" style={{ color: MAU.camDamChoChu }}>
-        {cau}
-      </p>
+      <div className="flex items-center gap-3">
+        {/* Chỉ hiện khi CHƯA đủ người: lúc đã đủ, khối này nói "thêm ai nữa cũng được" —
+            một cảnh đang-chờ đặt cạnh câu đó là nói ngược lại chính nó. */}
+        {!daDuNguoi && (
+          <MinhHoa ma="cho-nguoi-thu-hai" mau={MAU.camNangLuong} kichThuoc={84} />
+        )}
+        <p
+          className="flex-1 text-[15px] leading-snug font-semibold"
+          style={{ color: MAU.camDamChoChu }}
+        >
+          {cau}
+        </p>
+      </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
         {thieu.map((t) => (

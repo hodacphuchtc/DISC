@@ -45,11 +45,16 @@ export const THAM_SO_SO_LIEU = "so-lieu";
  * Không có bước 1 thì bước 2 không có ai để chọn; không có bước 2 thì bước 3 không có gì
  * để so. Đảo thứ tự là làm hỏng chính câu chuyện mà sản phẩm kể.
  */
-export const MA_BUOC = ["nha-minh", "lam-bai", "phan-tich"] as const;
+/**
+ * 🔴 HAI BƯỚC, KHÔNG PHẢI BA (16.2). Bước *Làm bài* cũ đã nhập vào bước 1: nút *Làm bài*
+ * nay nằm ngay trên thẻ của từng người, cạnh nút *Sửa*. Một bước riêng chỉ để chọn lại
+ * đúng người vừa khai tên là bắt người dùng đi hai lượt qua cùng một lưới thẻ.
+ */
+export const MA_BUOC = ["nha-minh", "phan-tich"] as const;
 export type MaBuoc = (typeof MA_BUOC)[number];
 
 /**
- * Chữ của khung ba bước.
+ * Chữ của khung các bước.
  *
  * 🔴 KHOÁ MỀM, KHÔNG GIẤU. Bước chưa mở được vẫn HIỆN RA, chỉ mờ đi kèm một câu nói rõ
  * còn thiếu gì. Giấu hẳn thì người dùng không biết phía trước còn gì — mà chính cái "phía
@@ -58,16 +63,14 @@ export type MaBuoc = (typeof MA_BUOC)[number];
 export const CHU_BUOC = {
   nhanTren: "Cho cả nhà · mỗi người 5–8 phút",
   tieuDe: "DISC gia đình",
-  moTa: "Ba bước. Xong bước nào thì bước sau tự mở.",
+  moTa: "Hai bước. Xong bước một thì bước hai tự mở.",
 
   ten: {
     "nha-minh": "Nhà mình",
-    "lam-bai": "Làm bài test",
     "phan-tich": "Phân tích cả nhà",
   },
   moTaBuoc: {
-    "nha-minh": "Khai tên từng người trong nhà",
-    "lam-bai": "Mỗi người tự làm bài của mình",
+    "nha-minh": "Khai tên từng người, rồi làm bài ngay trên thẻ của mình",
     "phan-tich": "Ai nên nói với ai thế nào cho thuận",
   },
 
@@ -78,6 +81,11 @@ export const CHU_BUOC = {
   conChuaLam: "Còn {so} người chưa làm",
   chuaAiLam: "Chưa ai làm bài",
   sanSangPhanTich: "{so} người đã xong — đọc được rồi",
+  /**
+   * Bước 1 nay mang HAI tin: có mấy người, và còn ai chưa làm. Nối bằng dấu chấm giữa
+   * thay vì viết sáu câu trọn vẹn cho sáu tổ hợp — sáu câu là sáu chỗ để lệch nhau.
+   */
+  noiTrangThai: "{a} · {b}",
 
   /* Lý do một bước chưa mở. Luôn nói CÒN THIẾU GÌ, không nói "chưa đủ điều kiện". */
   khoaChuaCoAi: "Thêm người ở bước 1 trước đã.",
@@ -86,6 +94,17 @@ export const CHU_BUOC = {
 
   nutMo: "Mở",
   nutDong: "Thu lại",
+
+  /**
+   * Nhịp chúc mừng khi cả nhà đã làm xong (16.7).
+   *
+   * 🔴 KHEN CÁI VIỆC, KHÔNG KHEN CON NGƯỜI. Luật §9.2 và ADR-002 chạy suốt sản phẩm: DISC
+   * không phải mô hình khuyết thiếu, và một câu kiểu *"nhà mình giỏi quá"* là dán nhãn —
+   * đúng thứ mà cả bộ nội dung đang tránh. Thứ đáng khen ở đây là cả nhà đã cùng ngồi
+   * xuống làm, và đó là một việc thật.
+   */
+  chucMungTieuDe: "Cả nhà đã làm xong",
+  chucMungPhu: "Giờ thì đọc được rồi — mỗi người một tờ, viết cho đúng người đó.",
 } as const;
 
 /* ── Bốn trục hành vi ────────────────────────────────────────────────────── */
@@ -671,6 +690,25 @@ export const CHU_M6 = {
   nutSaoLuu: "Sao lưu ra .zip",
   dangSaoLuu: "Đang nén…",
   loiSaoLuu: "Không tạo được file sao lưu. Thử lại giúp mình nhé.",
+
+  /* ── Khôi phục từ .zip (16.5) ── */
+  nutKhoiPhuc: "Khôi phục từ .zip",
+  dangDocTep: "Đang đọc tệp…",
+  /**
+   * 🔴 NÊU CẢ HAI CON SỐ, RỒI MỚI HỎI. Khôi phục nhầm tệp là mất sổ đang dùng — kiểu mất
+   * dữ liệu do chính nút cứu dữ liệu gây ra. Người dùng chỉ tự chặn được điều đó nếu họ
+   * nhìn thấy mình sắp đánh đổi cái gì lấy cái gì.
+   */
+  hoiGhiDe:
+    "Máy này đang có {cu} người và {baiCu} bài. Tệp vừa chọn có {moi} người và {baiMoi} bài.\n\n" +
+    "Khôi phục sẽ XOÁ hết dữ liệu đang có trên máy rồi thay bằng tệp này. Không lấy lại được.",
+  daKhoiPhuc: "Đã khôi phục: {nguoi} người, {bai} bài.",
+  /** Bản sao lưu đời cũ chỉ có bài — nói thẳng, đừng để người ta tưởng mất tên. */
+  nhacBanCu:
+    "Tệp này là bản sao lưu đời cũ: nó chỉ chứa bài làm, không chứa tên từng người.",
+  loiKhongMoDuoc: "Không mở được tệp này. Nó có phải tệp .zip không?",
+  loiKhongPhaiSo: "Tệp này không phải sổ DISC. Không có gì trên máy bị thay đổi.",
+  loiDuLieuHong: "Tệp đọc được nhưng dữ liệu bên trong hỏng. Không có gì trên máy bị thay đổi.",
   hoiXoaBai: "Xoá bài này khỏi máy? Không lấy lại được.",
   /**
    * 🔴 NÓI ĐÚNG THỨ SẮP MẤT. Câu cũ ghi "tất cả BÀI", mà nút thì (nay) dọn cả tên từng

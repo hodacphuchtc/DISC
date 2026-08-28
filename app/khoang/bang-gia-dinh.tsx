@@ -28,7 +28,9 @@ import {
   TRUC,
 } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
+import { useKhoDoi } from "@/app/dung-kho-doi";
 import { FormThanhVien, HoiXoa } from "@/app/components/form-thanh-vien";
+import { MinhHoa, NhanVat } from "@/app/components/nhan-vat";
 import { NhanMaMoi } from "@/app/components/nhan-ma-moi";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
@@ -37,7 +39,6 @@ import { boDeChoThanhVien, boDeQuanSatTheoLop } from "@modules/test/dinh-tuyen";
 import { MO_NOI_DUNG_TRE, laBoDeTre } from "@config/disc-nguong";
 import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
-  KENH_KHO,
   docTatCa,
   docThanhVien,
   luuBai,
@@ -54,22 +55,12 @@ function homNay(): string {
 }
 
 export function KhoangBangGiaDinh({
-  cheDo = "quan-ly",
   onLamBai,
   onLamBaiQuanSat,
   onXemBai,
   onNhanMa,
   onXemSoSanh,
 }: {
-  /**
-   * 🔴 MỘT BẢNG, HAI VIỆC (V2.1). `"quan-ly"` là BƯỚC 1 — khai tên, sửa, xoá.
-   * `"lam-bai"` là BƯỚC 2 — chọn người rồi làm bài. Cùng một lưới thẻ, khác bộ nút.
-   *
-   * Không tách thành hai component vì thẻ thành viên là chỗ khó nhất của cả màn (sổ tiến
-   * độ, bốn cột mini, hồ sơ nhận qua mã, nút quan sát theo lớp) — hai bản sao của nó sẽ
-   * lệch nhau vào đúng ngày ai đó sửa một bên.
-   */
-  readonly cheDo?: "quan-ly" | "lam-bai";
   /** Bấm *Làm bài* trên thẻ một người. Thiếu callback thì nút không hiện. */
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). Nút chỉ mọc trên thẻ trẻ từ lớp 3. */
@@ -96,13 +87,8 @@ export function KhoangBangGiaDinh({
     void napLai();
   }, [napLai]);
 
-  // Tab khác vừa đổi kho (thường là do dọn hạn mức) ⇒ nạp lại, đừng hiện số liệu cũ.
-  useEffect(() => {
-    if (typeof BroadcastChannel === "undefined") return;
-    const kenh = new BroadcastChannel(KENH_KHO);
-    kenh.onmessage = () => void napLai();
-    return () => kenh.close();
-  }, [napLai]);
+  // Kho vừa đổi — do chính tab này hay do tab khác — ⇒ nạp lại, đừng hiện số liệu cũ.
+  useKhoDoi(napLai);
 
   const baiCua = (id: string) => bai.filter((b) => b.maThanhVien === id);
   const chuaXep = bai.filter((b) => !b.maThanhVien);
@@ -124,12 +110,8 @@ export function KhoangBangGiaDinh({
     await napLai();
   }
 
-  const quanLy = cheDo === "quan-ly";
-
   return (
     <section className="max-w-3xl px-4 py-5 md:px-5">
-      {quanLy && (
-        <>
           {/* 🔴 THÔNG ĐIỆP NHÂN VĂN — dòng đầu tiên, trước mọi thứ khác, và CHỈ ở đây.
               Rải sang bước 2 và bước 3 là biến sự chân thành thành khẩu hiệu: đọc lần
               đầu thấy tử tế, đọc lần thứ tư thấy như quảng cáo. */}
@@ -158,27 +140,25 @@ export function KhoangBangGiaDinh({
               {CHU_BANG_GIA_DINH.nutThem}
             </button>
           </div>
-          <p className="mt-1.5 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTa}</p>
-        </>
-      )}
+      <p className="mt-1.5 text-[14px] text-neutral-600">{CHU_BANG_GIA_DINH.moTa}</p>
 
       {nguoi === null ? (
         <p className="text-[15px] text-neutral-500">…</p>
       ) : nguoi.length === 0 ? (
-        <p data-thu="bang-trong" className="text-[15px] text-neutral-600">
-          {CHU_BANG_GIA_DINH.trong}
-        </p>
+        // 🔴 Màn trống là màn NHIỀU NGƯỜI THẤY NHẤT — nó là màn đầu tiên của mọi gia đình.
+        // Một dòng chữ trần ở đây đọc lên như một lỗi; một hình vẽ nói rằng chỗ này VỐN
+        // trống lúc bắt đầu, và việc tiếp theo là thêm người.
+        <div data-thu="bang-trong" className="flex flex-col items-center py-4 text-center">
+          <MinhHoa ma="moi-them-nguoi" />
+          <p className="mt-3 text-[15px] text-neutral-600">{CHU_BANG_GIA_DINH.trong}</p>
+        </div>
       ) : (
-        <ul
-          data-thu="luoi-thanh-vien"
-          className={`grid gap-3 sm:grid-cols-2 ${quanLy ? "mt-5" : ""}`}
-        >
+        <ul data-thu="luoi-thanh-vien" className="mt-5 grid gap-3 sm:grid-cols-2">
           {nguoi.map((tv) => (
             <TheThanhVien
               key={tv.id}
               tv={tv}
               bai={baiCua(tv.id)}
-              cheDo={cheDo}
               onLamBai={onLamBai}
               onLamBaiQuanSat={onLamBaiQuanSat}
               onXemBai={onXemBai}
@@ -190,7 +170,7 @@ export function KhoangBangGiaDinh({
         </ul>
       )}
 
-      {quanLy && chuaXep.length > 0 && (
+      {chuaXep.length > 0 && (
         <section data-thu="chua-xep" className="mt-10">
           <h2 className="text-[15px] font-semibold text-neutral-900">
             {CHU_BANG_GIA_DINH.nhomChuaXep}
@@ -228,16 +208,14 @@ export function KhoangBangGiaDinh({
         </section>
       )}
 
-      {quanLy && onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
+      {onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
 
-      {quanLy && (
-        <p
-          data-thu="thong-diep-chan"
-          className="mt-10 text-[13px] leading-relaxed text-neutral-500"
-        >
-          {CHU_THONG_DIEP.chan}
-        </p>
-      )}
+      <p
+        data-thu="thong-diep-chan"
+        className="mt-10 text-[13px] leading-relaxed text-neutral-500"
+      >
+        {CHU_THONG_DIEP.chan}
+      </p>
 
       {dangSua && (
         <FormThanhVien
@@ -265,7 +243,6 @@ export function KhoangBangGiaDinh({
 function TheThanhVien({
   tv,
   bai,
-  cheDo,
   onLamBai,
   onLamBaiQuanSat,
   onXemBai,
@@ -275,8 +252,6 @@ function TheThanhVien({
 }: {
   readonly tv: ThanhVien;
   readonly bai: readonly BaiLamLuu[];
-  /** Bước 1 quản lý người (Sửa/Xoá); bước 2 làm bài (Làm bài/Xem kết quả). */
-  readonly cheDo: "quan-ly" | "lam-bai";
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn ngồi trả lời VỀ đứa trẻ này (bộ QS) — mở màn Vùng lệch. */
   readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
@@ -308,22 +283,44 @@ function TheThanhVien({
   const diem = moiNhat?.ketQua.hopLe ? moiNhat.ketQua.diem : (tv.nhanQuaMa?.diem ?? null);
   const chiCoMa = bai.length === 0 && Boolean(tv.nhanQuaMa);
 
+  /**
+   * Nhóm nổi trội của người này — quyết định màu viền và con robot nhỏ trên thẻ (16.8).
+   *
+   * 🔴 CHƯA CÓ HỒ SƠ THÌ KHÔNG CÓ MÀU. Đoán một nhóm cho người chưa làm bài là dán nhãn
+   * họ bằng một con số chưa từng tồn tại — đúng thứ ADR-002 cấm. Thẻ trung tính là câu
+   * trả lời đúng: *chưa biết*.
+   */
+  const trucNoiTroi: MaTrucKieu | null = diem
+    ? MA_TRUC.reduce((a, b) => (diem[b] > diem[a] ? b : a))
+    : null;
+  const mauThe = trucNoiTroi ? TRUC[trucNoiTroi].mau : MAU.vienMo;
+
   return (
     <li
       data-thu="the-thanh-vien"
       data-ten={tv.ten}
       data-so-bai={bai.length}
-      className="rounded-2xl border p-4"
-      style={{ borderColor: MAU.vienMo }}
+      data-truc={trucNoiTroi ?? undefined}
+      className="rounded-2xl border border-l-4 p-4 transition-colors duration-200 motion-reduce:transition-none"
+      style={{ borderColor: MAU.vienMo, borderLeftColor: mauThe }}
     >
-      <div className="flex items-baseline justify-between gap-2">
-        <h3 className="text-[16px] font-semibold text-neutral-900">{tv.ten}</h3>
-        <span className="text-[13px] text-neutral-500">{CHU_VAI[tv.vaiTro]}</span>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2.5">
+          {/* Robot nhỏ theo nhóm nổi trội. Bốn con này trước đây chỉ xuất hiện ở ĐÚNG màn
+              kết quả — cả chặng còn lại là chữ đen trên nền trắng. */}
+          {trucNoiTroi && <NhanVat truc={trucNoiTroi} kichThuoc={34} />}
+          <h3 className="truncate text-[16px] font-semibold text-neutral-900">{tv.ten}</h3>
+        </div>
+        <span className="shrink-0 text-[13px] text-neutral-500">{CHU_VAI[tv.vaiTro]}</span>
       </div>
 
       {/* Sổ tiến độ: một chấm đầy cho mỗi bài đã làm. Nhìn lướt là biết ai chưa xong. */}
       <p data-thu="so-tien-do" className="mt-2 text-[14px] text-neutral-600">
-        <span aria-hidden="true" className="mr-1.5 tracking-widest" style={{ color: MAU.camNangLuong }}>
+        <span
+          aria-hidden="true"
+          className="mr-1.5 tracking-widest"
+          style={{ color: trucNoiTroi ? TRUC[trucNoiTroi].mau : MAU.camNangLuong }}
+        >
           {"●".repeat(bai.length)}
           {"○".repeat(Math.max(GIOI_HAN_BAI_MOI_NGUOI - bai.length, 0))}
         </span>
@@ -365,7 +362,7 @@ function TheThanhVien({
           <button
             type="button"
             onClick={() => onLamBai(tv)}
-            className="min-h-[44px] rounded-xl px-3.5 text-[14px] font-semibold text-white"
+            className="min-h-[44px] max-w-full rounded-xl px-3.5 py-1.5 text-left text-[14px] font-semibold break-words text-white"
             style={{ backgroundColor: MAU.timCongNghe }}
           >
             {tuyen?.nguoiLonTraLoiHo
@@ -381,7 +378,7 @@ function TheThanhVien({
             type="button"
             data-thu="nut-quan-sat"
             onClick={() => onLamBaiQuanSat(tv)}
-            className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-semibold"
+            className="min-h-[44px] max-w-full rounded-xl border px-3.5 py-1.5 text-left text-[14px] font-semibold break-words"
             style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
           >
             {CHU_BANG_GIA_DINH.nutTraLoiHo.replace("{ten}", tv.ten)}
@@ -408,27 +405,23 @@ function TheThanhVien({
             {CHU_BANG_GIA_DINH.nutXemKetQua}
           </button>
         )}
-        {/* 🔴 Sửa và Xoá CHỈ ở bước 1. Ở bước 2 người ta đang chọn ai làm bài; để nút
-            Xoá ngay cạnh nút Làm bài là đặt lựa chọn không hoàn tác được vào đúng chỗ
-            ngón tay rơi vào theo phản xạ. */}
-        {cheDo === "quan-ly" && (
-          <>
-            <button
-              type="button"
-              onClick={onSua}
-              className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
-            >
-              {CHU_BANG_GIA_DINH.nutSua}
-            </button>
-            <button
-              type="button"
-              onClick={onXoa}
-              className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
-            >
-              {CHU_BANG_GIA_DINH.nutXoa}
-            </button>
-          </>
-        )}
+        {/* 🔴 THỨ TỰ AN TOÀN (16.2). Nay một thẻ mang cả *Làm bài* lẫn *Xoá*, nên *Xoá*
+            phải đứng CUỐI CÙNG — xa nhất khỏi nút người dùng bấm hàng ngày. Một lựa chọn
+            không hoàn tác được không được nằm ở chỗ ngón tay rơi vào theo phản xạ. */}
+        <button
+          type="button"
+          onClick={onSua}
+          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+        >
+          {CHU_BANG_GIA_DINH.nutSua}
+        </button>
+        <button
+          type="button"
+          onClick={onXoa}
+          className="min-h-[44px] rounded-xl px-2.5 text-[14px] text-neutral-600"
+        >
+          {CHU_BANG_GIA_DINH.nutXoa}
+        </button>
       </div>
     </li>
   );

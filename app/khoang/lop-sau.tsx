@@ -287,7 +287,7 @@ export function LopSauKetQua({
                     <span aria-hidden="true" style={{ color: TRUC[r.truc].mau }}>
                       ■
                     </span>
-                    <span className="min-w-[86px] font-medium">{TRUC[r.truc].ten}</span>
+                    <span className="font-medium sm:min-w-[86px]">{TRUC[r.truc].ten}</span>
                     <span className="tabular-nums text-neutral-600">
                       {CHU_PHONG_CACH.nhanBoMe} {r.diemBoMe} · {CHU_PHONG_CACH.nhanCon}{" "}
                       {r.diemCon}

@@ -4,39 +4,41 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng.
 
-**Phiên 28/08/2026 — luồng ba bước xong phần máy; GĐ16 mới viết sổ, CHƯA duyệt.**
+**Phiên 28/08/2026 (lượt 2) — GĐ16 XONG TRỌN 9/9 hạng mục máy.**
 
-**1. Vừa xong.** 15 hạng mục `V0.3`→`V5.2` (bảng ✅ bên dưới). **1.208 test xanh** ·
-`npm run kiem` + `npm run build` xanh. **6 commit còn ở local, CHƯA push** (remote ở
-`9dabcf2`). `PLAN_V2.md` vừa viết lại, thêm GĐ16 — chưa commit.
+**1. Vừa xong.** `16.1`→`16.9`, cả ba giai đoạn 16A/16B/16C. **1.292 test xanh** ·
+`npm run kiem` + `npm run build` xanh · gói chính **288 KB gzip** (trần 300, nền cũ 282).
+Thêm ADR-009. Chỉ còn `V0.1` và `V0.2` chưa tick — cả hai chặn bởi NGƯỜI/NGOÀI.
 
-**2. Đang dở.** GĐ16 **chờ chủ dự án gõ DUYỆT**, chưa viết một dòng code nào. Vào là làm
-`16.1`: sửa `modules/core/luu-tru/kho-bai.ts` — thêm `dangKyDoiKho(fn)` + `baoDoi()` gọi
-người đăng ký **trong tab này** rồi mới `postMessage`; gắn vào **mọi** lệnh ghi; rồi thêm
-hook `useKhoDoi()` ở `app/` thay ba chỗ tự gõ `new BroadcastChannel`.
+**2. Đang dở.** Không còn việc máy nào trong sổ này. Mọi hạng mục còn lại cần người.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` tài khoản Cloudflare + tên miền (chặn ngày phát) ·
-`V0.2` hai điện thoại thật quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md` ·
-duyệt GĐ16.
+`V0.2` hai điện thoại thật quét QR · hai chữ ký chuyên môn · duyệt câu chữ
+`docs/huong-dan-giao-vien-va-sale.md` · gọi đội dev app chủ · gọi 5 phụ huynh vừa nghỉ.
 
 **4. ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- `baoTabKhac()` **chỉ được gọi từ hai hàm dọn hạn mức**; `luuBai`/`luuThanhVien`/`xoaBai`/
-  `xoaThanhVien`/`luuPhanTich`/`xoaSach*` đều **0 lần**. Và tầng hai: `BroadcastChannel`
-  **không gửi về chính ngữ cảnh đã đăng tin** ⇒ vá đủ `postMessage` vẫn không cứu tab đang mở.
-- `JSZip.loadAsync` **không có ở `app/` hay `modules/`** ⇒ sổ `.zip` không khôi phục được.
-- *"Mặc định bản mới nhất"* **ĐÃ ĐÚNG SẴN** (`docTatCa()` sắp giảm dần, ô chọn lấy `bai[0]`).
-  Chỉ thiếu **giờ** ở nhãn nên hai bài cùng ngày trông giống hệt nhau — đừng đi sửa logic.
-- Gói JS: **282 KB nén / 958 KB thô**. Đây là mốc cho cửa kiểm ở `16.6`.
-- **Bốn robot SVG đã có** ở `modules/report/hinh-nhan-vat.ts`, nhưng **chỉ dùng ở màn kết
-  quả** — đó là câu trả lời cho "giao diện chưa sinh động", không cần vẽ nhân vật mới.
+- **Gói chính 288 KB gzip / 967 KB thô**, đo bằng `node scripts/kiem-co-goi.mjs` — chỉ tính
+  8 tệp `.js` mà `out/index.html` nạp ngay. `jspdf` nằm ở một chunk riêng **131 KB gzip**,
+  KHÔNG có trong lượt tải đầu. Người không bấm *Sao lưu* trả thêm đúng **5 KB**.
+- **`jspdf` 4.2.1 đã quét bằng `quet-ma-doc` → 🟢 XANH** (0 kênh mạng · 0 `child_process` ·
+  0 `process.env` · 0 hook cài đặt). Ứng viên "ĐỎ" duy nhất là trọn bộ ký tự khoảng trắng
+  Unicode trong polyfill `trim()` — báo nhầm. **Đừng quét lại trừ khi nâng phiên bản.**
+- **Font Be Vietnam Pro Regular** (SIL OFL 1.1, 132.948 byte) đã kiểm: magic `00010000`
+  hợp lệ, phủ **56/56** ký tự Việt thử. Nằm ở `public/fonts/`, KHÔNG nhúng base64 vào JS.
+- **jsdom KHÔNG có bộ dựng layout** — `offsetWidth` luôn 0. Mọi test kiểu *"không phần tử
+  nào rộng quá 320px"* chạy ở jsdom là **cửa kiểm giả, luôn xanh**. `tests/be-ngang.test.tsx`
+  vì thế canh thứ khác (bề rộng cố định trong nguồn, `break-words`, `w-full`, cỡ nút).
+- **Mã đo tương phản kiểu canvas 1×1 mà `CLAUDE.md` nhắc KHÔNG còn trong repo** — nó là
+  phép đo Playwright thời GĐ7. Nay có `tests/mau-va-chuyen-dong.test.tsx` đo bằng số học
+  WCAG, không cần canvas.
 
-**5. Cạm bẫy vừa trả giá.** Đã ghi vào mục *CẢNH BÁO / CẠM BẪY* của `CLAUDE.md` (5 bài,
-đắt nhất: *"đang tải" trông y hệt "đã mở"* gây lỗi đua đỏ lác đác, và **nút Xoá sạch dọn
-thiếu hai phần ba dữ liệu**). Không chép lại ở đây.
+**5. Cạm bẫy vừa trả giá.** Đã ghi vào mục *CẢNH BÁO / CẠM BẪY* của `CLAUDE.md`. Đắt nhất:
+**nút Sao lưu chỉ đọc một trong ba bảng** — cùng họ với lỗi *Xoá sạch* ở V3.1.
 
 **6. Lệnh phiên sau nên chạy.**
 ```bash
-npm run kiem            # 1.208 test; máy tải nặng thì npx vitest run --maxWorkers=2
+npm run kiem            # 1.292 test; máy tải nặng thì npx vitest run --maxWorkers=2
+npm run build           # có sẵn cửa canh cỡ gói ở cuối
 npm run xem-thu         # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
 ```
 
@@ -191,7 +193,7 @@ tiên:
 
 ---
 
-- [ ] 🔴 **16.1 — Kho tự báo mọi thay đổi, kể cả trong CÙNG một tab**
+- [x] 🔴 **16.1 — Kho tự báo mọi thay đổi, kể cả trong CÙNG một tab**
   - **(a)** Gốc lỗi đã đo trên mã: `baoTabKhac()` ở
     [kho-bai.ts:316](modules/core/luu-tru/kho-bai.ts#L316) **chỉ được gọi từ hai hàm dọn
     hạn mức**; `luuBai` · `luuThanhVien` · `xoaBai` · `xoaThanhVien` · `luuPhanTich` ·
@@ -211,7 +213,7 @@ tiên:
     đổi mà **không dựng lại component**.
   - **(d)** 4 giờ.
 
-- [ ] **16.2 — Gộp ba bước còn HAI**
+- [x] **16.2 — Gộp ba bước còn HAI**
   - **(a)** `MA_BUOC` còn `["nha-minh", "phan-tich"]`. Bước 1 hiện **cả hai bộ nút** trên
     một thẻ: *Sửa · Xoá* **và** *Làm bài · Bố mẹ trả lời về…* — tức bỏ tham số `cheDo` của
     [bang-gia-dinh.tsx](app/khoang/bang-gia-dinh.tsx) vừa thêm ở `V2.1`.
@@ -226,7 +228,7 @@ tiên:
     Thêm cửa mới: **N người có hồ sơ ⇒ đúng N bản phân tích** (thử N = 2, 3, 4).
   - **(d)** 5 giờ.
 
-- [ ] **16.3 — Ô chọn bản: có TÊN, NGÀY và GIỜ; mặc định bản mới nhất**
+- [x] **16.3 — Ô chọn bản: có TÊN, NGÀY và GIỜ; mặc định bản mới nhất**
   - **(a)** Ô chọn ở [ban-tong-hop.tsx](app/khoang/ban-tong-hop.tsx) đang hiện
     `{boDe} · {ketThuc.slice(0,10)}` — **thiếu giờ**. Đổi sang `hienNgayGio()`
     ([ngay.ts:33](modules/core/tien-ich/ngay.ts#L33)); tên người đã là nhãn của dòng.
@@ -253,7 +255,7 @@ tiên:
 
 ---
 
-- [ ] **16.4 — Tách tầng kho sau một giao diện (`KhoDisc`)**
+- [x] **16.4 — Tách tầng kho sau một giao diện (`KhoDisc`)**
   - **(a)** Gom mọi lối vào kho thành một giao diện ở tầng lõi
     (`modules/core/luu-tru/kho-disc.ts`): `docThanhVien` · `luuThanhVien` · `docBai` ·
     `luuBai` · `docPhanTich` … Bản dựng mặc định là IndexedDB đang có. Giao diện **không
@@ -269,7 +271,7 @@ tiên:
     minh. `tests/ranh-gioi-hai-tang.test.ts` phải vẫn xanh.
   - **(d)** 5 giờ.
 
-- [ ] 🔴 **16.5 — Nút KHÔI PHỤC từ `.zip`**
+- [x] 🔴 **16.5 — Nút KHÔI PHỤC từ `.zip`**
   - **(a)** Sổ `.zip` hiện **không nạp lại được** — `JSZip.loadAsync` chỉ có trong test.
     Thêm nút *Khôi phục* cạnh *Sao lưu*: chọn file → đọc `du-lieu/*.json` → kiểm hình dạng
     → **hỏi trước khi ghi đè**, nêu rõ máy này đang có mấy người và file kia có mấy người.
@@ -282,7 +284,7 @@ tiên:
     rác thì từ chối và **không đụng vào kho**; file thiếu trường thì nói rõ thiếu gì.
   - **(d)** 5 giờ.
 
-- [ ] 🔴 **16.6 — Xuất PDF chuẩn, nạp lười (ADR-009)**
+- [x] 🔴 **16.6 — Xuất PDF chuẩn, nạp lười (ADR-009)**
   - **(a)** Thêm `jspdf` + một font Việt subset (`.ttf`, nhúng được). 🔴 **Chỉ nạp khi
     bấm**: `const { jsPDF } = await import("jspdf")`. Sinh **mỗi người một tệp**, tên
     `{tên}-{yyyy-mm-dd}-{HHhMM}.pdf`, nội dung là bản phân tích của đúng người đó.
@@ -299,9 +301,6 @@ tiên:
     ngưỡng** (mốc hiện tại: 282 KB nén). Đây là cửa **duy nhất** bắt được ngày ai đó lỡ
     import tĩnh thư viện PDF: build vẫn xanh, test vẫn xanh, chỉ điện thoại 3G là chịu.
   - **(d)** 1 ngày.
-  - **(e) chặn:** NGOÀI — cần chọn một font Việt có giấy phép dùng thương mại (Be Vietnam
-    Pro hoặc Noto Sans, đều SIL OFL). Máy tải được, nhưng chủ dự án nên biết repo sẽ có
-    thêm một tệp font.
 
 ---
 
@@ -316,7 +315,7 @@ tiên:
 
 ---
 
-- [ ] **16.7 — Bộ minh hoạ mới cùng lối nét**
+- [x] **16.7 — Bộ minh hoạ mới cùng lối nét**
   - **(a)** Vẽ thêm SVG **trong chính `modules/report/hinh-nhan-vat.ts`** (cùng lối nét,
     cùng bảng màu trục với bốn robot sẵn có) cho: màn trống bước 1 · màn chờ người thứ hai ·
     nhịp chúc mừng khi cả nhà xong · huy hiệu tiến độ.
@@ -328,7 +327,7 @@ tiên:
     trong khung khai báo**. Tràn viewBox là lỗi chỉ lộ ra khi NHÌN, nên phải có cửa canh.
   - **(d)** 1 ngày.
 
-- [ ] **16.8 — Rải màu, nhân vật và chuyển động nhẹ khắp chặng đường**
+- [x] **16.8 — Rải màu, nhân vật và chuyển động nhẹ khắp chặng đường**
   - **(a)** Bốn robot hiện **chỉ xuất hiện ở đúng màn kết quả**; cả chặng còn lại là chữ đen
     trên nền trắng. Rải ra: thẻ thành viên mang màu nhóm nổi trội + robot nhỏ; huy hiệu
     `●●` thành vòng tiến độ; nút chính mang màu trục; bước đang mở có dải màu.
@@ -344,7 +343,7 @@ tiên:
     hàng loạt). Thêm cửa: mọi khối chuyển động đều có nhánh `prefers-reduced-motion`.
   - **(d)** 1 ngày.
 
-- [ ] **16.9 — Tối ưu điện thoại**
+- [x] **16.9 — Tối ưu điện thoại**
   - **(a)** Thanh bên nay chỉ còn một mục nhưng trên điện thoại vẫn chiếm một dải ngang đầu
     màn — thu thành một dòng gọn. Rà mọi bảng/lưới ở dải hẹp 320px; **ô chọn 14 bậc học** và
     **cụm nút trên thẻ** là hai chỗ dễ tràn nhất. Nút chạm ≥44px (bộ trẻ nhỏ ≥56px theo

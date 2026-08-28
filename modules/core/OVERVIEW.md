@@ -29,7 +29,9 @@ Supabase thì tài liệu đó lỗi thời.
 | `tien-ich/ngay.ts` | ISO ↔ dd/mm/yyyy, đếm ngày. Chặn bẫy `new Date("01/08/2026")` | ✅ |
 | `lien-he/kieu.ts` | Kiểu phiếu liên hệ + hàng rào QĐ3 (`timKhoaCam`) | ✅ |
 | `luu-tru/nhap.ts` | Nháp bài đang làm (localStorage), gắn theo bộ đề **và** biệt danh | ❌ |
-| `luu-tru/kho-bai.ts` | Bài đã xong (IndexedDB) | ❌ |
+| `luu-tru/kho-bai.ts` | Bản dựng IndexedDB + **mặt tiền** đi qua sổ đăng ký `KhoDisc` (16.4) | ❌ |
+| `luu-tru/kho-disc.ts` | 🆕 16.4 — BẢN HỢP ĐỒNG của tầng lưu trữ. **Sạch DOM**, nằm trong tầng lõi và có cửa canh. `datKho()` cắm bản dựng khác vào mà không sửa một dòng giao diện | ✅ |
+| `luu-tru/khoi-phuc.ts` | 🆕 16.5 — nạp sổ từ `.zip`. HAI pha: `docTuZip()` chỉ đọc-kiểm, `ghiDeKho()` mới ghi | ❌ |
 | `luu-tru/sao-luu.ts` | Xuất `.zip`. 🔴 `saoLuuTatCa()` KHÔNG nhận tham số lọc | ❌ |
 | `do-phieu/index.ts` | Bốn mốc phễu + tham số `?nguon=` | ❌ |
 | `lien-he/luu-tam.ts` | Bản mặc định của điểm cắm — lưu máy + mở Zalo | ❌ |
@@ -58,6 +60,23 @@ im lặng cả tính năng lưu. Thêm trường mới thì PHẢI thêm vào `K
 `lien-he/kieu.ts`; `tests/lien-he-sach.test.ts` có hàng rào biên dịch bắt việc này.
 
 ## 6. Cạm bẫy đã trả giá
+
+### Kho ghi xong thì phải TỰ BÁO — và `BroadcastChannel` KHÔNG đủ (16.1)
+
+`baoTabKhac()` cũ chỉ `postMessage`, mà spec loại trừ chính ngữ cảnh đã đăng tin. Nên tab
+người dùng đang nhìn là tab **duy nhất** không được báo: làm xong bài, bấm quay lại, thẻ vẫn
+hiện số cũ tới khi F5. Nay `baoDoi()` làm hai việc theo đúng thứ tự — gọi người đăng ký
+trong tab này, RỒI mới đăng tin cho tab khác — và `gomBao()` gộp lệnh ghi nhiều bảng thành
+một lần báo. Kênh nhận và kênh gửi dùng CHUNG một đối tượng, cố ý: mở kênh thứ hai để gửi
+thì kênh nhận trong cùng tab vẫn nghe thấy, và người đăng ký bị gọi hai lần cho một lần ghi.
+
+### Sao lưu phải biết kho có mấy bảng (16.5)
+
+`saoLuuTatCa()` từng chỉ đọc bảng BÀI, suốt từ khi kho lên v2 ba bảng ở GĐ12. Nay bản sao
+lưu là v2: thêm `du-lieu/thanh-vien.json` và `du-lieu/phan-tich.json`, **luôn ghi kể cả khi
+rỗng** — "vắng mặt" nghĩa là bản sao lưu đời cũ, "có mà rỗng" nghĩa là nhà chưa khai ai, và
+gộp hai trạng thái đó lại là để lúc khôi phục không phân biệt được.
+
 
 - 🔴 **NÚT "XOÁ SẠCH" TỪNG DỌN THIẾU HAI PHẦN BA DỮ LIỆU** (28/08/2026). Nó gọi
   `xoaSach()` — chỉ dọn bảng BÀI. Tên từng người (`thanh-vien`) và các bản phân tích

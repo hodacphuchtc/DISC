@@ -36,6 +36,7 @@ import { MAU } from "@config/thuong-hieu";
 import type { MaTruc } from "@modules/core/bo-de/kieu";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 import { luuPhanTich, type BaiLamLuu } from "@modules/core/luu-tru/kho-bai";
+import { hienNgayGio } from "@modules/core/tien-ich/ngay";
 import {
   phanTichGiaDinh,
   type BanPhanTich,
@@ -238,8 +239,12 @@ export function ManBanTongHop({
                 style={{ borderColor: MAU.vienMo }}
               >
                 {n.bai.map((b) => (
+                  /* 🔴 CÓ GIỜ, KHÔNG CHỈ NGÀY (16.3). Hai bài cùng một ngày trước đây hiện
+                     lên HAI DÒNG GIỐNG HỆT NHAU — và người dùng kết luận là ô chọn đang
+                     chọn sai bài, trong khi nó chọn đúng. Thứ hỏng là cái NHÃN.
+                     Tên người đã là nhãn của cả dòng nên không lặp lại ở đây. */
                   <option key={b.id} value={b.id}>
-                    {b.boDe} · {b.ketThuc.slice(0, 10)}
+                    {b.boDe} · {hienNgayGio(b.ketThuc)}
                   </option>
                 ))}
               </select>

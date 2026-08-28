@@ -18,7 +18,8 @@ import { KhoangBangGiaDinh } from "./bang-gia-dinh";
 import { ManKetQua } from "./ket-qua";
 import { HopThoaiHanMuc } from "@/app/components/hop-thoai-han-muc";
 import { KhoiSoSanh } from "@/app/components/khoi-so-sanh";
-import { GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
+import { GIOI_HAN_BAI_MOI_NGUOI, laTreEm } from "@config/disc-gia-dinh";
+import { MO_NOI_DUNG_TRE } from "@config/disc-nguong";
 import { CHU_M6 } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
@@ -27,6 +28,10 @@ import {
   soSanhTheoThoiGian,
   type KetQuaSoSanh,
 } from "@modules/report/so-sanh-thoi-gian";
+import {
+  phanTichGiaDinh,
+  type NguoiTrongPhanTich,
+} from "@modules/report/phan-tich-gia-dinh";
 import { ghiMoc } from "@modules/core/do-phieu";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
@@ -39,20 +44,25 @@ import {
   xoaSachTatCa,
   type BaiLamLuu,
 } from "@modules/core/luu-tru/kho-bai";
-import { TEN_TEP_SAO_LUU, saoLuuTatCa } from "@modules/core/luu-tru/sao-luu";
+import { docTuZip, ghiDeKho, type SoTuTep } from "@modules/core/luu-tru/khoi-phuc";
+import {
+  TEN_TEP_SAO_LUU,
+  saoLuuTatCaKemTep,
+  type TepKem,
+} from "@modules/core/luu-tru/sao-luu";
 import { taiXuong } from "@modules/core/luu-tru/tai-ve";
 
 export function KhoangNhaMinh({
-  cheDo = "quan-ly",
   onLamBai,
 }: {
-  /** Bước 1 quản lý người · bước 2 chọn người làm bài. Xem `KhoangBangGiaDinh`. */
-  readonly cheDo?: "quan-ly" | "lam-bai";
   /** `cheDo` = "quan-sat" ⇒ người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). */
   readonly onLamBai?: (tv: ThanhVien, cheDo?: "quan-sat") => void;
 }) {
   const [dangXem, datDangXem] = useState<BaiLamLuu | null>(null);
   const [dangSaoLuu, datDangSaoLuu] = useState(false);
+  const [dangDocTep, datDangDocTep] = useState(false);
+  /** Đã khôi phục xong bao nhiêu — hiện một dòng xác nhận, không hiện hộp thoại nữa. */
+  const [daKhoiPhuc, datDaKhoiPhuc] = useState<{ nguoi: number; bai: number } | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
   const [lanNap, datLanNap] = useState(0);
   /** Người vừa bấm *Làm bài* mà đã chạm trần — giữ lại để hỏi trước khi xoá gì. */
@@ -136,12 +146,96 @@ export function KhoangNhaMinh({
     onLamBai?.(tv, cheDo);
   }
 
+  /**
+   * Người dùng vừa chọn một tệp .zip.
+   *
+   * 🔴 ĐỌC TRƯỚC, HỎI SAU, GHI CUỐI. Ba bước tách bạch, và bước GHI chỉ chạy khi người
+   * dùng đã nhìn thấy cả hai con số rồi bấm đồng ý. Mọi nhánh thất bại đều thoát ra mà
+   * KHÔNG đụng vào kho — đó là điều kiện để nút này không trở thành nút mất dữ liệu.
+   */
+  async function chonTepKhoiPhuc(tep: File | null | undefined) {
+    if (!tep || dangDocTep) return;
+    datDangDocTep(true);
+    datLoi(null);
+    datDaKhoiPhuc(null);
+    try {
+      const kq = await docTuZip(await tep.arrayBuffer());
+      if (!kq.ok) {
+        datLoi(
+          kq.loi === "khong-mo-duoc"
+            ? CHU_M6.loiKhongMoDuoc
+            : kq.loi === "khong-phai-so-disc"
+              ? CHU_M6.loiKhongPhaiSo
+              : CHU_M6.loiDuLieuHong,
+        );
+        return;
+      }
+      await hoiRoiGhiDe(kq.so);
+    } catch {
+      datLoi(CHU_M6.loiKhongMoDuoc);
+    } finally {
+      datDangDocTep(false);
+    }
+  }
+
+  async function hoiRoiGhiDe(so: SoTuTep) {
+    const [nguoiCu, baiCu] = await Promise.all([docThanhVien(), docTatCa()]);
+    const cau = CHU_M6.hoiGhiDe
+      .replace("{cu}", String(nguoiCu.length))
+      .replace("{baiCu}", String(baiCu.length))
+      .replace("{moi}", String(so.thanhVien.length))
+      .replace("{baiMoi}", String(so.bai.length));
+    const themNhac = so.banCu ? `\n\n${CHU_M6.nhacBanCu}` : "";
+    if (!window.confirm(cau + themNhac)) return;
+
+    await ghiDeKho(so);
+    datDaKhoiPhuc({ nguoi: so.thanhVien.length, bai: so.bai.length });
+    napLai();
+  }
+
+  /**
+   * Sinh bản PDF cho từng người, để đính vào tệp sao lưu (16.6).
+   *
+   * 🔴 THẤT BẠI Ở ĐÂY KHÔNG ĐƯỢC KÉO ĐỔ CẢ NÚT SAO LƯU. PDF là phần đọc-cho-vui; JSON mới
+   * là phần cứu được dữ liệu. Font tải hỏng hay thư viện nạp lỗi thì vẫn phải ra một tệp
+   * .zip đầy đủ — mất bản đẹp còn hơn mất sổ.
+   *
+   * 🔴 Nạp lười: `xuat-pdf` kéo theo `jspdf`, nên nó chỉ được vào bằng `await import()`.
+   */
+  async function pdfMoiNguoi(): Promise<TepKem[]> {
+    try {
+      const [nguoi, ds] = await Promise.all([docThanhVien(), docTatCa()]);
+      const dauVao: NguoiTrongPhanTich[] = [];
+      for (const tv of nguoi) {
+        // Cờ tắt nội dung trẻ loại trẻ khỏi bản phân tích — và PDF là bản phân tích.
+        if (!MO_NOI_DUNG_TRE && laTreEm(tv.vaiTro, tv.lop)) continue;
+        // Lọc trước rồi mới đọc `diem`: `KetQua` là kiểu hợp, và nhánh KHÔNG hợp lệ
+        // (hàng rào HL-1 chặn) cố ý không có trường `diem` — nó chưa từng có điểm nào.
+        const moiNhat = ds.find(
+          (b): b is BaiLamLuu & { ketQua: { hopLe: true; diem: Record<MaTruc, number> } } =>
+            b.maThanhVien === tv.id && b.ketQua.hopLe,
+        );
+        const diem = moiNhat?.ketQua.diem ?? tv.nhanQuaMa?.diem;
+        if (!diem) continue;
+        dauVao.push({ id: tv.id, ten: tv.ten, laTre: laTreEm(tv.vaiTro, tv.lop), diem });
+      }
+
+      const kq = phanTichGiaDinh(dauVao);
+      if (!kq.phanTichDuoc) return [];
+
+      const { xuatPdfMoiNguoi } = await import("@modules/report/xuat-pdf");
+      return await xuatPdfMoiNguoi(kq.ban, new Date());
+    } catch {
+      return [];
+    }
+  }
+
   async function taiSaoLuu() {
     if (dangSaoLuu) return;
     datDangSaoLuu(true);
     datLoi(null);
     try {
-      const { duLieu } = await saoLuuTatCa(new Date().toISOString());
+      const { duLieu } = await saoLuuTatCaKemTep(new Date().toISOString(), await pdfMoiNguoi());
       if (!taiXuong(duLieu, `${TEN_TEP_SAO_LUU}.zip`)) datLoi(CHU_M6.loiSaoLuu);
     } catch {
       datLoi(CHU_M6.loiSaoLuu);
@@ -210,7 +304,6 @@ export function KhoangNhaMinh({
     <>
       <KhoangBangGiaDinh
         key={lanNap}
-        cheDo={cheDo}
         {...(onLamBai
           ? {
               onLamBai: (tv: ThanhVien) => void batDauBaiMoi(tv),
@@ -240,6 +333,26 @@ export function KhoangNhaMinh({
           >
             {CHU_M6.nutSaoLuu}
           </button>
+          {/* 🔴 Ô chọn tệp ẩn sau một nhãn trông như nút: `<input type="file">` không
+              tạo kiểu được cho tử tế, mà đây là nút người ta chỉ bấm vào ngày họ đã mất
+              dữ liệu — ngày tệ nhất để phải đoán xem cái gì bấm được. */}
+          <label
+            className="inline-flex min-h-[44px] cursor-pointer items-center rounded-xl border px-4 text-[14px] font-semibold"
+            style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
+          >
+            {dangDocTep ? CHU_M6.dangDocTep : CHU_M6.nutKhoiPhuc}
+            <input
+              type="file"
+              accept=".zip,application/zip"
+              className="sr-only"
+              onChange={(e) => {
+                const tep = e.target.files?.[0];
+                // Xoá giá trị để chọn LẠI CÙNG một tệp vẫn kích hoạt được onChange.
+                e.target.value = "";
+                void chonTepKhoiPhuc(tep);
+              }}
+            />
+          </label>
           <button
             type="button"
             onClick={() => void xoaTatCa()}
@@ -248,6 +361,14 @@ export function KhoangNhaMinh({
             {CHU_M6.nutXoaSach}
           </button>
         </div>
+
+        {daKhoiPhuc && (
+          <p data-thu="da-khoi-phuc" role="status" className="mt-2 text-[13px] font-semibold" style={{ color: MAU.timCongNghe }}>
+            {CHU_M6.daKhoiPhuc
+              .replace("{nguoi}", String(daKhoiPhuc.nguoi))
+              .replace("{bai}", String(daKhoiPhuc.bai))}
+          </p>
+        )}
         {loi && (
           <p role="alert" className="mt-2 text-[13px]" style={{ color: MAU.camDamChoChu }}>
             {loi}

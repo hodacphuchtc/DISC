@@ -78,31 +78,37 @@ export function ThanhBen() {
       className="w-full shrink-0 border-b border-neutral-200 bg-white md:h-dvh md:w-[264px] md:border-r md:border-b-0"
       style={{ borderColor: MAU.vienMo }}
     >
-      <div className="flex h-full flex-col gap-6 px-4 py-5 md:gap-0 md:px-3 md:py-6">
-        <header className="px-1">
+      {/* 🔴 TRÊN ĐIỆN THOẠI THU THÀNH MỘT DÒNG. Thanh này nay chỉ còn MỘT mục, nhưng ở
+          dải hẹp nó vẫn chiếm một dải ngang đầu màn: logo một dòng, dòng phụ một dòng,
+          rồi tấm mục một dòng nữa. Ba dòng cho một thứ không bấm được đi đâu, trong khi
+          thứ người dùng cần thấy — thẻ của từng người — bị đẩy xuống dưới nếp gấp. */}
+      <div className="flex h-full flex-row items-center gap-3 px-4 py-3 md:flex-col md:items-stretch md:gap-0 md:px-3 md:py-6">
+        <header className="min-w-0 px-1">
           <p className="text-2xl leading-none font-extrabold tracking-tight">
             <span style={{ color: MAU_LOGO.sata }}>{CHU.tenThuongHieu.truoc}</span>
             <span style={{ color: MAU_LOGO.robo }}>{CHU.tenThuongHieu.sau}</span>
           </p>
-          <p className="mt-1.5 text-[11px] tracking-widest text-neutral-600 uppercase">
+          <p className="mt-1.5 hidden text-[11px] tracking-widest text-neutral-600 uppercase md:block">
             {CHU.dongPhuLogo}
           </p>
         </header>
 
-        <div className="md:mt-7 md:flex-1">
+        <div className="ml-auto min-w-0 md:mt-7 md:ml-0 md:flex-1">
           {/* Một mục, đang mở, không bấm được đi đâu — nên là một tấm nhãn, không phải
               một nút. Nút không dẫn tới đâu là lời hứa suông với ngón tay người dùng. */}
           <div
             data-thu="muc-khoang"
             data-ma="disc"
-            className="flex w-full items-start gap-2.5 rounded-xl px-3 py-2.5 font-semibold"
+            className="flex w-full items-start gap-2.5 rounded-xl px-2.5 py-1.5 font-semibold md:px-3 md:py-2.5"
             style={{ backgroundColor: MAU.timRatNhat, color: MAU.timCongNghe }}
           >
             <span className="mt-px shrink-0">
               <IconDisc dangMo />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[15px] whitespace-nowrap">{TEN_KHOANG.disc}</span>
+              <span className="block text-[14px] whitespace-nowrap md:text-[15px]">
+                {TEN_KHOANG.disc}
+              </span>
               <span className="mt-0.5 hidden text-[11px] leading-snug font-normal text-neutral-600 md:block">
                 {MO_TA_KHOANG.disc}
               </span>

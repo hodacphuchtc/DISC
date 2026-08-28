@@ -25,7 +25,7 @@ export function BieuDoCot({
         return (
           <li key={t} className="flex items-center gap-3">
             <span
-              className={`w-[86px] shrink-0 text-[14px] ${dam ? "font-semibold text-neutral-900" : "text-neutral-600"}`}
+              className={`w-[74px] shrink-0 text-[13px] sm:w-[86px] sm:text-[14px] ${dam ? "font-semibold text-neutral-900" : "text-neutral-600"}`}
             >
               {TRUC[t].ten}
             </span>

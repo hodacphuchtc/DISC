@@ -11,8 +11,8 @@ import { CHU_BANG_GIA_DINH, CHU_BUOC } from "../config/disc-tu-dien";
  * bốn chỗ cho MỘT thay đổi, và lần sau vẫn thế.
  *
  * Từ V2.1, đường vào bài đổi lần nữa: không còn "bấm mục DISC trên thanh bên rồi chọn đối
- * tượng", mà là **mở bước 2 rồi bấm nút trên thẻ của đúng người đó**. Đường đó chỉ được
- * mô tả ở file này.
+ * tượng", mà là **bấm nút trên thẻ của đúng người đó**. Từ 16.2 bước *Làm bài* riêng cũng
+ * không còn — thẻ ở bước 1 mang luôn nút đó. Đường vào chỉ được mô tả ở file này.
  */
 
 /** Nút *Làm bài* trên thẻ một người (bài của chính họ). */
@@ -23,7 +23,7 @@ export const nutLamBai = () =>
 export const nutTraLoiHo = (ten: string) =>
   screen.getByRole("button", { name: CHU_BANG_GIA_DINH.nutTraLoiHo.replace("{ten}", ten) });
 
-/** Tấm của một bước trong khung ba bước. */
+/** Tấm của một bước trong khung các bước. */
 export const tamBuoc = (ma: string) =>
   document.querySelector(`[data-thu="tam-buoc"][data-buoc="${ma}"]`);
 
@@ -32,31 +32,22 @@ export const buocDangMo = (ma: string) =>
   Boolean(tamBuoc(ma)?.querySelector('[data-thu="than-buoc"]'));
 
 /**
- * Mở BƯỚC 2 và chờ lưới thẻ hiện ra.
+ * Mở BƯỚC 1 (nhà mình) và chờ lưới thẻ hiện ra — đây cũng là chỗ làm bài từ 16.2.
  *
- * Khung ba bước tự mở bước hợp lý nhất khi vào: chưa có ai → bước 1; có người chưa làm →
- * bước 2. Nên với một sổ đã có người, bước 2 thường đã mở sẵn — hàm này chỉ bấm khi cần,
- * để test không phụ thuộc vào việc đoán đúng bước nào đang mở.
+ * Khung tự mở bước hợp lý nhất khi vào: đủ hai người đã xong → bước 2; còn lại → bước 1.
+ * Nên bước 1 thường đã mở sẵn — hàm này chỉ bấm khi cần, để test không phụ thuộc vào việc
+ * đoán đúng bước nào đang mở.
  */
-export async function moBuocLamBai(): Promise<void> {
-  await waitFor(() => expect(tamBuoc("lam-bai")).toBeTruthy());
-  if (!buocDangMo("lam-bai")) {
-    fireEvent.click(screen.getByRole("button", { name: new RegExp(CHU_BUOC.ten["lam-bai"], "u") }));
-  }
-  await waitFor(() => expect(buocDangMo("lam-bai")).toBe(true));
-  await waitFor(() => expect(document.querySelector('[data-thu="luoi-thanh-vien"]')).toBeTruthy());
-}
-
-/** Mở bước 1 (quản lý người) và chờ bảng hiện ra. */
 export async function moBuocNhaMinh(): Promise<void> {
   await waitFor(() => expect(tamBuoc("nha-minh")).toBeTruthy());
   if (!buocDangMo("nha-minh")) {
     fireEvent.click(screen.getByRole("button", { name: new RegExp(CHU_BUOC.ten["nha-minh"], "u") }));
   }
   await waitFor(() => expect(buocDangMo("nha-minh")).toBe(true));
+  await waitFor(() => expect(document.querySelector('[data-thu="luoi-thanh-vien"]')).toBeTruthy());
 }
 
-/** Mở bước 3 (phân tích cả nhà). Chỉ mở được khi ≥ 2 người đã có hồ sơ. */
+/** Mở bước 2 (phân tích cả nhà). Chỉ mở được khi ≥ 2 người đã có hồ sơ. */
 export async function moBuocPhanTich(): Promise<void> {
   await waitFor(() => expect(tamBuoc("phan-tich")).toBeTruthy());
   if (!buocDangMo("phan-tich")) {
