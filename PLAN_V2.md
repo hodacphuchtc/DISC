@@ -4,33 +4,39 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng.
 
-**Phiên 28/08/2026 (lượt 2) — GĐ16 XONG TRỌN 9/9 hạng mục máy.**
+**Phiên 28/08/2026 (lượt 2) — GĐ16 XONG 9/9; GĐ17 mới viết sổ, CHƯA duyệt.**
 
-**1. Vừa xong.** `16.1`→`16.9`, cả ba giai đoạn 16A/16B/16C. **1.292 test xanh** ·
-`npm run kiem` + `npm run build` xanh · gói chính **288 KB gzip** (trần 300, nền cũ 282).
-Thêm ADR-009. Chỉ còn `V0.1` và `V0.2` chưa tick — cả hai chặn bởi NGƯỜI/NGOÀI.
+**1. Vừa xong.** `16.1`→`16.9`, cả ba đợt 16A/16B/16C. **1.292 test xanh** · `npm run kiem`
++ `npm run build` xanh · gói chính **288 KB gzip** (trần 300, nền cũ 282). Thêm ADR-009.
+Đã commit **và đã push** (`138812c`), CI GitHub xanh.
 
-**2. Đang dở.** Không còn việc máy nào trong sổ này. Mọi hạng mục còn lại cần người.
+**2. Đang dở.** **GĐ17 chờ chủ dự án gõ DUYỆT**, chưa viết một dòng code nào. Vào là làm
+`17.1` — hạng mục ĐO, không phải hạng mục tính năng: dựng
+`tests/chi-phi-pdf.test.ts` sinh 42 tệp PDF ở trường hợp xấu nhất rồi in ra tổng giây và
+tổng dung lượng. **Con số đó quyết định hình dạng của cả GĐ 17B** — quá 10 giây hoặc quá
+8 MB thì DỪNG, báo chủ dự án, đừng đi tiếp.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` tài khoản Cloudflare + tên miền (chặn ngày phát) ·
 `V0.2` hai điện thoại thật quét QR · hai chữ ký chuyên môn · duyệt câu chữ
-`docs/huong-dan-giao-vien-va-sale.md` · gọi đội dev app chủ · gọi 5 phụ huynh vừa nghỉ.
+`docs/huong-dan-giao-vien-va-sale.md` · gọi đội dev app chủ · gọi 5 phụ huynh vừa nghỉ ·
+**duyệt GĐ17**.
 
 **4. ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- **Gói chính 288 KB gzip / 967 KB thô**, đo bằng `node scripts/kiem-co-goi.mjs` — chỉ tính
-  8 tệp `.js` mà `out/index.html` nạp ngay. `jspdf` nằm ở một chunk riêng **131 KB gzip**,
-  KHÔNG có trong lượt tải đầu. Người không bấm *Sao lưu* trả thêm đúng **5 KB**.
-- **`jspdf` 4.2.1 đã quét bằng `quet-ma-doc` → 🟢 XANH** (0 kênh mạng · 0 `child_process` ·
-  0 `process.env` · 0 hook cài đặt). Ứng viên "ĐỎ" duy nhất là trọn bộ ký tự khoảng trắng
-  Unicode trong polyfill `trim()` — báo nhầm. **Đừng quét lại trừ khi nâng phiên bản.**
-- **Font Be Vietnam Pro Regular** (SIL OFL 1.1, 132.948 byte) đã kiểm: magic `00010000`
-  hợp lệ, phủ **56/56** ký tự Việt thử. Nằm ở `public/fonts/`, KHÔNG nhúng base64 vào JS.
+- 🔴 **Trần 2 bài/người + hộp thoại cảnh báo ĐÃ CÓ TỪ GĐ12** — `GIOI_HAN_BAI_MOI_NGUOI`,
+  `chonBaiPhaiXoa()`, `batDauBaiMoi()`, `hop-thoai-han-muc.tsx`. Hộp thoại nêu đích danh
+  bài sắp mất, có nút *Tải về giữ lại*, bắt tick ô xác nhận. **Đừng xây lại.** Ở ý "xem lại
+  bản cũ" chỉ còn thiếu cái NÚT CHUYỂN giữa hai bản.
+- **Gói chính 288 KB gzip / 967 KB thô**, đo bằng `node scripts/kiem-co-goi.mjs`. `jspdf`
+  nằm ở chunk riêng **131 KB gzip**, không có trong lượt tải đầu.
+- **`jspdf` 4.2.1 đã quét `quet-ma-doc` → 🟢 XANH.** Đừng quét lại trừ khi nâng phiên bản.
+- **Font Be Vietnam Pro** (SIL OFL, 132.948 byte) phủ **56/56** ký tự Việt thử.
 - **jsdom KHÔNG có bộ dựng layout** — `offsetWidth` luôn 0. Mọi test kiểu *"không phần tử
-  nào rộng quá 320px"* chạy ở jsdom là **cửa kiểm giả, luôn xanh**. `tests/be-ngang.test.tsx`
-  vì thế canh thứ khác (bề rộng cố định trong nguồn, `break-words`, `w-full`, cỡ nút).
-- **Mã đo tương phản kiểu canvas 1×1 mà `CLAUDE.md` nhắc KHÔNG còn trong repo** — nó là
-  phép đo Playwright thời GĐ7. Nay có `tests/mau-va-chuyen-dong.test.tsx` đo bằng số học
-  WCAG, không cần canvas.
+  nào rộng quá 320px"* chạy ở jsdom là **cửa kiểm giả, luôn xanh**.
+- **Bề rộng đang khoá ở `max-w-3xl` (768px)** tại [cac-buoc.tsx:140](app/khoang/cac-buoc.tsx#L140)
+  và [bang-gia-dinh.tsx:114](app/khoang/bang-gia-dinh.tsx#L114); lưới thẻ dừng ở
+  `sm:grid-cols-2`. Đó là gốc của việc màn 1920px thừa hai phần ba.
+- **Sàn so sánh 90 ngày** ở [so-sanh-thoi-gian.ts:87](modules/report/so-sanh-thoi-gian.ts#L87)
+  — dải chọn bản mới của `17.2` KHÔNG được lật nó.
 
 **5. Cạm bẫy vừa trả giá.** Đã ghi vào mục *CẢNH BÁO / CẠM BẪY* của `CLAUDE.md`. Đắt nhất:
 **nút Sao lưu chỉ đọc một trong ba bảng** — cùng họ với lỗi *Xoá sạch* ở V3.1.
@@ -356,10 +362,294 @@ tiên:
 
 ---
 
+## TỔNG ƯỚC LƯỢNG GĐ16
+
+| Giai đoạn | Máy | Người / Ngoài |
+| --- | --- | --- |
+| 16A — lỗi thật + gộp hai bước | 1,5 ngày | — |
+| 16B — PDF · khôi phục · tách tầng | 2,5 ngày | chọn font (SIL OFL) |
+| 16C — giao diện + di động | 3 ngày | — |
+| **Tổng** | **~7 ngày máy** | |
+
+🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
+thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`.
+
+---
+
+## 🆕 GIAI ĐOẠN 17 — Xem lại bản cũ · Tệp sao lưu đọc được · Bố cục máy tính
+
+> **Chốt 28/08/2026** sau khi chủ dự án bấm thử bản thật vừa dựng xong GĐ16.
+> **Toàn bộ GĐ17 là việc MÁY** — không hạng mục nào chờ người hay dịch vụ ngoài, nên không
+> hạng mục nào có dòng `(e) chặn:`.
+
+**Ba việc chủ dự án nêu:**
+
+1. Một người làm 2 bài, nhưng màn *Xem kết quả* **chỉ mở được bài mới nhất**.
+2. Giải nén tệp sao lưu ra thấy **JSON không đọc được**. Muốn thấy **thư mục theo tên từng
+   người**, bên trong là PDF, cộng một thư mục **Tổng hợp** chia theo ngày giờ.
+3. **Giao diện máy tính** khoá ở một cột hẹp bên trái; màn 1920px thừa hai phần ba.
+
+### 🔴 MỘT PHẦN YÊU CẦU ĐÃ CÓ SẴN — ĐỪNG XÂY LẠI
+
+Chủ dự án yêu cầu *"tối đa 2 bản; làm bản thứ 3 thì cảnh báo xoá bản cũ hơn"*. Việc đó
+**đã chạy đúng từ GĐ12**:
+
+| Thứ | Ở đâu |
+| --- | --- |
+| Trần **2 bài/người** | `GIOI_HAN_BAI_MOI_NGUOI = 2` — [disc-gia-dinh.ts:109](config/disc-gia-dinh.ts#L109) |
+| Chọn ra bài sắp mất (hàm thuần) | `chonBaiPhaiXoa()` — [han-muc.ts](modules/core/gia-dinh/han-muc.ts) |
+| Cửa chặn ở lối vào bài mới | `batDauBaiMoi()` — [nha-minh.tsx:100](app/khoang/nha-minh.tsx#L100) |
+| Hộp thoại cảnh báo | [hop-thoai-han-muc.tsx](app/components/hop-thoai-han-muc.tsx) |
+
+Hộp thoại đó nêu **đích danh** bài sắp mất, có nút *Tải về giữ lại*, và bắt tick một ô xác
+nhận mới cho đi tiếp. Trần **5 thư mục phân tích** cũng đã có, cùng khuôn.
+⇒ Ở ý (1) chỉ còn thiếu **cái nút chuyển giữa hai bản**.
+
+### 🔴 BỐN QUYẾT ĐỊNH ĐÃ CHỐT — không hỏi lại
+
+| Điểm | Chốt | Vì sao |
+| --- | --- | --- |
+| JSON trong `.zip` | **GIỮ**, nhét vào `_may-doc/` kèm `ĐỌC TRƯỚC.txt` | Bỏ hẳn là giết nút *Khôi phục* vừa xây ở `16.5`, và biến bản sao lưu thành bản xuất — mất máy là mất sổ |
+| Bề rộng máy tính | Nới theo **LOẠI nội dung**, KHÔNG full-width tất cả | Đoạn văn dài 200 ký tự làm mắt lạc dòng. Sản phẩm này nội dung chính LÀ chữ để phụ huynh đọc |
+| Ruột PDF cá nhân | **Bản đầy đủ**, dựng từ `layDienGiaiDay()` | Dùng lại nội dung đã có ⇒ **không viết chữ mới** ⇒ không làm hồ sơ đang chờ ký duyệt lỗi thời thêm lần nữa |
+| Tên thật trong `.zip` | **Chấp nhận**, lật hàng rào *"tên không vào tệp xuất"* của ADR-005 | Đã có tiền lệ ở `16.6`. Thư mục tên "Zozo" mà bên trong là PDF ghi rõ tên Zozo thì tên thư mục không lộ thêm gì |
+
+### 🔴 HAI HẠNG MỤC RỦI RO CAO — XẾP SỚM NHẤT CÓ CHỦ ĐÍCH
+
+| Rủi ro | Vì sao không để cuối |
+| --- | --- |
+| **Chi phí sinh nhiều tệp PDF** (`17.1`) | Trường hợp xấu nhất là **42 tệp** trong một lần bấm (6 người × 2 bản + 5 lần phân tích × 6 người), mỗi tệp nhúng trọn font 133 KB. Có thể ra `.zip` vài MB và treo máy cả chục giây trên điện thoại phổ thông. **Con số này quyết định hình dạng của cả GĐ 17B** — đo muộn thì phải đập đi làm lại. Nên nó là hạng mục ĐẦU TIÊN, trước cả việc dễ. |
+| **Khôi phục phải đọc được BA đời tệp** (`17.5`) | Người dùng đang giữ tệp `.zip` tải hôm qua (đời v2) và có thể cả đời v1. Nút cứu dữ liệu mà **từ chối chính bản sao lưu của người dùng** là kiểu hỏng tệ nhất tính năng này mắc được — và nó chỉ lộ ra vào đúng ngày người ta cần nó. |
+
+---
+
+## GIAI ĐOẠN 17A — Đo rủi ro, và gỡ khó chịu lớn nhất
+
+**Ước lượng: 0,75 ngày**
+
+### DEMO CUỐI GĐ 17A
+> Một người có **2 bài** → bấm *Xem kết quả* → thấy **dải chọn hai bản, mỗi bản một nhãn có
+> NGÀY và GIỜ**; bấm bản cũ thì biểu đồ và chữ đổi theo đúng bài cũ; bấm lại bản mới thì
+> quay về. **Không con số so sánh nào tự hiện ra.**
+> Và có **một con số thật** trên màn hình terminal: sinh 42 tệp PDF mất bao nhiêu giây,
+> ra bao nhiêu MB — đủ để quyết định GĐ 17B làm theo hình dạng nào.
+
+---
+
+- [ ] 🔴 **17.1 — ĐO TRƯỚC: chi phí sinh nhiều tệp PDF**
+  - **(a)** Chưa sửa sản phẩm. Viết `tests/chi-phi-pdf.test.ts` dựng dữ liệu BỊA ở trường
+    hợp xấu nhất (6 người × 2 bài + 5 lần phân tích × 6 bản = 42 tệp), gọi bộ sinh PDF
+    hiện có ([xuat-pdf.ts](modules/report/xuat-pdf.ts)) rồi **in ra: tổng giây, tổng byte
+    trước nén, tổng byte sau nén `.zip`, byte trung bình mỗi tệp**.
+    🔴 Đo cả trường hợp THẬT hay gặp (3 người × 1 bài + 1 lần phân tích = 6 tệp) — con số
+    xấu nhất dùng để quyết kiến trúc, con số hay gặp dùng để quyết có cần thanh tiến trình.
+    Nếu tổng > 10 giây hoặc `.zip` > 8 MB ⇒ **DỪNG, báo chủ dự án**, kèm ba lối thoát đã
+    tính sẵn: gộp 2 bản của một người vào MỘT tệp nhiều trang · chỉ xuất lần phân tích mới
+    nhất thay vì cả 5 · cắt font xuống bộ ký tự thật sự dùng.
+  - **(b)** Chạy `npx vitest run tests/chi-phi-pdf.test.ts` và **đọc bảng số in ra**. Không
+    cần bấm gì trên giao diện — đây là hạng mục lấy SỐ, không lấy tính năng.
+  - **(c)** `tests/chi-phi-pdf.test.ts` — khẳng định 42 tệp đều bắt đầu bằng `%PDF-`, và
+    ghim hai trần: tổng thời gian và tổng dung lượng. Trần vượt thì test ĐỎ, cố ý.
+  - **(d)** 2 giờ.
+
+- [ ] **17.2 — Dải chọn bản ở màn Kết quả**
+  - **(a)** Component mới `app/components/chon-ban-ket-qua.tsx`: mỗi bản một nút, nhãn dùng
+    `hienNgayGio()` ([ngay.ts:33](modules/core/tien-ich/ngay.ts#L33)), bản đang xem được
+    đánh dấu, bản mới nhất mở sẵn. **Chỉ hiện khi có từ 2 bài trở lên** — một bài mà bày ra
+    một dải chọn một phần tử là bày ra một nút không làm gì.
+    [nha-minh.tsx](app/khoang/nha-minh.tsx): `dangXem` đổi từ *một bài* sang
+    `{ cacBan: BaiLamLuu[]; dangChon: number }`; nút *Xem kết quả* trên thẻ trao **mọi bài
+    của người đó** thay vì mỗi `bai[0]`.
+    [bang-gia-dinh.tsx](app/khoang/bang-gia-dinh.tsx): `onXemBai` đổi chữ ký để trao cả
+    danh sách — chỗ đó đã sẵn có `bai` của từng người, không phải đọc kho thêm lần nào.
+    🔴 **RANH GIỚI PHẢI GIỮ:** dải này chỉ cho XEM LẦN LƯỢT. Tuyệt đối không tự tính
+    *"bạn đã đổi bao nhiêu điểm"*. Việc so sánh có **sàn 90 ngày**
+    ([so-sanh-thoi-gian.ts:87](modules/report/so-sanh-thoi-gian.ts#L87)) vì hai bài cách
+    nhau ba tuần thì thứ hiện lên là **nhiễu đo** — mà nó vẫn đọc rất thuyết phục vì có số
+    kèm theo. Nút *Xem thay đổi* hiện có giữ nguyên luật cũ, không đụng vào.
+  - **(b)** Cho một người làm **2 bài** (cách nhau vài phút cũng được) → bấm *Xem kết quả*
+    trên thẻ của họ → thấy **hai nhãn khác nhau, có giờ**; bản mới nhất đang được chọn.
+    Bấm nhãn cũ → **bốn cột điểm đổi** sang bài cũ và chữ diễn giải đổi theo. Bấm lại nhãn
+    mới → quay về. Người chỉ có **1 bài** → **không thấy dải nào**.
+  - **(c)** `tests/chon-ban-ket-qua.test.tsx`: 1 bài ⇒ không dựng dải · 2 bài ⇒ hai nhãn
+    KHÁC NHAU và đều chứa giờ · mặc định chọn bài mới nhất · bấm bản cũ ⇒ điểm nhận được
+    đúng của bài cũ · 🔴 **dải này không làm xuất hiện chữ nào của khối so sánh**.
+  - **(d)** 3 giờ.
+
+---
+
+## GIAI ĐOẠN 17B — Tệp sao lưu mở ra là đọc được
+
+**Ước lượng: 1,5 ngày**
+
+### DEMO CUỐI GĐ 17B
+> Bấm *Sao lưu* → nhận một `.zip` → giải nén thấy:
+> **một thư mục cho mỗi người trong nhà**, tên là tên của họ, bên trong 1–2 tệp PDF;
+> một thư mục **Tổng hợp** chứa các thư mục con đặt tên theo **ngày giờ** từng lần phân
+> tích (tối đa 5); và một thư mục `_may-doc` chứa JSON kèm tệp `ĐỌC TRƯỚC.txt`.
+> Rồi *Xoá sạch* → *Khôi phục* chọn đúng tệp đó → **cả sổ quay về**. Thử lại bằng tệp
+> `.zip` **tải hôm qua** → **cũng nạp được**.
+
+Hình dạng đích:
+
+```
+disc-sao-luu.zip
+├── Zozo/
+│   ├── 2026-08-28 19h30 — THCS.pdf
+│   └── 2026-08-12 08h15 — THCS.pdf        ← tối đa 2, đúng bằng trần đã có
+├── Mẹ Lan/
+│   └── 2026-08-28 19h42 — PH.pdf
+├── Tổng hợp/
+│   ├── 2026-08-28 20h05/                  ← MỘT thư mục cho MỘT lần chạy phân tích
+│   │   ├── Zozo.pdf
+│   │   └── Mẹ Lan.pdf                     ← mỗi người một tờ (luật GĐ10/GĐ14)
+│   └── 2026-08-25 08h15/…                 ← tối đa 5, đúng bằng trần đã có
+└── _may-doc/
+    ├── ĐỌC TRƯỚC.txt
+    ├── ban-ke.json · thanh-vien.json · phan-tich.json · bai/…
+```
+
+---
+
+- [ ] 🔴 **17.3 — PDF cho MỘT bài của MỘT người**
+  - **(a)** `modules/report/noi-dung-ket-qua.ts` (mới, **tầng lõi**, hàm thuần): đổi một
+    bài thành danh sách dòng, **dùng lại kiểu `DongBan`** của
+    [noi-dung-ban.ts](modules/report/noi-dung-ban.ts) đã viết ở `16.6`. Ruột lấy từ
+    `layDienGiaiDay()` ([dien-giai.ts:209](modules/report/dien-giai.ts#L209)) — điểm bốn
+    nhóm · phổ bốn nhóm (biểu hiện · điểm mạnh · chỗ cần để ý) · lời khuyên cho đúng người
+    đọc. 🔴 **KHÔNG viết một chữ nội dung mới nào** — mọi câu đều đã có trong `config/`.
+    [xuat-pdf.ts](modules/report/xuat-pdf.ts): tách phần vẽ thành `veTepPdf(dong, tieuDe)`
+    dùng chung, rồi thêm `xuatPdfMotBai()`. Font vẫn tải **một lần** cho cả lượt.
+    🔴 Người có hồ sơ **nhận qua mã mời** (`nhanQuaMa`, không có bài trên máy) vẫn ra được
+    PDF — họ có đủ bốn điểm — nhưng đầu tệp phải ghi rõ *"hồ sơ nhận qua mã mời"*, không
+    được để người đọc tưởng bài làm trên máy này.
+  - **(b)** Chưa nhìn thấy gì trên màn. Chạy `npx vitest run tests/xuat-pdf.test.ts`, rồi
+    mở tệp PDF mà test ghi ra `du-lieu-thu/` (thư mục này đã có trong `.gitignore`) bằng
+    trình đọc PDF của máy: thấy **tên người,
+    ngày giờ, bốn điểm, và phần chữ** — tiếng Việt đủ dấu.
+  - **(c)** `tests/noi-dung-ket-qua.test.ts`: mỗi bộ đề ra đủ **bốn** trục (luật §9.2) ·
+    bộ PH ra bản tự đọc, bộ MN/QS ra bản cho người lớn · bài của người nhận qua mã mời có
+    dòng ghi rõ nguồn. Mở rộng `tests/xuat-pdf.test.ts`: tệp bắt đầu `%PDF-`, tên tệp có
+    đủ ngày + giờ + mã bộ đề.
+  - **(d)** 5 giờ.
+
+- [ ] 🔴 **17.4 — Cây thư mục mới trong `.zip`**
+  - **(a)** `modules/core/luu-tru/sao-luu.ts`: `taoNoiDungZip()` nhận **cây thư mục** thay
+    vì mảng phẳng; JSON chuyển xuống `_may-doc/` kèm `ĐỌC TRƯỚC.txt` nói rõ *"đừng mở tay,
+    đây là phần nút Khôi phục đọc"*. `saoLuuTatCa()` **giữ nguyên chữ ký một tham số** —
+    nó là hàng rào, có test khẳng định `toHaveLength(1)`.
+    Hàm mới `tenThuMucNguoi(ten, daDung)` ở tầng lõi: lọc ký tự cấm hệ tệp
+    (`/ \\ : * ? " < > |`) nhưng **GIỮ dấu tiếng Việt**; tên trùng thì thêm hậu tố
+    `Zozo (2)` — form chặn trùng tên, nhưng hồ sơ nhận qua mã mời do máy nhận tự đặt tên.
+    [nha-minh.tsx](app/khoang/nha-minh.tsx): dựng cây, kèm **dòng tiến trình**
+    (*Đang tạo tệp 12/28…*) và **nhường luồng giữa mỗi tệp** để máy không đứng hình.
+    🔴 Đây là **chỗ chặn thứ TƯ** của cờ `MO_NOI_DUNG_TRE`: cờ tắt ⇒ không xuất thư mục
+    của trẻ, kể cả trẻ có bài từ trước khi tắt cờ.
+    🔴 Sinh PDF hỏng (font lỗi, thư viện nạp lỗi) **không được kéo đổ nút Sao lưu** — vẫn
+    phải ra `.zip` đủ JSON. Mất bản đẹp còn hơn mất sổ.
+  - **(b)** Máy có 3 người, một người 2 bài, đã chạy phân tích 2 lần → bấm *Sao lưu* →
+    thấy **dòng tiến trình chạy** → tệp tải về. Giải nén: **đếm được 3 thư mục tên người**,
+    thư mục người kia có **2 tệp PDF**, thư mục *Tổng hợp* có **2 thư mục con tên theo ngày
+    giờ**, và `_may-doc/` có `ĐỌC TRƯỚC.txt`. Đổi tên một người thành `Bé/Na` rồi sao lưu
+    lại → thư mục **không** vỡ thành hai cấp.
+  - **(c)** `tests/cay-sao-luu.test.ts`: cây đúng hình dạng · mỗi người ≤2 tệp · ≤5 thư mục
+    con trong *Tổng hợp* · tên trùng ra hậu tố `(2)` · ký tự cấm bị lọc mà dấu tiếng Việt
+    còn nguyên · **cờ `MO_NOI_DUNG_TRE` tắt ⇒ không có thư mục của trẻ** (thử CẢ HAI trạng
+    thái cờ — một cờ chỉ thử lúc đang bật thì đúng bằng không có cờ) · bộ sinh PDF ném lỗi
+    ⇒ `.zip` **vẫn** có đủ JSON.
+  - **(d)** 5 giờ.
+
+- [ ] 🔴 **17.5 — Khôi phục đọc được CẢ BA đời tệp**
+  - **(a)** `modules/core/luu-tru/khoi-phuc.ts`: `docTuZip()` phải nhận diện và nạp được
+    **v1** (chỉ `bai/`, `ban-ke.json` ở gốc) · **v2** (`du-lieu/` + `ban-ke.json` ở gốc —
+    đời sinh ra hôm 28/08) · **v3** (`_may-doc/`). Tìm bản kê ở CẢ HAI chỗ trước khi kết
+    luận *"không phải sổ DISC"*.
+    🔴 Tệp PDF trong `.zip` **bị bỏ qua khi khôi phục** — chúng là bản đọc, không phải
+    nguồn dữ liệu. Nhưng sự có mặt của chúng **không được** làm bộ đọc từ chối tệp.
+  - **(b)** Giữ lại tệp `.zip` đã tải **hôm 28/08** (đời v2). *Xoá sạch* → *Khôi phục* chọn
+    tệp cũ đó → **cả sổ quay về đủ**. Rồi sao lưu lại (ra đời v3) → *Xoá sạch* → *Khôi phục*
+    bằng tệp mới → **cũng quay về đủ**. Thử một `.zip` bất kỳ không phải sổ DISC → báo lỗi
+    rõ và **không mất gì**.
+  - **(c)** Mở rộng `tests/khoi-phuc.test.ts`: khứ hồi **v3** · nạp được tệp **v2** dựng
+    tay · nạp được tệp **v1** dựng tay · tệp v3 có lẫn PDF vẫn nạp đúng · tệp rác vẫn bị
+    từ chối và **không đụng vào kho**.
+  - **(d)** 2 giờ.
+
+---
+
+## GIAI ĐOẠN 17C — Máy tính hết thừa hai phần ba màn
+
+**Ước lượng: 1 ngày**
+
+### DEMO CUỐI GĐ 17C
+> Mở trên màn **1920px**: lưới thẻ gia đình xếp **3–4 cột** (sáu người vừa một màn, không
+> phải cuộn); bản phân tích cả nhà xếp **hai cột**; **nhưng đoạn văn vẫn ngắt dòng ở bề
+> rộng đọc được**, không chạy hết bề ngang.
+> Rồi thu cửa sổ còn **320px** đi lại từ đầu → **không cuộn ngang một lần nào**.
+
+---
+
+- [ ] **17.6 — Gom bề rộng về `config/`, nới khung trang và lưới thẻ**
+  - **(a)** Gốc vấn đề đã đo: [cac-buoc.tsx:140](app/khoang/cac-buoc.tsx#L140) và
+    [bang-gia-dinh.tsx:114](app/khoang/bang-gia-dinh.tsx#L114) khoá `max-w-3xl` (768px),
+    lưới thẻ dừng ở `sm:grid-cols-2`. Màn 1920px vì thế dùng đúng một phần ba.
+    File mới `config/bo-cuc.ts` giữ các lớp bề rộng — **một chỗ duy nhất để chỉnh**, cùng
+    lối với `config/thuong-hieu.ts`, thay vì rải `max-w-*` khắp 12 file như hiện nay:
+    khung trang `max-w-[1600px]` căn giữa · lưới thẻ `1 → 2 → 3 → 4` cột · khung đọc
+    `max-w-2xl` (~70 ký tự/dòng).
+    🔴 **KHÔNG nới đoạn văn và màn làm bài.** [disc.tsx](app/khoang/disc.tsx),
+    [lam-bai.tsx](app/khoang/lam-bai.tsx), [truoc-khi-bat-dau.tsx](app/khoang/truoc-khi-bat-dau.tsx),
+    [vung-lech.tsx](app/khoang/vung-lech.tsx) giữ nguyên khung hẹp. Nới ra là hại đúng thứ
+    đang cần sửa.
+  - **(b)** Mở trên màn máy tính rộng nhất anh có: **lưới thẻ xếp 3 hoặc 4 cột**, khoảng
+    trắng bên phải co lại rõ rệt. Vào một bài test: **màn câu hỏi vẫn hẹp như cũ** — chữ
+    không chạy hết bề ngang.
+  - **(c)** `tests/bo-cuc.test.tsx`: không màn nào còn `max-w-3xl` gõ thẳng · lưới thẻ có
+    mốc ≥3 cột · **bốn màn đọc-và-trả-lời vẫn giữ khung hẹp** (cửa này chặn việc nới quá
+    tay, không phải chặn việc nới) · `tests/be-ngang.test.tsx` (320px) phải vẫn xanh.
+  - **(d)** 4 giờ.
+
+- [ ] **17.7 — Bản phân tích và màn kết quả xếp hai cột ở màn rộng**
+  - **(a)** [ban-tong-hop.tsx](app/khoang/ban-tong-hop.tsx): N bản xếp **hai cột từ mốc
+    `lg`**, mỗi cột giữ bề rộng đọc được. Đây là màn chữ nhiều nhất — cũng là chỗ đỡ cuộn
+    nhiều nhất. 🔴 **Luật in tách bản không được vỡ:** bấm *In phần của Bin* thì mọi dải
+    khác vẫn phải bị ẩn — bố cục hai cột dùng CSS grid, và `display: none` khi in vẫn phải
+    thắng. [ket-qua.tsx](app/khoang/ket-qua.tsx): biểu đồ + bốn điểm bên trái, chữ diễn
+    giải bên phải, từ mốc `lg`.
+  - **(b)** Có 3 người đã làm xong → chạy *Phân tích cả nhà* trên màn rộng → **ba bản xếp
+    hai cột**, đỡ cuộn hẳn. Bấm *In phần của Zozo* → xem trước bản in → **chỉ có phần của
+    Zozo**, không lẫn một chữ nào của người khác. Thu cửa sổ hẹp lại → **tự về một cột**.
+  - **(c)** Mở rộng `tests/bo-cuc.test.tsx`: bản tổng hợp có mốc `lg:grid-cols-2` · màn kết
+    quả có mốc hai cột. `tests/ban-tong-hop.test.tsx` (in tách bản) và
+    `tests/ban-in.test.ts` phải **vẫn xanh** — đó là cửa canh luật *mỗi người một tờ*.
+  - **(d)** 4 giờ.
+
+---
+
+## TỔNG ƯỚC LƯỢNG GĐ17
+
+| Giai đoạn | Máy | Người / Ngoài |
+| --- | --- | --- |
+| 17A — đo rủi ro + chuyển bản | 0,75 ngày | — |
+| 17B — tệp sao lưu đọc được | 1,5 ngày | — |
+| 17C — bố cục máy tính | 1 ngày | — |
+| **Tổng** | **~3,25 ngày máy** | **không có** |
+
+🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
+thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`.
+
+---
+
 ## ❌ KHÔNG LÀM Ở PHIÊN BẢN NÀY
 
 | Không làm | Vì sao |
 | --- | --- |
+| **So sánh tự động giữa hai bản** ở dải chọn mới (`17.2`) | Sàn **90 ngày** vẫn giữ. Hai bài cách ba tuần thì thứ hiện lên là nhiễu đo, mà nó đọc rất thuyết phục vì có số kèm theo. Dải mới chỉ cho XEM lần lượt |
+| **Tăng trần 2 bài/người hay 5 thư mục phân tích** | Chủ dự án xác nhận giữ nguyên. Trần và hộp thoại cảnh báo đã chạy đúng từ GĐ12 |
+| **Full-width cho đoạn văn và màn làm bài** (`17.6`) | Dòng 200 ký tự làm mắt lạc dòng. Sản phẩm này nội dung chính LÀ chữ để phụ huynh đọc — nới ra là hại đúng thứ đang cần sửa |
+| **Bỏ JSON khỏi tệp sao lưu** | Là giết nút *Khôi phục* vừa xây ở `16.5`. JSON xuống `_may-doc/` kèm tệp giải thích, giữ được cả hai |
+| **Cắt font xuống bộ ký tự thật dùng** | Chỉ mở ra nếu `17.1` đo thấy cần. Chưa có số thì chưa tối ưu — tối ưu trước khi đo là đoán |
+| **Sửa câu chữ nội dung** | Vẫn không đụng `config/disc-noi-dung-cap.ts` và họ hàng — phần đang chờ ký duyệt. PDF cá nhân dùng lại nguyên văn `layDienGiaiDay()` |
 | **Backend + đăng nhập + đồng bộ** | Chủ dự án chốt giữ ADR-001; `16.4` tách tầng sẵn để app chủ cắm vào sau. Làm ngay thì cần đội dev app chủ (**chưa ai hỏi họ có nhận không**), cần máy chủ, và **công ty thành bên xử lý dữ liệu cá nhân TRẺ EM** (NĐ 13/2023) — thứ ADR-001 đã cố ý mua đường tránh. Thêm 2–4 tuần. |
 | **Hoạt hình Lottie / video** | Thêm thư viện + 50–200 KB mỗi cảnh, đụng thẳng mục tiêu *chạy mượt trên điện thoại phổ thông*. SVG tự vẽ đủ sinh động mà 0 KB. |
 | **PDF cho bản in ba dải của GĐ10** | Gói này chỉ xuất PDF cho **bản phân tích cả nhà**. Bản in cũ vẫn dùng `window.print()` — nó đang chạy đúng, không có lý do đụng vào. |
@@ -380,15 +670,3 @@ Sau khi phát cho 30 gia đình, đọc hai con số ở `?so-lieu=1`:
   bác**. Bằng 0 sau 30 máy thật thì **dừng, đừng tiêu thêm ngày nào**.
 
 ---
-
-## TỔNG ƯỚC LƯỢNG GĐ16
-
-| Giai đoạn | Máy | Người / Ngoài |
-| --- | --- | --- |
-| 16A — lỗi thật + gộp hai bước | 1,5 ngày | — |
-| 16B — PDF · khôi phục · tách tầng | 2,5 ngày | chọn font (SIL OFL) |
-| 16C — giao diện + di động | 3 ngày | — |
-| **Tổng** | **~7 ngày máy** | |
-
-🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
-thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`.
