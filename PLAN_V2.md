@@ -387,7 +387,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
 
 ---
 
-- [ ] **V5.1 — Ẩn đồ cũ khỏi điều hướng (KHÔNG di chuyển file)**
+- [x] **V5.1 — Cách ly đồ cũ** ✅ (28/08/2026 — soi thấy CHỈ MỘT món thật sự mồ côi: `lich-su.tsx`, chết từ GĐ12 mà vẫn nằm trong `app/`. Dời vào `cu/` theo đúng quyết định 28/08, kèm `tests/vung-cach-ly.test.ts` canh luật một chiều. So sánh *hồi đó ↔ bây giờ* KHÔNG cần ẩn — nút vốn đã tự ẩn tới khi có hai bài cách ≥90 ngày)
   - **(a)** Ẩn khỏi đường đi những thứ không thuộc luồng mới: so sánh *hồi đó ↔ bây giờ*
     (sớm nhất cuối tháng 11 mới có nhà nào mở được), ảnh PNG chia sẻ ra ngoài (đích đã đổi
     sang *rủ người trong nhà*), và nút QR **nếu `V0.2` đỏ**. 🔴 **Chỉ ẩn khỏi điều hướng,
@@ -400,7 +400,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     `tests/ngoai-tuyen.test.ts` phải vẫn xanh (service worker + danh sách nạp sẵn).
   - **(d)** 2 giờ.
 
-- [ ] **V5.2 — Ghi lại quyết định để sáu tháng sau còn truy được**
+- [x] **V5.2 — Ghi lại quyết định để sáu tháng sau còn truy được** ✅ (28/08/2026)
   - **(a)** Viết `docs/decisions/ADR-008-ba-buoc-trong-mot-khoang.md`: luồng ba bước lật
     phần nào của ADR-007, giữ phần nào (bảng gia đình **được giữ nguyên** bên trong bước 1,
     nên điều ADR-007 lo — *"nhìn một cái là biết ai chưa làm"* — vẫn còn), và ghi lại **cả

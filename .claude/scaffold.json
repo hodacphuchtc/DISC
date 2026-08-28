@@ -35,7 +35,8 @@
     ".gitignore",
     ".gitleaks.toml",
     "CLAUDE.md",
-    "PLAN.md",
+    "PLAN_V2.md",
+    "PLAN_V1_LUU.md",
     "README.md",
     "app/globals.css",
     "app/layout.tsx",
@@ -75,5 +76,5 @@
     "test",
     "report"
   ],
-  "adrCount": 7
+  "adrCount": 8
 }

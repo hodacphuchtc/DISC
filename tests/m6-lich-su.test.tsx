@@ -1,7 +1,7 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { KhoangLichSu } from "../app/khoang/lich-su";
+import { KhoangLichSu } from "../cu/lich-su";
 import { CHU_M6 } from "../config/disc-tu-dien";
 import { luuBai, xoaSach, type BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
 

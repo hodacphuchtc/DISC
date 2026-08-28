@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { ManKetQua } from "./ket-qua";
+import { ManKetQua } from "@/app/khoang/ket-qua";
 import { CHU_M6, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { napBoDe } from "@modules/core/bo-de/nap";

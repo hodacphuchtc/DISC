@@ -1,3 +1,9 @@
+> 🔴 **KHÔNG CÒN HIỆU LỰC (28/08/2026).** Lộ trình đang chạy là `PLAN_V2.md` — luồng ba
+> bước, xem `docs/decisions/ADR-008-ba-buoc-trong-mot-khoang.md`.
+>
+> Giữ file này để TRA CỨU: nó là nơi duy nhất ghi lại **vì sao** 68 hạng mục của GĐ0–GĐ14
+> được làm như vậy. Đừng đọc nó như việc đang làm, và đừng tick thêm ô nào ở đây.
+
 # PLAN.md — Lộ trình DISC (khởi tạo 26/08/2026 · lộ trình chi tiết 26/08/2026)
 
 > **Nguyên tắc đọc file này:** đây là NGUỒN LỘ TRÌNH DUY NHẤT của dự án — không đẻ file kế
