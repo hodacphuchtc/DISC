@@ -17,10 +17,12 @@
 Khoang trắc nghiệm DISC nhúng vào app chủ của SATA ROBO, cho **cả gia đình**: trẻ mầm non
 tới lớp 12, và bố mẹ. Hệ thống chấm rồi trả về bản báo cáo đọc được ngay — mỗi người đọc bản
 viết cho đúng mình. Mục tiêu kinh doanh: **giữ chân hơn 1.000 gia đình đang học** (đổi từ mồi
-thu khách, 27/08/2026). Hướng đang mở: **luồng ba bước** — `PLAN_V2.md`, ADR-008.
-Nguồn yêu cầu: `docs/brd/`. 🔴 **Lộ trình đang có hiệu lực: `PLAN_V2.md`** (luồng 3 bước,
-chốt 28/08/2026, ADR-008). `PLAN_V1_LUU.md` (tên cũ `PLAN.md`) chỉ còn để TRA CỨU *vì sao*
-68 hạng mục GĐ0–GĐ14 làm như vậy — **không còn là việc đang làm, đừng tick thêm ô nào ở đó**.
+thu khách, 27/08/2026). Hướng đang mở: **luồng ba bước** — ADR-008.
+Nguồn yêu cầu: `docs/brd/`. 🔴 **Lộ trình đang có hiệu lực: `PLAN_V3.md`** (service worker
+chịu cập nhật + đường ra host thật, chốt 28/08/2026). **Hai sổ cũ chỉ còn để TRA CỨU *vì
+sao*, đừng tick thêm ô nào ở đó:** `PLAN_V2.md` (GĐ15–GĐ18 + luồng ba bước; hai ô còn mở
+`V0.1`/`V0.2` đã chuyển thành `21.1`/`22.1` của sổ V3) · `PLAN_V1_LUU.md` (tên cũ
+`PLAN.md`, 68 hạng mục GĐ0–GĐ14).
 Repo: https://github.com/hodacphuchtc/DISC — **PUBLIC**, đã push (27/08/2026).
 🔴 Repo công khai: mọi thứ trong này internet đọc được. Đừng đưa dữ liệu thật của trẻ,
 họ tên, hay số điện thoại cá nhân vào bất kỳ file nào.
@@ -60,94 +62,86 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 28/08/2026, lượt 3 — `PLAN_V2.md` HẾT VIỆC MÁY)
+## TRẠNG THÁI (cập nhật 29/08/2026 — GĐ19 + GĐ20 xong, sổ V3 HẾT VIỆC MÁY)
 
-> 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V2.md`** (mục *BÀN GIAO PHIÊN GẦN
+> 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V3.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
-### 🟢 HẾT VIỆC MÁY — luồng ba bước (15) · GĐ16 (9) · GĐ17 (7)
+### 🟢 ĐÃ XONG
 
-**1.366 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 290 KB gzip**
-(trần 300; nền cũ 282). Đã push `814cb40`, CI xanh.
+**`PLAN_V3.md`: 7/10 ô ✅** — `V3.0` · GĐ19 (5) · GĐ20 (1). Ba ô còn lại đều chặn bởi
+NGƯỜI/NGOÀI. **`PLAN_V2.md`: 25/27** và **`PLAN_V1_LUU.md`: 68/68** — hai sổ đã đóng, chỉ
+để tra *vì sao*, đừng tick thêm ô nào.
 
-Sổ `PLAN_V2.md` còn đúng **HAI** ô chưa tick — `V0.1` (host + tên miền) và `V0.2` (hai
-điện thoại quét QR) — **cả hai chặn bởi NGƯỜI/NGOÀI, không phải bởi máy.**
+**1.407 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 290 KB gzip**
+(trần 300). 🔴 **Chưa push**: `2447261` (GĐ18) và commit phiên này đều mới ở local.
 
-🔴 **Danh sách tính năng KHÔNG chép vào đây** — nó nằm nguyên ở các ô ✅ của `PLAN_V2.md`
-(luồng ba bước · GĐ16 · GĐ17) và `PLAN_V1_LUU.md` (GĐ0–GĐ14). Chép sang đây là dựng bản
-sao thứ hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên.
+🔴 **Danh sách tính năng KHÔNG chép vào đây** — nó nằm nguyên ở các ô ✅ của ba sổ. Chép
+sang đây là dựng bản sao thứ hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên.
 
-**Ba việc GĐ17 vừa gỡ**, để người đọc biết sản phẩm hôm nay khác hôm qua chỗ nào: xem lại
-được **lần đo trước** · tệp `.zip` **mở ra là đọc được** (thư mục theo tên người + *Tổng
-hợp*, JSON chìm xuống `_may-doc/`) · **máy tính hết thừa hai phần ba màn**.
-
-### ĐÃ XONG TRƯỚC ĐÓ — GĐ0–GĐ14, 68/68 hạng mục
-
-Bốn mốc: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo · **GĐ10** ba bản
-báo cáo · **GĐ11–GĐ14 DISC GIA ĐÌNH** (đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH).
-
-🔴 **Danh sách tính năng KHÔNG chép lại ở đây** — nó nằm nguyên trong `PLAN_V1_LUU.md`
-(GĐ0–GĐ14) và bảng ✅ đầu `PLAN_V2.md` (luồng ba bước). Chép sang đây là dựng bản sao thứ
-hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên.
-
-Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (thêm `?so-lieu=1` để
-đọc bộ đếm phễu).
+**GĐ19 sửa một lỗi chặn MỌI bản vá tương lai.** Tên kho cache gõ cứng ⇒ `public/sw.js`
+không đổi byte nào giữa các bản build ⇒ trình duyệt không bao giờ cài lại service worker ⇒
+**máy nào đã mở trang là kẹt ở bản đầu tiên tới hết đời**. Nó lộ ra như chuyện vặt lúc dev
+(*"cửa sổ cũ vẫn chạy bản cũ"*), nhưng cùng lỗi đó nghĩa là sau khi phát cho 30 gia đình,
+không bản vá nào tới được họ. Nay: tên kho mang **vân tay bản build** · điều hướng đi
+**mạng trước**, tài sản băm đi **kho trước** · service worker mới **không chiếm quyền ngay**
+(giữ nguyên chunk `jspdf` cho tab đang mở) · và một **harness chạy thật** `sw.js` trong
+`tests/the-gioi-sw.ts` thay cho các cửa regex vốn xanh suốt thời gian lỗi tồn tại.
+**GĐ20:** bước đang mở nay **đóng lại được** — effect tự-mở-hộ từng mở lại ngay sau mỗi lần
+người dùng bấm đóng.
 
 ### 🔴 VIỆC NGƯỜI ĐANG CHẶN MỐC PHÁT
 
-1. 🔴 **Tài khoản Cloudflare + một tên miền** (`V0.1`). Chốt phát cho 30 gia đình trong
-   1–2 tuần mà **chưa có host, chưa có tên miền, chưa ai bấm deploy lần nào** — không
-   `infra.json`, không cấu hình host nào trong repo. Sản phẩm mới chỉ chạy trên
-   `localhost:3100`. **Đây là blocker cứng của mốc phát, và không code nào cứu được.**
-2. 🔴 **Hai điện thoại thật, 30 phút** (`V0.2`) — quét thử mã QR bằng camera. Test đã dựng
-   lại lưới từ nét vẽ Canvas rồi giải mã ngược, cộng phép thử hội chứng Reed–Solomon; ống
-   kính, ánh sáng và độ tương phản thì không mô phỏng được. Hỏng thì phải ẩn nút QR trước
-   khi phát, và nói thẳng với sale là *"cả nhà dùng chung một máy"*.
-3. **Gửi hai hồ sơ ký duyệt.** 🔴 Gói B nay RỘNG HƠN: `14.3` thêm nội dung về quan hệ giữa
-   HAI NGƯỜI LỚN (vợ ↔ chồng). ⚠️ **Chạy lại `scripts/xuat-noi-dung-ky-duyet.mjs` KHÔNG
-   ĐỦ** — script đó không hề import `config/disc-noi-dung-cap.ts` (nơi chứa 56 đoạn nội
-   dung cặp), nên phải MỞ RỘNG script trước rồi mới sinh lại.
-4. **Gọi đội dev app chủ 30 phút** — React bản mấy · có Tailwind không · lead đi vào đâu.
-5. **Gọi 5 phụ huynh vừa nghỉ** — mục tiêu cả dự án là giữ chân mà **chưa ai đo vì sao họ
-   đi**; lý do có thể chẳng liên quan gì tới thứ đang xây.
-6. **Duyệt câu chữ trang A4** — bản nháp đã có ở `docs/huong-dan-giao-vien-va-sale.md`
-   (nói gì trong 30 giây · ba điều CẤM nói · ba câu hỏi hay gặp · 🔴 luật máy demo). Đọc
-   hết mất 3 phút; duyệt xong là đưa được cho giáo viên.
+0. 🔴 **Bấm 5 bước ở *DEMO CUỐI GĐ19*** (`PLAN_V3.md`) — nhất là bước 2: sửa một chữ →
+   `npm run xem-thu` → **F5 thường** ở tab cũ → phải thấy chữ mới **ngay lượt đầu**. Máy
+   không tự bấm được (không có Playwright trong dự án), nên đây là mắt xích cuối của GĐ19.
+1. 🔴 **Tài khoản Cloudflare + một tên miền** (`21.1`) — **blocker cứng của ngày phát, và
+   không code nào cứu được**. Sản phẩm mới chỉ chạy `localhost:3100`; chưa có `infra.json`,
+   chưa ai bấm deploy lần nào.
+2. 🔴 **Hai điện thoại thật, 30 phút** (`22.1`) — quét thử mã QR bằng camera. Test đã dựng
+   lại lưới từ nét vẽ Canvas và thử hội chứng Reed–Solomon; ống kính và ánh sáng thì không
+   mô phỏng được. Hỏng thì ẩn nút QR trước khi phát.
+3. **Bấm thử GĐ18 bằng mắt** (`22.2`) — 7 việc ở *DEMO CUỐI* của 18A/18B/18C trong `PLAN_V2.md`.
+4. **Gửi hai hồ sơ ký duyệt.** 🔴 Gói B nay RỘNG HƠN (`14.3` thêm nội dung vợ ↔ chồng).
+   ⚠️ Chạy lại `scripts/xuat-noi-dung-ky-duyet.mjs` **KHÔNG ĐỦ** — script không import
+   `config/disc-noi-dung-cap.ts`, phải MỞ RỘNG nó trước.
+5. **Gọi đội dev app chủ 30 phút** · **gọi 5 phụ huynh vừa nghỉ** · **duyệt trang A4**
+   (`docs/huong-dan-giao-vien-va-sale.md`).
 
-### CHỜ NGOÀI (thiếu người/dịch vụ — ghi vào đây rồi làm tiếp, đừng dừng)
+### CHỜ NGOÀI (ghi vào đây rồi làm tiếp, đừng dừng)
 
-- 🔴 **HAI chữ ký chuyên môn, hai mức trách nhiệm khác nhau.** **Gói A**
-  `docs/noi-dung-cho-ky-duyet.md` — nội dung nói về TRẺ, *chặn ngày ra người dùng thật*.
-  **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` — phản hồi tính cách cho NGƯỜI LỚN về chính
-  họ **và về bạn đời của họ** (thêm ở 14.3); *chỉ chặn phần nội dung của chính nó*, chưa ký
-  được vẫn phát hành, chỉ cần tắt phần đó đi.
-- 🔴 **Đo lý do phụ huynh rời đi** — gọi 5 người vừa nghỉ. Mục tiêu là giữ chân mà **chưa ai
-  đo vì sao họ rời**. *Chặn: cả bốn giai đoạn có nhắm đúng chỗ không.*
-- 🔴 **Gọi đội dev app chủ 30 phút.** Họ sẽ bảo trì hệ này mà **chưa ai hỏi họ có nhận không**.
-- **Chốt nghi thức mời của trường** (ai nói, ở đâu, lúc nào). Lý do chưa nhà nào làm 2 bài
-  không phải phần mềm khó dùng — là chưa ai bảo họ làm. *Chặn: GĐ14 có ai dùng không.*
-- **Thu 30–50 phản hồi thật** rồi chạy `node scripts/phan-tich-item.mjs` → Cronbach's α. Đây
-  là lúc DUY NHẤT được phép nói về độ tin cậy — bằng số của chính mình.
+- 🔴 **HAI chữ ký chuyên môn.** **Gói A** `docs/noi-dung-cho-ky-duyet.md` (nội dung về TRẺ,
+  *chặn ngày ra người dùng thật*). **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (người
+  lớn về chính họ **và bạn đời**; *chỉ chặn phần của nó*, chưa ký vẫn phát được).
+- 🔴 **Đo lý do phụ huynh rời đi** — mục tiêu cả dự án là giữ chân mà **chưa ai đo vì sao
+  họ đi**. *Chặn: cả bốn giai đoạn có nhắm đúng chỗ không.*
+- **Chốt nghi thức mời của trường** · **thu 30–50 phản hồi thật** rồi chạy
+  `node scripts/phan-tich-item.mjs` → Cronbach α (lúc DUY NHẤT được nói về độ tin cậy).
 
 ### 🔴 CON SỐ CẦN THEO DÕI SAU KHI PHÁT
 
-**`baiThuHai`** — đọc ở khoang *Số liệu máy này*. Nó chính là giả định đang đỡ 9,5 ngày của
-GĐ14: *một phụ huynh sẽ triệu tập được từ hai thành viên trở lên cùng làm bài.* Tính tới hôm
-nay giả định đó vẫn có **0 quan sát ủng hộ và 1 quan sát phản bác**.
+**`baiThuHai`** — đọc ở `?so-lieu=1`. Nó là giả định đang đỡ 9,5 ngày của GĐ14: *một phụ
+huynh triệu tập được từ hai người trở lên cùng làm bài*. Tới hôm nay giả định đó có **0
+quan sát ủng hộ và 1 quan sát phản bác**. **Bằng 0 sau 30 máy thật thì thứ cần xem lại là
+giả định, không phải phần mềm.**
 
-Ba bảo hiểm đã cài xong và nay chạy được thật: GĐ11 phát được ngay · mốc `baiThuHai` ghi thật
-và đọc được · mã mời đã gỡ trần *"cả nhà một máy"*. **Bằng 0 sau 30 máy thật thì thứ cần xem
-lại là giả định, không phải phần mềm.**
+Chạy thử: `npm run xem-thu` → http://localhost:3100 (`?so-lieu=1` để đọc phễu).
 
-> Quyền ghi vào repo: **đã có** (tài khoản `hodacphuchtc`, token có scope `repo` +
-> `workflow`). Push lần đầu ngày 27/08/2026.
-
-> **Không cần Supabase và không cần Vercel nữa** — xem `docs/decisions/ADR-001-khong-backend.md`.
+> Quyền ghi repo: **đã có** (`hodacphuchtc`, token scope `repo` + `workflow`).
+> **Không cần Supabase, không cần Vercel** — `docs/decisions/ADR-001-khong-backend.md`.
 
 ## QUYẾT ĐỊNH QUAN TRỌNG
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 29/08/2026 | **Điều hướng đi MẠNG trước, tài sản băm đi KHO trước** (GĐ19) | HTML là thứ trỏ tới tên tệp JS đã băm, nên vỏ trang cũ trong kho khoá người dùng vào NGUYÊN một bản cũ. HTML tĩnh vài chục KB — một lượt mạng không đáng kể, và mất mạng thì vẫn rơi về kho nên ngoại tuyến không mất gì. Luật *"chỉ điều hướng mới được nhận vỏ trang"* của GĐ7 nay giữ bằng **cấu trúc** (hàm `taiSan` không có nhánh nào trả HTML), không bằng một câu `if` mà lần sửa sau dễ nới ra |
+| 29/08/2026 | **Service worker mới KHÔNG chiếm quyền ngay — bỏ `skipWaiting`** | Chiếm quyền ngay là xoá kho thế hệ cũ ngay dưới chân một tab đang mở; tab đó bấm *Sao lưu* rồi `await import("jspdf")` (ADR-009) xin một chunk không còn ở kho lẫn ở máy chủ — hỏng giữa phiên, im lặng. Chi phí gần bằng 0 vì điều hướng đã đi mạng trước: người dùng thấy bản mới ngay lần tải trang kế tiếp, không phải chờ service worker đổi ca |
+| 29/08/2026 | **KHÔNG ghim `generateBuildId`** dù vân tay đổi mỗi lần build | Ghim vào hằng số thì hai bản build KHÁC nội dung dùng chung `/_next/static/<hằng số>/_buildManifest.js`, và cache-first phục vụ bản cũ trên một đường dẫn trông như bất biến — đúng loại lỗi GĐ19 sinh ra để chữa. Build ID ngẫu nhiên của Next đang làm việc của nó. Cái giá: mỗi lần deploy máy người dùng nạp lại kho (~1 MB thô, deploy thì hiếm) |
+| 28/08/2026 | **MỌI nút sao lưu đi qua MỘT cửa `taiBanSaoLuuVeMay()`**, không chép mã sang nút thứ hai | Hai nút gói ra hai thứ khác nhau và người dùng bấm đúng cái sai. Chép đoạn sinh PDF sang là dựng bản sao thứ hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên. Có cửa đọc mã nguồn cấm `app/` tự nhập `saoLuuTatCa` |
+| 28/08/2026 | **Ba nút giữ dữ liệu ra CHÂN TRANG, ngoài cả hai bước** | Chúng gói TRỌN máy chứ không thuộc riêng bước *Nhà mình*; và nút *Khôi phục* là thứ người ta đi tìm vào đúng ngày đã mất dữ liệu — ngày tệ nhất để phải mở đúng bước 1 rồi cuộn hết bảng gia đình mới thấy |
+| 28/08/2026 | **Nút Xoá viền đỏ NỀN TRẮNG, không nền đỏ đặc** | Viền đỏ nói *"cẩn thận"*; nền đỏ đặc nói *"bấm tôi"*, và nó trông ngang hàng nút *Sao lưu*. Đây là nút xoá sạch cả nhà, không lấy lại được. `MAU.doCanhBao = #B3261E`, đo được 6,54:1 |
+| 28/08/2026 | **Độ nổi áp qua bộ chọn `[data-thu]` trong `@layer components`**, không rắc `shadow-*` từng file | 13 loại khối nhận bóng mà **0 file `.tsx` phải sửa** — cùng kỹ thuật khối `@media print` đã dùng từ lâu. Đổi lại: `data-thu` nay gánh HAI việc (móc CSS + móc test), nên có cửa hai chiều canh |
+| 28/08/2026 | **KHÔNG nhấp nháy nút lùi** — làm nổi bằng hình khối | Chủ dự án nêu ý rồi tự chốt bỏ sau khi nghe lý do. Cái gì nháy mãi thì thành nền và người ta thôi nhìn — đúng lý do `V4.2` chốt *"nhắc một lần rồi thôi"*. Màn hình này có trẻ mầm non ngồi trước |
 | 28/08/2026 | **JSON Ở LẠI trong tệp sao lưu, chỉ chìm xuống `_may-doc/`** kèm tệp *ĐỌC TRƯỚC.txt* | Chủ dự án phàn nàn "một số file JSON không đọc được" và muốn chỉ còn PDF. Bỏ hẳn JSON là **giết nút Khôi phục vừa xây hôm qua**, và biến bản sao lưu thành bản xuất — mất máy là mất sổ, không cứu được. Giữ cả hai: phần người đọc ở gốc, phần máy đọc chìm xuống dưới và tự khai mình là gì |
 | 28/08/2026 | **Nới bề rộng theo LOẠI nội dung, KHÔNG full-width tất cả** | Chủ dự án nêu đúng vấn đề (màn 1920px thừa hai phần ba) nhưng cách sửa hiển nhiên lại hại đúng thứ cần sửa: sản phẩm này nội dung chính LÀ chữ để phụ huynh đọc, và dòng 200 ký tự làm mắt lạc dòng. Lưới thẻ và bố cục nhiều cột thì nới; đoạn văn và màn làm bài giữ ~70 ký tự/dòng, **có cửa canh chiều giữ** |
 | 28/08/2026 | **Thư mục trong `.zip` mang TÊN THẬT**, lật hàng rào *"tên không vào tệp xuất"* của ADR-005 | Chủ dự án chốt. Cả hạng mục sinh ra để tệp `.zip` mở ra là đọc được — `Nguoi-1/`, `Nguoi-2/` thì mất đúng thứ đang cần. Và đã có tiền lệ: `16.6` đặt tên tệp PDF theo tên người. Tên tệp JSON thì VẪN không mang tên, vì ở đó bỏ tên đi là miễn phí |
@@ -206,6 +200,48 @@ lại là giả định, không phải phần mềm.**
 > Bài học riêng của miền LƯU TRỮ (kho · sao lưu · khôi phục · hạn mức · ba đời tệp `.zip`)
 > nằm ở `modules/core/OVERVIEW.md` mục 6 — **đừng chép lại vào đây**.
 
+- 🔴 **RETURN SỚM CỦA MỘT MÀN LÀ TẤM CHẮN TÌNH CỜ — DỜI KHỐI RA NGOÀI LÀ GỠ NÓ**
+  (28/08/2026, `18.2`). Ba nút giữ dữ liệu nằm trong `KhoangNhaMinh`, vốn `return` sớm khi
+  mở màn kết quả, nên chúng **vắng mặt khỏi DOM** đúng lúc đó. Không ai thiết kế điều ấy —
+  nó là hệ quả phụ. Đưa ba nút ra ngoài liền đẻ ra HAI lỗi mới cùng lúc: bấm *Xoá sạch*
+  trong lúc đang xem kết quả để lại **màn hình nói dối** (kho trống mà vẫn hiện điểm của
+  bài vừa xoá), và ba cái nút bắt đầu **in ra giấy**. **Dời một khối thì phải hỏi: ở chỗ
+  cũ, có lúc nào nó KHÔNG được vẽ không, và điều gì đang nhờ vào chuyện đó?**
+- 🔴 **SỬA HÀNG LOẠT NEO THEO MỘT ĐẶC ĐIỂM SẼ BỎ SÓT ĐÚNG THỨ KHÁC ĐẶC ĐIỂM ĐÓ**
+  (28/08/2026, `18.9`). Script thêm độ nổi neo vào `font-semibold text-white` — nó quét 22
+  nút chính rất gọn, và **bỏ qua nút *Quay lại câu trước*** vì nút đó chữ xám. Test vẫn
+  xanh (không cửa nào đo độ nổi từng nút), build vẫn xanh. Chỉ lộ ra ở lượt **soát tay
+  từng hạng mục trước khi tick**. Cùng họ với `10.7` (dò khoá bằng `indexOf` đổ cả tám câu
+  vào một trục). **Sửa hàng loạt xong thì phải liệt kê thứ KHÔNG khớp neo và soi từng cái.**
+- 🔴 **CỬA KIỂM SOI CHUỖI CON BẮT TRÚNG CHÍNH BÌNH LUẬN DẶN ĐỪNG LÀM ĐIỀU ĐÓ**
+  (28/08/2026, hai lần trong một ngày). Cửa cấm tự gọi `saoLuuTatCa(` bắt trúng dòng chú
+  thích *"đừng gọi `saoLuuTatCa()`"*; bộ soát trước khi tick báo đỏ `"Nhà mình"` trong một
+  file chỉ nhắc chữ đó ở khối bình luận. **Soi mã thì soi CẤU TRÚC** — câu `import`, hoặc
+  bỏ bình luận trước khi khớp — đừng soi văn bản trần. Cùng họ `11.6` (`"Bi"` khớp
+  *"**Bi**ệt danh"*) và `17.7` (`endsWith("ket-qua.tsx")` khớp `chon-ban-ket-qua.tsx`).
+- 🔴 **TÊN KHO CACHE GÕ CỨNG = SERVICE WORKER KHÔNG BAO GIỜ TỰ CẬP NHẬT, VÀ NÓ IM LẶNG
+  TUYỆT ĐỐI** (29/08/2026, GĐ19). `TEN_KHO = "disc-vo-v2"` là hằng số ⇒ `public/sw.js`
+  **không đổi byte nào giữa các bản build** ⇒ trình duyệt so byte thấy y hệt nên không bao
+  giờ chạy lại `install` ⇒ `activate` cũng không bao giờ có kho tên khác để xoá ⇒ **mọi máy
+  đã từng mở trang kẹt ở bản đầu tiên tới hết đời**. Build xanh, test xanh, gói đúng cỡ.
+  Triệu chứng lộ ra như một chuyện vặt lúc dev (*"cửa sổ cũ vẫn chạy bản cũ"*), nhưng cùng
+  một lỗi đó nghĩa là **sau khi phát, không bản vá nào tới được người dùng**. Nay tên kho
+  mang vân tay bản build, và `scripts/sinh-danh-sach-cache.mjs` **dừng build** nếu mốc
+  `__VAN_TAY__` biến mất. **Bài học chung: thứ gì quyết định "có phải bản mới không" thì
+  phải sinh ra từ NỘI DUNG, không được gõ tay.**
+- 🔴 **REGEX TRÊN MÃ NGUỒN KHÔNG PHẢI CỬA KIỂM CHO MỘT THỨ CÓ HÀNH VI** (29/08/2026, `19.1`).
+  Tám cửa cũ của `tests/ngoai-tuyen.test.ts` hỏi `expect(nguon).toMatch(/navigate/)` — và
+  cả tám **xanh y nguyên** suốt thời gian service worker trả bản cũ cho tới hết đời máy.
+  Chúng chứng minh CHỮ có mặt trong file, không chứng minh mã chạy lên thì làm gì. Cùng họ
+  với bài học `16.9`. Cách chữa: `tests/the-gioi-sw.ts` dựng `self`/`caches`/`fetch` giả rồi
+  **chạy thật** ba trình xử lý — và **bắt buộc chứng minh nó ĐỎ trên mã cũ trước** (4/21 đỏ)
+  rồi mới đi sửa. Cửa nào chưa từng đỏ thì chưa ai biết nó có đo gì không.
+- **Đọc mã nguồn rồi suy ra cấu trúc route là suy ẩu** (29/08/2026, `19.4`). Thấy
+  `app/khoang/nha-minh.tsx` nên tôi viết vào sổ rằng có URL `/khoang/nha-minh/` và cả một
+  lỗ ngoại tuyến quanh nó. Sự thật: app có **đúng một** route (`app/page.tsx`), mọi "khoang"
+  là trạng thái phía client. `find out -name "*.html"` trả lời câu đó trong 1 giây.
+  **Hỏi thư mục build, đừng hỏi thư mục mã nguồn** — và đừng viết bước nghiệm thu bắt người
+  ta đi bấm một thứ không tồn tại.
 - 🔴 **jsdom CÓ HAI REALM, VÀ CÂU BÁO LỖI KHÔNG HỀ NHẮC TỚI ĐIỀU ĐÓ** (28/08/2026,
   `17.4`). Fixture dựng bằng `new TextEncoder().encode()` cho ra một `Uint8Array` mà phép
   `instanceof Uint8Array` **bên trong JSZip trượt** — JSZip ném *"Can't read the data of

@@ -1,53 +1,58 @@
-# PLAN_V2.md — Lộ trình đang có hiệu lực
+# PLAN_V2.md — ĐÃ ĐÓNG SỔ 28/08/2026
 
-## BÀN GIAO PHIÊN GẦN NHẤT
+> 🔴 **SỔ NÀY KHÔNG CÒN LÀ VIỆC ĐANG LÀM.** Lộ trình đang có hiệu lực là **`PLAN_V3.md`**.
+> Sổ này chỉ còn để tra *vì sao* các hạng mục GĐ15–GĐ18 và luồng ba bước làm như vậy —
+> **đừng tick thêm ô nào ở đây.**
+>
+> **Hai ô còn mở đã CHUYỂN QUYỀN SỞ HỮU sang `PLAN_V3.md`** (chuyển, không chép — hai bản
+> danh sách chỉ lệch vào đúng ngày ai đó sửa một bên):
+>
+> | Ô cũ ở sổ này | Nay là | Vì sao chuyển |
+> | --- | --- | --- |
+> | `V0.1` — đưa lên host thật | **`21.1`** của `PLAN_V3.md` | vẫn chặn cứng ngày phát |
+> | `V0.2` — hai điện thoại quét QR | **`22.1`** của `PLAN_V3.md` | vẫn cần hai máy thật |
+>
+> Bảy việc bấm mắt ở ba mục *DEMO CUỐI 18A/18B/18C* dưới đây **vẫn còn nợ** — chúng là
+> `22.2` của sổ V3.
+
+## BÀN GIAO PHIÊN GẦN NHẤT (đóng băng — bàn giao đang chạy nằm ở `PLAN_V3.md`)
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**28/08/2026 (lượt 4) — GĐ18 XONG TRỌN PHẦN MÁY, 9/9 ô đã tick. Chờ bấm thử bằng mắt.**
+**28/08/2026 (lượt 4) — GĐ18 xong trọn. Sổ này HẾT VIỆC MÁY: 25/27 ô ✅.**
 
-**1. Vừa xong.** GĐ18 `18.1`–`18.9` + bản vá **hai nút sao lưu ra hai thứ khác nhau**.
-**1.387 test xanh** (từ 1.366; +21 cửa mới ở `khoi-giu-du-lieu` và `do-noi`), `npm run kiem`
-+ `build` xanh, gói chính **vẫn 290 KB gzip** (trần 300 — bóng đổ là CSS, không tốn JS).
+**1. Vừa xong.** GĐ18 `18.1`–`18.9` (ba nút giữ dữ liệu ra chân trang · nút Xoá viền đỏ ·
+nút lùi thành nút tím có khối · hệ độ nổi), cộng bản vá **hai nút sao lưu ra hai thứ khác
+nhau**. **1.387 test xanh**, `kiem` + `build` xanh, gói chính **vẫn 290 KB gzip**.
+Đã push `45c753f` (CI xanh); **`2447261` đã commit nhưng CHƯA push**.
 
-**2. Đang dở.** 🟢 **HẾT VIỆC MÁY.** Chín ô `18.1`–`18.9` đã tick sau một lượt soát
-**29 điểm trên mã thật** (không tick theo trí nhớ). Lượt soát đó bắt được một chỗ còn dở
-thật — nút *Quay lại câu trước* trong bài chưa có độ nổi, vì script sửa hàng loạt chỉ bắt
-nút chữ trắng; đã vá rồi mới tick.
-Sổ còn đúng **HAI** ô: `V0.1`, `V0.2` — cả hai chặn bởi NGƯỜI/NGOÀI, GĐ18 không gỡ được ô nào.
-
-⚠️ **Tick này xác nhận PHẦN MÁY, chưa phải phần mắt.** Chủ dự án bấm thử theo danh sách ở
-DEMO CUỐI của 18A/18B/18C — nếu có gì lệch thì đó là việc của GĐ19, không phải mở lại ô.
+**2. Đang dở.** Không còn hạng mục máy nào. Việc gần nhất: **chủ dự án bấm thử GĐ18 bằng
+mắt** — 7 việc ở *DEMO CUỐI* của 18A/18B/18C. Lệch chỗ nào thì mở hạng mục MỚI, đừng bỏ tick.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
-`V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · duyệt
-`docs/huong-dan-giao-vien-va-sale.md` · gọi đội dev app chủ · gọi 5 phụ huynh vừa nghỉ.
+`V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · gọi đội dev app chủ · gọi 5 phụ
+huynh vừa nghỉ. Chi tiết ở `CLAUDE.md` mục TRẠNG THÁI.
 
 **4. ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- 🔴 **jsPDF TỰ CẮT FONT.** 42 tệp PDF (xấu nhất) = **0,48 giây / 2,65 MB**; một tệp 48 KB,
-  *nhỏ hơn* tệp font gốc 130 KB. `tests/chi-phi-pdf.test.ts` ghim hai con số.
-  ⇒ **Đừng thêm thanh tiến trình đếm tệp** — nửa giây không ai kịp thấy.
-- 🔴 **Trần 2 bài/người + hộp thoại cảnh báo CÓ TỪ GĐ12**, đừng xây lại
-  (`hop-thoai-han-muc.tsx`, `chonBaiPhaiXoa()`).
-- **Tệp `.zip` có BA đời** (v1 `bai/` · v2 `du-lieu/` · v3 `_may-doc/`); `docTuZip()` đọc
+- **`#B3261E` = 6,54:1** trên trắng (`#D32F2F` chỉ 4,98 — sát ngưỡng quá). `MAU.doCanhBao`.
+- **Bóng đổ tốn 0 KB JS** — gói chính không nhúc nhích qua cả GĐ18. Nó là CSS.
+- **Kho tự báo đủ rồi**: `bang-gia-dinh`/`cac-buoc`/`phan-tich` đều `useKhoDoi`, và
+  `xoaSachTatCa()` lẫn `ghiDeKho()` đều bắn `baoDoi()`. **Đừng truyền `napLai` xuống nữa.**
+- 🔴 Từ GĐ16–17, vẫn đúng: **jsPDF tự cắt font** (42 tệp = 0,48 giây) · **trần 2 bài/người
+  + hộp thoại cảnh báo CÓ TỪ GĐ12**, đừng xây lại · **`.zip` có BA đời**, `docTuZip()` đọc
   cả ba. Chi tiết: `modules/core/OVERVIEW.md` mục 6.
-- **jsdom KHÔNG có bộ dựng layout** (`offsetWidth` luôn 0) và **có HAI realm**. Mọi cửa
-  kiểm đo pixel ở đó là cửa giả. Chi tiết ở `CLAUDE.md` mục *Cạm bẫy*.
-- **Bề rộng gom hết về `config/bo-cuc.ts`**; `tests/bo-cuc.test.tsx` canh **cả hai chiều**
-  — nới cái cần nới, VÀ giữ khung hẹp cho bốn màn đọc-và-trả-lời.
 
-**4b. 🔴 MỘT LỖI TÌM THẤY, CHƯA SỬA (ngoài phạm vi GĐ18).** Ở `cac-buoc.tsx`, một bước
-đang mở **không đóng lại được**: bấm đóng làm `dangMo` về `null`, mà `useEffect` tự-mở-hộ
-có `dangMo` trong mảng phụ thuộc nên nó mở lại ngay. Chú thích tại chỗ ghi *"chỉ chọn hộ
-MỘT LẦN"* — mã không làm vậy. Phát hiện khi viết cửa `G5b`; cửa đó đã viết vòng qua và ghi
-rõ lý do. **Sửa hay không là quyết định của chủ dự án**, không phải việc tự nhận thêm.
+**5. Cạm bẫy vừa trả giá** — ghi ở đúng miền, **đừng chép lại vào đây**: LƯU TRỮ →
+`modules/core/OVERVIEW.md` mục 6 · CÔNG CỤ → `.claude/rules/tech-defaults.md` mục cuối
+(4 bẫy Tailwind/CSS/print) · TOÀN HỆ → `CLAUDE.md` mục CẢNH BÁO (3 bài).
 
-**5. Cạm bẫy vừa trả giá.** Ghi ở `CLAUDE.md` mục *CẢNH BÁO / CẠM BẪY* (3 bài mới) và
-`modules/core/OVERVIEW.md` mục 6 (miền lưu trữ). Không chép lại ở đây.
+**6. 🔴 LỖI ĐÃ TÌM THẤY, CHƯA SỬA (ngoài phạm vi).** `cac-buoc.tsx`: bước đang mở **không
+đóng lại được** — `useEffect` tự-mở-hộ có `dangMo` trong mảng phụ thuộc nên mở lại ngay.
+Chú thích tại chỗ ghi *"chỉ chọn hộ MỘT LẦN"*; mã không làm vậy. Chủ dự án quyết.
 
-**6. Lệnh phiên sau nên chạy.**
+**7. Lệnh phiên sau nên chạy.**
 ```bash
-npm run kiem      # 1.366 test; máy tải nặng thì npx vitest run --maxWorkers=2
+npm run kiem      # 1.387 test; máy tải nặng thì npx vitest run --maxWorkers=2
 npm run xem-thu   # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
 ```
 

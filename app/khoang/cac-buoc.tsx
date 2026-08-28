@@ -19,7 +19,7 @@
  * Thuộc TẦNG GIAO DIỆN THAM CHIẾU (ADR-004).
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { KhoangDisc } from "./disc";
 import { KhoangNhaMinh } from "./nha-minh";
@@ -95,12 +95,24 @@ export function KhoangCacBuoc() {
    *
    * 🔴 Chỉ chọn hộ MỘT LẦN, lúc đếm xong lần đầu. Chọn lại mỗi lần số đổi thì người dùng
    * đang xem bước 1 mà vừa có ai đó làm xong bài sẽ bị bật sang bước 2 giữa chừng.
+   *
+   * 🔴 "MỘT LẦN" PHẢI NHỚ BẰNG `ref`, KHÔNG SUY TỪ `dangMo === null` (lỗi đã trả giá,
+   * `20.1`). Bản cũ chốt chặn bằng `dangMo !== null` và để `dangMo` trong mảng phụ thuộc:
+   * người dùng bấm đóng bước ⇒ `dangMo` về `null` ⇒ effect chạy lại ⇒ thấy `null` ⇒ **mở
+   * lại ngay**. Chú thích thì ghi "một lần", mã thì chạy mỗi lần đóng. `null` ở đây mang
+   * HAI nghĩa — *chưa chọn hộ* và *người dùng vừa đóng* — và effect không phân biệt được.
+   * Cùng họ với bài học *"trạng thái chưa biết phải khác trạng thái biết rồi và bằng
+   * không"* của `V2.1`.
+   *
+   * Xoá sạch kho thì bước 1 mở lại qua `datDangMo("nha-minh")` gọi thẳng ở khối giữ dữ
+   * liệu — không nhờ effect này, nên nó không cần biết chuyện đó.
    */
+  const daChonHoBuoc = useRef(false);
   useEffect(() => {
-    if (!dem || dangMo !== null) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!dem || daChonHoBuoc.current) return;
+    daChonHoBuoc.current = true;
     datDangMo(dem.soDaLam >= TOI_THIEU_DE_PHAN_TICH ? "phan-tich" : "nha-minh");
-  }, [dem, dangMo]);
+  }, [dem]);
 
   // Đang làm bài thì khoang DISC chiếm trọn màn — ba tấm lùi đi, không để người ta vừa
   // trả lời câu 7 vừa nhìn thấy nút "Phân tích cả nhà" nhấp nháy bên dưới.
