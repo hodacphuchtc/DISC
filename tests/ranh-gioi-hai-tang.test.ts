@@ -48,6 +48,8 @@ const FILE_LOI = [
    * thành vô nghĩa. Cửa này là thứ giữ nó sạch.
    */
   "modules/core/luu-tru/kho-disc.ts",
+  /** 17.4 — đặt tên thư mục là hàm thuần: vào một cái tên, ra một cái tên. */
+  "modules/core/luu-tru/cay-sao-luu.ts",
 ] as const;
 
 /**

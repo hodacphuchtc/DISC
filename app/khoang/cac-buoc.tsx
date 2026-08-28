@@ -27,6 +27,7 @@ import { KhoangPhanTich } from "./phan-tich";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { MinhHoa } from "@/app/components/nhan-vat";
 import { NhacSaoLuu, daNhacSaoLuu } from "@/app/components/nhac-sao-luu";
+import { KHUNG } from "@config/bo-cuc";
 import { CHU_BUOC, MA_BUOC, type MaBuoc } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { docTatCa, docThanhVien } from "@modules/core/luu-tru/kho-bai";
@@ -137,14 +138,16 @@ export function KhoangCacBuoc() {
   };
 
   return (
-    <div data-thu="khung-buoc" className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
+    <div data-thu="khung-buoc" className={`${KHUNG.trang} ${KHUNG.dem}`}>
       <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
         {CHU_BUOC.nhanTren}
       </p>
       <h1 className="mt-2 text-[26px] leading-[1.15] font-extrabold tracking-tight text-neutral-900 md:text-[30px]">
         {CHU_BUOC.tieuDe}
       </h1>
-      <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_BUOC.moTa}</p>
+      {/* 🔴 Dòng mô tả giữ KHUNG ĐỌC dù khung ngoài đã nới — nó là chữ, và chữ dài
+          hết bề ngang màn 1920px thì mắt lạc dòng. Nới cái cần nới, giữ cái cần giữ. */}
+      <p className={`mt-1.5 text-[15px] text-neutral-600 ${KHUNG.doc}`}>{CHU_BUOC.moTa}</p>
 
       {/* 🔴 NHỊP CHÚC MỪNG chỉ hiện khi MỌI người trong sổ đã xong, và nhà có ít nhất
           hai người — một nhà một người thì "cả nhà đã làm xong" là một câu nói dối nhỏ,

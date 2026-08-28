@@ -7,6 +7,7 @@ import { KhoiMaMoi } from "@/app/components/khoi-ma-moi";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
 import { CHU_BA_BAN, CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
+import { KHUNG } from "@config/bo-cuc";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe, MaTruc } from "@modules/core/bo-de/kieu";
 import { BO_DE_BO_ME, BO_DE_CON } from "@modules/report/doi-chieu";
@@ -147,7 +148,21 @@ export function ManKetQua({
   ];
 
   return (
-    <section className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
+    /**
+     * 🔴 BỐ CỤC HAI CỘT CHỈ Ở NỬA TRÊN, và chỉ từ mốc `xl` (17.7).
+     *
+     * Nửa trên là BẢNG SỐ: biểu đồ, tóm tắt 30 giây, bảng tra bốn nhóm — những khối cao mà
+     * hẹp, xếp dọc thì đẩy phần chữ xuống tận dưới nếp gấp. Nửa dưới là ĐOẠN VĂN, và nó ở
+     * lại một cột: kéo prose ra hai cột trên màn 1920px thì mắt phải nhảy lên đầu cột hai,
+     * còn kéo nó ra full-width thì lạc dòng. Cả hai đều tệ hơn hiện tại.
+     *
+     * 🔴 `print:block` gỡ grid khi in. Hợp đồng `@media print` của màn này có năm lớp và
+     * `tests/ban-in.test.ts` canh nó — một bố cục grid lọt vào bản in là thứ chỉ lộ ra khi
+     * xem trước bản in, tức là muộn.
+     */
+    <section className={`${KHUNG.trang} px-5 py-10 md:px-12 md:py-16`}>
+      <div className="grid gap-x-12 xl:grid-cols-2 xl:items-start print:block">
+      <div className={KHUNG.doc}>
       <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
         {boDe.ten} · {bietDanh}
       </p>
@@ -202,8 +217,9 @@ export function ManKetQua({
         <BangTraDisc />
         <ChuGiaiBonNhom />
       </div>
+      </div>
 
-      <div className="mt-10 space-y-7">
+      <div className={`mt-10 space-y-7 xl:mt-0 ${KHUNG.doc}`}>
         {khoi.map((k) => (
           <div key={k.ten}>
             <h2 className="text-[12px] font-semibold tracking-widest text-neutral-600 uppercase">
@@ -232,6 +248,8 @@ export function ManKetQua({
             ))}
           </ol>
         </div>
+      </div>
+
       </div>
 
       {laNguoiLonDocVeTre && (

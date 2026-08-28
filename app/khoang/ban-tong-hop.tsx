@@ -31,6 +31,7 @@ import {
   TRUNG_KHOP,
   VIEC_CUA_TOI,
 } from "@config/disc-noi-dung-cap";
+import { KHUNG } from "@config/bo-cuc";
 import { CHU_HAN_MUC_THU_MUC, CHU_TONG_HOP, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { MaTruc } from "@modules/core/bo-de/kieu";
@@ -163,7 +164,7 @@ export function ManBanTongHop({
 
   if (ketQua) {
     return (
-      <section className="max-w-3xl px-5 py-8 md:px-12 md:py-12">
+      <section className={`${KHUNG.trang} ${KHUNG.dem}`}>
         <button
           type="button"
           data-khong-in
@@ -199,7 +200,13 @@ export function ManBanTongHop({
           ))}
         </div>
 
-        <div className="mt-8 space-y-10">
+        {/* 🔴 HAI CỘT TỪ MỐC `lg` — đây là màn chữ nhiều nhất sản phẩm, cũng là chỗ
+            đỡ cuộn được nhiều nhất. Mỗi cột vẫn giữ KHUNG ĐỌC bên trong `MotBan`, nên
+            nới bố cục KHÔNG kéo dài dòng chữ ra.
+            🔴 Luật IN TÁCH BẢN không vỡ: `[data-ban][data-an-khi-in] { display: none }`
+            ở `globals.css` có độ đặc hiệu 0-2-0 và `display` thắng mọi bố cục grid —
+            một ô grid bị `display:none` thì biến mất khỏi luồng, không để lại ô trống. */}
+        <div className={`mt-8 ${KHUNG.haiCot}`}>
           {ketQua.map((b) => (
             <MotBan key={b.toiId} ban={b} />
           ))}
@@ -279,7 +286,11 @@ export function ManBanTongHop({
 
 function MotBan({ ban }: { readonly ban: BanPhanTich }) {
   return (
-    <section data-ban={`tv-${ban.toiId}`} data-thu="ban-tong-hop" className="space-y-4">
+    <section
+      data-ban={`tv-${ban.toiId}`}
+      data-thu="ban-tong-hop"
+      className={`space-y-4 ${KHUNG.doc}`}
+    >
       <h2
         className="border-b pb-2 text-[20px] leading-snug font-bold"
         style={{ color: MAU.timCongNghe, borderColor: MAU.vienMo }}

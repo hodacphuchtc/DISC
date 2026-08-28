@@ -25,12 +25,16 @@ import {
   xoaSachTatCa,
   type BaiLamLuu,
 } from "../modules/core/luu-tru/kho-bai";
+import { THU_MUC_MAY_DOC } from "../modules/core/luu-tru/cay-sao-luu";
 import {
   TEP_PHAN_TICH,
   TEP_THANH_VIEN,
   saoLuuTatCa,
   taoNoiDungZip,
 } from "../modules/core/luu-tru/sao-luu";
+
+/** Neo vào hằng số — xem lý do ở `tests/luu-tru.test.ts`. */
+const BAN_KE = `${THU_MUC_MAY_DOC}/ban-ke.json`;
 
 const LUC = "2026-08-28T09:00:00+07:00";
 
@@ -186,6 +190,85 @@ describe("🔴 tệp lạ thì BÁO LỖI RÕ và KHÔNG đụng vào kho", () =
   });
 });
 
+/**
+ * 🔴 17.5 — BA ĐỜI TỆP SAO LƯU, VÀ CẢ BA PHẢI NẠP ĐƯỢC.
+ *
+ * | Đời | Bản kê | Bài | Thành viên + phân tích |
+ * | --- | --- | --- | --- |
+ * | v1 | `ban-ke.json` | `bai/` | (không có) |
+ * | v2 (28/08) | `ban-ke.json` | `bai/` | `du-lieu/` |
+ * | v3 (17.4) | `_may-doc/ban-ke.json` | `_may-doc/bai/` | `_may-doc/` |
+ *
+ * Người dùng có thể đang giữ một tệp tải từ đời trước. **Nút cứu dữ liệu mà từ chối chính
+ * bản sao lưu của họ là kiểu hỏng tệ nhất tính năng này mắc được** — và nó chỉ lộ ra vào
+ * đúng ngày người ta cần đến nó, tức là ngày đã mất máy.
+ */
+describe("🔴 nạp được CẢ BA đời tệp sao lưu", () => {
+  /** Dựng tay một tệp .zip đời v2 — đúng hình dạng bản tải ngày 28/08/2026. */
+  async function dungV2(): Promise<Uint8Array> {
+    const z = new JSZip();
+    z.file("ban-ke.json", JSON.stringify({ phienBanSaoLuu: 2, taoLuc: LUC, soBai: 1 }));
+    z.file("bai/001-THCS-2026-08-28.json", JSON.stringify(bai("b-v2", "tv-0")));
+    z.file("du-lieu/thanh-vien.json", JSON.stringify([nguoi(0, "Zozo")]));
+    z.file("du-lieu/phan-tich.json", JSON.stringify([thuMuc("pt-v2")]));
+    return z.generateAsync({ type: "uint8array" });
+  }
+
+  it("v2 (bản tải hôm 28/08) ⇒ nạp được ĐỦ, không bị coi là bản cũ", async () => {
+    const kq = await docTuZip(await dungV2());
+    expect(kq.ok, "từ chối chính bản sao lưu người dùng đang giữ").toBe(true);
+    if (!kq.ok) return;
+    expect(kq.so.bai).toHaveLength(1);
+    expect(kq.so.thanhVien).toHaveLength(1);
+    expect(kq.so.phanTich).toHaveLength(1);
+    expect(kq.so.banCu).toBe(false);
+  });
+
+  it("v2 ghi được vào kho, khứ hồi ra đúng dữ liệu", async () => {
+    const kq = await docTuZip(await dungV2());
+    if (!kq.ok) throw new Error("phải đọc được");
+    await ghiDeKho(kq.so);
+    expect((await docThanhVien()).map((t) => t.ten)).toEqual(["Zozo"]);
+    expect(await docTatCa()).toHaveLength(1);
+  });
+
+  it("v3 (đời hiện tại) ⇒ khứ hồi đủ ba bảng", async () => {
+    await dungNhaBaNguoi();
+    const { duLieu } = await saoLuuTatCa(LUC);
+    await xoaSachTatCa();
+
+    const kq = await docTuZip(duLieu);
+    expect(kq.ok).toBe(true);
+    if (!kq.ok) return;
+    expect(kq.so.thanhVien).toHaveLength(3);
+    expect(kq.so.bai).toHaveLength(3);
+    expect(kq.so.banCu).toBe(false);
+  });
+
+  it("🔴 tệp v3 có LẪN PDF vẫn nạp đúng — PDF là bản đọc, không phải nguồn dữ liệu", async () => {
+    await dungNhaBaNguoi();
+    const kem = [
+      { ten: "Zozo/2026-08-28-19h30.pdf", duLieu: Uint8Array.from([37, 80, 68, 70]) },
+      { ten: "Tổng hợp/2026-08-28 20h05/Zozo.pdf", duLieu: Uint8Array.from([37, 80, 68, 70]) },
+    ];
+    const duLieu = await taoNoiDungZip(
+      await docTatCa(),
+      LUC,
+      await docThanhVien(),
+      await docPhanTich(),
+      kem,
+    );
+    await xoaSachTatCa();
+
+    const kq = await docTuZip(duLieu);
+    expect(kq.ok, "PDF trong tệp làm bộ đọc từ chối cả tệp").toBe(true);
+    if (!kq.ok) return;
+    // Đúng 3 bài, KHÔNG đếm nhầm hai tệp PDF thành bài.
+    expect(kq.so.bai).toHaveLength(3);
+    expect(kq.so.thanhVien).toHaveLength(3);
+  });
+});
+
 describe("bản sao lưu ĐỜI CŨ (v1, chỉ có bài)", () => {
   it("vẫn nạp được, và tự nói ra rằng nó không mang tên ai", async () => {
     // Dựng đúng hình dạng bản v1: ban-ke + bai/, KHÔNG có thư mục du-lieu.
@@ -203,19 +286,19 @@ describe("bản sao lưu ĐỜI CŨ (v1, chỉ có bài)", () => {
 });
 
 describe("🔴 sao lưu phải CHỨA cả ba bảng — lỗi mất dữ liệu vừa vá", () => {
-  it("tệp .zip có đủ ban-ke, bai/, và hai tệp du-lieu/", async () => {
+  it("tệp .zip có đủ bản kê, thư mục bài, và hai tệp dữ liệu", async () => {
     await dungNhaBaNguoi();
     const { duLieu, soBai, soThanhVien } = await saoLuuTatCa(LUC);
     expect(soBai).toBe(3);
     expect(soThanhVien).toBe(3);
 
     const zip = await JSZip.loadAsync(duLieu);
-    expect(zip.file("ban-ke.json")).toBeTruthy();
+    expect(zip.file(BAN_KE)).toBeTruthy();
     expect(zip.file(TEP_THANH_VIEN), "sao lưu thiếu bảng thành viên").toBeTruthy();
     expect(zip.file(TEP_PHAN_TICH), "sao lưu thiếu bảng phân tích").toBeTruthy();
 
-    const banKe = JSON.parse(await zip.file("ban-ke.json")!.async("string"));
-    expect(banKe.phienBanSaoLuu).toBe(2);
+    const banKe = JSON.parse(await zip.file(BAN_KE)!.async("string"));
+    expect(banKe.phienBanSaoLuu).toBe(3);
     expect(banKe.soThanhVien).toBe(3);
   });
 

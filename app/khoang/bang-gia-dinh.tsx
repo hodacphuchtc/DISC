@@ -27,6 +27,7 @@ import {
   CHU_TRE_TAM_DONG,
   TRUC,
 } from "@config/disc-tu-dien";
+import { KHUNG } from "@config/bo-cuc";
 import { MAU } from "@config/thuong-hieu";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { FormThanhVien, HoiXoa } from "@/app/components/form-thanh-vien";
@@ -65,7 +66,14 @@ export function KhoangBangGiaDinh({
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). Nút chỉ mọc trên thẻ trẻ từ lớp 3. */
   readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
-  readonly onXemBai?: (bai: BaiLamLuu) => void;
+  /**
+   * Bấm *Xem kết quả* trên thẻ.
+   *
+   * 🔴 Trao CẢ danh sách bài của người đó, không phải mỗi bài mới nhất (17.2). Màn kết quả
+   * cần đủ danh sách mới dựng được dải chọn lần đo; trao một bài rồi bắt màn kia đi đọc kho
+   * lần nữa là đọc hai lần cùng một thứ, và hai lượt đọc đó lệch nhau được.
+   */
+  readonly onXemBai?: (cacBan: readonly BaiLamLuu[]) => void;
   /** Nhận một mã mời (13.1). Trả `false` khi sổ đã có hồ sơ đó rồi. */
   readonly onNhanMa?: (ten: string, hoSo: HoSoMoi) => Promise<boolean> | boolean;
   /** Bấm *Xem thay đổi* trên thẻ (13.2). Nút chỉ hiện khi thật sự so được. */
@@ -111,7 +119,7 @@ export function KhoangBangGiaDinh({
   }
 
   return (
-    <section className="max-w-3xl px-4 py-5 md:px-5">
+    <section className={`${KHUNG.trang} px-4 py-5 md:px-5`}>
           {/* 🔴 THÔNG ĐIỆP NHÂN VĂN — dòng đầu tiên, trước mọi thứ khác, và CHỈ ở đây.
               Rải sang bước 2 và bước 3 là biến sự chân thành thành khẩu hiệu: đọc lần
               đầu thấy tử tế, đọc lần thứ tư thấy như quảng cáo. */}
@@ -122,7 +130,9 @@ export function KhoangBangGiaDinh({
           >
             {CHU_THONG_DIEP.chinh}
           </p>
-          <p className="mt-1.5 text-[15px] text-neutral-600">{CHU_THONG_DIEP.phu}</p>
+          <p className={`mt-1.5 text-[15px] text-neutral-600 ${KHUNG.doc}`}>
+            {CHU_THONG_DIEP.phu}
+          </p>
           {/* 🔴 LÝ DO QUAY LẠI (13.2). Không có dòng này thì sản phẩm chỉ được dùng một
               lần rồi thôi — mà mục tiêu của cả gói là GIỮ CHÂN, không phải đo một lần. */}
           <p data-thu="nhac-lam-lai" className="mt-1 text-[14px] text-neutral-500">
@@ -153,7 +163,7 @@ export function KhoangBangGiaDinh({
           <p className="mt-3 text-[15px] text-neutral-600">{CHU_BANG_GIA_DINH.trong}</p>
         </div>
       ) : (
-        <ul data-thu="luoi-thanh-vien" className="mt-5 grid gap-3 sm:grid-cols-2">
+        <ul data-thu="luoi-thanh-vien" className={`mt-5 ${KHUNG.luoiThe}`}>
           {nguoi.map((tv) => (
             <TheThanhVien
               key={tv.id}
@@ -212,7 +222,7 @@ export function KhoangBangGiaDinh({
 
       <p
         data-thu="thong-diep-chan"
-        className="mt-10 text-[13px] leading-relaxed text-neutral-500"
+        className={`mt-10 text-[13px] leading-relaxed text-neutral-500 ${KHUNG.doc}`}
       >
         {CHU_THONG_DIEP.chan}
       </p>
@@ -255,7 +265,7 @@ function TheThanhVien({
   readonly onLamBai?: (tv: ThanhVien) => void;
   /** Người lớn ngồi trả lời VỀ đứa trẻ này (bộ QS) — mở màn Vùng lệch. */
   readonly onLamBaiQuanSat?: (tv: ThanhVien) => void;
-  readonly onXemBai?: (bai: BaiLamLuu) => void;
+  readonly onXemBai?: (cacBan: readonly BaiLamLuu[]) => void;
   readonly onXemSoSanh?: (tv: ThanhVien) => void;
   readonly onSua: () => void;
   readonly onXoa: () => void;
@@ -398,7 +408,7 @@ function TheThanhVien({
         {onXemBai && moiNhat && (
           <button
             type="button"
-            onClick={() => onXemBai(moiNhat)}
+            onClick={() => onXemBai(bai)}
             className="min-h-[44px] rounded-xl border px-3.5 text-[14px] font-semibold"
             style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
           >

@@ -31,7 +31,8 @@ Supabase thì tài liệu đó lỗi thời.
 | `luu-tru/nhap.ts` | Nháp bài đang làm (localStorage), gắn theo bộ đề **và** biệt danh | ❌ |
 | `luu-tru/kho-bai.ts` | Bản dựng IndexedDB + **mặt tiền** đi qua sổ đăng ký `KhoDisc` (16.4) | ❌ |
 | `luu-tru/kho-disc.ts` | 🆕 16.4 — BẢN HỢP ĐỒNG của tầng lưu trữ. **Sạch DOM**, nằm trong tầng lõi và có cửa canh. `datKho()` cắm bản dựng khác vào mà không sửa một dòng giao diện | ✅ |
-| `luu-tru/khoi-phuc.ts` | 🆕 16.5 — nạp sổ từ `.zip`. HAI pha: `docTuZip()` chỉ đọc-kiểm, `ghiDeKho()` mới ghi | ❌ |
+| `luu-tru/khoi-phuc.ts` | 🆕 16.5 — nạp sổ từ `.zip`; 17.5 đọc được **cả ba đời tệp**. HAI pha: `docTuZip()` chỉ đọc-kiểm, `ghiDeKho()` mới ghi | ❌ |
+| `luu-tru/cay-sao-luu.ts` | 🆕 17.4 — đặt tên thư mục trong `.zip`: lọc ký tự cấm (giữ dấu tiếng Việt), tách tên trùng, tên thư mục theo ngày giờ | ✅ |
 | `luu-tru/sao-luu.ts` | Xuất `.zip`. 🔴 `saoLuuTatCa()` KHÔNG nhận tham số lọc | ❌ |
 | `do-phieu/index.ts` | Bốn mốc phễu + tham số `?nguon=` | ❌ |
 | `lien-he/luu-tam.ts` | Bản mặc định của điểm cắm — lưu máy + mở Zalo | ❌ |
@@ -60,6 +61,20 @@ im lặng cả tính năng lưu. Thêm trường mới thì PHẢI thêm vào `K
 `lien-he/kieu.ts`; `tests/lien-he-sach.test.ts` có hàng rào biên dịch bắt việc này.
 
 ## 6. Cạm bẫy đã trả giá
+
+### Tệp sao lưu nay có BA đời, và cả ba phải nạp được (17.5)
+
+| Đời | Bản kê | Bài | Thành viên + phân tích |
+| --- | --- | --- | --- |
+| v1 | `ban-ke.json` | `bai/` | (không có) |
+| v2 | `ban-ke.json` | `bai/` | `du-lieu/` |
+| v3 | `_may-doc/ban-ke.json` | `_may-doc/bai/` | `_may-doc/` |
+
+Người dùng có thể đang giữ một tệp tải từ đời trước. **Nút cứu dữ liệu mà từ chối chính bản
+sao lưu của họ là kiểu hỏng tệ nhất tính năng này mắc được** — và nó chỉ lộ ra vào đúng ngày
+người ta cần đến nó. `docTuZip()` vì thế tìm bản kê ở CẢ HAI chỗ trước khi kết luận "không
+phải sổ DISC", và bỏ qua mọi tệp không phải `.json` (từ 17.4 tệp `.zip` còn mang cả PDF).
+
 
 ### Kho ghi xong thì phải TỰ BÁO — và `BroadcastChannel` KHÔNG đủ (16.1)
 

@@ -18,8 +18,29 @@ import JSZip from "jszip";
 
 import type { PhanTichGiaDinh, ThanhVien } from "@modules/core/gia-dinh/kieu";
 
+import { THU_MUC_MAY_DOC } from "./cay-sao-luu";
 import { khoDangDung, type BaiLamLuu } from "./kho-disc";
 import { TEP_PHAN_TICH, TEP_THANH_VIEN } from "./sao-luu";
+
+/**
+ * 🔴 BA ĐỜI TỆP SAO LƯU, VÀ CẢ BA PHẢI NẠP ĐƯỢC (17.5).
+ *
+ * | Đời | Bản kê | Bài | Thành viên + phân tích |
+ * | --- | --- | --- | --- |
+ * | v1 | `ban-ke.json` | `bai/` | (không có) |
+ * | v2 (28/08) | `ban-ke.json` | `bai/` | `du-lieu/` |
+ * | v3 (17.4) | `_may-doc/ban-ke.json` | `_may-doc/bai/` | `_may-doc/` |
+ *
+ * Người dùng có thể đang giữ một tệp tải từ đời trước. Nút cứu dữ liệu mà **từ chối chính
+ * bản sao lưu của họ** là kiểu hỏng tệ nhất tính năng này mắc được — và nó chỉ lộ ra vào
+ * đúng ngày người ta cần đến nó.
+ */
+const CHO_TIM = {
+  banKe: [`${THU_MUC_MAY_DOC}/ban-ke.json`, "ban-ke.json"],
+  thanhVien: [`${THU_MUC_MAY_DOC}/thanh-vien.json`, "du-lieu/thanh-vien.json"],
+  phanTich: [`${THU_MUC_MAY_DOC}/phan-tich.json`, "du-lieu/phan-tich.json"],
+  thuMucBai: [`${THU_MUC_MAY_DOC}/bai`, "bai"],
+} as const;
 
 /** Sổ đọc được từ tệp — đã kiểm hình dạng, CHƯA ghi vào kho. */
 export type SoTuTep = {
@@ -83,6 +104,18 @@ async function docJson(zip: JSZip, ten: string): Promise<unknown> {
   return JSON.parse(await tep.async("string"));
 }
 
+/** Đọc tệp JSON đầu tiên tìm thấy trong danh sách chỗ có thể nằm. Trả cả đường dẫn đã dùng. */
+async function docJsonODau(
+  zip: JSZip,
+  cho: readonly string[],
+): Promise<{ gia: unknown; duong: string } | undefined> {
+  for (const duong of cho) {
+    const gia = await docJson(zip, duong);
+    if (gia !== undefined) return { gia, duong };
+  }
+  return undefined;
+}
+
 /* ── Pha 1: ĐỌC và KIỂM, tuyệt đối không ghi ──────────────────────────────── */
 
 /**
@@ -99,7 +132,8 @@ export async function docTuZip(duLieu: ArrayBuffer | Uint8Array): Promise<KetQua
   }
 
   try {
-    const banKe = await docJson(zip, "ban-ke.json");
+    const kho = await docJsonODau(zip, CHO_TIM.banKe);
+    const banKe = kho?.gia;
     // 🔴 Hàng rào NHẬN DẠNG. Một tệp `.zip` bất kỳ (ảnh, tài liệu) mở được nhưng KHÔNG
     // phải sổ DISC — ghi đè bằng nó là xoá sổ đang dùng để lấy về con số không.
     if (typeof banKe !== "object" || banKe === null || !("phienBanSaoLuu" in banKe)) {
@@ -107,37 +141,44 @@ export async function docTuZip(duLieu: ArrayBuffer | Uint8Array): Promise<KetQua
     }
 
     const bai: BaiLamLuu[] = [];
-    const tepBai = zip.folder("bai");
-    if (tepBai) {
+    for (const goc of CHO_TIM.thuMucBai) {
+      const tepBai = zip.folder(goc);
+      if (!tepBai) continue;
       const ten: string[] = [];
       tepBai.forEach((duong) => {
-        if (duong.endsWith(".json")) ten.push(`bai/${duong}`);
+        // 🔴 CHỈ nhận `.json`. Từ 17.4 tệp .zip còn mang cả PDF; chúng là bản ĐỌC, không
+        // phải nguồn dữ liệu — nhưng sự có mặt của chúng KHÔNG được làm bộ đọc từ chối tệp.
+        if (duong.endsWith(".json")) ten.push(`${goc}/${duong}`);
       });
+      if (ten.length === 0) continue;
       for (const t of ten.sort()) {
         const doc = await docJson(zip, t);
         if (!laBaiHopLe(doc)) return { ok: false, loi: "du-lieu-hong", chiTiet: t };
         bai.push(doc);
       }
+      break;
     }
 
-    const thoTv = await docJson(zip, TEP_THANH_VIEN);
-    const thoPt = await docJson(zip, TEP_PHAN_TICH);
+    const tv = await docJsonODau(zip, CHO_TIM.thanhVien);
+    const pt = await docJsonODau(zip, CHO_TIM.phanTich);
+    const thoTv = tv?.gia;
+    const thoPt = pt?.gia;
     const banCu = thoTv === undefined && thoPt === undefined;
 
     if (thoTv !== undefined && !Array.isArray(thoTv)) {
-      return { ok: false, loi: "du-lieu-hong", chiTiet: TEP_THANH_VIEN };
+      return { ok: false, loi: "du-lieu-hong", chiTiet: tv?.duong ?? TEP_THANH_VIEN };
     }
     if (thoPt !== undefined && !Array.isArray(thoPt)) {
-      return { ok: false, loi: "du-lieu-hong", chiTiet: TEP_PHAN_TICH };
+      return { ok: false, loi: "du-lieu-hong", chiTiet: pt?.duong ?? TEP_PHAN_TICH };
     }
 
     const thanhVien = (thoTv ?? []) as unknown[];
     const phanTich = (thoPt ?? []) as unknown[];
     if (!thanhVien.every(laThanhVienHopLe)) {
-      return { ok: false, loi: "du-lieu-hong", chiTiet: TEP_THANH_VIEN };
+      return { ok: false, loi: "du-lieu-hong", chiTiet: tv?.duong ?? TEP_THANH_VIEN };
     }
     if (!phanTich.every(laPhanTichHopLe)) {
-      return { ok: false, loi: "du-lieu-hong", chiTiet: TEP_PHAN_TICH };
+      return { ok: false, loi: "du-lieu-hong", chiTiet: pt?.duong ?? TEP_PHAN_TICH };
     }
 
     return {

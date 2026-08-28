@@ -17,7 +17,9 @@
  */
 
 import { dongChoBan, tenTepBan, type DongBan } from "@modules/report/noi-dung-ban";
+import { dongChoBai, type BaiDeDoc } from "@modules/report/noi-dung-ket-qua";
 import type { BanPhanTich } from "@modules/report/phan-tich-gia-dinh";
+import { hienNgayGio } from "@modules/core/tien-ich/ngay";
 
 /** Font Việt SIL OFL 1.1 — giấy phép kèm theo ở `public/fonts/OFL.txt`. */
 export const DUONG_FONT = "/fonts/BeVietnamPro-Regular.ttf";
@@ -86,7 +88,14 @@ export function quenFontDaTai(): void {
  * được phép là ngoại lệ: tờ của Bin không được mang phần Mẹ Lan đọc về cả nhà. Chữ ký hàm
  * chính là hàng rào — không có cách nào truyền hai bản vào đây.
  */
-export async function xuatPdfMotBan(ban: BanPhanTich, luc: Date): Promise<TepPdf> {
+/**
+ * Vẽ một danh sách dòng thành MỘT tệp PDF.
+ *
+ * 🔴 MỘT BỘ VẼ DUY NHẤT cho cả bản phân tích cả nhà lẫn bản cá nhân (17.3). Hai bộ vẽ là
+ * hai cách xuống dòng, hai cỡ chữ, hai cách ngắt trang — và chúng chỉ lệch nhau vào đúng
+ * ngày ai đó sửa một bên.
+ */
+async function veTepPdf(dongCanVe: readonly DongBan[]): Promise<Uint8Array> {
   const [{ jsPDF }, font] = await Promise.all([import("jspdf"), taiFont()]);
 
   const tep = new jsPDF({ unit: "mm", format: "a4" });
@@ -97,7 +106,7 @@ export async function xuatPdfMotBan(ban: BanPhanTich, luc: Date): Promise<TepPdf
   const rongChu = TRANG.rong - TRANG.le * 2;
   let y = TRANG.le + 6;
 
-  for (const d of dongChoBan(ban)) {
+  for (const d of dongCanVe) {
     tep.setFontSize(CO_CHU[d.kieu]);
     y += CACH_TREN[d.kieu];
     const dong = tep.splitTextToSize(d.chu, rongChu) as string[];
@@ -116,9 +125,27 @@ export async function xuatPdfMotBan(ban: BanPhanTich, luc: Date): Promise<TepPdf
     }
   }
 
+  return new Uint8Array(tep.output("arraybuffer"));
+}
+
+export async function xuatPdfMotBan(ban: BanPhanTich, luc: Date): Promise<TepPdf> {
   return {
     ten: tenTepBan(ban.tenLuc, luc),
-    duLieu: new Uint8Array(tep.output("arraybuffer")),
+    duLieu: await veTepPdf(dongChoBan(ban)),
+  };
+}
+
+/**
+ * Sinh MỘT tệp PDF cho MỘT bài đã làm của MỘT người (17.3).
+ *
+ * Tên tệp lấy theo **mốc làm xong bài**, không theo lúc bấm sao lưu: hai lần đo của cùng
+ * một người phải ra hai tên khác nhau, và tên phải nói đúng bài đó làm khi nào.
+ */
+export async function xuatPdfMotBai(bai: BaiDeDoc): Promise<TepPdf> {
+  const luc = new Date(bai.ketThuc);
+  return {
+    ten: tenTepBan(`${bai.ten}-${bai.boDe}`, luc),
+    duLieu: await veTepPdf(dongChoBai(bai, hienNgayGio)),
   };
 }
 

@@ -14,7 +14,16 @@ import {
   xoaSachTatCa,
   type BaiLamLuu,
 } from "../modules/core/luu-tru/kho-bai";
+import { THU_MUC_MAY_DOC } from "../modules/core/luu-tru/cay-sao-luu";
 import { saoLuuTatCa, taoNoiDungZip } from "../modules/core/luu-tru/sao-luu";
+
+/**
+ * 🔴 ĐỌC ĐƯỜNG DẪN TỪ HẰNG SỐ, KHÔNG GÕ CỨNG. Hình dạng tệp .zip đã đổi ba lần
+ * (v1 → v2 ở 16.5 → v3 ở 17.4), và mỗi lần đổi lại kéo theo một đợt test đỏ chỉ vì test
+ * gõ lại chuỗi đường dẫn của riêng nó. Neo vào hằng số thì đổi chỗ lần thứ tư là 0 test đỏ.
+ */
+const BAN_KE = `${THU_MUC_MAY_DOC}/ban-ke.json`;
+const THU_MUC_BAI = `${THU_MUC_MAY_DOC}/bai/`;
 
 const LUC = "2026-08-27T06:30:00+07:00";
 
@@ -98,12 +107,12 @@ describe("sao lưu .zip", () => {
     expect(soBai).toBe(3);
 
     const zip = await JSZip.loadAsync(duLieu);
-    // Chỉ đếm tệp trong `bai/`: từ 16.5 bản sao lưu còn mang thêm hai tệp `du-lieu/`
-    // (tên từng người + các bản phân tích), và chúng KHÔNG phải bài.
-    const tep = Object.keys(zip.files).filter((t) => t.startsWith("bai/") && t.endsWith(".json"));
+    // Chỉ đếm tệp bài: từ 17.4 tệp .zip còn mang cả PDF ở các thư mục tên người và
+    // thư mục *Tổng hợp*, cùng hai tệp JSON khác trong `_may-doc/` — không cái nào là bài.
+    const tep = Object.keys(zip.files).filter((t) => t.startsWith(THU_MUC_BAI) && t.endsWith(".json"));
     expect(tep).toHaveLength(3);
 
-    const banKe = JSON.parse(await zip.file("ban-ke.json")!.async("string"));
+    const banKe = JSON.parse(await zip.file(BAN_KE)!.async("string"));
     expect([...banKe.boDe].sort()).toEqual(["MN", "QS", "THCS"]);
   });
 
@@ -115,7 +124,7 @@ describe("sao lưu .zip", () => {
   it("bản kê ghi đủ số bài và có dòng nhắc về dữ liệu cá nhân", async () => {
     await luuBai(bai({ id: "a" }));
     const zip = await JSZip.loadAsync((await saoLuuTatCa(LUC)).duLieu);
-    const banKe = JSON.parse(await zip.file("ban-ke.json")!.async("string"));
+    const banKe = JSON.parse(await zip.file(BAN_KE)!.async("string"));
     expect(banKe.soBai).toBe(1);
     expect(banKe.taoLuc).toBe(LUC);
     expect(banKe.ghiChu).toMatch(/dữ liệu cá nhân/u);
@@ -125,8 +134,8 @@ describe("sao lưu .zip", () => {
     const goc = bai({ id: "a", traLoi: { "THCS-D1": 4, "THCS-I6": 2 } });
     await luuBai(goc);
     const zip = await JSZip.loadAsync((await saoLuuTatCa(LUC)).duLieu);
-    // Bỏ mục THƯ MỤC "bai/": nó cũng nằm trong zip.files nhưng zip.file() trả null.
-    const ten = Object.keys(zip.files).find((t) => t.startsWith("bai/") && !zip.files[t].dir)!;
+    // Bỏ mục THƯ MỤC: nó cũng nằm trong zip.files nhưng zip.file() trả null.
+    const ten = Object.keys(zip.files).find((t) => t.startsWith(THU_MUC_BAI) && !zip.files[t].dir)!;
     expect(JSON.parse(await zip.file(ten)!.async("string"))).toEqual(goc);
   });
 
@@ -139,17 +148,17 @@ describe("sao lưu .zip", () => {
     const { duLieu, soBai } = await saoLuuTatCa(LUC);
     expect(soBai).toBe(0);
     const zip = await JSZip.loadAsync(duLieu);
-    expect(Object.keys(zip.files).filter((t) => t.startsWith("bai/"))).toEqual([]);
+    expect(Object.keys(zip.files).filter((t) => t.startsWith(THU_MUC_BAI))).toEqual([]);
     /**
-     * 🔴 HAI TỆP `du-lieu/` VẪN PHẢI CÓ MẶT, dù rỗng (16.5). Vắng mặt nghĩa là *bản sao
+     * 🔴 HAI TỆP DỮ LIỆU VẪN PHẢI CÓ MẶT, dù rỗng (16.5). Vắng mặt nghĩa là *bản sao
      * lưu đời cũ, không mang tên ai*; có mà rỗng nghĩa là *nhà này chưa khai ai*. Gộp hai
      * trạng thái đó lại là để lúc khôi phục không phân biệt được, và người dùng nhận một
      * câu báo sai về chính dữ liệu của họ.
      */
     expect(Object.keys(zip.files).filter((t) => t.endsWith(".json")).sort()).toEqual([
-      "ban-ke.json",
-      "du-lieu/phan-tich.json",
-      "du-lieu/thanh-vien.json",
+      `${THU_MUC_MAY_DOC}/ban-ke.json`,
+      `${THU_MUC_MAY_DOC}/phan-tich.json`,
+      `${THU_MUC_MAY_DOC}/thanh-vien.json`,
     ]);
   });
 
@@ -169,7 +178,7 @@ describe("sao lưu .zip", () => {
   it("taoNoiDungZip nhận thẳng danh sách — dùng được không cần IndexedDB", async () => {
     const duLieu = await taoNoiDungZip([bai({ id: "x" })], LUC);
     expect(duLieu).toBeInstanceOf(Uint8Array);
-    expect((await JSZip.loadAsync(duLieu)).file("ban-ke.json")).not.toBeNull();
+    expect((await JSZip.loadAsync(duLieu)).file(BAN_KE)).not.toBeNull();
   });
 });
 

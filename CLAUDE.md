@@ -60,16 +60,28 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 28/08/2026 — `PLAN_V2.md` HẾT VIỆC MÁY)
+## TRẠNG THÁI (cập nhật 28/08/2026, lượt 3 — `PLAN_V2.md` HẾT VIỆC MÁY)
 
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V2.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
-### 🟢 ĐÃ XONG — luồng ba bước (15 mục) VÀ TRỌN GĐ16 (9 mục)
+### 🟢 ĐÃ XONG — luồng ba bước (15) · GĐ16 (9) · GĐ17 (7)
 
-**1.292 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 288 KB gzip**
+**1.366 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 290 KB gzip**
 (trần 300; nền cũ 282). Sổ `PLAN_V2.md` còn đúng **HAI** ô chưa tick — `V0.1` và `V0.2` —
 và cả hai chặn bởi NGƯỜI/NGOÀI. **Không còn việc máy nào trong sổ này.**
+
+**GĐ17 thêm vào sản phẩm** (chủ dự án bấm thử bản thật rồi nêu ba việc):
+- **Xem lại được LẦN ĐO TRƯỚC** (`17.2`) — người có 2 bài thì màn kết quả có dải chọn hai
+  bản, nhãn có ngày VÀ giờ. 🔴 Chỉ cho XEM lần lượt, **không** so sánh: sàn 90 ngày giữ
+  nguyên. (Trần 2 bài + hộp thoại cảnh báo thì đã có từ GĐ12, không xây lại.)
+- **Tệp `.zip` mở ra là ĐỌC ĐƯỢC** (`17.3`–`17.5`) — thư mục mang **tên từng người**, bên
+  trong 1–2 tệp PDF bản đầy đủ; thư mục **Tổng hợp** chia theo ngày giờ từng lần phân tích
+  (tối đa 5); JSON chìm xuống `_may-doc/` kèm tệp *ĐỌC TRƯỚC.txt*. Nút *Khôi phục* đọc
+  được **cả ba đời tệp**.
+- **Máy tính hết thừa hai phần ba màn** (`17.6`–`17.7`) — lưới thẻ 3–4 cột, bản phân tích
+  hai cột, màn kết quả hai cột ở nửa trên. 🔴 **Đoạn văn và màn làm bài GIỮ khung hẹp**, có
+  cửa canh chiều đó.
 
 Luồng ba bước: `V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
 `V5.1`–`V5.2`. GĐ16: `16.1`–`16.9`, ba đợt 16A/16B/16C.
@@ -163,6 +175,11 @@ lại là giả định, không phải phần mềm.**
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 28/08/2026 | **JSON Ở LẠI trong tệp sao lưu, chỉ chìm xuống `_may-doc/`** kèm tệp *ĐỌC TRƯỚC.txt* | Chủ dự án phàn nàn "một số file JSON không đọc được" và muốn chỉ còn PDF. Bỏ hẳn JSON là **giết nút Khôi phục vừa xây hôm qua**, và biến bản sao lưu thành bản xuất — mất máy là mất sổ, không cứu được. Giữ cả hai: phần người đọc ở gốc, phần máy đọc chìm xuống dưới và tự khai mình là gì |
+| 28/08/2026 | **Nới bề rộng theo LOẠI nội dung, KHÔNG full-width tất cả** | Chủ dự án nêu đúng vấn đề (màn 1920px thừa hai phần ba) nhưng cách sửa hiển nhiên lại hại đúng thứ cần sửa: sản phẩm này nội dung chính LÀ chữ để phụ huynh đọc, và dòng 200 ký tự làm mắt lạc dòng. Lưới thẻ và bố cục nhiều cột thì nới; đoạn văn và màn làm bài giữ ~70 ký tự/dòng, **có cửa canh chiều giữ** |
+| 28/08/2026 | **Thư mục trong `.zip` mang TÊN THẬT**, lật hàng rào *"tên không vào tệp xuất"* của ADR-005 | Chủ dự án chốt. Cả hạng mục sinh ra để tệp `.zip` mở ra là đọc được — `Nguoi-1/`, `Nguoi-2/` thì mất đúng thứ đang cần. Và đã có tiền lệ: `16.6` đặt tên tệp PDF theo tên người. Tên tệp JSON thì VẪN không mang tên, vì ở đó bỏ tên đi là miễn phí |
+| 28/08/2026 | **Dải chọn bản chỉ cho XEM lần lượt, KHÔNG so sánh** | Việc so hai bài có sàn 90 ngày vì một nấc trả lời dịch điểm 4–10 điểm. Thêm một đường vòng qua sàn đó là lật một quyết định đã chốt, và lật một cách âm thầm. Có cửa canh: dải này cấm cả các chữ *tăng · giảm · thay đổi · tiến bộ* |
+| 28/08/2026 | **Đo TRƯỚC khi thiết kế cho việc sinh nhiều tệp PDF** (`17.1`) | Lo 42 tệp × font 133 KB thành vài chục MB và treo máy. Đo thật: **0,48 giây / 2,65 MB**, vì jsPDF tự cắt font. Nhờ đo trước mà **bỏ được** thanh tiến trình đếm từng tệp và cơ chế nhường luồng — ít mã hơn, và vì đã đo chứ không phải vì lười |
 | 28/08/2026 | **Thêm `jspdf` — nhưng NẠP LƯỜI là ĐIỀU KIỆN KÈM THEO** (ADR-009) | Ràng buộc *"chỉ `jszip`"* không phải luật đạo đức; nó là cách kiểm soát hai rủi ro. Rủi ro chuỗi cung ứng trả bằng `quet-ma-doc` **trước khi import một dòng nào** (verdict 🟢 XANH). Rủi ro cỡ gói trả bằng `await import()` **cộng hai cửa canh**. Người không bấm *Sao lưu* trả thêm đúng **5 KB** |
 | 28/08/2026 | **Mặt tiền kho giữ NGUYÊN tên hàm cũ, không đổi 13 file giao diện** | `kho-bai.ts` thành mặt tiền đi qua sổ đăng ký `KhoDisc`. Đổi 13 file sang `kho().luuBai(...)` là hàng trăm dòng đổi, một đợt test đỏ, và **0 giá trị** cho người dùng trước ngày phát — trong khi `datKho()` vẫn thay được toàn bộ. Bản dựng GIẢ trong test chứng minh ổ cắm là ổ cắm thật |
 | 28/08/2026 | **`saoLuuTatCa()` giữ chữ ký MỘT tham số; PDF đi qua hàm thứ hai** | Chữ ký một-tham-số LÀ một hàng rào, có test khẳng định `toHaveLength(1)` để chặn đúng cái bẫy cũ (thêm `boDe?` rồi nút sao lưu chỉ lấy một phần). Nới cửa cho một lý do chính đáng hôm nay là mở sẵn nó cho một lý do không chính đáng ngày mai |
@@ -213,6 +230,22 @@ lại là giả định, không phải phần mềm.**
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
 
+- 🔴 **jsdom CÓ HAI REALM, VÀ CÂU BÁO LỖI KHÔNG HỀ NHẮC TỚI ĐIỀU ĐÓ** (28/08/2026,
+  `17.4`). Fixture dựng bằng `new TextEncoder().encode()` cho ra một `Uint8Array` mà phép
+  `instanceof Uint8Array` **bên trong JSZip trượt** — JSZip ném *"Can't read the data of
+  'x'. Is it in a supported JavaScript type?"*, đọc lên như thể dữ liệu sai kiểu. Sản phẩm
+  thật chạy trong trình duyệt một realm nên **không dính**; đây thuần tuý là tật của môi
+  trường test. **Dùng `Uint8Array.from()`.** Và bài học chung: trước khi đi sửa sản phẩm vì
+  một test đỏ, hỏi xem test có đang chạy trong cùng thế giới với sản phẩm không.
+- 🔴 **`endsWith()` TRÊN TÊN TỆP BẮT TRÚNG CẢ TÊN DÀI HƠN** (28/08/2026, `17.7`). Bộ tìm
+  file của cửa kiểm bố cục dùng `t.endsWith("ket-qua.tsx")` — và nó khớp `chon-ban-ket-qua.tsx`,
+  rồi lặng lẽ đi soi nhầm file. Cùng một họ với bẫy đã cắn ở `11.6`: biệt danh `"Bi"` khớp
+  vào chữ `"**Bi**ệt danh"`. **So khớp tên tệp thì so ĐÚNG tên**, không so đuôi.
+- **Đo TRƯỚC khi thiết kế thì gỡ được cả một mảng việc** (28/08/2026, `17.1`). Kế hoạch có
+  hẳn một thanh tiến trình đếm từng tệp và cơ chế nhường luồng, dựng cho nỗi lo 42 tệp PDF
+  làm treo máy. Đo ra **0,48 giây** — vì jsPDF tự cắt font, mỗi tệp chỉ 48 KB, nhỏ hơn cả
+  tệp font gốc. Bỏ được cả hai cơ chế. **Một hạng mục ĐO đặt ở đầu gói rẻ hơn nhiều so với
+  một hạng mục TỐI ƯU đặt ở cuối** — và nó còn có thể nói cho biết là không cần tối ưu.
 - 🔴 **NÚT SAO LƯU CHỈ ĐỌC MỘT TRONG BA BẢNG — LỜI HỨA CỨU DỮ LIỆU LÀ LỜI HỨA SUÔNG**
   (28/08/2026, `16.5`). `saoLuuTatCa()` gọi `docTatCa()` rồi thôi. Kho lên v2 ba bảng từ
   GĐ12 mà hàm sao lưu không ai đụng tới — nên phụ huynh bấm *Sao lưu*, nhận một tệp trông

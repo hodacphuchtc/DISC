@@ -25,7 +25,8 @@ văn bản diễn giải, tính vùng lệch con ↔ cha mẹ, và vẽ tấm �
 | `do-chu.ts` | Đo và ngắt chữ cho Canvas (nhận hàm đo, không nhận `ctx`) | ✅ |
 | `hinh-nhan-vat.ts` | Nét vẽ bốn robot **và bốn cảnh minh hoạ** (16.7) — NGUỒN DUY NHẤT cho màn hình, ảnh PNG, và mọi chỗ khác | ✅ |
 | `noi-dung-ban.ts` | 🆕 16.6 — nội dung MỘT bản phân tích dạng dòng. Nguồn dùng chung cho PDF; hàm thuần | ✅ |
-| `xuat-pdf.ts` | 🆕 16.6 — mỗi người MỘT tệp PDF. 🔴 `jspdf` chỉ vào bằng `await import()` (ADR-009) | ❌ |
+| `noi-dung-ket-qua.ts` | 🆕 17.3 — nội dung MỘT bài đã làm dạng dòng, dựng từ `layDienGiaiDay()`. 🔴 Không viết chữ nội dung mới nào | ✅ |
+| `xuat-pdf.ts` | 🆕 16.6 — mỗi người MỘT tệp PDF; 17.3 thêm `xuatPdfMotBai()` cho bản cá nhân. Một bộ vẽ `veTepPdf()` dùng chung. 🔴 `jspdf` chỉ vào bằng `await import()` (ADR-009) | ❌ |
 | `thong-ke.ts` | Cronbach's alpha, tương quan item–tổng (sàng bộ câu bằng dữ liệu thật) | ✅ |
 | `muc-do.ts` | Vị trí một trục trong hồ sơ + cường độ (GĐ9) | ✅ |
 | `doi-chieu-phong-cach.ts` | Lệch phong cách BỐ MẸ ↔ CON — **khác** `doi-chieu.ts` (GĐ9) | ✅ |

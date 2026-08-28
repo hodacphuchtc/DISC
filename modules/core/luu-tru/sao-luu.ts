@@ -14,12 +14,26 @@ import JSZip from "jszip";
 
 import type { PhanTichGiaDinh, ThanhVien } from "@modules/core/gia-dinh/kieu";
 
+import {
+  CHU_DOC_TRUOC,
+  TEP_DOC_TRUOC,
+  THU_MUC_MAY_DOC,
+} from "./cay-sao-luu";
+
 import { docPhanTich, docTatCa, docThanhVien, type BaiLamLuu } from "./kho-bai";
 
 export const TEN_TEP_SAO_LUU = "disc-sao-luu";
 
-/** Nơi để hai bảng thêm ở kho v2. Bài vẫn nằm ở `bai/` — bản sao lưu cũ mở được. */
-export const THU_MUC_DU_LIEU = "du-lieu";
+/**
+ * Nơi để phần MÁY đọc.
+ *
+ * 🔴 ĐỜI THỨ BA CỦA TỆP SAO LƯU (17.4). v1 để bài ở gốc `bai/`; v2 (28/08) thêm
+ * `du-lieu/`; v3 dồn tất cả xuống `_may-doc/` để chỗ dễ thấy nhất dành cho thư mục mang
+ * TÊN NGƯỜI. `docTuZip()` phải đọc được **cả ba** — người dùng có thể đang giữ một tệp
+ * tải từ đời trước, và nút cứu dữ liệu mà từ chối chính bản sao lưu của họ là kiểu hỏng
+ * tệ nhất tính năng này mắc được.
+ */
+export const THU_MUC_DU_LIEU = THU_MUC_MAY_DOC;
 export const TEP_THANH_VIEN = `${THU_MUC_DU_LIEU}/thanh-vien.json`;
 export const TEP_PHAN_TICH = `${THU_MUC_DU_LIEU}/phan-tich.json`;
 
@@ -35,7 +49,7 @@ export const TEP_PHAN_TICH = `${THU_MUC_DU_LIEU}/phan-tich.json`;
  * Bản kê v1 vẫn đọc được — trường mới là trường THÊM, không đổi trường cũ.
  */
 export type BanKe = {
-  readonly phienBanSaoLuu: 1 | 2;
+  readonly phienBanSaoLuu: 1 | 2 | 3;
   readonly taoLuc: string;
   readonly soBai: number;
   readonly boDe: readonly string[];
@@ -46,10 +60,16 @@ export type BanKe = {
   readonly soThuMucPhanTich?: number;
 };
 
-/** Tên tệp an toàn cho mọi hệ điều hành, và không lộ biệt danh ra tên tệp. */
+/**
+ * Tên tệp an toàn cho mọi hệ điều hành, và không lộ biệt danh ra tên tệp.
+ *
+ * 🔴 Ở ĐÂY vẫn KHÔNG có tên người, dù thư mục PDF thì có. Hai chỗ, hai lý do khác nhau:
+ * thư mục PDF tồn tại để người dùng ĐỌC, còn tệp JSON này người dùng không bao giờ mở —
+ * bỏ tên ra khỏi nó là miễn phí, nên vẫn bỏ.
+ */
 function tenTepCuaBai(bai: BaiLamLuu, thuTu: number): string {
   const ngay = bai.ketThuc.slice(0, 10);
-  return `bai/${String(thuTu + 1).padStart(3, "0")}-${bai.boDe}-${ngay}.json`;
+  return `${THU_MUC_MAY_DOC}/bai/${String(thuTu + 1).padStart(3, "0")}-${bai.boDe}-${ngay}.json`;
 }
 
 /** Một tệp đọc-được-bằng-mắt đi kèm bản sao lưu (bản PDF của từng người, 16.6). */
@@ -68,7 +88,7 @@ export async function taoNoiDungZip(
   const zip = new JSZip();
 
   const banKe: BanKe = {
-    phienBanSaoLuu: 2,
+    phienBanSaoLuu: 3,
     taoLuc,
     soBai: ds.length,
     boDe: [...new Set(ds.map((b) => b.boDe))].sort(),
@@ -78,7 +98,9 @@ export async function taoNoiDungZip(
       "Bản sao lưu DISC: tên từng người, bài đã làm, và các bản phân tích. Tệp này chứa " +
       "dữ liệu cá nhân — giữ trong máy, đừng gửi qua nhóm chat.",
   };
-  zip.file("ban-ke.json", JSON.stringify(banKe, null, 2));
+  // 🔴 Bản kê xuống `_may-doc/` cùng phần còn lại. `docTuZip()` tìm nó ở CẢ HAI chỗ.
+  zip.file(`${THU_MUC_MAY_DOC}/ban-ke.json`, JSON.stringify(banKe, null, 2));
+  zip.file(TEP_DOC_TRUOC, CHU_DOC_TRUOC);
 
   ds.forEach((bai, i) => zip.file(tenTepCuaBai(bai, i), JSON.stringify(bai, null, 2)));
 
@@ -88,9 +110,10 @@ export async function taoNoiDungZip(
   zip.file(TEP_THANH_VIEN, JSON.stringify(nguoi, null, 2));
   zip.file(TEP_PHAN_TICH, JSON.stringify(thuMuc, null, 2));
 
-  // 🔴 PDF nằm ở GỐC tệp .zip, không nhét vào `du-lieu/`. Người mở tệp này thường là một
-  // phụ huynh vừa mất máy — thứ họ cần thấy đầu tiên là tờ của mình, không phải một thư
-  // mục tên "du-lieu" mà mở ra toàn JSON.
+  // 🔴 PHẦN ĐỌC ĐƯỢC nằm ở GỐC tệp .zip, JSON thì chìm xuống `_may-doc/`. Người mở tệp này
+  // thường là một phụ huynh vừa mất máy — thứ họ cần thấy đầu tiên là thư mục mang tên
+  // mình, không phải một thư mục mở ra toàn ký hiệu. `t.ten` đã mang sẵn đường dẫn thư
+  // mục (`Zozo/…`, `Tổng hợp/2026-08-28 20h05/…`) do nơi gọi dựng.
   for (const t of tepKem) zip.file(t.ten, t.duLieu);
 
   // "uint8array" chứ không phải "blob": chạy được cả trong Node lẫn trình duyệt.

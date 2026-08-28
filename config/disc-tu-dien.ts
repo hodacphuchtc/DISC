@@ -827,6 +827,19 @@ export const CHU_KHO_HONG: Readonly<Record<string, string>> = {
  * biến nó thành một lựa chọn tử tế là: **nêu đích danh bài nào sắp mất** (ngày nào, bộ
  * nào), **cho tải về trước**, và **cho huỷ**. Thiếu một trong ba là quay về xoá im lặng.
  */
+/**
+ * Dải chọn bản ở màn Kết quả (17.2).
+ *
+ * 🔴 Câu chữ CỐ Ý trung tính: "lần đo", không phải "lần trước / lần sau". Chữ so sánh dẫn
+ * người đọc đi tìm sự thay đổi, mà việc so sánh có sàn 90 ngày và không phải bài nào cũng
+ * đủ điều kiện. Nhãn chỉ nói MỐC THỜI GIAN, không nói ý nghĩa.
+ */
+export const CHU_CHON_BAN = {
+  nhanVung: "Chọn lần đo để xem",
+  moTa: "Người này có nhiều lần đo trên máy. Bấm để xem từng lần.",
+  nhanMoiNhat: "· mới nhất",
+} as const;
+
 export const CHU_HAN_MUC = {
   tieuDe: "Bài cũ nhất sẽ được thay bằng bài mới",
   moTa:

@@ -15,12 +15,14 @@
 import { useCallback, useState } from "react";
 
 import { KhoangBangGiaDinh } from "./bang-gia-dinh";
+import { ChonBanKetQua } from "@/app/components/chon-ban-ket-qua";
 import { ManKetQua } from "./ket-qua";
 import { HopThoaiHanMuc } from "@/app/components/hop-thoai-han-muc";
 import { KhoiSoSanh } from "@/app/components/khoi-so-sanh";
 import { GIOI_HAN_BAI_MOI_NGUOI, laTreEm } from "@config/disc-gia-dinh";
 import { MO_NOI_DUNG_TRE } from "@config/disc-nguong";
 import { CHU_M6 } from "@config/disc-tu-dien";
+import { KHUNG } from "@config/bo-cuc";
 import { MAU } from "@config/thuong-hieu";
 import { napBoDe } from "@modules/core/bo-de/nap";
 import { MA_TRUC, type MaTruc } from "@modules/core/bo-de/kieu";
@@ -29,9 +31,12 @@ import {
   type KetQuaSoSanh,
 } from "@modules/report/so-sanh-thoi-gian";
 import {
-  phanTichGiaDinh,
-  type NguoiTrongPhanTich,
-} from "@modules/report/phan-tich-gia-dinh";
+  THU_MUC_TONG_HOP,
+  tenThuMucLanChay,
+  tenThuMucNguoi,
+} from "@modules/core/luu-tru/cay-sao-luu";
+import { laBanPhanTichHopLe } from "@modules/report/phan-tich-gia-dinh";
+import { docPhanTich } from "@modules/core/luu-tru/kho-bai";
 import { ghiMoc } from "@modules/core/do-phieu";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
@@ -58,7 +63,16 @@ export function KhoangNhaMinh({
   /** `cheDo` = "quan-sat" ⇒ người lớn trả lời VỀ đứa trẻ này (bộ QS, V1.4). */
   readonly onLamBai?: (tv: ThanhVien, cheDo?: "quan-sat") => void;
 }) {
-  const [dangXem, datDangXem] = useState<BaiLamLuu | null>(null);
+  /**
+   * Đang xem kết quả của ai, và ĐANG Ở LẦN ĐO THỨ MẤY (17.2).
+   *
+   * 🔴 Giữ cả danh sách chứ không chỉ một bài: người dùng phải chuyển qua lại được giữa
+   * hai lần đo mà không phải thoát ra rồi vào lại từ thẻ.
+   */
+  const [dangXem, datDangXem] = useState<{
+    cacBan: readonly BaiLamLuu[];
+    chon: number;
+  } | null>(null);
   const [dangSaoLuu, datDangSaoLuu] = useState(false);
   const [dangDocTep, datDangDocTep] = useState(false);
   /** Đã khôi phục xong bao nhiêu — hiện một dòng xác nhận, không hiện hộp thoại nữa. */
@@ -202,30 +216,82 @@ export function KhoangNhaMinh({
    *
    * 🔴 Nạp lười: `xuat-pdf` kéo theo `jspdf`, nên nó chỉ được vào bằng `await import()`.
    */
-  async function pdfMoiNguoi(): Promise<TepKem[]> {
+  async function cayTepDocDuoc(): Promise<TepKem[]> {
     try {
-      const [nguoi, ds] = await Promise.all([docThanhVien(), docTatCa()]);
-      const dauVao: NguoiTrongPhanTich[] = [];
-      for (const tv of nguoi) {
-        // Cờ tắt nội dung trẻ loại trẻ khỏi bản phân tích — và PDF là bản phân tích.
-        if (!MO_NOI_DUNG_TRE && laTreEm(tv.vaiTro, tv.lop)) continue;
-        // Lọc trước rồi mới đọc `diem`: `KetQua` là kiểu hợp, và nhánh KHÔNG hợp lệ
-        // (hàng rào HL-1 chặn) cố ý không có trường `diem` — nó chưa từng có điểm nào.
-        const moiNhat = ds.find(
-          (b): b is BaiLamLuu & { ketQua: { hopLe: true; diem: Record<MaTruc, number> } } =>
-            b.maThanhVien === tv.id && b.ketQua.hopLe,
-        );
-        const diem = moiNhat?.ketQua.diem ?? tv.nhanQuaMa?.diem;
-        if (!diem) continue;
-        dauVao.push({ id: tv.id, ten: tv.ten, laTre: laTreEm(tv.vaiTro, tv.lop), diem });
+      const [nguoi, ds, thuMuc] = await Promise.all([
+        docThanhVien(),
+        docTatCa(),
+        docPhanTich(),
+      ]);
+      const { xuatPdfMoiNguoi, xuatPdfMotBai } = await import("@modules/report/xuat-pdf");
+      const tep: TepKem[] = [];
+
+      /**
+       * 🔴 CHỖ CHẶN THỨ TƯ CỦA CỜ `MO_NOI_DUNG_TRE` (17.4). Ba chỗ trước là thẻ, khoang
+       * làm bài, và bản phân tích. Đây là chỗ thứ tư và là chỗ dễ quên nhất: một tệp PDF
+       * nằm trong `.zip` sống lâu hơn cả phiên làm việc — tắt cờ mà vẫn xuất là phát nội
+       * dung về trẻ ra ngoài máy, đúng thứ cờ đó sinh ra để chặn.
+       */
+      const choPhep = nguoi.filter((tv) => MO_NOI_DUNG_TRE || !laTreEm(tv.vaiTro, tv.lop));
+
+      /* ── Một thư mục cho mỗi người, bên trong là các bài của họ ───────────── */
+      const daDungTen = new Set<string>();
+      const tenThuMuc = new Map<string, string>();
+      for (const tv of choPhep) {
+        const ten = tenThuMucNguoi(tv.ten, daDungTen);
+        daDungTen.add(ten);
+        tenThuMuc.set(tv.id, ten);
+
+        // Bài của người này, mới trước. Trần 2 bài/người đã do kho canh (GIOI_HAN_BAI_MOI_NGUOI).
+        const cuaHo = ds.filter((b) => b.maThanhVien === tv.id && b.ketQua.hopLe);
+        for (const b of cuaHo) {
+          const mot = await xuatPdfMotBai({
+            ten: tv.ten,
+            boDe: b.boDe,
+            ketThuc: b.ketThuc,
+            diem: (b.ketQua as { diem: Record<MaTruc, number> }).diem,
+            xepHang: (b.ketQua as { xepHang: readonly MaTruc[] }).xepHang,
+            ...(b.tuoi !== undefined ? { tuoi: b.tuoi } : {}),
+            ...(b.banKhoan !== undefined ? { banKhoan: b.banKhoan } : {}),
+          });
+          tep.push({ ten: `${ten}/${mot.ten}`, duLieu: mot.duLieu });
+        }
+
+        // 🔴 Hồ sơ nhận qua mã mời KHÔNG có bài trên máy này — nhưng vẫn có bốn con số,
+        // nên vẫn ra được một tờ. Cờ `nhanQuaMa` bắt tờ đó tự khai nguồn.
+        if (cuaHo.length === 0 && tv.nhanQuaMa) {
+          const mot = await xuatPdfMotBai({
+            ten: tv.ten,
+            boDe: tv.nhanQuaMa.boDe,
+            ketThuc: `${tv.nhanQuaMa.ngayPhat}T00:00:00`,
+            diem: tv.nhanQuaMa.diem,
+            xepHang: [...MA_TRUC].sort(
+              (a, b) => tv.nhanQuaMa!.diem[b] - tv.nhanQuaMa!.diem[a],
+            ),
+            nhanQuaMa: true,
+          });
+          tep.push({ ten: `${ten}/${mot.ten}`, duLieu: mot.duLieu });
+        }
       }
 
-      const kq = phanTichGiaDinh(dauVao);
-      if (!kq.phanTichDuoc) return [];
+      /* ── Thư mục Tổng hợp: một thư mục con cho mỗi LẦN đã chạy phân tích ──── */
+      for (const t of thuMuc) {
+        // 🔴 Dùng bản ĐÃ LƯU, không chạy lại engine. Chạy lại là dựng ra một bản khác với
+        // bản người ta từng đọc (nội dung ở `config/` có thể đã sửa), rồi gọi nó là "lần
+        // chạy ngày hôm đó" — cùng lý do đã ghi ở màn mở lại thư mục.
+        if (!laBanPhanTichHopLe(t.noiDung)) continue;
+        const thuMucCon = `${THU_MUC_TONG_HOP}/${tenThuMucLanChay(t.taoLuc)}`;
+        const lo = await xuatPdfMoiNguoi(t.noiDung, new Date(t.taoLuc));
+        for (const mot of lo) tep.push({ ten: `${thuMucCon}/${mot.ten}`, duLieu: mot.duLieu });
+      }
 
-      const { xuatPdfMoiNguoi } = await import("@modules/report/xuat-pdf");
-      return await xuatPdfMoiNguoi(kq.ban, new Date());
+      return tep;
     } catch {
+      /**
+       * 🔴 SINH PDF HỎNG KHÔNG ĐƯỢC KÉO ĐỔ NÚT SAO LƯU. PDF là phần đọc-cho-vui; JSON mới
+       * là phần cứu được dữ liệu. Font tải lỗi hay thư viện nạp lỗi thì vẫn phải ra một
+       * tệp `.zip` đầy đủ — mất bản đẹp còn hơn mất sổ.
+       */
       return [];
     }
   }
@@ -235,7 +301,7 @@ export function KhoangNhaMinh({
     datDangSaoLuu(true);
     datLoi(null);
     try {
-      const { duLieu } = await saoLuuTatCaKemTep(new Date().toISOString(), await pdfMoiNguoi());
+      const { duLieu } = await saoLuuTatCaKemTep(new Date().toISOString(), await cayTepDocDuoc());
       if (!taiXuong(duLieu, `${TEN_TEP_SAO_LUU}.zip`)) datLoi(CHU_M6.loiSaoLuu);
     } catch {
       datLoi(CHU_M6.loiSaoLuu);
@@ -275,6 +341,7 @@ export function KhoangNhaMinh({
   }
 
   if (dangXem) {
+    const ban = dangXem.cacBan[dangXem.chon];
     return (
       <div>
         <div data-khong-in className="px-5 pt-8 md:px-12">
@@ -287,14 +354,28 @@ export function KhoangNhaMinh({
             ← {CHU_M6.nutDong}
           </button>
         </div>
+        {/* 🔴 Dải chọn nằm NGOÀI `ManKetQua` và ở TRÊN nó — màn kết quả vốn đã là màn
+            dài nhất sản phẩm; nhét thêm một dải điều hướng vào giữa ruột nó là chôn dải
+            đó xuống dưới nếp gấp, đúng chỗ không ai tìm. */}
+        <div className="px-5 pt-6 md:px-12">
+          <ChonBanKetQua
+            cacBan={dangXem.cacBan}
+            dangChon={dangXem.chon}
+            onChon={(chon) => datDangXem({ ...dangXem, chon })}
+          />
+        </div>
         <ManKetQua
-          boDe={napBoDe(dangXem.boDe)}
-          bietDanh={dangXem.maTre}
-          ketQua={dangXem.ketQua}
-          idBai={dangXem.id}
+          /* 🔴 `key` đổi theo bài: `ManKetQua` giữ trạng thái bên trong (lớp đã bóc, ô
+             băn khoăn). Thiếu `key` thì chuyển sang lần đo khác mà màn vẫn mở đúng những
+             lớp của lần đo trước — hai bộ số dưới cùng một trạng thái đã mở. */
+          key={ban.id}
+          boDe={napBoDe(ban.boDe)}
+          bietDanh={ban.maTre}
+          ketQua={ban.ketQua}
+          idBai={ban.id}
           onLamLai={() => datDangXem(null)}
-          {...(dangXem.tuoi !== undefined ? { tuoi: dangXem.tuoi } : {})}
-          {...(dangXem.banKhoan !== undefined ? { banKhoan: dangXem.banKhoan } : {})}
+          {...(ban.tuoi !== undefined ? { tuoi: ban.tuoi } : {})}
+          {...(ban.banKhoan !== undefined ? { banKhoan: ban.banKhoan } : {})}
         />
       </div>
     );
@@ -310,7 +391,7 @@ export function KhoangNhaMinh({
               onLamBaiQuanSat: (tv: ThanhVien) => void batDauBaiMoi(tv, "quan-sat"),
             }
           : {})}
-        onXemBai={(b) => datDangXem(b)}
+        onXemBai={(cacBan) => datDangXem({ cacBan, chon: 0 })}
         onNhanMa={nhanMa}
         onXemSoSanh={(tv) => void moSoSanh(tv)}
       />
@@ -323,7 +404,7 @@ export function KhoangNhaMinh({
         />
       )}
 
-      <div data-thu="giu-du-lieu" className="max-w-3xl px-5 pb-12 md:px-12">
+      <div data-thu="giu-du-lieu" className={`${KHUNG.trang} px-5 pb-12 md:px-12`}>
         <div className="flex flex-wrap gap-2.5">
           <button
             type="button"

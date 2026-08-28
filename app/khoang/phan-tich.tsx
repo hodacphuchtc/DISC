@@ -21,6 +21,7 @@ import { KhoiConThieuAi } from "@/app/components/con-thieu-ai";
 import { HopThoaiThuMuc } from "@/app/components/hop-thoai-han-muc";
 import { GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
 import { CHU_BUOC, CHU_TONG_HOP } from "@config/disc-tu-dien";
+import { KHUNG } from "@config/bo-cuc";
 import { MAU } from "@config/thuong-hieu";
 import { ghiMoc } from "@modules/core/do-phieu";
 import { hienNgayGio } from "@modules/core/tien-ich/ngay";
@@ -149,7 +150,9 @@ export function KhoangPhanTich({
 
   return (
     <section data-thu="buoc-phan-tich" className="px-4 py-5">
-      <p className="text-[14px] leading-relaxed text-neutral-700">{CHU_TONG_HOP.moTa}</p>
+      <p className={`text-[14px] leading-relaxed text-neutral-700 ${KHUNG.doc}`}>
+        {CHU_TONG_HOP.moTa}
+      </p>
 
       {/* 🔴 Nêu ĐÍCH DANH người còn thiếu, ngay trên nút Phân tích. Đây là đòn bẩy trực
           tiếp của `baiThuHai`, không phải màu sắc hay bố cục. */}
