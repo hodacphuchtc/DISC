@@ -36,7 +36,7 @@ import {
   docThanhVien,
   donBaiThanhVien,
   luuThanhVien,
-  xoaSach,
+  xoaSachTatCa,
   type BaiLamLuu,
 } from "@modules/core/luu-tru/kho-bai";
 import { TEN_TEP_SAO_LUU, saoLuuTatCa } from "@modules/core/luu-tru/sao-luu";
@@ -150,9 +150,16 @@ export function KhoangNhaMinh({
     }
   }
 
+  /**
+   * 🔴 DỌN TRỌN BA BẢNG, không chỉ bảng bài.
+   *
+   * Bản trước gọi `xoaSach()` — chỉ dọn BÀI, để nguyên tên từng người và các bản phân
+   * tích đã chạy. Người bấm tin là mình vừa xoá sạch máy, mà tên thật của cả nhà vẫn còn
+   * đó. Luật máy demo của giáo viên/sale dựa thẳng vào nút này.
+   */
   async function xoaTatCa() {
     if (!window.confirm(CHU_M6.hoiXoaSach)) return;
-    await xoaSach();
+    await xoaSachTatCa();
     napLai();
   }
 

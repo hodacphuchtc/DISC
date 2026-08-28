@@ -586,7 +586,14 @@ export const CHU_M6 = {
   dangSaoLuu: "Đang nén…",
   loiSaoLuu: "Không tạo được file sao lưu. Thử lại giúp mình nhé.",
   hoiXoaBai: "Xoá bài này khỏi máy? Không lấy lại được.",
-  hoiXoaSach: "Xoá TẤT CẢ bài trên máy này? Không lấy lại được.",
+  /**
+   * 🔴 NÓI ĐÚNG THỨ SẮP MẤT. Câu cũ ghi "tất cả BÀI", mà nút thì (nay) dọn cả tên từng
+   * người lẫn các bản phân tích. Nói thiếu là để người ta đồng ý với một việc khác việc
+   * thật sự sắp xảy ra.
+   */
+  hoiXoaSach:
+    "Xoá TẤT CẢ trên máy này — tên từng người, bài đã làm, và các bản phân tích? " +
+    "Không lấy lại được.",
   nutDong: "Đóng",
   demBai: "{so} bài trên máy này",
   /** 🔴 QĐ7 — máy giáo viên đi qua nhiều gia đình. */
@@ -915,6 +922,14 @@ export const CHU_TONG_HOP = {
   nhomThuMuc: "Các lần đã phân tích",
   moTaThuMuc: "Giữ {so} lần gần nhất trên máy này.",
   nutMoThuMuc: "Mở",
+  /**
+   * 🔴 Bản ghi cũ có thể thiếu trường (nội dung đổi hình dạng giữa hai phiên bản). Nói ra
+   * thay vì trả về một trang trắng — trang trắng thì người dùng chỉ thấy sản phẩm hỏng mà
+   * không biết vì sao, và cũng không biết là mình còn chạy lại được.
+   */
+  thuMucHong:
+    "Bản này lưu từ một phiên bản cũ nên máy không đọc lại được. Chạy phân tích mới nhé — " +
+    "dữ liệu bài làm của cả nhà vẫn còn nguyên.",
 } as const;
 
 /* ── Hạn mức thư mục phân tích (14.5) ────────────────────────────────────── */

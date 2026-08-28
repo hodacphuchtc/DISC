@@ -270,6 +270,30 @@ export function xoaSachThanhVien(): Promise<void> {
   );
 }
 
+export function xoaSachPhanTich(): Promise<void> {
+  return chayTren<undefined>(BANG_PHAN_TICH, "readwrite", (b) => b.clear(), undefined).then(
+    () => undefined,
+  );
+}
+
+/**
+ * 🔴 DỌN TRỌN MÁY — cả BA bảng.
+ *
+ * Vì sao phải có hàm này. Nút *Xoá sạch* trước đây chỉ gọi `xoaSach()`, tức là chỉ dọn
+ * bảng BÀI. Tên từng người trong nhà (bảng `thanh-vien`) và các bản phân tích đã chạy
+ * (bảng `phan-tich-gia-dinh`) vẫn nằm nguyên trong máy — trong khi người bấm tin rằng
+ * mình vừa xoá sạch.
+ *
+ * Đó không phải chuyện dọn dẹp, đó là chuyện RIÊNG TƯ: kho v2 nay giữ TÊN THẬT (ADR-005),
+ * và luật máy demo của giáo viên/sale dựa thẳng vào nút này — "bấm Xoá sạch sau mỗi lần
+ * demo". Một nút xoá dọn thiếu hai phần ba dữ liệu thì lời hứa đó là lời hứa suông.
+ */
+export async function xoaSachTatCa(): Promise<void> {
+  await xoaSach();
+  await xoaSachThanhVien();
+  await xoaSachPhanTich();
+}
+
 /* ── Phân tích cả nhà ────────────────────────────────────────────────────── */
 
 export function luuPhanTich(pt: PhanTichGiaDinh): Promise<boolean> {

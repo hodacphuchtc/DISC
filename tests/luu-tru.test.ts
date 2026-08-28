@@ -3,10 +3,15 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import {
   demBietDanh,
+  docPhanTich,
   docTatCa,
+  docThanhVien,
   luuBai,
+  luuPhanTich,
+  luuThanhVien,
   xoaBai,
   xoaSach,
+  xoaSachTatCa,
   type BaiLamLuu,
 } from "../modules/core/luu-tru/kho-bai";
 import { saoLuuTatCa, taoNoiDungZip } from "../modules/core/luu-tru/sao-luu";
@@ -152,5 +157,43 @@ describe("sao lưu .zip", () => {
     const duLieu = await taoNoiDungZip([bai({ id: "x" })], LUC);
     expect(duLieu).toBeInstanceOf(Uint8Array);
     expect((await JSZip.loadAsync(duLieu)).file("ban-ke.json")).not.toBeNull();
+  });
+});
+
+/* ── Xoá sạch phải dọn TRỌN máy (V3.1) ───────────────────────────────────── */
+
+describe("🔴 xoaSachTatCa — dọn cả ba bảng", () => {
+  /**
+   * VÌ SAO CÓ NHÓM NÀY. Nút *Xoá sạch* trước đây chỉ gọi `xoaSach()` — dọn mỗi bảng BÀI.
+   * Tên từng người (bảng `thanh-vien`) và các bản phân tích đã chạy (bảng
+   * `phan-tich-gia-dinh`) vẫn nằm nguyên trong máy, trong khi người bấm tin rằng mình vừa
+   * xoá sạch.
+   *
+   * Đây KHÔNG phải chuyện dọn dẹp mà là chuyện RIÊNG TƯ: kho v2 giữ TÊN THẬT (ADR-005), và
+   * luật máy demo của giáo viên/sale dựa thẳng vào nút này — *"bấm Xoá sạch sau mỗi lần
+   * demo"*. Một nút xoá dọn thiếu hai phần ba dữ liệu thì lời hứa đó là lời hứa suông.
+   */
+  it("dọn hết bài, người, VÀ bản phân tích", async () => {
+    await luuBai(bai({ id: "bai-1" }));
+    await luuThanhVien({
+      id: "tv-1",
+      ten: "Zozo",
+      vaiTro: "con",
+      lop: "7",
+      thuTu: 0,
+      taoLuc: LUC,
+      suaLuc: LUC,
+    });
+    await luuPhanTich({ id: "pt-1", maBai: ["bai-1"], taoLuc: LUC, noiDung: [] });
+
+    expect(await docTatCa()).toHaveLength(1);
+    expect(await docThanhVien()).toHaveLength(1);
+    expect(await docPhanTich()).toHaveLength(1);
+
+    await xoaSachTatCa();
+
+    expect(await docTatCa(), "còn sót bài").toHaveLength(0);
+    expect(await docThanhVien(), "🔴 còn sót TÊN người trong máy").toHaveLength(0);
+    expect(await docPhanTich(), "🔴 còn sót bản phân tích trong máy").toHaveLength(0);
   });
 });

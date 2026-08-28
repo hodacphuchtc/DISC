@@ -161,3 +161,33 @@ export function phanTichGiaDinh(
 
 /** Ngưỡng "trùng khớp" lấy nguyên của vùng lệch — không dựng thang thứ hai. */
 export const NGUONG_TRUNG_KHOP = NGUONG_VUNG_LECH.trungKhopToiDa;
+
+/**
+ * BẢN GHI ĐÃ LƯU CÓ ĐÚNG HÌNH DẠNG KHÔNG (V3.1).
+ *
+ * 🔴 `PhanTichGiaDinh.noiDung` khai kiểu `unknown` CÓ CHỦ ĐÍCH — kho không biết gì về hình
+ * dạng nội dung, và đó là điều đúng. Nhưng vì thế, mở lại một thư mục cũ mà ép kiểu bừa là
+ * đường thẳng tới một trang trắng: bản ghi từ phiên bản trước có thể thiếu trường, và React
+ * đọc `undefined.latCat` là màn hình trắng, không phải một lời báo lỗi.
+ *
+ * Hàm thuần, không React. Kiểm ĐỦ SÂU tới mức mà giao diện thật sự đọc tới.
+ */
+export function laBanPhanTichHopLe(x: unknown): x is readonly BanPhanTich[] {
+  if (!Array.isArray(x) || x.length === 0) return false;
+  return x.every((b) => {
+    if (typeof b !== "object" || b === null) return false;
+    const o = b as Record<string, unknown>;
+    if (typeof o.toiId !== "string" || typeof o.tenLuc !== "string") return false;
+    if (!Array.isArray(o.latCat)) return false;
+    return o.latCat.every((l) => {
+      if (typeof l !== "object" || l === null) return false;
+      const c = l as Record<string, unknown>;
+      return (
+        typeof c.toiId === "string" &&
+        typeof c.nguoiKiaId === "string" &&
+        typeof c.tenNguoiKia === "string" &&
+        Array.isArray(c.trucLech)
+      );
+    });
+  });
+}

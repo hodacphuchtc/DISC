@@ -63,13 +63,20 @@ function diemCua(
 
 export function ManBanTongHop({
   nguoi,
+  banCoSan,
   onDong,
 }: {
   readonly nguoi: readonly NguoiCoBai[];
+  /**
+   * 🔴 MỞ LẠI MỘT LẦN CHẠY CŨ (V3.1). Có giá trị thì bỏ qua bước chọn bài và hiện thẳng
+   * bản đã lưu — KHÔNG chạy lại engine. Chạy lại là dựng ra một bản khác với bản người ta
+   * từng đọc (nội dung ở `config/` có thể đã sửa), rồi gọi nó là "lần chạy ngày hôm đó".
+   */
+  readonly banCoSan?: readonly BanPhanTich[];
   readonly onDong: () => void;
 }) {
   const [chon, datChon] = useState<Record<string, string>>({});
-  const [ketQua, datKetQua] = useState<readonly BanPhanTich[] | null>(null);
+  const [ketQua, datKetQua] = useState<readonly BanPhanTich[] | null>(banCoSan ?? null);
   const [loi, datLoi] = useState<string | null>(null);
 
   const coHoSo = nguoi.filter((n) => diemCua(n, chon[n.tv.id]) !== null);

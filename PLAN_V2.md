@@ -263,7 +263,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
 
 ---
 
-- [ ] **V3.1 — Nối danh sách 5 thư mục có ngày và giờ**
+- [x] **V3.1 — Nối danh sách 5 thư mục có ngày và giờ** ✅ (28/08/2026 — kèm sửa một lỗi RIÊNG TƯ phát hiện tại chỗ: nút *Xoá sạch* chỉ dọn bảng bài, để nguyên tên người và bản phân tích)
   - **(a)** Ba thứ đã dựng xong mà **chưa nối vào đâu**: `docPhanTich()` ở
     [modules/core/luu-tru/kho-bai.ts:273](modules/core/luu-tru/kho-bai.ts#L273) không ai
     gọi; chữ `CHU_TONG_HOP.nhomThuMuc` · `moTaThuMuc` · `nutMoThuMuc` nằm trong `config/`

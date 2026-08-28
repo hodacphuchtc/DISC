@@ -18,7 +18,7 @@ import { useState } from "react";
 import { GIOI_HAN_BAI_MOI_NGUOI, GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
 import { CHU_HAN_MUC, CHU_HAN_MUC_THU_MUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
-import { hienNgay } from "@modules/core/tien-ich/ngay";
+import { hienNgay, hienNgayGio } from "@modules/core/tien-ich/ngay";
 import type { PhanTichGiaDinh } from "@modules/core/gia-dinh/kieu";
 import type { BaiLamLuu } from "@modules/core/luu-tru/kho-bai";
 import { goiCacBai, taiXuong, tenTepThuMuc } from "@modules/core/luu-tru/tai-ve";
@@ -190,7 +190,9 @@ export function HopThoaiThuMuc({
               style={{ backgroundColor: "#FFF4E6" }}
             >
               {CHU_HAN_MUC_THU_MUC.mauDong
-                .replace("{ngay}", hienNgay(t.taoLuc))
+                // 🔴 NGÀY VÀ GIỜ. Hai lần chạy trong cùng một buổi mà chỉ hiện ngày thì hai
+                // dòng giống hệt nhau, và người dùng phải đoán xem mình sắp xoá cái nào.
+                .replace("{ngay}", hienNgayGio(t.taoLuc))
                 .replace("{so}", String(t.maBai.length))}
             </li>
           ))}
