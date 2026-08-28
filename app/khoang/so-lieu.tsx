@@ -15,7 +15,7 @@
 
 import { useEffect, useState } from "react";
 
-import { CHU_MOC, CHU_SO_LIEU } from "@config/disc-tu-dien";
+import { CHU_MOC, CHU_PHEU_MOI, CHU_SO_LIEU } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import {
   MOC,
@@ -92,6 +92,27 @@ export function KhoangSoLieu() {
               </li>
             ))}
           </ul>
+
+          {/* 🔴 ĐỌC HỘ CẶP SỐ. Hai con số này chỉ có nghĩa khi đặt cạnh nhau, và cái
+              nghĩa đó phải viết ra — nếu không thì người đọc tự bịa một cách hiểu, và
+              cách hiểu tự bịa bao giờ cũng nghiêng về phía "làm đẹp thêm chút nữa". */}
+          <section data-thu="pheu-moi" className="mt-8 rounded-xl border p-4" style={{ borderColor: MAU.vienMo }}>
+            <h3 className="text-[14px] font-semibold text-neutral-900">
+              {CHU_PHEU_MOI.tieuDe}
+            </h3>
+            <p className="mt-1.5 text-[15px] font-semibold tabular-nums" style={{ color: MAU.timCongNghe }}>
+              {CHU_PHEU_MOI.dong
+                .replace("{soMoi}", String(so.pheu.bamMoi))
+                .replace("{soLam}", String(so.pheu.baiThuHai))}
+            </p>
+            <p data-thu="chan-doan" className="mt-2 text-[14px] leading-relaxed text-neutral-700">
+              {so.pheu.baiThuHai > 0
+                ? CHU_PHEU_MOI.daChay
+                : so.pheu.bamMoi === 0
+                  ? CHU_PHEU_MOI.chuaAiMoi
+                  : CHU_PHEU_MOI.moiMaKhongLam}
+            </p>
+          </section>
 
           {so.soBai === 0 && (
             <p className="mt-6 text-[15px] text-neutral-600">{CHU_SO_LIEU.trong}</p>

@@ -384,6 +384,47 @@ export const CHU_CHON = {
   },
 } as const;
 
+/* ── CÒN THIẾU AI (V3.2) — đòn bẩy của con số `baiThuHai` ────────────────── */
+
+/**
+ * 🔴 ĐÂY LÀ PHẦN "LÀM ĐẸP" DUY NHẤT DÁM KHẲNG ĐỊNH LÀ CÓ TÁC DỤNG.
+ *
+ * Đích của bước 3 đã chốt: **rủ thêm người trong nhà cùng làm**. Nên thứ phải sửa không
+ * phải màu sắc hay bố cục, mà là CÂU NÓI: đổi *"cần ít nhất 2 người"* (một điều kiện kỹ
+ * thuật, chẳng gợi ai làm gì) thành một câu nêu ĐÍCH DANH người còn thiếu, kèm nút mời
+ * đúng người đó.
+ *
+ * 🔴 KHÔNG bê `CHU_THONG_DIEP` sang đây. Khối đó có luật "chỉ xuất hiện ở bảng gia đình"
+ * và `tests/thong-diep.test.tsx` canh — rải ra khắp nơi thì lần đọc thứ tư nó thành khẩu
+ * hiệu quảng cáo.
+ */
+export const CHU_MOI = {
+  /** Hiện khi CHƯA đủ người: nói còn thiếu ai, không nói "chưa đủ điều kiện". */
+  conThieuMot: "Còn {ten} chưa làm — bức tranh cả nhà đang thiếu một người.",
+  conThieuNhieu: "Còn {ds} chưa làm — bức tranh cả nhà đang thiếu {so} người.",
+  /** Hiện khi ĐÃ đủ, trên đầu bản phân tích: mời nốt người còn lại cho đủ nhà. */
+  themNguaCon: "Thêm {ds} nữa thì bức tranh đủ cả nhà.",
+  /** Nối danh sách tên: "A, B và C". */
+  noiCuoi: " và ",
+  noiGiua: ", ",
+
+  nutMoi: "Mời {ten}",
+  nutLamHo: "{ten} làm ngay trên máy này",
+
+  /**
+   * 🔴 NÓI RÕ HAI ĐƯỜNG, vì người dùng đang đứng trước một lựa chọn thật: người kia làm
+   * trên máy của họ (gửi link, rồi họ gửi mã về), hay làm luôn trên máy này.
+   */
+  hopTieuDe: "Mời {ten} cùng làm",
+  hopThan:
+    "Gửi đường dẫn này cho {ten}. Làm xong, {ten} bấm nút chia sẻ kết quả và gửi lại cho " +
+    "bạn một mã ngắn — bạn nhập mã đó ở bước 1 là xong.",
+  nutChepLink: "Chép đường dẫn",
+  daChepLink: "Đã chép. Dán vào tin nhắn gửi cho {ten} nhé.",
+  loiChepLink: "Máy không cho chép tự động. Bạn chép thủ công đường dẫn trên thanh địa chỉ nhé.",
+  nutDongHop: "Đóng",
+} as const;
+
 /* ── Thiếu bậc học ⇒ chưa làm bài được (V2.2) ────────────────────────────── */
 
 /**
@@ -655,7 +696,27 @@ export const CHU_MOC: Readonly<Record<string, string>> = {
   themThanhVien: "Thêm thành viên vào sổ",
   baiThuHai: "Người thứ hai cùng làm",
   phanTichGiaDinh: "Xem phân tích cả nhà",
+  bamMoi: "Bấm mời người trong nhà",
 };
+
+/**
+ * 🔴 DÒNG ĐỌC HỘ CẶP SỐ CHẨN ĐOÁN (V3.3).
+ *
+ * Hai con số `bamMoi` và `baiThuHai` chỉ có nghĩa khi ĐẶT CẠNH NHAU, và cái nghĩa đó
+ * phải viết ra — nếu không thì sáu tháng sau người đọc bảng số liệu sẽ tự bịa ra một cách
+ * hiểu, và cách hiểu tự bịa bao giờ cũng nghiêng về phía "làm đẹp thêm chút nữa".
+ */
+export const CHU_PHEU_MOI = {
+  tieuDe: "Đọc hai con số này cùng nhau",
+  dong: "{soMoi} lần bấm mời → {soLam} lần có người thứ hai làm xong.",
+  chuaAiMoi:
+    "Chưa ai bấm mời. Nếu vẫn vậy sau 30 máy thật thì thứ cần xem lại là GIẢ ĐỊNH " +
+    "(phụ huynh có muốn rủ người nhà không), không phải phần mềm.",
+  moiMaKhongLam:
+    "Có người bấm mời mà chưa ai làm xong. Lời mời tới nơi rồi — chỗ hỏng nằm ở quãng " +
+    "sau đó, và đó là việc sửa được.",
+  daChay: "Đã có người thứ hai cùng làm. Giả định đỡ GĐ14 có quan sát ủng hộ đầu tiên.",
+} as const;
 
 /* ── Kho dữ liệu hỏng (12.1) ─────────────────────────────────────────────── */
 

@@ -52,8 +52,13 @@ describe("nguồn", () => {
 });
 
 describe("ghi mốc", () => {
-  it("bảng mốc đúng như đặc tả — ba mốc bài, ba mốc gia đình", () => {
-    // `deLaiSo` bỏ ở 11.2 cùng ô thu liên hệ; ba mốc gia đình thêm ở 11.6.
+  it("bảng mốc đúng như đặc tả — ba mốc bài, bốn mốc gia đình", () => {
+    // `deLaiSo` bỏ ở 11.2 cùng ô thu liên hệ; ba mốc gia đình thêm ở 11.6;
+    // `bamMoi` thêm ở V3.3 để tách "đã bấm mời" khỏi "người thứ hai làm xong".
+    //
+    // 🔴 THỨ TỰ LÀ MỘT PHẦN CỦA ĐẶC TẢ, không phải chi tiết vặt: nó là thứ tự hiện trên
+    // màn số liệu. Mốc mới phải THÊM VÀO CUỐI — chèn giữa thì con số cũ vẫn đúng nhưng
+    // đứng nhầm hàng, và không ai đọc ra được là mình đang nhìn nhầm.
     expect([...MOC]).toEqual([
       "mo",
       "batDau",
@@ -61,6 +66,7 @@ describe("ghi mốc", () => {
       "themThanhVien",
       "baiThuHai",
       "phanTichGiaDinh",
+      "bamMoi",
     ]);
   });
 
@@ -94,6 +100,7 @@ describe("ghi mốc", () => {
       themThanhVien: 0,
       baiThuHai: 0,
       phanTichGiaDinh: 0,
+      bamMoi: 0,
     });
   });
 

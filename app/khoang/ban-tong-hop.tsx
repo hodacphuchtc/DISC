@@ -64,6 +64,7 @@ function diemCua(
 export function ManBanTongHop({
   nguoi,
   banCoSan,
+  khoiThieu,
   onDong,
 }: {
   readonly nguoi: readonly NguoiCoBai[];
@@ -73,6 +74,8 @@ export function ManBanTongHop({
    * từng đọc (nội dung ở `config/` có thể đã sửa), rồi gọi nó là "lần chạy ngày hôm đó".
    */
   readonly banCoSan?: readonly BanPhanTich[];
+  /** Khối *còn thiếu ai* — vẽ trên ĐẦU bản, đúng lúc người ta vừa thấy bản này hay. */
+  readonly khoiThieu?: React.ReactNode;
   readonly onDong: () => void;
 }) {
   const [chon, datChon] = useState<Record<string, string>>({});
@@ -156,6 +159,15 @@ export function ManBanTongHop({
         >
           ← {CHU_TONG_HOP.nutDong}
         </button>
+
+        {/* 🔴 KHỐI "CÒN THIẾU AI" ĐẶT NGAY TRÊN ĐẦU BẢN, và `data-khong-in` để nó KHÔNG
+            đi vào bản in. Trên màn hình nó là lời mời đúng lúc — người ta vừa đọc xong
+            bản của mình và thấy nó hay. Trên giấy nó chỉ là một lời chào hàng lạc chỗ. */}
+        {khoiThieu && (
+          <div data-khong-in className="mt-5">
+            {khoiThieu}
+          </div>
+        )}
 
         <div data-khong-in className="mt-4 flex flex-wrap gap-2">
           <span className="self-center text-[13px] text-neutral-600">

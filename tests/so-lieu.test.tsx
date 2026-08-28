@@ -2,7 +2,7 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { KhoangSoLieu } from "../app/khoang/so-lieu";
-import { CHU_MOC, CHU_SO_LIEU } from "../config/disc-tu-dien";
+import { CHU_MOC, CHU_PHEU_MOI, CHU_SO_LIEU } from "../config/disc-tu-dien";
 import { MOC, ghiMoc, xoaPhieu } from "../modules/core/do-phieu";
 import { luuBai, xoaSach, type BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
 
@@ -127,5 +127,52 @@ describe("màn số liệu — đếm trên chính máy này", () => {
     hien();
     await choXong();
     expect(screen.getByText(CHU_SO_LIEU.nhacRiengTu)).toBeTruthy();
+  });
+});
+
+/* ── Cặp số chẩn đoán (V3.3) ─────────────────────────────────────────────── */
+
+describe("🔴 đọc hộ cặp số bamMoi ↔ baiThuHai", () => {
+  /**
+   * Hai con số này chỉ có nghĩa khi ĐẶT CẠNH NHAU. `baiThuHai` một mình chỉ có 0 hoặc 1,
+   * nên khi nó bằng 0 thì không ai biết là *chưa ai bấm mời* hay *bấm rồi mà người kia
+   * không làm* — hai chẩn đoán ngược hẳn nhau, dẫn tới hai quyết định ngược hẳn nhau.
+   */
+  it("chưa ai bấm mời ⇒ nói thẳng là phải xem lại GIẢ ĐỊNH, không phải phần mềm", async () => {
+    hien();
+    await waitFor(() =>
+      expect(document.querySelector('[data-thu="pheu-moi"]')).toBeTruthy(),
+    );
+    expect(document.querySelector('[data-thu="chan-doan"]')).toHaveTextContent(
+      CHU_PHEU_MOI.chuaAiMoi,
+    );
+  });
+
+  it("có người bấm mời mà chưa ai làm ⇒ nói chỗ hỏng nằm ở quãng sau, và sửa được", async () => {
+    ghiMoc("bamMoi", "buoc-3", "2026-08-27T06:30:00+07:00");
+    ghiMoc("bamMoi", "buoc-3", "2026-08-27T06:30:00+07:00");
+    hien();
+    await waitFor(() =>
+      expect(document.querySelector('[data-thu="pheu-moi"]')).toBeTruthy(),
+    );
+
+    expect(document.querySelector('[data-thu="pheu-moi"]')).toHaveTextContent(
+      CHU_PHEU_MOI.dong.replace("{soMoi}", "2").replace("{soLam}", "0"),
+    );
+    expect(document.querySelector('[data-thu="chan-doan"]')).toHaveTextContent(
+      CHU_PHEU_MOI.moiMaKhongLam,
+    );
+  });
+
+  it("đã có người thứ hai làm xong ⇒ ghi nhận quan sát ủng hộ đầu tiên", async () => {
+    ghiMoc("bamMoi", "buoc-3", "2026-08-27T06:30:00+07:00");
+    ghiMoc("baiThuHai", "buoc-3", "2026-08-27T06:30:00+07:00");
+    hien();
+    await waitFor(() =>
+      expect(document.querySelector('[data-thu="pheu-moi"]')).toBeTruthy(),
+    );
+    expect(document.querySelector('[data-thu="chan-doan"]')).toHaveTextContent(
+      CHU_PHEU_MOI.daChay,
+    );
   });
 });

@@ -22,6 +22,20 @@ export const MOC = [
   "themThanhVien",
   "baiThuHai",
   "phanTichGiaDinh",
+  /**
+   * 🔴 THÊM VÀO CUỐI, KHÔNG CHÈN GIỮA. Thứ tự mảng này là thứ tự hiện trên màn số liệu;
+   * chèn giữa thì các con số cũ đọc lên vẫn đúng nhưng đứng nhầm hàng.
+   *
+   * 🔴 VÌ SAO TÁCH KHỎI `baiThuHai`. `baiThuHai` chỉ có 0 hoặc 1, nên khi nó bằng 0
+   * thì KHÔNG AI BIẾT là **chưa ai bấm mời** hay **bấm rồi mà người kia không làm** — hai
+   * chẩn đoán ngược hẳn nhau: một cái là lỗi sản phẩm (lời mời tới nơi mà người kia không
+   * làm được ⇒ sửa tiếp), một cái là lỗi GIẢ ĐỊNH (không ai muốn rủ ⇒ dừng, đừng tiêu
+   * thêm ngày nào). Không có cặp số này thì kết quả nào cũng đọc ra được thành "cần làm
+   * đẹp thêm chút nữa".
+   *
+   * Khác `baiThuHai` ở chỗ: mốc này đếm SỐ LẦN bấm, không phải "đã từng đạt".
+   */
+  "bamMoi",
 ] as const;
 export type MaMoc = (typeof MOC)[number];
 

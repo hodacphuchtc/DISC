@@ -16,6 +16,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { ManBanTongHop, type NguoiCoBai } from "./ban-tong-hop";
+import { KhoiConThieuAi } from "@/app/components/con-thieu-ai";
 import { HopThoaiThuMuc } from "@/app/components/hop-thoai-han-muc";
 import { GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
 import { CHU_BUOC, CHU_TONG_HOP } from "@config/disc-tu-dien";
@@ -36,10 +37,17 @@ import {
   thuMucSapMat,
 } from "@modules/core/luu-tru/kho-bai";
 
-export function KhoangPhanTich() {
+export function KhoangPhanTich({
+  onLamNgay,
+}: {
+  /** Cho một người còn thiếu làm bài luôn trên máy này — mở bước 2 với người đó. */
+  readonly onLamNgay?: (id: string) => void;
+} = {}) {
   const [dangPhanTich, datDangPhanTich] = useState<readonly NguoiCoBai[] | null>(null);
   const [choThuMuc, datChoThuMuc] = useState<readonly PhanTichGiaDinh[] | null>(null);
   const [soNguoiCoHoSo, datSoNguoiCoHoSo] = useState<number | null>(null);
+  /** Người trong sổ CHƯA có hồ sơ nào — chính là chỗ trống của bức tranh cả nhà. */
+  const [thieu, datThieu] = useState<readonly { id: string; ten: string }[]>([]);
   /** Các lần đã chạy, mới nhất trước. Tối đa `GIOI_HAN_THU_MUC`. */
   const [thuMuc, datThuMuc] = useState<readonly PhanTichGiaDinh[]>([]);
   /** Bản cũ đang mở lại — `null` = đang chạy bản mới. */
@@ -48,12 +56,10 @@ export function KhoangPhanTich() {
 
   const demLai = useCallback(async () => {
     const [tv, bai, pt] = await Promise.all([docThanhVien(), docTatCa(), docPhanTich()]);
-    datSoNguoiCoHoSo(
-      tv.filter(
-        (t) =>
-          bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa),
-      ).length,
-    );
+    const coHoSo = (t: (typeof tv)[number]) =>
+      bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa);
+    datSoNguoiCoHoSo(tv.filter(coHoSo).length);
+    datThieu(tv.filter((t) => !coHoSo(t)).map((t) => ({ id: t.id, ten: t.ten })));
     // Mới nhất lên trước: người ta tìm lần vừa chạy nhiều hơn tìm lần đầu tiên.
     datThuMuc([...pt].sort((a, b) => b.taoLuc.localeCompare(a.taoLuc)));
   }, []);
@@ -114,17 +120,53 @@ export function KhoangPhanTich() {
     datBanCu(pt.noiDung);
   }
 
+  // 🔴 Khối "còn thiếu ai" đi THEO cả bản phân tích, không chỉ nằm ở màn chờ. Lúc người
+  // ta vừa đọc xong bản của mình và thấy nó hay là lúc dễ rủ thêm người nhất.
+  const khoiThieu =
+    thieu.length > 0 ? (
+      <KhoiConThieuAi
+        thieu={thieu}
+        daDuNguoi={(soNguoiCoHoSo ?? 0) >= 2}
+        {...(onLamNgay ? { onLamNgay } : {})}
+      />
+    ) : null;
+
   if (banCu) {
-    return <ManBanTongHop nguoi={[]} banCoSan={banCu} onDong={() => datBanCu(null)} />;
+    return (
+      <ManBanTongHop
+        nguoi={[]}
+        banCoSan={banCu}
+        khoiThieu={khoiThieu}
+        onDong={() => datBanCu(null)}
+      />
+    );
   }
 
   if (dangPhanTich) {
-    return <ManBanTongHop nguoi={dangPhanTich} onDong={() => datDangPhanTich(null)} />;
+    return (
+      <ManBanTongHop
+        nguoi={dangPhanTich}
+        khoiThieu={khoiThieu}
+        onDong={() => datDangPhanTich(null)}
+      />
+    );
   }
 
   return (
     <section data-thu="buoc-phan-tich" className="px-4 py-5">
       <p className="text-[14px] leading-relaxed text-neutral-700">{CHU_TONG_HOP.moTa}</p>
+
+      {/* 🔴 Nêu ĐÍCH DANH người còn thiếu, ngay trên nút Phân tích. Đây là đòn bẩy trực
+          tiếp của `baiThuHai`, không phải màu sắc hay bố cục. */}
+      {thieu.length > 0 && (
+        <div className="mt-4">
+          <KhoiConThieuAi
+            thieu={thieu}
+            daDuNguoi={(soNguoiCoHoSo ?? 0) >= 2}
+            {...(onLamNgay ? { onLamNgay } : {})}
+          />
+        </div>
+      )}
 
       <button
         type="button"

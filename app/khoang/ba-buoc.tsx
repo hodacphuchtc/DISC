@@ -202,7 +202,16 @@ export function KhoangBaBuoc() {
                       onLamBai={(tv, cheDo) => datDangLamCho({ tv, ...(cheDo ? { cheDo } : {}) })}
                     />
                   )}
-                  {ma === "phan-tich" && <KhoangPhanTich />}
+                  {ma === "phan-tich" && (
+                    <KhoangPhanTich
+                      onLamNgay={() => {
+                        // 🔴 Mở BƯỚC 2, không nhảy thẳng vào bài. Thẻ mới là chỗ chọn được
+                        // "em tự làm" hay "bố mẹ trả lời hộ" — nhảy thẳng là chọn hộ người
+                        // dùng một trong hai, và chọn sai thì bài về sai loại.
+                        datDangMo("lam-bai");
+                      }}
+                    />
+                  )}
                 </div>
               )}
             </li>

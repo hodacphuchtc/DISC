@@ -283,7 +283,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     `tests/han-muc.test.ts` (hạn mức 5 thư mục) phải vẫn xanh.
   - **(d)** 5 giờ.
 
-- [ ] **V3.2 — Bước 3 khoá bằng "CÒN THIẾU AI", kèm nút mời**
+- [x] **V3.2 — Bước 3 khoá bằng "CÒN THIẾU AI", kèm nút mời** ✅ (28/08/2026)
   - **(a)** Đây là **đòn bẩy thật sự** của con số `baiThuHai`, không phải màu sắc hay bố
     cục. Thay câu chung chung *"cần ít nhất 2 người"* bằng câu nêu **đích danh người chưa
     làm**: *"Còn bố Nam và bé Na chưa làm — bức tranh cả nhà đang thiếu 2 người"*, kèm nút
@@ -303,7 +303,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     *"**Bi**ệt danh khác nhau"* và làm test đỏ oan, đã trả giá một lần).
   - **(d)** 5 giờ.
 
-- [ ] **V3.3 — Đo phễu mời: tách "đã bấm mời" khỏi "người thứ hai làm xong"**
+- [x] **V3.3 — Đo phễu mời: tách "đã bấm mời" khỏi "người thứ hai làm xong"** ✅ (28/08/2026)
   - **(a)** Giá trị trên giờ công cao nhất cả sổ này. Hiện `baiThuHai` chỉ có 0 hoặc 1.
     Nếu ra 0, không ai biết là **chưa ai bấm mời** hay **bấm rồi mà người kia không làm** —
     hai chẩn đoán ngược nhau: một cái là lỗi phần mềm, một cái là lỗi giả định. Thêm mốc
