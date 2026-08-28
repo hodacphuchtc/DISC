@@ -60,16 +60,25 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 28/08/2026 — `PLAN_V2.md` xong phần MÁY)
+## TRẠNG THÁI (cập nhật 28/08/2026 — luồng ba bước xong; GĐ16 chờ duyệt)
 
-### 🟢 LUỒNG BA BƯỚC XONG — 15/17 hạng mục, `1.208 test xanh`
+> 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V2.md`** (mục *BÀN GIAO PHIÊN GẦN
+> NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
-Chủ dự án chốt **dựng lại luồng thành BA BƯỚC** (`1 Nhà mình → 2 Làm bài → 3 Phân tích`)
-và **phát cho 30 gia đình trong 1–2 tuần**. Máy đã làm xong **mọi hạng mục không cần
-người**: `V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
-`V5.1`–`V5.2`.
+### 🟢 ĐÃ XONG — luồng ba bước, 15 hạng mục
 
-🔴 **Hai hạng mục còn lại đều CHẶN BỞI NGƯỜI/NGOÀI, không phải bởi máy** — xem mục dưới.
+`V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
+`V5.1`–`V5.2`. **1.208 test xanh** · `npm run kiem` + `npm run build` xanh.
+🔴 **6 commit còn ở LOCAL, chưa push** — remote đang ở `9dabcf2`.
+
+### ⏸ ĐANG DỞ — GĐ16, chờ chủ dự án gõ DUYỆT
+
+Chủ dự án bấm thử bản thật (28/08) và nêu bảy điểm; sổ `PLAN_V2.md` đã có **GĐ16** với 9
+hạng mục chia ba đợt (~7 ngày máy). **Chưa viết một dòng code nào.** Vào việc là làm
+`16.1` — sửa `modules/core/luu-tru/kho-bai.ts`.
+
+Ba việc lớn của GĐ16: **gộp ba bước còn HAI** (tạo người xong là làm bài ngay tại thẻ) ·
+**xuất PDF + nút Khôi phục từ `.zip`** · **giao diện sinh động + tối ưu điện thoại**.
 
 🔴 **Đã sửa một LỖI CHẶN THẬT tồn từ GĐ12:** `boDeCuaThanhVien()` chỉ đọc `tv.lop` rồi
 `Number()`, không đọc `vaiTro`. Bố mẹ (không có lớp) và trẻ mầm non (`Number("mam-non")`
@@ -78,39 +87,17 @@ xây cho lại là nhóm không vào được bài của chính mình.** Lỗi t
 luôn `giaiThich`, nên em lớp 1–2 vào từ thẻ bị chuyển sang bản quan sát **không một chữ
 giải thích**, trái `DISC_BA.md` §4.2. Cả hai đã sửa, có test canh.
 
-### ĐÃ XONG TRƯỚC ĐÓ
+### ĐÃ XONG TRƯỚC ĐÓ — GĐ0–GĐ14, 68/68 hạng mục
 
-**GĐ0–GĐ14: 68/68 hạng mục**, ghi ở `PLAN_V1_LUU.md`. Chạy thử bản phát hành:
-`npm run xem-thu` → http://localhost:3100 (hoặc `?so-lieu=1` để đọc bộ đếm phễu).
+Bốn mốc: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo · **GĐ10** ba bản
+báo cáo · **GĐ11–GĐ14 DISC GIA ĐÌNH** (đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH).
 
-Bốn mốc lớn: **GĐ0–GĐ8** sản phẩm chạy đầu-cuối · **GĐ9** làm sâu báo cáo · **GĐ10** ba bản
-báo cáo · **GĐ11–GĐ14 DISC GIA ĐÌNH** — đơn vị dữ liệu đổi từ MỘT BÀI sang MỘT GIA ĐÌNH.
+🔴 **Danh sách tính năng KHÔNG chép lại ở đây** — nó nằm nguyên trong `PLAN_V1_LUU.md`
+(GĐ0–GĐ14) và bảng ✅ đầu `PLAN_V2.md` (luồng ba bước). Chép sang đây là dựng bản sao thứ
+hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên.
 
-Những gì GĐ11–GĐ14 thêm vào sản phẩm:
-- **Bảng gia đình** thay màn *Bài đã làm*: mỗi người một thẻ, nhìn một cái biết ai chưa làm.
-  Bấm *Làm bài* từ thẻ thì không bị hỏi tên lần nữa.
-- **Mã mời / QR tự viết** (không thêm thư viện): một hồ sơ DISC gói vừa 14 ký tự, hạn 7 ngày,
-  kiểm tổng 2 ký tự. Gỡ trần *"cả nhà phải dùng chung một máy"* mà không phá ADR-001.
-- **Phân tích cả nhà** tới 6 người: mỗi người một bản đọc riêng, in tách bản mỗi người một tờ.
-- **So sánh "hồi đó ↔ bây giờ"**, chỉ mở khi hai bài cách nhau ≥ 90 ngày.
-- **Màn *Số liệu máy này*** — mở cửa cho bộ đếm phễu vốn có từ GĐ6 mà chưa màn nào đọc.
-- 5 câu/màn cho mọi bộ đề (thẻ có khung, số theo cả bài) · lớp 1–12 + *đã qua lớp 12* ·
-  bỏ ô thu liên hệ · chú giải bốn nhóm + khối dẫn nguồn.
-
-Những gì luồng ba bước (`PLAN_V2`) thêm vào sản phẩm:
-- **Một khoang, ba bước xếp dọc**, khoá mềm — bước chưa mở vẫn hiện, mờ đi kèm câu nói rõ
-  CÒN THIẾU GÌ. Bảng gia đình giữ nguyên bên trong bước 1.
-- **Bố mẹ và trẻ mầm non vào được bài của chính mình** (lỗi chặn tồn từ GĐ12).
-- **14 bậc học**: Mầm non · Lớp 1–12 · Trên lớp 12. Ô lớp chỉ hiện với vai còn đi học.
-- **Khối "còn thiếu ai"** nêu đích danh người chưa làm + nút mời, hiện ở cả bước 3 lẫn đầu
-  bản phân tích. Kèm mốc `bamMoi` tách "đã bấm mời" khỏi "người thứ hai làm xong".
-- **Danh sách 5 thư mục phân tích** có ngày VÀ giờ, mở lại được bản cũ (chữ và hàm đã có
-  từ GĐ14 mà chưa nối vào đâu).
-- **Cờ `MO_NOI_DUNG_TRE`** tắt riêng phần nội dung về trẻ trong 30 giây.
-- **Nhắc sao lưu** đúng một lần, khi người thứ hai làm xong.
-- Sửa một **lỗi riêng tư**: nút *Xoá sạch* trước chỉ dọn bảng bài, để nguyên tên người và
-  bản phân tích trong máy.
-- Màn *Bài đã làm* cũ — chết từ GĐ12 mà không ai biết — chuyển vào vùng cách ly `cu/`.
+Chạy thử bản phát hành: `npm run xem-thu` → http://localhost:3100 (thêm `?so-lieu=1` để
+đọc bộ đếm phễu).
 
 ### 🔴 VIỆC NGƯỜI ĐANG CHẶN MỐC PHÁT
 
@@ -167,6 +154,9 @@ lại là giả định, không phải phần mềm.**
 
 | Ngày | Quyết định | Lý do |
 | ---- | ---------- | ----- |
+| 28/08/2026 | **GIỮ ADR-001 — không backend.** Dữ liệu lên server là việc của app chủ, khoang DISC chỉ **tách tầng lưu trữ sẵn** (`16.4`) | Chủ dự án muốn "đăng nhập máy khác vẫn thấy". Làm ngay thì công ty thành bên xử lý dữ liệu cá nhân TRẺ EM (NĐ 13/2023) — đúng thứ ADR-001 đã cố ý mua đường tránh — và cần đội dev app chủ, những người **chưa ai hỏi họ có nhận không**. Tách tầng tốn 5 giờ, cắm server sau không phải sửa một dòng giao diện |
+| 28/08/2026 | **Thêm thư viện PDF, nhưng NẠP LƯỜI là điều kiện kèm theo** (ADR-009 sẽ viết) | Sinh PDF có dấu tiếng Việt buộc phải nhúng font. `await import()` giữ gói chính ở **282 KB nén**; ai không sao lưu thì không trả đồng nào. Kèm cửa kiểm cỡ gói vì một `import` tĩnh lỡ tay thì build vẫn xanh, test vẫn xanh, chỉ điện thoại 3G là chịu |
+| 28/08/2026 | **Sao lưu `.zip` giữ CẢ PDF lẫn JSON** | Chủ dự án muốn "chỉ PDF", nhưng nút Khôi phục cần thứ máy đọc được. PDF nằm ngoài cho người, JSON trong `du-lieu/` cho máy — mở zip vẫn thấy PDF trước |
 | 28/08/2026 | **Đồ cũ không dùng thì CÁCH LY vào `cu/`, không xoá** | Chủ dự án chốt. Xoá sớm tiết kiệm vài KB mà mất một bản dựng đã chạy đúng. Luật MỘT CHIỀU (`app`/`modules`/`config` không được import từ `cu/`) có `tests/vung-cach-ly.test.ts` canh — một thư mục tên "cũ" mà không có cửa canh thì chỉ là một cái tên |
 | 28/08/2026 | **Cờ `MO_NOI_DUNG_TRE` chặn ở BA chỗ, không phải một** | Ẩn nút ở thẻ là chuyện TRÌNH BÀY; khoang làm bài là cửa chặn NỘI DUNG; bản phân tích là chỗ thứ ba vì một lát cắt "Mẹ ↔ bé" LÀ nội dung nói về bé, dù bé có bài từ trước khi tắt cờ |
 | 28/08/2026 | **Nút mời gửi ĐƯỜNG DẪN, không phải mã QR** | Mã mời mang một hồ sơ ĐÃ LÀM XONG đi ra; người chưa làm thì chưa có gì để gói. Lẫn hai chiều là bày ra một nút bấm vào rồi chẳng dẫn tới đâu |
@@ -216,12 +206,6 @@ lại là giả định, không phải phần mềm.**
   cửa khác nhau** — kiểu đỏ khó truy nhất. Sửa ở SẢN PHẨM (chưa đếm xong thì chưa vẽ bước
   nào), không sửa ở test. **Trạng thái "chưa biết" phải khác trạng thái "biết rồi và bằng
   không" — gộp hai cái đó là mầm của cả lỗi giao diện lẫn lỗi test.**
-- 🔴 **NÚT "XOÁ SẠCH" DỌN THIẾU HAI PHẦN BA DỮ LIỆU** (28/08/2026, `V3.1`). Nó chỉ gọi
-  `xoaSach()` — dọn mỗi bảng BÀI. Tên từng người (`thanh-vien`) và các bản phân tích
-  (`phan-tich-gia-dinh`) vẫn nằm nguyên, trong khi người bấm tin là mình vừa xoá sạch. Kho
-  lên v2 ba bảng ở GĐ12 mà nút xoá không ai đụng tới. **Thêm một bảng thì phải đi hỏi mọi
-  hàm nói "tất cả" xem chúng có biết bảng mới không** — và câu xác nhận cũng phải nói lại
-  đúng thứ sắp mất.
 - **Bọc IIFE async trong một hàm async khác mà không `await` là dựng một cuộc đua**
   (28/08/2026, `V0.3`). Test đọc ra 7 người nhưng 0 bài — bảng ghi TRƯỚC kịp đáp, bảng ghi
   SAU thì chưa — và nó trông y hệt "bộ nạp hỏng". Suýt đi sửa mã lành.

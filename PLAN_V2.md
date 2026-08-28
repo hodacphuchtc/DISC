@@ -1,61 +1,88 @@
-# PLAN_V2.md — Luồng 3 bước (MVP phát cho 30 gia đình)
+# PLAN_V2.md — Lộ trình đang có hiệu lực
 
-> **Sổ này thay `PLAN.md` làm lộ trình đang có hiệu lực (28/08/2026).** `PLAN.md` giữ lại
-> để tra *vì sao* 68 hạng mục cũ được làm như vậy — **không còn là việc đang làm**.
+## BÀN GIAO PHIÊN GẦN NHẤT
+
+> 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng.
+
+**Phiên 28/08/2026 — luồng ba bước xong phần máy; GĐ16 mới viết sổ, CHƯA duyệt.**
+
+**1. Vừa xong.** 15 hạng mục `V0.3`→`V5.2` (bảng ✅ bên dưới). **1.208 test xanh** ·
+`npm run kiem` + `npm run build` xanh. **6 commit còn ở local, CHƯA push** (remote ở
+`9dabcf2`). `PLAN_V2.md` vừa viết lại, thêm GĐ16 — chưa commit.
+
+**2. Đang dở.** GĐ16 **chờ chủ dự án gõ DUYỆT**, chưa viết một dòng code nào. Vào là làm
+`16.1`: sửa `modules/core/luu-tru/kho-bai.ts` — thêm `dangKyDoiKho(fn)` + `baoDoi()` gọi
+người đăng ký **trong tab này** rồi mới `postMessage`; gắn vào **mọi** lệnh ghi; rồi thêm
+hook `useKhoDoi()` ở `app/` thay ba chỗ tự gõ `new BroadcastChannel`.
+
+**3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` tài khoản Cloudflare + tên miền (chặn ngày phát) ·
+`V0.2` hai điện thoại thật quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md` ·
+duyệt GĐ16.
+
+**4. ĐÃ ĐO, ĐỪNG ĐO LẠI.**
+- `baoTabKhac()` **chỉ được gọi từ hai hàm dọn hạn mức**; `luuBai`/`luuThanhVien`/`xoaBai`/
+  `xoaThanhVien`/`luuPhanTich`/`xoaSach*` đều **0 lần**. Và tầng hai: `BroadcastChannel`
+  **không gửi về chính ngữ cảnh đã đăng tin** ⇒ vá đủ `postMessage` vẫn không cứu tab đang mở.
+- `JSZip.loadAsync` **không có ở `app/` hay `modules/`** ⇒ sổ `.zip` không khôi phục được.
+- *"Mặc định bản mới nhất"* **ĐÃ ĐÚNG SẴN** (`docTatCa()` sắp giảm dần, ô chọn lấy `bai[0]`).
+  Chỉ thiếu **giờ** ở nhãn nên hai bài cùng ngày trông giống hệt nhau — đừng đi sửa logic.
+- Gói JS: **282 KB nén / 958 KB thô**. Đây là mốc cho cửa kiểm ở `16.6`.
+- **Bốn robot SVG đã có** ở `modules/report/hinh-nhan-vat.ts`, nhưng **chỉ dùng ở màn kết
+  quả** — đó là câu trả lời cho "giao diện chưa sinh động", không cần vẽ nhân vật mới.
+
+**5. Cạm bẫy vừa trả giá.** Đã ghi vào mục *CẢNH BÁO / CẠM BẪY* của `CLAUDE.md` (5 bài,
+đắt nhất: *"đang tải" trông y hệt "đã mở"* gây lỗi đua đỏ lác đác, và **nút Xoá sạch dọn
+thiếu hai phần ba dữ liệu**). Không chép lại ở đây.
+
+**6. Lệnh phiên sau nên chạy.**
+```bash
+npm run kiem            # 1.208 test; máy tải nặng thì npx vitest run --maxWorkers=2
+npm run xem-thu         # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
+```
+
+---
+
+> **Sổ này thay `PLAN_V1_LUU.md`** (tên cũ `PLAN.md`, ghi GĐ0–GĐ14). Sổ cũ chỉ còn để tra
+> *vì sao* 68 hạng mục cũ được làm như vậy — **không tick thêm ô nào ở đó**.
 >
 > **Nguyên tắc đọc:** mỗi Giai đoạn kết thúc bằng một thứ chủ dự án **tự bấm thấy được**,
 > không nghiệm thu bằng câu "đã viết xong module". Mỗi hạng mục có 4 dòng: **(a)** làm gì ·
 > **(b)** kiểm chứng bằng thao tác nào · **(c)** test tự động nào chạy · **(d)** ước lượng.
-> Hạng mục nào bị người/dịch vụ ngoài chặn thì có thêm dòng **(e) chặn:**.
+> Hạng mục bị người/dịch vụ ngoài chặn thì có thêm dòng **(e) chặn:**.
 > **Luật tick:** chỉ tick ✅ khi (b) đã bấm thật **và** (c) đã xanh.
 > 🔴 = rủi ro cao, **cố ý xếp sớm nhất**.
 
-**Mục tiêu:** một gia đình đi được từ *"nghe giáo viên nói"* tới *"cả nhà đọc bản phân tích
-về nhau"*, và trong lúc đó **rủ được người thứ hai cùng làm**.
-
-**Mốc phát:** 30 gia đình đang học, trong 1–2 tuần (chốt 28/08/2026).
+**Mục tiêu sản phẩm:** một gia đình đi được từ *"nghe giáo viên nói"* tới *"cả nhà đọc bản
+phân tích về nhau"*, và trong lúc đó **rủ được người thứ hai cùng làm**.
 
 **Đích đo được duy nhất:** phễu mời — *bao nhiêu người bấm mời* / *bao nhiêu người thứ hai
-làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
+làm xong*. Hai con số chẩn đoán ngược nhau; đọc ở `?so-lieu=1`.
 
 ---
 
 ## RÀNG BUỘC TOÀN DỰ ÁN (mọi hạng mục đều phải tuân)
 
 - **Không backend, không CSDL, không API** (ADR-001). Dữ liệu ở IndexedDB + localStorage
-  của chính máy người dùng. Thư viện ngoài duy nhất: `jszip`.
-- **Tầng lõi** (`modules/**`, `config/**`) = hàm thuần, không React không DOM.
-  `tests/ranh-gioi-hai-tang.test.ts` canh ranh giới này (ADR-004).
-- **Hằng số nghiệp vụ đọc từ `config/`**, không gõ cứng trong component.
-- **Chữ hiển thị gom vào `config/disc-tu-dien.ts`**, không gõ thẳng vào JSX.
-- **Tiếng Việt 100%** cho mọi chữ người dùng thấy. Tên biến/hàm: tiếng Việt không dấu.
+  của chính máy người dùng.
+- **Thư viện ngoài:** `jszip`, và từ GĐ16 thêm **một** thư viện PDF **chỉ nạp lười**
+  (ADR-009). Không thêm gì khác nếu chưa có ADR.
+- **Tầng lõi** (`modules/**`, `config/**`) = hàm thuần, không React không DOM
+  (`tests/ranh-gioi-hai-tang.test.ts` canh — ADR-004).
+- **Hằng số nghiệp vụ đọc từ `config/`**; **chữ hiển thị gom vào `config/disc-tu-dien.ts`**.
+- **Tiếng Việt 100%** cho chữ người dùng thấy. Tên biến/hàm: tiếng Việt không dấu.
 - **Cấm chữ "phi lợi nhuận"** ở mọi chữ mới (`tests/thong-diep.test.tsx` quét cả `config/`).
-- **Test dùng tên bịa.** Không bao giờ đưa tên thật của trẻ vào test, seed, log, tài liệu.
-- Sau mỗi hạng mục: `npm run kiem` phải xanh mới được đi tiếp. Máy tải nặng thì
+- **Test dùng tên bịa.** Không đưa tên thật của trẻ vào test, seed, log, tài liệu.
+- **Vùng `cu/` một chiều:** `app`/`modules`/`config` không được import từ đó.
+- Sau mỗi hạng mục: `npm run kiem` phải xanh mới đi tiếp. Máy tải nặng thì
   `npx vitest run --maxWorkers=2` — Docker từng làm 19–20 test đỏ giả.
 
 ---
 
-## 🔴 BA RỦI RO CAO — XẾP SỚM NHẤT CÓ CHỦ ĐÍCH
+## 🔴 HAI HẠNG MỤC ĐANG CHẶN NGÀY PHÁT — không phải việc máy
 
-| Rủi ro | Vì sao không để cuối |
-| --- | --- |
-| **Chưa có nơi phát** (`V0.1`) | Chốt phát trong 1–2 tuần mà chưa có host, chưa có tên miền, chưa ai bấm deploy lần nào. DNS có thể mất một buổi. Biết muộn = trượt mốc, không cứu được bằng code. |
-| **Quét QR bằng camera thật** (`V0.2`) | Đây là thứ **duy nhất** gỡ trần *"cả nhà xếp hàng trên một điện thoại"*. Hỏng thì cả thiết kế bước 3 đổi. Máy không mô phỏng được ống kính và ánh sáng. |
-| **Xoá màn M1 làm test đỏ hàng loạt** (`V2.2`) | Lần trước chỉ *sắp lại* M1 đã gây **34 cửa đỏ ở 4 file**. Lần này M1 biến mất hẳn. Tách thành hạng mục riêng, làm sau khi luồng mới đã chạy được — không gộp. |
-
----
-
-## GIAI ĐOẠN V0 — Giết ba rủi ro trước khi viết một dòng giao diện
-
-**Ước lượng: 0,5 ngày máy + 1 buổi người**
-
-### DEMO CUỐI GĐ V0
-> Chủ dự án mở **link thật trên điện thoại của mình** (không phải `localhost`), thấy khoang
-> DISC chạy; rồi lấy **điện thoại thứ hai quét mã QR** trên màn hình máy thứ nhất và thấy
-> đúng tên hiện ra.
-
----
+> Hai việc này **đã nằm trong sổ từ trước GĐ16 và vẫn chưa xong**. Chúng chặn ngày đưa sản
+> phẩm tới 30 gia đình, và **không dòng code nào gỡ được**. Giữ ở đầu sổ để không lần nào
+> mở sổ ra mà không nhìn thấy chúng.
 
 - [ ] 🔴 **V0.1 — Đưa bản hiện tại lên host thật**
   - **(a)** Deploy `out/` lên Cloudflare Pages (trang tĩnh, gói miễn phí dùng thương mại
@@ -75,379 +102,275 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
   - **(a)** Không viết code. Dùng bản vừa deploy: máy A tạo một thành viên (tên bịa
     `"Zozo"`), làm xong một bài, phát mã QR. Máy B quét mã đó bằng camera. Thử ở **ba điều
     kiện**: ánh sáng phòng bình thường · ngoài nắng · màn hình máy A giảm độ sáng 30%.
-  - **(b)** Máy B hiện đúng hồ sơ, hỏi tên, lưu vào sổ. **Nếu một trong ba điều kiện
-    hỏng ⇒ ghi lại đúng điều kiện nào, rồi ẩn nút QR ở `V5.1` và nói thẳng với sale là
-    "cả nhà dùng chung một máy".** Không phát một tính năng chưa ai xác minh.
+  - **(b)** Máy B hiện đúng hồ sơ, hỏi tên, lưu vào sổ. **Nếu một trong ba điều kiện hỏng ⇒
+    ghi lại đúng điều kiện nào, rồi ẩn nút QR và nói thẳng với sale là "cả nhà dùng chung
+    một máy".** Không phát một tính năng chưa ai xác minh.
   - **(c)** `tests/qr.test.ts` + `tests/ma-moi-hoan-chinh.test.tsx` đã canh phần toán
     (dựng lại lưới từ nét vẽ Canvas + phép thử hội chứng Reed–Solomon). Không thêm test —
     **cửa còn thiếu chính là camera thật, và nó không tự động hoá được.**
   - **(d)** 30 phút.
   - **(e) chặn:** NGƯỜI — cần hai điện thoại thật và một người cầm máy thứ hai.
 
-- [x] **V0.3 — Sửa bộ nạp dữ liệu mẫu cho sale demo được** ✅ (28/08/2026)
-  - **(a)** `nap-vao-trinh-duyet.js` mở `indexedDB.open("disc", 1)` trong khi kho thật đã
-    là v2 ba bảng ⇒ `VersionError`, lời hứa văng, IIFE **không có `.catch()`** nên chỉ hiện
-    một lỗi đỏ lạ. 🔴 File đó **do máy sinh** — sửa **bộ sinh**
-    `tests/DATA_TEST/tao-du-lieu-mau.mjs`, sửa tay là mất công lần sau sinh lại.
-    Đã làm: xuất `PHIEN_BAN_KHO` từ `kho-bai.ts` và **import tên bảng + số phiên bản từ
-    đó**, không gõ lại (chính việc gõ lại đã gây ra lỗi này); dựng đủ ba bảng và index
-    `maThanhVien`; thêm `.catch()` + `onblocked`; đặt cờ `disc:da-nhan-nuoi-v2` để
-    `nhanNuoiNeuCan()` khỏi đẻ thêm người trùng tên; sửa dòng nhắc cuối (cổng 3100, màn
-    *"Bài đã làm"* đã không còn).
-    **Danh sách thành viên SUY RA từ chính 8 hồ sơ mẫu, không khai tay** — khai một danh
-    sách riêng bên cạnh danh sách bài là dựng nguồn sự thật thứ hai. Ra **7 người**, giữ
-    nguyên tên bịa cũ: `Bé Bún` (mầm non) · `Su Kem` (lớp 4) · `Tí Nị` (lớp 7, **2 bài** —
-    cặp vùng lệch) · `Mẹ Bống` (mẹ, **không lớp**) · `Kem Bơ` (lớp 8) · `Cà Rốt` (mầm non,
-    ca không hợp lệ) · `Nem Rán` (lớp 5).
-  - **(b)** Mở bản đang chạy → DevTools → Console → dán trọn file → thấy dòng
-    `✅ Đã nạp 7 người và 8 bài mẫu` → tải lại trang → bước 1 có **7 người, mỗi người có bài**.
-  - **(c)** `tests/nap-du-lieu-mau.test.ts` — **chạy chính bộ nạp đã sinh** dưới
-    `fake-indexeddb` rồi đọc lại bằng đúng hàm kho của sản phẩm: 7 người · 8 bài · **không
-    bài nào mồ côi** · hai bài của Tí Nị về cùng một người · người lớn không bị gán lớp ·
-    dán hai lần không đẻ người trùng · không tên nào trông như họ tên thật. **8/8 xanh.**
-  - **(d)** 1,5 giờ (thực tế ~1 giờ).
+---
+
+## ✅ ĐÃ XONG — luồng ba bước (28/08/2026, 15 hạng mục)
+
+> Rút gọn có chủ đích: bốn dòng chi tiết của một hạng mục ĐÃ XONG hết việc của nó. Lý do và
+> bài học đã chuyển vào `CLAUDE.md` (bảng quyết định + sổ sẹo) và
+> `docs/decisions/ADR-008-ba-buoc-trong-mot-khoang.md`; chi tiết thi công nằm trong thông
+> điệp commit. Giữ nguyên bốn dòng ở đây là dựng một bản sao thứ hai để hai bên lệch nhau.
+
+| Mã | Làm gì | Cửa kiểm |
+| --- | --- | --- |
+| `V0.3` | Bộ nạp dữ liệu mẫu chạy được trên kho v2 (7 người + 8 bài) | `tests/nap-du-lieu-mau.test.ts` |
+| `V1.1` | 14 bậc học lên `config/`: Mầm non · Lớp 1–12 · Trên lớp 12 | `tests/tuy-chon-lop.test.ts` |
+| `V1.2` | Ô lớp chỉ hiện với vai còn đi học; hai hàng rào chặn lớp mồ côi | `tests/form-thanh-vien.test.tsx` |
+| `V1.3` 🔴 | Bộ đề suy từ VAI + BẬC HỌC — **sửa lỗi bố mẹ và mầm non không vào được bài** | `tests/dinh-tuyen.test.ts` |
+| `V1.4` | Nút *Bố mẹ trả lời về {tên}* trên thẻ trẻ từ lớp 3 | `tests/nut-tren-the.test.tsx` |
+| `V2.1` | Khung ba bước, thanh bên một mục, số liệu ẩn sau `?so-lieu=1` | `tests/dieu-huong.test.tsx` |
+| `V2.2` 🔴 | Xoá màn *"Ai đang cầm máy?"*; mọi bài thuộc một người trong sổ | `tests/duong-vao-bai.ts` |
+| `V3.1` | Danh sách 5 thư mục có ngày-giờ; **sửa lỗi riêng tư của nút Xoá sạch** | `tests/thu-muc-phan-tich.test.tsx` |
+| `V3.2` | Khối *"còn thiếu ai"* nêu đích danh + nút mời | `tests/con-thieu-ai.test.tsx` |
+| `V3.3` | Mốc `bamMoi` tách "đã bấm mời" khỏi "người thứ hai làm xong" | `tests/do-phieu.test.ts` |
+| `V4.1` 🔴 | Cờ `MO_NOI_DUNG_TRE` chặn ở ba chỗ, test chạy cả hai trạng thái | `tests/co-noi-dung-tre.test.tsx` |
+| `V4.2` | Nhắc sao lưu đúng một lần, sau bài của người thứ hai | `tests/nhac-sao-luu.test.tsx` |
+| `V4.3` | `docs/huong-dan-giao-vien-va-sale.md` — 0 dòng code | *(chờ duyệt câu chữ)* |
+| `V5.1` | Cách ly `cu/lich-su.tsx` + luật một chiều | `tests/vung-cach-ly.test.ts` |
+| `V5.2` | ADR-008; `PLAN.md` → `PLAN_V1_LUU.md`; cập nhật `CLAUDE.md` | `npm run check:structure` |
+
+**Trạng thái lúc chốt:** 1.208 test xanh · 61 file test · `npm run kiem` + `npm run build`
+xanh · sáu commit của gói này còn ở local.
 
 ---
 
-## GIAI ĐOẠN V1 — Bố mẹ vào được bài của chính mình
+# GĐ16 — Gộp hai bước · PDF · dữ liệu không mất · giao diện sinh động
 
-**Ước lượng: 1 ngày**
+**Bối cảnh.** Chủ dự án bấm thử bản thật và nêu bảy điểm. Đọc mã thì chúng rơi vào **ba
+nhóm khác hẳn nhau về bản chất**, và trộn lại là cách chắc chắn nhất để làm sai thứ tự ưu
+tiên:
 
-> Đây là **lỗi chặn thật**, không phải chuyện thẩm mỹ: `boDeCuaThanhVien()` ở
-> [app/khoang/disc.tsx:70](app/khoang/disc.tsx#L70) chỉ đọc `tv.lop` rồi `Number()`.
-> Bố mẹ không có lớp ⇒ trả `null` ⇒ đá về màn *"Ai đang cầm máy?"*. **Bấm "Làm bài" trên
-> thẻ của Mẹ thì không vào được bài của Mẹ.** Trẻ mầm non cũng vậy — form còn chẳng cho
-> chọn lớp mầm non. Đúng nhóm người mà cả GĐ11–GĐ14 xây cho là nhóm không đi vào được.
+| Nhóm | Gồm những gì | Cỡ |
+| --- | --- | --- |
+| **Lỗi thật** | Màn không tự tải lại dữ liệu mới · sổ `.zip` không khôi phục được | Nhỏ, đắt nếu để lại |
+| **Sửa luồng** | Gộp 3 bước còn 2 · ô chọn bản thiếu giờ | Nhỏ |
+| **Làm mới** | Xuất PDF · bộ minh hoạ · tối ưu di động | Lớn |
 
-### DEMO CUỐI GĐ V1
-> Thêm **Mẹ Lan** (vai Mẹ) → form **không hiện ô lớp**. Bấm *Làm bài* trên thẻ Mẹ Lan →
-> **vào thẳng câu hỏi đầu tiên, không hỏi lại vai hay lớp**. Thêm **Bé Na** (vai Con, lớp
-> *Mầm non*) → bấm *Làm bài* → vào bản người lớn trả lời hộ, có hộp giải thích.
+**Quyết định đã chốt (28/08/2026):**
+
+1. **PDF bằng thư viện, NẠP LƯỜI** — gói chính giữ nguyên **282 KB nén**. Cần **ADR-009**.
+2. **Giữ ADR-001 — không backend.** Tách tầng lưu trữ sau một giao diện để đội dev app chủ
+   cắm server của họ vào sau; cộng nút **Khôi phục** từ `.zip` để đổi máy vẫn còn dữ liệu
+   **ngay hôm nay**. *Suy ra:* `.zip` chứa **PDF cho người đọc** + **JSON trong `du-lieu/`
+   cho máy** — chỉ-PDF thì nút Khôi phục không có gì để đọc.
+3. **Vẽ thêm bộ minh hoạ mới cùng lối nét** với bốn robot sẵn có. Không thêm thư viện hình.
+4. **Làm trọn ba đợt rồi mới phát.**
+
+**Đã có sẵn, KHÔNG phải làm lại:** hạn mức **2 bài/người** (`GIOI_HAN_BAI_MOI_NGUOI`) và
+**5 thư mục phân tích** (`GIOI_HAN_THU_MUC`) đang chạy đúng như vậy.
 
 ---
 
-- [x] **V1.1 — Lớp lên `config/`, thêm Mầm non và Trên lớp 12** ✅ (28/08/2026 — làm TRƯỚC V0.3 vì bộ sinh dữ liệu mẫu cần hằng `LOP_MAM_NON`)
-  - **(a)** Hai sentinel đang nằm cục bộ trong `app/khoang/chon-doi-tuong.tsx` — đúng vết
-    xe `TUOI_VAO_THCS` đã trả giá (hằng nghiệp vụ cục bộ là mầm của hai nguồn sự thật).
-    Đưa lên `config/disc-nguong.ts`: `LOP_MAM_NON = "mam-non"`, `LOP_TREN_12 = "tren-12"`.
-    Thêm hàm thuần `tuyChonLop()` trả **14 mục** theo đúng thứ tự: Mầm non · Lớp 1…Lớp 12 ·
-    Trên lớp 12. Chữ hiển thị vào `config/disc-tu-dien.ts`.
-  - **(b)** Chưa nhìn thấy gì trên màn — đây là hạng mục nền cho `V1.2`. Kiểm bằng (c).
-  - **(c)** Thêm `tests/tuy-chon-lop.test.ts`: `tuyChonLop()` trả đúng 14 mục, mục đầu là
-    Mầm non, mục cuối là Trên lớp 12, và **không mục nào có giá trị là số 13** (sentinel
-    bằng số sẽ lặng lẽ chui vào dữ liệu như thể có người học lớp 13).
-  - **(d)** 1 giờ.
+## 🔴 BA HẠNG MỤC RỦI RO CAO — XẾP SỚM NHẤT CÓ CHỦ ĐÍCH
 
-- [x] **V1.2 — Form thành viên: ô lớp chỉ hiện với người đang đi học** ✅ (28/08/2026)
-  - **(a)** Sửa `app/components/form-thanh-vien.tsx`: ô lớp **chỉ render khi vai là `con`
-    hoặc `anh-chi-em`**. Bố · mẹ · ông · bà · người thân · khác → không có ô lớp. Đổi vai
-    đang chọn thì **xoá lớp đã chọn** (đừng để lại lớp mồ côi trên một người lớn). Danh
-    sách lớp lấy từ `tuyChonLop()`. Đổi nhãn `CHU_BANG_GIA_DINH.nhanLop` từ
-    `"Lớp (nếu đang đi học)"` thành `"Lớp"` — ô này nay chỉ hiện đúng lúc cần.
-  - **(b)** Bước 1 → *Thêm người* → chọn vai **Mẹ**: **không thấy ô lớp**. Đổi sang vai
-    **Con**: ô lớp hiện ra với **đúng 14 mục**, mục đầu *Mầm non*, mục cuối *Trên lớp 12*.
-    Chọn *Lớp 7* rồi đổi vai về **Bố**: ô lớp biến mất, lưu xong mở lại thấy **không còn
-    lớp 7 dính trên người đó**.
-  - **(c)** Thêm `tests/form-thanh-vien.test.tsx`: (1) vai `me` không render ô lớp;
-    (2) vai `con` render 14 mục; (3) chọn lớp rồi đổi vai sang `bo` thì bản ghi lưu ra
-    **không có trường `lop`**.
-  - **(d)** 3 giờ.
+| Rủi ro | Vì sao không để cuối |
+| --- | --- |
+| **Lỗi không tự tải lại có TẦNG THỨ HAI** (`16.1`) | `BroadcastChannel` **không bao giờ gửi về chính ngữ cảnh vừa đăng tin**. Vá đủ mọi `postMessage` rồi mà **tab đang mở vẫn không biết** — và người dùng chỉ có một tab. Phát hiện muộn thì mọi hạng mục sau đều dựng trên một nền tưởng là đã sửa. |
+| **Sổ `.zip` không khôi phục được** (`16.5`) | `JSZip.loadAsync` không có ở `app/` hay `modules/`. Người dùng bấm *Sao lưu*, yên tâm, rồi mất máy là mất sổ. Càng nhiều gia đình dùng thì càng nhiều người tin vào một lời hứa suông. |
+| **Thư viện PDF làm phình gói chính** (`16.6`) | Một `import` tĩnh lỡ tay là gói tải về gấp đôi, và **không cửa nào hiện có bắt được** — build vẫn xanh, test vẫn xanh. Chỉ điện thoại 3G của phụ huynh là chịu. |
 
-- [x] **V1.3 — Bộ đề suy từ VAI + LỚP, không hỏi lại** ✅ (28/08/2026)
-  - **(a)** Đưa `boDeCuaThanhVien()` từ `app/khoang/disc.tsx` **xuống tầng lõi**
-    (`modules/test/dinh-tuyen.ts`) và cho nó đọc **cả `vaiTro` lẫn `lop`**. Vẫn gọi xuyên
-    qua `dinhTuyen()` — ADR-002 (sàn tự đánh giá 8 tuổi) là thứ đắt nhất trong sản phẩm và
-    chỉ được có **một** nơi giữ. Bảng ánh xạ:
+---
 
-    | Thành viên | `doiTuong` truyền vào `dinhTuyen` | Bộ đề | Ai trả lời |
-    | --- | --- | --- | --- |
-    | Vai không có lớp (bố/mẹ/ông/bà/người thân/khác) | `phu-huynh` + `mucTieu: "toi"` | `PH` | chính họ |
-    | Lớp `mam-non` | `mam-non` | `MN` | người lớn trả lời hộ |
-    | Lớp 1–2 | `tieu-hoc` | `MN` + hộp giải thích **bắt buộc hiện** | người lớn trả lời hộ |
-    | Lớp 3–5 | `tieu-hoc` | `TH` | em tự làm |
-    | Lớp 6–9 | `thcs` | `THCS` | em tự làm |
-    | Lớp 10–12 · `tren-12` | `cap-ba-tro-len` | `PH` | em tự làm |
+## GIAI ĐOẠN 16A — Lỗi thật + gộp hai bước
 
-    Thêm hàm thuần `boDeQuanSatTheoLop(lop)` cùng file cho nút phụ ở `V1.4`.
-    🔴 **Không suy tuổi từ lớp và không lưu tuổi bịa** — gác bằng LỚP. Lớp 4 có cả bé 9
-    lẫn bé 10; đoán ra một con số rồi lưu như thể đã hỏi là tự bịa dữ liệu.
-  - **(b)** Bấm *Làm bài* trên thẻ **Mẹ Lan** → vào thẳng câu hỏi đầu tiên, **không qua màn
-    nào hỏi vai hay lớp**. Bấm trên thẻ **Bé Na** (Mầm non) → vào bản quan sát, có hộp giải
-    thích. Bấm trên thẻ **Bin** (Lớp 7) → vào bộ THCS.
-  - **(c)** Mở rộng `tests/dinh-tuyen.test.ts`: **một test cho mỗi dòng trong bảng trên**
-    (6 dòng). Thêm test `boDeQuanSatTheoLop`: lớp `mam-non` và lớp 1–2 → `MN`;
-    lớp 3 trở lên → `QS`. `tests/ranh-gioi-hai-tang.test.ts` phải vẫn xanh (hàm mới ở tầng
-    lõi, không được import React).
+**Ước lượng: 1,5 ngày**
+
+### DEMO CUỐI GĐ 16A
+> Làm xong một bài → bấm quay lại → **thẻ người đó hiện ngay số bài mới, KHÔNG cần F5**.
+> Thanh bên một mục; bấm vào thấy **HAI bước**: *1 Nhà mình* (tạo người **và** làm bài ngay
+> tại thẻ) · *2 Phân tích cả nhà* (mở khi ≥2 người xong). 2 người → 2 bản; 4 người → 4 bản.
+
+---
+
+- [ ] 🔴 **16.1 — Kho tự báo mọi thay đổi, kể cả trong CÙNG một tab**
+  - **(a)** Gốc lỗi đã đo trên mã: `baoTabKhac()` ở
+    [kho-bai.ts:316](modules/core/luu-tru/kho-bai.ts#L316) **chỉ được gọi từ hai hàm dọn
+    hạn mức**; `luuBai` · `luuThanhVien` · `xoaBai` · `xoaThanhVien` · `luuPhanTich` ·
+    `xoaSach*` đều **0 lần**. 🔴 Và tầng thứ hai: `BroadcastChannel` **không gửi về chính
+    ngữ cảnh đã đăng tin**, nên vá đủ `postMessage` vẫn không cứu được tab đang mở.
+    Dựng bộ đăng ký trong `kho-bai.ts`: `dangKyDoiKho(fn)` trả hàm huỷ đăng ký; `baoDoi()`
+    làm **hai việc** — gọi mọi người đăng ký **trong tab này**, rồi mới `postMessage` cho
+    tab khác. Gắn `baoDoi()` vào **mọi** lệnh ghi.
+    Thêm hook `useKhoDoi(napLai)` ở `app/`: hiện **ba** component tự gõ lại
+    `new BroadcastChannel(KENH_KHO)` — ba chỗ để quên.
+  - **(b)** Máy trống → thêm một người → **không tải lại trang** → làm xong bài → bấm quay
+    lại → thẻ hiện `1/2 bài`, bước 2 sáng lên. Xoá một người ở bước 1 → dòng đếm ở tiêu đề
+    bước đổi ngay. **Không bấm F5 lần nào trong suốt bài kiểm tra này.**
+  - **(c)** `tests/kho-tu-bao.test.ts` — mỗi lệnh ghi gọi đúng một lần người đăng ký; huỷ
+    đăng ký thì thôi nhận; không có `BroadcastChannel` (trình duyệt cũ) vẫn báo trong tab.
+    `tests/tai-lai-sau-khi-lam-bai.test.tsx` — đi trọn luồng, khẳng định số bài trên thẻ
+    đổi mà **không dựng lại component**.
   - **(d)** 4 giờ.
 
-- [x] **V1.4 — Nút phụ "Bố mẹ trả lời về {tên}" trên thẻ con từ lớp 3** ✅ (28/08/2026)
-  - **(a)** `app/khoang/bang-gia-dinh.tsx`: thẻ của người có lớp **từ 3 trở lên** có thêm
-    nút phụ mở bộ `QS` qua `boDeQuanSatTheoLop()`, dẫn tới màn **Vùng lệch con ↔ cha mẹ**
-    đã có. Thẻ bố mẹ **chỉ có đúng một nút** (bài tự đánh giá). Thẻ mầm non và lớp 1–2 chỉ
-    có nút người lớn trả lời hộ — không cần nút phụ vì bài chính đã là bản quan sát.
-  - **(b)** Thẻ **Bin** (Lớp 7) có nút chính *Bin tự làm bài* và nút phụ *Bố mẹ trả lời về
-    Bin*. Thẻ **Mẹ Lan** chỉ có một nút. Thẻ **Bé Na** chỉ có nút người lớn trả lời hộ.
-  - **(c)** Mở rộng `tests/bang-gia-dinh.test.tsx`: đếm số nút trên thẻ theo vai+lớp cho
-    bốn trường hợp (mẹ · mầm non · lớp 2 · lớp 7).
-  - **(d)** 2 giờ.
-
----
-
-## GIAI ĐOẠN V2 — Ba bước hiện ra
-
-**Ước lượng: 1,5 ngày**
-
-### DEMO CUỐI GĐ V2
-> Thanh bên **chỉ còn một mục**. Bấm vào → **ba bước xếp dọc từ trên xuống**, đánh số
-> 1·2·3. Máy trống thì bước 2 và 3 **mờ đi kèm câu nói rõ vì sao** (*"Chưa có ai trong
-> sổ"*). Thêm một người → bước 2 sáng lên. **Không còn màn "Ai đang cầm máy?" ở bất kỳ
-> đâu.** Gõ `?so-lieu=1` vào cuối địa chỉ thì mở được màn số liệu.
-
----
-
-- [x] **V2.1 — Khung ba bước + thanh bên một mục + giấu màn số liệu** ✅ (28/08/2026)
-  - **(a)** Thêm `MA_BUOC = ["nha-minh", "lam-bai", "phan-tich"] as const` + `TEN_BUOC` +
-    `MO_TA_BUOC` vào `config/disc-tu-dien.ts`. `app/khoang/disc.tsx` thành khung xếp dọc
-    ba tấm: mỗi tấm có số thứ tự, tên, **một dòng trạng thái sống** (`3 người trong sổ` ·
-    `còn 2 người chưa làm`), mở/gập được. **Khoá mềm:** bước 2 và 3 **luôn nhìn thấy**,
-    mờ đi kèm lý do — không giấu. Tự mở bước hợp lý nhất khi vào: chưa có ai → 1; có người
-    chưa làm → 2; đủ 2 người có bài → 3.
-    `app/components/thanh-ben.tsx` chỉ render `"disc"`. **Giữ nguyên `MA_KHOANG` và
-    `chuanHoaMaKhoang()`** — máy người dùng đang có `"lich-su"` trong localStorage và hàm
-    đó đã lo đá về mặc định. `app/page.tsx` đọc `?so-lieu=1` **trong `useEffect`**, không
-    đọc lúc dựng HTML tĩnh (máy chủ không có `location` ⇒ lệch hydration).
-  - **(b)** Mở link → thanh bên có **đúng một mục**. Bấm vào → ba tấm xếp dọc. Trên máy
-    trống: bước 2 mờ, ghi *"Chưa có ai trong sổ"*; bước 3 mờ, ghi *"Cần ít nhất 2 người đã
-    làm xong"*. Thêm một người → bước 2 sáng và tự mở. Thêm `?so-lieu=1` → thấy màn số
-    liệu; bỏ đi → không có đường nào khác tới đó.
-  - **(c)** Mở rộng `tests/dieu-huong.test.tsx`: thanh bên render đúng 1 mục; ba tấm có mặt
-    cùng lúc; bước 2 mờ khi sổ trống và sáng khi có 1 người; bước 3 mờ khi <2 người có bài.
-    Sửa `tests/so-lieu.test.tsx` để vào qua `?so-lieu=1`.
-  - **(d)** 6 giờ.
-
-- [x] 🔴 **V2.2 — Bước 2 là danh sách thành viên; xoá màn "Ai đang cầm máy?"** ✅ (28/08/2026)
-  - **(a)** Bước 2 render danh sách thẻ thành viên để chọn (đúng nghĩa *"hãy chọn cá nhân
-    thực hiện"*), sổ trống thì chỉ về bước 1. **Xoá `app/khoang/chon-doi-tuong.tsx`** và
-    nhánh `{ ten: "chon" }` trong `disc.tsx`. `BoiCanhChon` (lớp/tuổi) nay lấy từ bản ghi
-    thành viên, không từ M1. **Mang nguyên hàng rào hạn mức 2 bài** (`baiSapMat` →
-    `HopThoaiHanMuc`) sang bước 2 — đây là chỗ **duy nhất** được phép xoá bài vì hạn mức;
-    thay một màn mà đánh rơi hàng rào của màn đó là cách mất dữ liệu tốn công nhất.
-    Giữ nguyên chữ ký `dinhTuyen()` để `tests/dinh-tuyen.test.ts` khỏi đỏ oan.
-  - **(b)** Đi hết luồng: bước 1 thêm người → bước 2 chọn người → làm bài → xem kết quả.
-    **Không gặp màn "Ai đang cầm máy?" ở bất kỳ đâu.** Làm **2 bài cho Mẹ Lan** rồi thử
-    bài thứ 3 → phải bật hộp thoại **nêu đích danh bài sắp mất**, không xoá im lặng.
-  - **(c)** 🔴 Đổi `tests/duong-m1.ts` → `tests/duong-vao-bai.ts` — **một nơi duy nhất**
-    biết cách vào một bộ đề (tạo thành viên → bấm *Làm bài* trên thẻ). Bảng ánh xạ ở `V1.3`
-    đọc lên chính là bản đặc tả của file này. Rà lại các file gọi nó: `m2-truoc-khi-bat-dau`
-    · `m3-lam-bai` · `luu-boi-canh` · `m4-ket-qua` · `m5-vung-lech` · `m6-lich-su` ·
-    `moc-bai-thu-hai` · `han-muc-thi-hanh` · `lam-bai-tu-the` · `ba-dai` ·
-    `bon-loi-nguoi-doc`. Xoá `tests/m1-chon-doi-tuong.test.tsx`.
-    **`tests/han-muc-thi-hanh.test.tsx` phải vẫn xanh** — đó là cửa canh hàng rào hạn mức.
-  - **(d)** 6 giờ. **Ước lượng này rộng có chủ đích:** lần trước chỉ *sắp lại* M1 đã gây
-    34 cửa đỏ ở 4 file. Làm hạng mục này **sau** khi `V2.1` đã chạy được, không gộp.
-
----
-
-## GIAI ĐOẠN V3 — Bước 3 mở ra và rủ được người
-
-**Ước lượng: 1,5 ngày**
-
-> Đích của bước 3 đã chốt: **rủ thêm người trong nhà cùng làm** — không phải khoe ra ngoài,
-> không phải in ra. Mọi thiết kế ở giai đoạn này xoay quanh **chỗ trống** và **lời mời**.
-
-### DEMO CUỐI GĐ V3
-> Hai người làm xong → bước 3 sáng → bấm *Phân tích* → mỗi người một bản đọc riêng, nói rõ
-> *tương tác với người kia thế nào*. Trên đầu bản có dòng **"Còn bố Nam và bé Na chưa làm"**
-> kèm nút mời từng người. Chạy lần thứ hai → **danh sách thư mục hiện ngày VÀ giờ**, mở lại
-> được bản cũ.
-
----
-
-- [x] **V3.1 — Nối danh sách 5 thư mục có ngày và giờ** ✅ (28/08/2026 — kèm sửa một lỗi RIÊNG TƯ phát hiện tại chỗ: nút *Xoá sạch* chỉ dọn bảng bài, để nguyên tên người và bản phân tích)
-  - **(a)** Ba thứ đã dựng xong mà **chưa nối vào đâu**: `docPhanTich()` ở
-    [modules/core/luu-tru/kho-bai.ts:273](modules/core/luu-tru/kho-bai.ts#L273) không ai
-    gọi; chữ `CHU_TONG_HOP.nhomThuMuc` · `moTaThuMuc` · `nutMoThuMuc` nằm trong `config/`
-    không component nào vẽ. Dựng danh sách thư mục ở cuối bước 3, đọc từ `docPhanTich()`.
-    Tên thư mục dùng **`hienNgayGio()`**
-    ([modules/core/tien-ich/ngay.ts:33](modules/core/tien-ich/ngay.ts#L33)), không phải
-    `hienNgay()` — yêu cầu là ngày **và** giờ. Sửa `CHU_HAN_MUC_THU_MUC.mauDong` cho khớp.
-    Mở lại một thư mục cũ thì hiện đúng N bản đã lưu. 🔴 `PhanTichGiaDinh.noiDung` khai
-    kiểu `unknown` — **phải kiểm hình dạng lúc đọc ra, cấm ép kiểu**: bản ghi cũ có thể
-    thiếu trường, và một bản phân tích vỡ giữa chừng thì người dùng thấy trang trắng.
-  - **(b)** Chạy phân tích 2 lần cách nhau vài phút → cuối bước 3 hiện **2 dòng thư mục,
-    mỗi dòng có ngày và giờ khác nhau**. Bấm *Mở* ở dòng cũ → hiện lại đúng bản đã chạy
-    lúc đó. Chạy tới lần thứ 6 → hộp thoại hỏi trước, **nêu đích danh lần nào sắp mất**.
-  - **(c)** Thêm `tests/thu-muc-phan-tich.test.tsx`: lưu 3 bản phân tích → danh sách hiện
-    3 dòng, **mỗi dòng chứa cả ngày lẫn giờ**; bấm *Mở* dòng thứ 2 hiện đúng nội dung của
-    bản đó; `noiDung` sai hình dạng thì hiện thông báo, **không làm trắng trang**.
-    `tests/han-muc.test.ts` (hạn mức 5 thư mục) phải vẫn xanh.
+- [ ] **16.2 — Gộp ba bước còn HAI**
+  - **(a)** `MA_BUOC` còn `["nha-minh", "phan-tich"]`. Bước 1 hiện **cả hai bộ nút** trên
+    một thẻ: *Sửa · Xoá* **và** *Làm bài · Bố mẹ trả lời về…* — tức bỏ tham số `cheDo` của
+    [bang-gia-dinh.tsx](app/khoang/bang-gia-dinh.tsx) vừa thêm ở `V2.1`.
+    🔴 Giữ thứ tự an toàn: *Xoá* đứng **cuối**, xa nhất khỏi *Làm bài* — lựa chọn không
+    hoàn tác được không được nằm ở chỗ ngón tay rơi vào theo phản xạ.
+    Sửa `CHU_BUOC` (tên bước · dòng trạng thái · câu khoá) cho khớp hai bước.
+  - **(b)** Thêm một người → **nút Làm bài hiện ngay trên thẻ đó**, không phải mở bước khác.
+    Cho 2 người làm xong → bước 2 sáng → bấm *Phân tích* → **2 bản**. Thêm 2 người nữa cho
+    làm xong rồi chạy lại → **4 bản**.
+  - **(c)** Sửa `tests/dieu-huong.test.tsx` (đang khẳng định 3 tấm) · `tests/duong-vao-bai.ts`
+    (bỏ `moBuocLamBai`) · `tests/nut-tren-the.test.tsx` · `tests/co-noi-dung-tre.test.tsx`.
+    Thêm cửa mới: **N người có hồ sơ ⇒ đúng N bản phân tích** (thử N = 2, 3, 4).
   - **(d)** 5 giờ.
 
-- [x] **V3.2 — Bước 3 khoá bằng "CÒN THIẾU AI", kèm nút mời** ✅ (28/08/2026)
-  - **(a)** Đây là **đòn bẩy thật sự** của con số `baiThuHai`, không phải màu sắc hay bố
-    cục. Thay câu chung chung *"cần ít nhất 2 người"* bằng câu nêu **đích danh người chưa
-    làm**: *"Còn bố Nam và bé Na chưa làm — bức tranh cả nhà đang thiếu 2 người"*, kèm nút
-    mời cho từng người. Nút mời làm đúng một việc: mở mã mời/QR cho người đó (nếu `V0.2`
-    xanh), hoặc chuyển thẳng sang bước 2 với người đó được chọn sẵn (nếu `V0.2` đỏ).
-    Khối này hiện ở **cả hai chỗ**: trên tấm bước 3 khi chưa mở được, và trên đầu bản phân
-    tích khi đã chạy xong (lúc người ta vừa thấy nó hay).
-    Chữ mới đặt trong `CHU_TONG_HOP`. 🔴 **Không bê `CHU_THONG_DIEP` sang** — khối đó có
-    luật *"chỉ xuất hiện ở bảng gia đình"* và `tests/thong-diep.test.tsx` canh; rải ra khắp
-    nơi thì lần đọc thứ tư nó thành khẩu hiệu quảng cáo.
-  - **(b)** Sổ có 4 người, mới 2 người làm xong → tấm bước 3 ghi **đúng tên 2 người còn
-    lại**, mỗi tên một nút mời. Bấm nút mời của bố Nam → mở đúng mã mời cho bố Nam. Chạy
-    phân tích xong → khối "còn thiếu ai" **vẫn hiện trên đầu bản**.
-  - **(c)** Thêm `tests/con-thieu-ai.test.tsx`: sổ 4 người / 2 người có bài → hiện đúng 2
-    tên còn lại; đủ cả 4 → khối biến mất; tên hiện ra **khớp đúng tên trong sổ** (dùng tên
-    bịa `"Zozo"`, `"Kiki"` — 🔴 tên ngắn như `"Bi"` khớp nhầm vào chữ giao diện
-    *"**Bi**ệt danh khác nhau"* và làm test đỏ oan, đã trả giá một lần).
+- [ ] **16.3 — Ô chọn bản: có TÊN, NGÀY và GIỜ; mặc định bản mới nhất**
+  - **(a)** Ô chọn ở [ban-tong-hop.tsx](app/khoang/ban-tong-hop.tsx) đang hiện
+    `{boDe} · {ketThuc.slice(0,10)}` — **thiếu giờ**. Đổi sang `hienNgayGio()`
+    ([ngay.ts:33](modules/core/tien-ich/ngay.ts#L33)); tên người đã là nhãn của dòng.
+    🔴 *Mặc định bản mới nhất* **đã đúng sẵn** — `docTatCa()` sắp giảm dần theo `ketThuc` và
+    ô chọn lấy `n.bai[0]`. **Không sửa logic**, chỉ thêm test khoá lại. Thứ khiến chủ dự án
+    tưởng nó chọn sai là cái nhãn: hai bài cùng ngày hiện lên hai dòng giống hệt nhau.
+  - **(b)** Một người có 2 bài **cùng ngày, cách nhau vài giờ** → ô chọn hiện hai dòng
+    **khác nhau có giờ**; dòng đầu là bài mới hơn và được chọn sẵn. Chọn dòng cũ → bản chạy
+    ra đúng mốc cũ.
+  - **(c)** `tests/ban-tong-hop.test.tsx`: mặc định là bài mới nhất; hai bài cùng ngày ra
+    hai nhãn khác nhau; chọn bài cũ thì engine nhận đúng điểm của bài cũ.
+  - **(d)** 2 giờ.
+
+---
+
+## GIAI ĐOẠN 16B — PDF · khôi phục · tách tầng kho
+
+**Ước lượng: 2,5 ngày**
+
+### DEMO CUỐI GĐ 16B
+> Bấm *Sao lưu* → nhận một `.zip`; mở ra thấy **mỗi người một file PDF** tên dạng
+> `Zozo-2026-08-28-16h20.pdf`, mở trên máy khác không cài gì cũng đọc được, **tiếng Việt
+> đủ dấu**. Rồi *Xoá sạch* → *Khôi phục* → chọn đúng file `.zip` đó → **cả sổ quay về**.
+
+---
+
+- [ ] **16.4 — Tách tầng kho sau một giao diện (`KhoDisc`)**
+  - **(a)** Gom mọi lối vào kho thành một giao diện ở tầng lõi
+    (`modules/core/luu-tru/kho-disc.ts`): `docThanhVien` · `luuThanhVien` · `docBai` ·
+    `luuBai` · `docPhanTich` … Bản dựng mặc định là IndexedDB đang có. Giao diện **không
+    React, không DOM**, để đội dev app chủ viết một bản dựng gọi server của họ và cắm vào
+    **mà không sửa một dòng giao diện nào**.
+    🔴 ADR-004 đã hứa chuyện tách tầng này (*"đội dev nhiều khả năng viết lại giao diện"*)
+    nhưng mới làm cho tầng NỘI DUNG, chưa làm cho tầng LƯU TRỮ — mà lưu trữ mới là chỗ
+    server sẽ cắm vào.
+  - **(b)** Không nhìn thấy gì trên màn; sản phẩm phải chạy **y hệt** trước đó. Đi hết luồng
+    một lượt để chắc không rơi mất gì.
+  - **(c)** `tests/kho-disc.test.ts` — một bản dựng **GIẢ, lưu trong bộ nhớ** chạy được toàn
+    bộ luồng. Bản giả cắm được thì bản server cũng cắm được; đó chính là điều cần chứng
+    minh. `tests/ranh-gioi-hai-tang.test.ts` phải vẫn xanh.
   - **(d)** 5 giờ.
 
-- [x] **V3.3 — Đo phễu mời: tách "đã bấm mời" khỏi "người thứ hai làm xong"** ✅ (28/08/2026)
-  - **(a)** Giá trị trên giờ công cao nhất cả sổ này. Hiện `baiThuHai` chỉ có 0 hoặc 1.
-    Nếu ra 0, không ai biết là **chưa ai bấm mời** hay **bấm rồi mà người kia không làm** —
-    hai chẩn đoán ngược nhau: một cái là lỗi phần mềm, một cái là lỗi giả định. Thêm mốc
-    `"bamMoi"` vào `MOC` ở
-    [modules/core/do-phieu/index.ts:18](modules/core/do-phieu/index.ts#L18) (**thêm vào
-    cuối mảng**, không chèn giữa) và ghi mốc khi bấm nút mời ở `V3.2`. Hiện cả hai con số
-    ở màn `?so-lieu=1`, đặt cạnh nhau kèm một dòng đọc hộ: *"{x} lần bấm mời → {y} người
-    thứ hai làm xong"*.
-  - **(b)** Bấm nút mời 3 lần, cho 1 người làm xong → mở `?so-lieu=1` thấy **3 lần bấm mời**
-    và **1 người thứ hai làm xong**.
-  - **(c)** Mở rộng `tests/do-phieu.test.ts`: mốc `bamMoi` đếm đúng số lần bấm (khác
-    `baiThuHai` vốn chỉ ghi một lần, đo *"đã từng đạt"*). Mở rộng `tests/so-lieu.test.tsx`
-    kiểm hai con số hiện ra đúng.
-  - **(d)** 2 giờ.
+- [ ] 🔴 **16.5 — Nút KHÔI PHỤC từ `.zip`**
+  - **(a)** Sổ `.zip` hiện **không nạp lại được** — `JSZip.loadAsync` chỉ có trong test.
+    Thêm nút *Khôi phục* cạnh *Sao lưu*: chọn file → đọc `du-lieu/*.json` → kiểm hình dạng
+    → **hỏi trước khi ghi đè**, nêu rõ máy này đang có mấy người và file kia có mấy người.
+    🔴 Tuyệt đối không ghi đè im lặng: khôi phục nhầm file là mất sổ đang dùng — kiểu mất
+    dữ liệu do chính nút cứu dữ liệu gây ra.
+  - **(b)** Máy có 3 người → *Sao lưu* → *Xoá sạch* → *Khôi phục* chọn file vừa tải →
+    **3 người và mọi bài quay về đủ**. Thử khôi phục bằng một `.zip` lạ bất kỳ → **báo lỗi
+    rõ ràng và KHÔNG xoá gì**.
+  - **(c)** `tests/khoi-phuc.test.ts` — khứ hồi sao lưu→khôi phục ra đúng dữ liệu cũ; file
+    rác thì từ chối và **không đụng vào kho**; file thiếu trường thì nói rõ thiếu gì.
+  - **(d)** 5 giờ.
+
+- [ ] 🔴 **16.6 — Xuất PDF chuẩn, nạp lười (ADR-009)**
+  - **(a)** Thêm `jspdf` + một font Việt subset (`.ttf`, nhúng được). 🔴 **Chỉ nạp khi
+    bấm**: `const { jsPDF } = await import("jspdf")`. Sinh **mỗi người một tệp**, tên
+    `{tên}-{yyyy-mm-dd}-{HHhMM}.pdf`, nội dung là bản phân tích của đúng người đó.
+    🔴 **Mỗi người một tờ** là luật đã có từ GĐ10/GĐ14: bản của Bin không được có một chữ
+    nào của bản Mẹ Lan. PDF phải giữ đúng luật đó.
+    Viết `docs/decisions/ADR-009-them-thu-vien-pdf.md`: vì sao lật ràng buộc một-thư-viện,
+    và vì sao **nạp lười là điều kiện kèm theo**, không phải một tối ưu tuỳ chọn.
+  - **(b)** Bấm *Sao lưu* → mở `.zip` → thấy N file PDF + thư mục `du-lieu/`. Mở một PDF
+    **trên máy khác, không cài gì** → chữ tiếng Việt **đủ dấu, không ô vuông**, đầu trang
+    có tên người và ngày giờ đánh giá.
+  - **(c)** `tests/xuat-pdf.test.ts` — tệp bắt đầu bằng `%PDF-`; tên tệp có đủ tên + ngày +
+    giờ; **bản của người A không chứa tên người B**.
+    `tests/co-goi-chinh.test.ts` — đọc `out/` sau build và **chặn gói chính phình quá
+    ngưỡng** (mốc hiện tại: 282 KB nén). Đây là cửa **duy nhất** bắt được ngày ai đó lỡ
+    import tĩnh thư viện PDF: build vẫn xanh, test vẫn xanh, chỉ điện thoại 3G là chịu.
+  - **(d)** 1 ngày.
+  - **(e) chặn:** NGOÀI — cần chọn một font Việt có giấy phép dùng thương mại (Be Vietnam
+    Pro hoặc Noto Sans, đều SIL OFL). Máy tải được, nhưng chủ dự án nên biết repo sẽ có
+    thêm một tệp font.
 
 ---
 
-## GIAI ĐOẠN V4 — Bảo hiểm trước ngày phát
+## GIAI ĐOẠN 16C — Giao diện sinh động, chạy mượt trên điện thoại
 
-**Ước lượng: 1 ngày**
+**Ước lượng: 3 ngày**
 
-### DEMO CUỐI GĐ V4
-> Đổi **một dòng trong `config/`** → toàn bộ nội dung nói về trẻ biến mất khỏi sản phẩm,
-> phần dành cho người lớn còn nguyên vẹn và vẫn chạy hết luồng. Làm xong bài của người thứ
-> hai → hiện **đúng một lần** lời nhắc tải bản sao lưu về máy.
-
----
-
-- [x] 🔴 **V4.1 — Cờ tắt riêng nội dung nói về TRẺ** ✅ (28/08/2026)
-  - **(a)** 68KB nội dung nói về trẻ (`docs/noi-dung-cho-ky-duyet.md`) **chưa ai có chuyên
-    môn ký duyệt**. Chủ dự án đã chốt ngày 28/08/2026 là **phát đủ cả phần trẻ, chưa ký
-    cũng phát**, và chịu trách nhiệm về quyết định đó — ghi lại ở đây để sau còn truy được.
-    Bảo hiểm rẻ nhất: `MO_NOI_DUNG_TRE = true` trong `config/disc-nguong.ts`. Đặt `false`
-    thì các bộ `MN` · `TH` · `THCS` · `QS` không mở được, thẻ trẻ em nói rõ *"phần dành cho
-    trẻ đang tạm đóng"*, và bản phân tích cả nhà chỉ ghép giữa những người lớn. Ngày có
-    khiếu nại đầu tiên thì tắt trong 30 giây, thay vì gỡ cả sản phẩm.
-  - **(b)** Đổi cờ sang `false`, chạy `npm run build`, mở lại: thẻ **Bé Na** và **Bin**
-    không bấm làm bài được và nói rõ lý do; thẻ **Mẹ Lan** và **bố Nam** vẫn làm bài bình
-    thường; bước 3 vẫn chạy được với hai người lớn. Đổi lại `true` → mọi thứ trở lại.
-  - **(c)** Thêm `tests/co-noi-dung-tre.test.tsx`: cờ `false` thì bốn bộ đề trẻ không mở
-    được và phân tích cả nhà vẫn chạy với 2 người lớn; cờ `true` thì mọi thứ như cũ.
-  - **(d)** 3 giờ.
-
-- [x] **V4.2 — Nhắc sao lưu đúng một lần, sau bài của người thứ hai** ✅ (28/08/2026)
-  - **(a)** Mọi thứ nằm trong IndexedDB của một trình duyệt: xoá dữ liệu duyệt web, đổi
-    điện thoại, chế độ ẩn danh — mất sạch, không khôi phục được. Nút sao lưu `.zip` có sẵn
-    nhưng nằm im ở cuối màn. Hiện lời nhắc **đúng một lần**, ngay sau khi mốc `baiThuHai`
-    được ghi — đó là khoảnh khắc **đầu tiên** gia đình có thứ đáng để mất. Nhắc sớm hơn thì
-    phiền, muộn hơn thì đã mất. Dùng lại `saoLuuTatCa()` + `taiXuong()` đã có.
-  - **(b)** Làm bài cho người thứ hai → hiện lời nhắc kèm nút tải về; bấm tải → được file
-    `.zip`. Làm bài cho người thứ ba → **không nhắc lại nữa**.
-  - **(c)** Thêm `tests/nhac-sao-luu.test.tsx`: nhắc xuất hiện đúng một lần sau bài thứ hai,
-    không xuất hiện ở bài thứ nhất và bài thứ ba.
-  - **(d)** 3 giờ.
-
-- [x] **V4.3 — Bộ đồ nghề cho giáo viên và sale (0 dòng code)** ✅ (28/08/2026 — `docs/huong-dan-giao-vien-va-sale.md`, CHỜ chủ dự án duyệt câu chữ)
-  - **(a)** Kênh phân phối là **con người** — giáo viên và sale trao đổi lúc chăm sóc khách
-    hàng — mà hiện **chưa có câu nào soạn sẵn**. Sổ dự án đã ghi: *"Lý do chưa nhà nào làm
-    2 bài không phải phần mềm khó dùng — là chưa ai bảo họ làm."* Viết
-    `docs/huong-dan-giao-vien-va-sale.md`, đúng một trang A4: nói gì trong 30 giây · nói
-    lúc nào trong buổi chăm sóc · **ba câu trả lời cho ba câu hỏi phụ huynh hay hỏi nhất**
-    (*"cái này để làm gì?"* · *"có mất tiền không?"* · *"dữ liệu con tôi đi đâu?"*) ·
-    🔴 **luật máy demo: dùng tên bịa, bấm Xoá sạch sau mỗi lần demo** — máy công ty đi qua
-    nhiều gia đình sẽ tích lại tên thật của nhiều đứa trẻ kèm hồ sơ tính cách, và lúc đó
-    công ty đang thật sự xử lý dữ liệu cá nhân của trẻ.
-  - **(b)** Chủ dự án đọc hết trong 3 phút và duyệt câu chữ; đưa cho một giáo viên đọc thử,
-    họ nói lại được ý chính mà không cần nhìn giấy.
-  - **(c)** Không có test tự động — đây là tài liệu cho người.
-  - **(d)** 1 giờ.
-  - **(e) chặn:** NGƯỜI — cần chủ dự án duyệt câu chữ trước khi đưa cho giáo viên.
+### DEMO CUỐI GĐ 16C
+> Mở trên **điện thoại thật**: mỗi thẻ thành viên có một robot nhỏ theo nhóm nổi trội của
+> họ; màn trống có minh hoạ thay vì một dòng chữ; cả nhà xong thì có một nhịp chúc mừng.
+> Thu cửa sổ còn **320px** rồi đi hết luồng — **không phải cuộn ngang một lần nào**.
 
 ---
 
-## GIAI ĐOẠN V5 — Dọn và chốt
+- [ ] **16.7 — Bộ minh hoạ mới cùng lối nét**
+  - **(a)** Vẽ thêm SVG **trong chính `modules/report/hinh-nhan-vat.ts`** (cùng lối nét,
+    cùng bảng màu trục với bốn robot sẵn có) cho: màn trống bước 1 · màn chờ người thứ hai ·
+    nhịp chúc mừng khi cả nhà xong · huy hiệu tiến độ.
+    🔴 Cùng MỘT nguồn nét với bốn robot — hai nguồn hình là hai nơi lệch nhau vào đúng ngày
+    ai đó sửa một bên, và ảnh chia sẻ PNG cũng đọc từ nguồn đó.
+  - **(b)** Máy trống → bước 1 có minh hoạ mời thêm người, không phải một dòng chữ trần.
+    Cho cả nhà làm xong → thấy nhịp chúc mừng.
+  - **(c)** `tests/hinh-minh-hoa.test.ts` — mỗi hình trả về nét vẽ khác rỗng và **nằm trọn
+    trong khung khai báo**. Tràn viewBox là lỗi chỉ lộ ra khi NHÌN, nên phải có cửa canh.
+  - **(d)** 1 ngày.
 
-**Ước lượng: 0,5 ngày**
+- [ ] **16.8 — Rải màu, nhân vật và chuyển động nhẹ khắp chặng đường**
+  - **(a)** Bốn robot hiện **chỉ xuất hiện ở đúng màn kết quả**; cả chặng còn lại là chữ đen
+    trên nền trắng. Rải ra: thẻ thành viên mang màu nhóm nổi trội + robot nhỏ; huy hiệu
+    `●●` thành vòng tiến độ; nút chính mang màu trục; bước đang mở có dải màu.
+    Chuyển động **CSS thuần**: hiện dần khi mở bước, số đếm lên, thanh tiến trình trượt.
+    🔴 Bọc mọi chuyển động trong `@media (prefers-reduced-motion: reduce)` — người tắt hiệu
+    ứng thường có lý do sức khoẻ.
+    🔴 Chữ dùng `MAU.camDamChoChu`, **không dùng cam thương hiệu** — cam trên nền trắng chỉ
+    đạt 2,28:1, dưới cả ngưỡng chữ to.
+  - **(b)** Đi hết luồng: **không màn nào còn là chữ đen trần**. Bật *Giảm chuyển động*
+    trong cài đặt máy → mọi thứ vẫn dùng được bình thường, chỉ hết động.
+  - **(c)** Mở rộng `tests/do-chu.test.ts` (đo tương phản bằng cách vẽ màu lên canvas 1×1
+    rồi đọc pixel — Tailwind v4 sinh màu `oklch()` nên phân tích chuỗi `rgb()` là báo nhầm
+    hàng loạt). Thêm cửa: mọi khối chuyển động đều có nhánh `prefers-reduced-motion`.
+  - **(d)** 1 ngày.
 
-### DEMO CUỐI GĐ V5
-> Đi hết luồng ba bước một mạch trên **điện thoại thật**, không gặp lối cụt nào, không gặp
-> nút nào bấm vào rồi không biết quay ra bằng đường nào.
+- [ ] **16.9 — Tối ưu điện thoại**
+  - **(a)** Thanh bên nay chỉ còn một mục nhưng trên điện thoại vẫn chiếm một dải ngang đầu
+    màn — thu thành một dòng gọn. Rà mọi bảng/lưới ở dải hẹp 320px; **ô chọn 14 bậc học** và
+    **cụm nút trên thẻ** là hai chỗ dễ tràn nhất. Nút chạm ≥44px (bộ trẻ nhỏ ≥56px theo
+    `canNutTo()` ở `config/`). Ảnh/SVG đặt `max-width:100%`.
+  - **(b)** Thu cửa sổ còn **320px** rồi đi hết luồng: **không cuộn ngang một lần nào**.
+    Trên điện thoại thật, mọi nút bấm trúng bằng ngón cái, không phải phóng to.
+  - **(c)** `tests/be-ngang.test.tsx` — dựng ở 320px, khẳng định không phần tử nào rộng hơn
+    khung. `tests/khung.test.ts` (cỡ chữ/nút theo lứa) phải vẫn xanh.
+  - **(d)** 1 ngày.
 
 ---
 
-- [x] **V5.1 — Cách ly đồ cũ** ✅ (28/08/2026 — soi thấy CHỈ MỘT món thật sự mồ côi: `lich-su.tsx`, chết từ GĐ12 mà vẫn nằm trong `app/`. Dời vào `cu/` theo đúng quyết định 28/08, kèm `tests/vung-cach-ly.test.ts` canh luật một chiều. So sánh *hồi đó ↔ bây giờ* KHÔNG cần ẩn — nút vốn đã tự ẩn tới khi có hai bài cách ≥90 ngày)
-  - **(a)** Ẩn khỏi đường đi những thứ không thuộc luồng mới: so sánh *hồi đó ↔ bây giờ*
-    (sớm nhất cuối tháng 11 mới có nhà nào mở được), ảnh PNG chia sẻ ra ngoài (đích đã đổi
-    sang *rủ người trong nhà*), và nút QR **nếu `V0.2` đỏ**. 🔴 **Chỉ ẩn khỏi điều hướng,
-    không dời file sang thư mục khác ở phiên bản này** — dời file là hàng trăm dòng đổi
-    đường dẫn và một đợt test đỏ, đổi lại đúng con số 0 giá trị cho người dùng trước ngày
-    phát. Ghi danh sách những thứ đã ẩn vào một mục trong `PLAN_V2.md` để đợt sau dọn thật.
-  - **(b)** Đi hết luồng ba bước trên điện thoại thật: mỗi màn đều có đường quay ra, không
-    màn nào trống trơn, không nút nào dẫn tới trang trắng.
-  - **(c)** `npm run kiem` xanh toàn bộ. `tests/manifest.test.ts` và
-    `tests/ngoai-tuyen.test.ts` phải vẫn xanh (service worker + danh sách nạp sẵn).
-  - **(d)** 2 giờ.
+## ❌ KHÔNG LÀM Ở PHIÊN BẢN NÀY
 
-- [x] **V5.2 — Ghi lại quyết định để sáu tháng sau còn truy được** ✅ (28/08/2026)
-  - **(a)** Viết `docs/decisions/ADR-008-ba-buoc-trong-mot-khoang.md`: luồng ba bước lật
-    phần nào của ADR-007, giữ phần nào (bảng gia đình **được giữ nguyên** bên trong bước 1,
-    nên điều ADR-007 lo — *"nhìn một cái là biết ai chưa làm"* — vẫn còn), và ghi lại **cả
-    phản biện cũ** để đời sau cân lại được. Cập nhật `CLAUDE.md`: bảng quyết định (3 quyết
-    định chốt ngày 28/08: luồng ba bước · phát khi chưa có chữ ký · mọi bài phải thuộc một
-    người) và mục TRẠNG THÁI trỏ sang `PLAN_V2.md`. Đổi tên `PLAN.md` → `PLAN_V1_LUU.md`
-    và thêm một dòng ở đầu: *"Không còn hiệu lực. Giữ để tra lý do của 68 hạng mục cũ.
-    Lộ trình đang chạy: `PLAN_V2.md`."*
-  - **(b)** Mở `CLAUDE.md` đọc mục TRẠNG THÁI, thấy nó trỏ đúng sang `PLAN_V2.md` và nói
-    đúng số hạng mục đã xong.
-  - **(c)** `npm run check:structure` xanh.
-  - **(d)** 2 giờ.
-
----
-
-## ❌ KHÔNG LÀM Ở BẢN NÀY — và vì sao
-
-| Không làm | Lý do |
+| Không làm | Vì sao |
 | --- | --- |
-| **Làm đẹp sâu bước 3** (bố cục, minh hoạ, hoạt ảnh) | Chưa biết phải đẹp chỗ nào cho tới khi có 30 gia đình thật. Làm trước là đoán; làm sau là sửa đúng chỗ. Riêng phần *"còn thiếu ai"* ở `V3.2` là ngoại lệ — đó là phần duy nhất dám khẳng định có tác dụng, vì nó tác động thẳng vào `baiThuHai`. Tiết kiệm ~3 ngày. |
-| **Dời đồ cũ sang thư mục `cu/`** | Chỉ **ẩn khỏi điều hướng** ở `V5.1`. Dời file thật = hàng trăm dòng đổi đường dẫn + một đợt test đỏ, đổi lại 0 giá trị cho người dùng. Dọn sau khi phát xong. |
-| **So sánh "hồi đó ↔ bây giờ"** | Cần hai bài cách nhau ≥ 90 ngày. Sớm nhất **cuối tháng 11/2026** mới có gia đình đầu tiên mở được màn này. Giữ mã, ẩn lối vào. |
-| **Ảnh PNG chia sẻ ra ngoài** | Đích đã chốt là *rủ người trong nhà*, không phải khoe ra ngoài. Hai đích đòi hai thiết kế; giữ cả hai làm loãng cả hai. |
-| **Đầu tư thêm vào bản in tách bản** | Giữ nguyên như đang có (không tốn gì), nhưng không làm thêm: phụ huynh dùng điện thoại, rất ít người in. |
-| **Thu 30–50 phản hồi rồi chạy Cronbach's α** | Đây là lúc **duy nhất** được phép nói về độ tin cậy bằng số của chính mình — nhưng phải có dữ liệu thật trước. Sau khi phát. |
-| **Dựng lại trọn bộ test một lượt** | Làm cuốn chiếu: đổi luồng ở `V2.1` trước, xoá M1 ở `V2.2` sau như một hạng mục riêng. Gộp lại là mời một đợt đỏ không gỡ nổi. |
-| **Bàn giao cho đội dev app chủ** | ADR-004 đã tách mã hai tầng sẵn cho việc này, nhưng **chưa ai hỏi họ có nhận không**. Việc của người, xem mục dưới. |
+| **Backend + đăng nhập + đồng bộ** | Chủ dự án chốt giữ ADR-001; `16.4` tách tầng sẵn để app chủ cắm vào sau. Làm ngay thì cần đội dev app chủ (**chưa ai hỏi họ có nhận không**), cần máy chủ, và **công ty thành bên xử lý dữ liệu cá nhân TRẺ EM** (NĐ 13/2023) — thứ ADR-001 đã cố ý mua đường tránh. Thêm 2–4 tuần. |
+| **Hoạt hình Lottie / video** | Thêm thư viện + 50–200 KB mỗi cảnh, đụng thẳng mục tiêu *chạy mượt trên điện thoại phổ thông*. SVG tự vẽ đủ sinh động mà 0 KB. |
+| **PDF cho bản in ba dải của GĐ10** | Gói này chỉ xuất PDF cho **bản phân tích cả nhà**. Bản in cũ vẫn dùng `window.print()` — nó đang chạy đúng, không có lý do đụng vào. |
+| **Sửa câu chữ nội dung** | Không đụng `config/disc-noi-dung-cap.ts` và họ hàng — đó là phần đang chờ ký duyệt. Đổi lúc này là làm hồ sơ ký duyệt lỗi thời thêm một lần nữa. |
+| **Xoá thật thư mục `cu/`** | Chờ tới khi đã phát cho gia đình thật và chắc chắn không quay lại. Xoá sớm tiết kiệm vài KB mà mất một bản dựng đã chạy đúng. |
+| **So sánh "hồi đó ↔ bây giờ"** | Vẫn giữ, nhưng không đầu tư thêm: sớm nhất **cuối tháng 11/2026** mới có gia đình đầu tiên đủ hai bài cách 90 ngày để mở được màn này. |
 
 ---
 
-## CHỜ NGOÀI — việc NGƯỜI / NGOÀI, chạy song song, không chặn thi công
-
-| Việc | Nhãn | Chặn cái gì |
-| --- | --- | --- |
-| **Tài khoản Cloudflare + tên miền** | NGOÀI | 🔴 **Chặn `V0.1`, và `V0.1` chặn cả mốc phát.** Làm đầu tiên. |
-| **Hai điện thoại thật để quét QR** | NGƯỜI | 🔴 Chặn `V0.2`. Kết quả quyết định thiết kế nút mời ở `V3.2`. |
-| **Gọi 5 phụ huynh vừa nghỉ** | NGƯỜI | Không chặn dòng code nào. **Nhưng mục tiêu cả dự án là giữ chân mà chưa ai đo vì sao họ đi** — lý do có thể chẳng liên quan gì tới thứ đang xây. |
-| **Gọi đội dev app chủ 30 phút** | NGƯỜI | Họ sẽ bảo trì hệ này mà chưa ai hỏi họ có nhận không. React bản mấy · có Tailwind không · lead đi vào đâu. |
-| **Chữ ký chuyên môn cho nội dung về trẻ** | NGOÀI | Chủ dự án đã chốt phát trước khi có chữ ký (28/08/2026). `V4.1` là bảo hiểm cho quyết định đó. |
-| **Duyệt câu chữ trang A4** | NGƯỜI | Chặn `V4.3`. |
-
----
-
-## 🏁 ĐIỀU KIỆN DỪNG — đặt TRƯỚC khi có dữ liệu
-
-> Đặt bây giờ, lúc chưa ai gắn bó với kết quả. Không có mốc này thì **kết quả nào cũng đọc
-> ra được thành "cần làm đẹp thêm chút nữa"**.
+## 🏁 ĐIỀU KIỆN DỪNG — giữ nguyên, không sửa sau khi thấy kết quả
 
 Sau khi phát cho 30 gia đình, đọc hai con số ở `?so-lieu=1`:
 
@@ -455,21 +378,18 @@ Sau khi phát cho 30 gia đình, đọc hai con số ở `?so-lieu=1`:
   người kia không làm được — sửa tiếp, và biết rõ sửa chỗ nào.
 - **Bấm mời ≈ 0** ⇒ lỗi ở **giả định**, không phải phần mềm. Giả định đỡ 9,5 ngày của GĐ14
   (*một phụ huynh triệu tập được ≥2 người*) hiện có **0 quan sát ủng hộ và 1 quan sát phản
-  bác**. Bằng 0 sau 30 máy thật thì **dừng, đừng tiêu thêm ngày nào** — thứ cần xem lại là
-  giả định.
+  bác**. Bằng 0 sau 30 máy thật thì **dừng, đừng tiêu thêm ngày nào**.
 
 ---
 
-## TỔNG ƯỚC LƯỢNG
+## TỔNG ƯỚC LƯỢNG GĐ16
 
 | Giai đoạn | Máy | Người / Ngoài |
 | --- | --- | --- |
-| V0 — giết ba rủi ro | 0,5 ngày | 1 buổi (tài khoản host, 2 điện thoại) |
-| V1 — bố mẹ vào được bài | 1 ngày | — |
-| V2 — ba bước | 1,5 ngày | — |
-| V3 — bước 3 + rủ người | 1,5 ngày | — |
-| V4 — bảo hiểm | 1 ngày | 1 giờ duyệt câu chữ |
-| V5 — dọn và chốt | 0,5 ngày | — |
-| **Tổng** | **~6 ngày máy** | **~1 buổi + 1 giờ** |
+| 16A — lỗi thật + gộp hai bước | 1,5 ngày | — |
+| 16B — PDF · khôi phục · tách tầng | 2,5 ngày | chọn font (SIL OFL) |
+| 16C — giao diện + di động | 3 ngày | — |
+| **Tổng** | **~7 ngày máy** | |
 
-Kịp mốc 1–2 tuần, với điều kiện **tài khoản host có trong 2 ngày đầu**.
+🔴 **Vẫn chặn ngày phát, không đổi:** `V0.1` tài khoản host + tên miền · `V0.2` hai điện
+thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va-sale.md`.

@@ -36,6 +36,12 @@ lấy kiểu từ `core/bo-de/kieu.ts` (QĐ5).
 
 ## 5. Trạng thái
 
+
+🔴 **Cập nhật 28/08/2026.** Thêm `laBanPhanTichHopLe()` — kiểm hình dạng một bản phân tích
+ĐÃ LƯU trước khi vẽ lại. `PhanTichGiaDinh.noiDung` khai kiểu `unknown` có chủ đích (kho
+không biết gì về hình dạng nội dung, và đó là điều đúng), nên ép kiểu bừa lúc mở lại thư
+mục cũ là đường thẳng tới một TRANG TRẮNG: bản ghi từ phiên bản trước có thể thiếu trường,
+và React đọc `undefined.latCat` không phải là một lời báo lỗi.
 Xong GĐ9. **GĐ10 chặng 1 đang dở** — xem `PLAN.md` mục BÀN GIAO. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
 
 **GĐ9 thêm hai đường ra khỏi module này, đừng nhầm chúng với nhau:**

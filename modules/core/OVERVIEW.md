@@ -43,7 +43,13 @@ Chỉ đọc `config/`. Không import `modules/test` hay `modules/report`.
 
 ## 5. Trạng thái
 
-Xong (27/08/2026, gồm GĐ9). Không còn việc dở. Chi tiết tiến độ: `PLAN.md` mục BÀN GIAO.
+Xong (28/08/2026, gồm GĐ9 và luồng ba bước). Không còn việc dở.
+Tiến độ + bàn giao: **`PLAN_V2.md`** (sổ cũ đổi tên thành `PLAN_V1_LUU.md`).
+
+🔴 **Kho lên v2 BA BẢNG** (`bai-lam` · `thanh-vien` · `phan-tich-gia-dinh`).
+`PHIEN_BAN_KHO` nay **xuất ra ngoài** để bộ sinh dữ liệu mẫu mở kho bằng đúng số đó —
+gõ lại con số ấy chính là lỗi làm bộ nạp mẫu chết lặng suốt từ GĐ12.
+Thêm `xoaSachPhanTich()` và `xoaSachTatCa()` (dọn cả ba bảng).
 
 🔴 **GĐ9 thêm `tuoi`/`banKhoan` vào `BaiLamLuu`, và bắt đầu GHI `lop`** (trường này khai
 từ GĐ0 mà chưa từng có nơi nào ghi). Mọi trường mới đều tuỳ chọn và **không nâng version
@@ -53,6 +59,18 @@ im lặng cả tính năng lưu. Thêm trường mới thì PHẢI thêm vào `K
 
 ## 6. Cạm bẫy đã trả giá
 
+- 🔴 **NÚT "XOÁ SẠCH" TỪNG DỌN THIẾU HAI PHẦN BA DỮ LIỆU** (28/08/2026). Nó gọi
+  `xoaSach()` — chỉ dọn bảng BÀI. Tên từng người (`thanh-vien`) và các bản phân tích
+  (`phan-tich-gia-dinh`) vẫn nằm nguyên, trong khi người bấm tin là mình vừa xoá sạch máy.
+  Kho lên v2 ba bảng ở GĐ12 mà nút xoá không ai đụng tới. Đây không phải chuyện dọn dẹp mà
+  là chuyện RIÊNG TƯ: kho v2 giữ TÊN THẬT (ADR-005), và luật máy demo của giáo viên/sale
+  dựa thẳng vào nút này. **Thêm một bảng thì phải đi hỏi MỌI hàm nói "tất cả" xem chúng có
+  biết bảng mới không** — và câu xác nhận cũng phải nói lại đúng thứ sắp mất.
+  Nay dùng `xoaSachTatCa()`, có `tests/luu-tru.test.ts` canh.
+- 🔴 **Kho ghi xong mà KHÔNG ai được báo** (28/08/2026, đang sửa ở `16.1`). `baoTabKhac()`
+  chỉ được gọi từ hai hàm dọn hạn mức; mọi lệnh ghi bình thường đều không phát tín hiệu.
+  Và `BroadcastChannel` **không gửi về chính ngữ cảnh đã đăng tin**, nên tab đang mở không
+  bao giờ tự biết — người dùng phải F5.
 - **`saoLuuTatCa()` không có tham số lọc** — thêm một tham số `boDe?` là mở lại đúng cái
   bẫy đã cắn dự án trước: nút Sao lưu đọc danh sách đang hiển thị, file tải về thiếu mà
   trông vẫn đủ. Có test canh chữ ký hàm.
