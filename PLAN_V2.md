@@ -4,18 +4,20 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**28/08/2026 (lượt 4) — GĐ18 THI CÔNG XONG PHẦN MÁY, CHỜ CHỦ DỰ ÁN BẤM THỬ.**
+**28/08/2026 (lượt 4) — GĐ18 XONG TRỌN PHẦN MÁY, 9/9 ô đã tick. Chờ bấm thử bằng mắt.**
 
 **1. Vừa xong.** GĐ18 `18.1`–`18.9` + bản vá **hai nút sao lưu ra hai thứ khác nhau**.
 **1.387 test xanh** (từ 1.366; +21 cửa mới ở `khoi-giu-du-lieu` và `do-noi`), `npm run kiem`
 + `build` xanh, gói chính **vẫn 290 KB gzip** (trần 300 — bóng đổ là CSS, không tốn JS).
 
-**2. Đang dở.** 🔴 **GĐ18 `18.1`–`18.9` đã viết xong mã và MỌI CỬA KIỂM XANH, nhưng
-CHÍN Ô VẪN CHƯA TICK** — luật tick của sổ này là *"(b) đã bấm thật VÀ (c) đã xanh"*, mà (b)
-là thao tác tay của chủ dự án thì chưa ai làm. Đây không phải sơ suất: dự án đã trả giá đắt
-nhất một phiên (GĐ9) vì một ô tick ✅ trong khi chưa làm đúng thứ đặc tả đòi. **Bấm thử theo
-danh sách ở DEMO CUỐI của 18A/18B/18C rồi mới tick.**
-Ngoài ra sổ còn hai ô cũ `V0.1`, `V0.2` — cả hai chờ người, GĐ18 không gỡ được ô nào.
+**2. Đang dở.** 🟢 **HẾT VIỆC MÁY.** Chín ô `18.1`–`18.9` đã tick sau một lượt soát
+**29 điểm trên mã thật** (không tick theo trí nhớ). Lượt soát đó bắt được một chỗ còn dở
+thật — nút *Quay lại câu trước* trong bài chưa có độ nổi, vì script sửa hàng loạt chỉ bắt
+nút chữ trắng; đã vá rồi mới tick.
+Sổ còn đúng **HAI** ô: `V0.1`, `V0.2` — cả hai chặn bởi NGƯỜI/NGOÀI, GĐ18 không gỡ được ô nào.
+
+⚠️ **Tick này xác nhận PHẦN MÁY, chưa phải phần mắt.** Chủ dự án bấm thử theo danh sách ở
+DEMO CUỐI của 18A/18B/18C — nếu có gì lệch thì đó là việc của GĐ19, không phải mở lại ô.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
 `V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · duyệt
@@ -719,7 +721,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
 
 ---
 
-- [ ] **18.1 — Đổi chữ nút Xoá + thêm màu đỏ vào bảng màu**
+- [x] **18.1 — Đổi chữ nút Xoá + thêm màu đỏ vào bảng màu**
   - **(a)** [disc-tu-dien.ts:689](config/disc-tu-dien.ts#L689) `nutXoaSach` → `"Xoá sạch DISC
     trên máy này"`; sửa kèm `docs/BA/DISC_BA.md:803` cho khỏi lệch tài liệu. Thêm
     `doCanhBao: "#B3261E"` vào `MAU` ở [thuong-hieu.ts](config/thuong-hieu.ts) — **đo được
@@ -732,7 +734,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
     phải **xanh** (mọi test đi qua hằng `CHU_M6.nutXoaSach` nên hai đầu đổi cùng lúc).
   - **(d)** 0,15 ngày.
 
-- [ ] 🔴 **18.2 — RỦI RO CAO: tách `KhoiGiuDuLieu` và dời ra chân trang**
+- [x] 🔴 **18.2 — RỦI RO CAO: tách `KhoiGiuDuLieu` và dời ra chân trang**
   - **(a)** Bốn bước, **theo đúng thứ tự này**, vì nó giữ cho 10 cửa không đỏ một giây nào:
     **(1)** Tạo `app/components/khoi-giu-du-lieu.tsx` → `KhoiGiuDuLieu({ onDonKho })`, chép
     nguyên bốn state (:63,64,66,67), bốn hàm (:150-221) **kèm cả hai khối chú thích 🔴
@@ -768,7 +770,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
     cố tình bỏ `vi.doMock` để thấy nó ĐỎ, rồi mới tin nó xanh.
   - **(d)** 0,6 ngày.
 
-- [ ] **18.3 — Bảy cửa kiểm cho khối mới**
+- [x] **18.3 — Bảy cửa kiểm cho khối mới**
   - **(a)** `tests/khoi-giu-du-lieu.test.tsx`: **G1** nút Xoá là `<button>` **có viền**,
     `bg-white`, `min-h-[44px]`, `borderColor` khớp `MAU.doCanhBao` · **G2** đủ **ba** nút,
     đếm bằng `textContent` của `[data-thu="hang-nut"]` chứ **không** `getAllByRole("button")`
@@ -802,7 +804,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
 
 ---
 
-- [ ] 🔴 **18.4 — RỦI RO CAO: chặn bóng khi in, TRƯỚC khi thêm bóng nào**
+- [x] 🔴 **18.4 — RỦI RO CAO: chặn bóng khi in, TRƯỚC khi thêm bóng nào**
   - **(a)** Thêm `* { box-shadow: none !important; }` vào **cuối** khối `@media print` của
     [globals.css](app/globals.css). Đây là **ngoại lệ duy nhất** cho lệnh *"đừng đụng khối
     print"*, và là phần **thêm**, không sửa dòng nào đang có.
@@ -813,7 +815,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
   - **(c)** `npx vitest run tests/ban-in.test.ts` — phải xanh.
   - **(d)** 0,1 ngày.
 
-- [ ] **18.5 — Sáu token độ nổi + áp cho khối bằng `data-thu`**
+- [x] **18.5 — Sáu token độ nổi + áp cho khối bằng `data-thu`**
   - **(a)** Trong `@theme` của [globals.css](app/globals.css): `--shadow-noi-1` (khối tĩnh) ·
     `--shadow-noi-2` (bấm được / đang mở) · `--shadow-noi-3` (panel trên lớp phủ) ·
     `--shadow-lun` (`inset`, cho `:active`) · `--shadow-nut-chinh` (có
@@ -836,7 +838,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
   - **(c)** Cả bộ (đặc biệt `bo-cuc` · `be-ngang` · `mau-va-chuyen-dong`).
   - **(d)** 0,5 ngày.
 
-- [ ] **18.6 — Cửa kiểm cho hệ độ nổi**
+- [x] **18.6 — Cửa kiểm cho hệ độ nổi**
   - **(a)** `tests/do-noi.test.tsx`: sáu token tồn tại (gồm `--shadow-*: initial`) ·
     🔴 **cửa hai chiều** — mọi token khai ra phải có nơi dùng, **và** mọi class
     `shadow-<tên>` trong `app/` phải có token tương ứng · cấm `shadow-[` (arbitrary) và
@@ -866,7 +868,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
 
 ---
 
-- [ ] 🔴 **18.7 — RỦI RO CAO: `NutQuayLai`, làm chỗ khoá nhãn TRƯỚC**
+- [x] 🔴 **18.7 — RỦI RO CAO: `NutQuayLai`, làm chỗ khoá nhãn TRƯỚC**
   - **(a)** Tạo `app/components/nut-quay-lai.tsx` → `NutQuayLai({ nhan, onBam, khongIn?,
     themLop? })`. Từ *chữ gạch chân* thành **chip có hình khối**: nền trắng · viền `1.5px`
     tím · chữ tím `font-semibold` 14px (nâng từ 13) · `rounded-xl` · `min-h-[44px] px-4` ·
@@ -889,7 +891,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
     component thay vì chờ một test luồng xa phát hiện.
   - **(d)** 0,4 ngày.
 
-- [ ] **18.8 — Sáu chỗ lùi lại còn lại + nút lùi trong bài + thanh bên**
+- [x] **18.8 — Sáu chỗ lùi lại còn lại + nút lùi trong bài + thanh bên**
   - **(a)** Di dời sang `NutQuayLai`: [nha-minh.tsx:245](app/khoang/nha-minh.tsx#L245) ·
     [nha-minh.tsx:226](app/khoang/nha-minh.tsx#L226) ·
     [ban-tong-hop.tsx:172](app/khoang/ban-tong-hop.tsx#L172) ·
@@ -913,7 +915,7 @@ thoại thật để quét QR · duyệt câu chữ `docs/huong-dan-giao-vien-va
     `nut-ket-qua.tsx:53`.
   - **(d)** 0,35 ngày.
 
-- [ ] **18.9 — Rải chuỗi lún cho nút chính và nút phụ**
+- [x] **18.9 — Rải chuỗi lún cho nút chính và nút phụ**
   - **(a)** ~17 nút, thuần thay chuỗi `className`. Nút chính (nền tím đặc) dùng
     `shadow-nut-chinh` + `disabled:shadow-none` — một nút mờ 60% mà vẫn nổi khối là nói dối
     rằng nó bấm được. Nút phụ (viền tím, nền trắng) dùng `shadow-noi-1`. **Thang trả lời**

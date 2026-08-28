@@ -256,7 +256,11 @@ export function LamBai({
         <button
           type="button"
           onClick={lui}
-          className="min-h-[48px] rounded-xl border border-neutral-300 px-5 text-[15px] font-medium text-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2"
+          /* 🔴 GIỮ VIỀN XÁM, KHÔNG cho viền tím như `NutQuayLai` (18.8). Nút này đứng ngay
+             cạnh nút *Tiếp* nền tím; cho nó viền tím nữa là hai nút tím sát nhau, và đứa
+             trẻ phải ĐỌC CHỮ mới biết cái nào đi tiếp. Nó vẫn được độ nổi và lún khi bấm —
+             thứ thiếu là màu, không phải hình khối. */
+          className="min-h-[48px] rounded-xl border border-neutral-300 bg-white px-5 text-[15px] font-medium text-neutral-800 shadow-noi-1 transition-[box-shadow,transform] duration-150 hover:shadow-noi-2 active:translate-y-px active:shadow-lun motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2"
           style={{ outlineColor: MAU.timCongNghe }}
         >
           {CHU_LAM_BAI.nutQuayLai}
