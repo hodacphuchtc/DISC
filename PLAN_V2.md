@@ -2,45 +2,39 @@
 
 ## BÀN GIAO PHIÊN GẦN NHẤT
 
-> 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng.
+> 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**Phiên 28/08/2026 (lượt 3) — GĐ16 VÀ GĐ17 xong trọn. Sổ này HẾT VIỆC MÁY.**
+**28/08/2026 (lượt 3) — GĐ16 + GĐ17 xong trọn. `PLAN_V2.md` HẾT VIỆC MÁY.**
 
-**1. Vừa xong.** GĐ17 `17.1`→`17.7`, ba đợt 17A/17B/17C. **1.366 test xanh** ·
-`npm run kiem` + `npm run build` xanh · gói chính **290 KB gzip** (trần 300).
-Sổ còn đúng **HAI** ô chưa tick: `V0.1` và `V0.2`, cả hai chặn bởi NGƯỜI/NGOÀI.
+**1. Vừa xong.** GĐ17 `17.1`–`17.7`. **1.366 test xanh**, `npm run kiem` + `build` xanh,
+gói chính **290 KB gzip** (trần 300). Đã push `814cb40`, CI xanh.
 
-**2. Đang dở.** Không còn việc máy nào trong sổ này.
+**2. Đang dở.** Không còn hạng mục máy nào. Sổ còn hai ô: `V0.1`, `V0.2` — cả hai chờ người.
 
-**3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` tài khoản Cloudflare + tên miền (chặn ngày phát) ·
-`V0.2` hai điện thoại thật quét QR · hai chữ ký chuyên môn · duyệt câu chữ
+**3. Chặn ở NGƯỜI / NGOÀI.** `V0.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
+`V0.2` hai điện thoại quét QR · hai chữ ký chuyên môn · duyệt
 `docs/huong-dan-giao-vien-va-sale.md` · gọi đội dev app chủ · gọi 5 phụ huynh vừa nghỉ.
 
 **4. ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- 🔴 **jsPDF TỰ CẮT FONT.** Sinh 42 tệp PDF (trường hợp xấu nhất) mất **0,48 giây**, gói
-  `.zip` **2,65 MB**; một tệp chỉ **48 KB — nhỏ hơn chính tệp font gốc 130 KB**. Nỗi lo
-  "mỗi tệp cõng trọn 133 KB font" là lo hão. `tests/chi-phi-pdf.test.ts` ghim lại cả hai
-  con số. **Đừng thêm thanh tiến trình đếm từng tệp** — nửa giây thì không ai kịp thấy.
-- 🔴 **Trần 2 bài/người + hộp thoại cảnh báo ĐÃ CÓ TỪ GĐ12**, đừng xây lại. Ở ý "xem lại
-  bản cũ" chỉ thiếu cái NÚT CHUYỂN, và nó đã làm ở `17.2`.
-- **Tệp `.zip` nay có BA đời** — v1 (`bai/`), v2 (`du-lieu/`, sinh ngày 28/08 lượt 2),
-  v3 (`_may-doc/`). `docTuZip()` đọc được cả ba; `tests/khoi-phuc.test.ts` canh.
-- **jsdom có HAI REALM.** `new TextEncoder().encode()` trả một `Uint8Array` mà
-  `instanceof` bên trong JSZip **trượt** — JSZip ném *"Can't read the data of …"*, câu báo
-  lỗi không hề nhắc tới realm. Fixture phải dùng `Uint8Array.from()`. Sản phẩm thật chạy
-  trong trình duyệt một realm nên **không dính**.
-- **jsdom KHÔNG có bộ dựng layout** — `offsetWidth` luôn 0. Mọi test đo pixel ở đó là cửa
-  kiểm giả. `tests/bo-cuc.test.tsx` và `tests/be-ngang.test.tsx` vì thế soi LỚP CSS.
-- **Bề rộng gom hết về `config/bo-cuc.ts`.** Không màn nào còn gõ cứng `max-w-3xl`, và có
-  cửa canh chiều ngược lại: bốn màn đọc-và-trả-lời PHẢI giữ khung hẹp.
+- 🔴 **jsPDF TỰ CẮT FONT.** 42 tệp PDF (xấu nhất) = **0,48 giây / 2,65 MB**; một tệp 48 KB,
+  *nhỏ hơn* tệp font gốc 130 KB. `tests/chi-phi-pdf.test.ts` ghim hai con số.
+  ⇒ **Đừng thêm thanh tiến trình đếm tệp** — nửa giây không ai kịp thấy.
+- 🔴 **Trần 2 bài/người + hộp thoại cảnh báo CÓ TỪ GĐ12**, đừng xây lại
+  (`hop-thoai-han-muc.tsx`, `chonBaiPhaiXoa()`).
+- **Tệp `.zip` có BA đời** (v1 `bai/` · v2 `du-lieu/` · v3 `_may-doc/`); `docTuZip()` đọc
+  cả ba. Chi tiết: `modules/core/OVERVIEW.md` mục 6.
+- **jsdom KHÔNG có bộ dựng layout** (`offsetWidth` luôn 0) và **có HAI realm**. Mọi cửa
+  kiểm đo pixel ở đó là cửa giả. Chi tiết ở `CLAUDE.md` mục *Cạm bẫy*.
+- **Bề rộng gom hết về `config/bo-cuc.ts`**; `tests/bo-cuc.test.tsx` canh **cả hai chiều**
+  — nới cái cần nới, VÀ giữ khung hẹp cho bốn màn đọc-và-trả-lời.
 
-**5. Cạm bẫy vừa trả giá.** Đã ghi vào mục *CẢNH BÁO / CẠM BẪY* của `CLAUDE.md`.
+**5. Cạm bẫy vừa trả giá.** Ghi ở `CLAUDE.md` mục *CẢNH BÁO / CẠM BẪY* (3 bài mới) và
+`modules/core/OVERVIEW.md` mục 6 (miền lưu trữ). Không chép lại ở đây.
 
 **6. Lệnh phiên sau nên chạy.**
 ```bash
-npm run kiem            # 1.366 test; máy tải nặng thì npx vitest run --maxWorkers=2
-npm run build           # có sẵn cửa canh cỡ gói ở cuối
-npm run xem-thu         # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
+npm run kiem      # 1.366 test; máy tải nặng thì npx vitest run --maxWorkers=2
+npm run xem-thu   # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
 ```
 
 ---

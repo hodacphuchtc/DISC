@@ -65,48 +65,21 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V2.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
-### 🟢 ĐÃ XONG — luồng ba bước (15) · GĐ16 (9) · GĐ17 (7)
+### 🟢 HẾT VIỆC MÁY — luồng ba bước (15) · GĐ16 (9) · GĐ17 (7)
 
 **1.366 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 290 KB gzip**
-(trần 300; nền cũ 282). Sổ `PLAN_V2.md` còn đúng **HAI** ô chưa tick — `V0.1` và `V0.2` —
-và cả hai chặn bởi NGƯỜI/NGOÀI. **Không còn việc máy nào trong sổ này.**
+(trần 300; nền cũ 282). Đã push `814cb40`, CI xanh.
 
-**GĐ17 thêm vào sản phẩm** (chủ dự án bấm thử bản thật rồi nêu ba việc):
-- **Xem lại được LẦN ĐO TRƯỚC** (`17.2`) — người có 2 bài thì màn kết quả có dải chọn hai
-  bản, nhãn có ngày VÀ giờ. 🔴 Chỉ cho XEM lần lượt, **không** so sánh: sàn 90 ngày giữ
-  nguyên. (Trần 2 bài + hộp thoại cảnh báo thì đã có từ GĐ12, không xây lại.)
-- **Tệp `.zip` mở ra là ĐỌC ĐƯỢC** (`17.3`–`17.5`) — thư mục mang **tên từng người**, bên
-  trong 1–2 tệp PDF bản đầy đủ; thư mục **Tổng hợp** chia theo ngày giờ từng lần phân tích
-  (tối đa 5); JSON chìm xuống `_may-doc/` kèm tệp *ĐỌC TRƯỚC.txt*. Nút *Khôi phục* đọc
-  được **cả ba đời tệp**.
-- **Máy tính hết thừa hai phần ba màn** (`17.6`–`17.7`) — lưới thẻ 3–4 cột, bản phân tích
-  hai cột, màn kết quả hai cột ở nửa trên. 🔴 **Đoạn văn và màn làm bài GIỮ khung hẹp**, có
-  cửa canh chiều đó.
+Sổ `PLAN_V2.md` còn đúng **HAI** ô chưa tick — `V0.1` (host + tên miền) và `V0.2` (hai
+điện thoại quét QR) — **cả hai chặn bởi NGƯỜI/NGOÀI, không phải bởi máy.**
 
-Luồng ba bước: `V0.3` · `V1.1`–`V1.4` · `V2.1`–`V2.2` · `V3.1`–`V3.3` · `V4.1`–`V4.3` ·
-`V5.1`–`V5.2`. GĐ16: `16.1`–`16.9`, ba đợt 16A/16B/16C.
+🔴 **Danh sách tính năng KHÔNG chép vào đây** — nó nằm nguyên ở các ô ✅ của `PLAN_V2.md`
+(luồng ba bước · GĐ16 · GĐ17) và `PLAN_V1_LUU.md` (GĐ0–GĐ14). Chép sang đây là dựng bản
+sao thứ hai, và hai bản chỉ lệch vào đúng ngày ai đó sửa một bên.
 
-**GĐ16 thêm vào sản phẩm:**
-- **Kho tự báo mọi thay đổi, kể cả trong CÙNG một tab** (`16.1`) — làm xong bài, bấm quay
-  lại, thẻ đổi số ngay, không F5. Hook `useKhoDoi()` thay ba chỗ tự gõ `BroadcastChannel`.
-- **HAI bước thay ba** (`16.2`) — nút *Làm bài* nằm ngay trên thẻ vừa tạo; *Xoá* đứng cuối
-  cụm nút, xa nhất khỏi thứ ngón tay rơi vào theo phản xạ.
-- **Ô chọn bản có GIỜ** (`16.3`) — hai bài cùng ngày không còn hiện lên hai dòng giống hệt
-  nhau. Logic *"mặc định bài mới nhất"* đã đúng sẵn, chỉ khoá lại bằng test.
-- **Giao diện `KhoDisc`** (`16.4`) — đội dev app chủ viết một bản dựng gọi server của họ,
-  gọi `datKho()` một lần lúc khởi động, **không sửa một dòng giao diện nào**.
-- **Nút KHÔI PHỤC từ `.zip`** (`16.5`) — hai pha: đọc-kiểm → hỏi kèm cả hai con số → mới
-  ghi. Và bản sao lưu nay chứa **đủ ba bảng** (xem mục cạm bẫy).
-- **PDF mỗi người một tệp** (`16.6`, ADR-009) — `jspdf` nạp lười + font Việt SIL OFL.
-- **Bộ minh hoạ, màu nhóm trên thẻ, chuyển động tắt được** (`16.7`, `16.8`).
-- **Dải hẹp 320px** (`16.9`) — thanh bên thu một dòng trên điện thoại.
-
-🔴 **Đã sửa một LỖI CHẶN THẬT tồn từ GĐ12 (từ đợt trước):** `boDeCuaThanhVien()` chỉ đọc `tv.lop` rồi
-`Number()`, không đọc `vaiTro`. Bố mẹ (không có lớp) và trẻ mầm non (`Number("mam-non")`
-ra `NaN`) đều bị đá về màn *"Ai đang cầm máy?"* — tức là **đúng nhóm người mà GĐ11–GĐ14
-xây cho lại là nhóm không vào được bài của chính mình.** Lỗi thứ hai cùng chỗ: hàm đó vứt
-luôn `giaiThich`, nên em lớp 1–2 vào từ thẻ bị chuyển sang bản quan sát **không một chữ
-giải thích**, trái `DISC_BA.md` §4.2. Cả hai đã sửa, có test canh.
+**Ba việc GĐ17 vừa gỡ**, để người đọc biết sản phẩm hôm nay khác hôm qua chỗ nào: xem lại
+được **lần đo trước** · tệp `.zip` **mở ra là đọc được** (thư mục theo tên người + *Tổng
+hợp*, JSON chìm xuống `_may-doc/`) · **máy tính hết thừa hai phần ba màn**.
 
 ### ĐÃ XONG TRƯỚC ĐÓ — GĐ0–GĐ14, 68/68 hạng mục
 
@@ -229,6 +202,9 @@ lại là giả định, không phải phần mềm.**
 
 > Bài học riêng của miền BÁO CÁO (chấm điểm · diễn giải · Canvas · bản in) nằm ở
 > `modules/report/OVERVIEW.md` mục 6. Dưới đây chỉ giữ bài học TOÀN HỆ.
+
+> Bài học riêng của miền LƯU TRỮ (kho · sao lưu · khôi phục · hạn mức · ba đời tệp `.zip`)
+> nằm ở `modules/core/OVERVIEW.md` mục 6 — **đừng chép lại vào đây**.
 
 - 🔴 **jsdom CÓ HAI REALM, VÀ CÂU BÁO LỖI KHÔNG HỀ NHẮC TỚI ĐIỀU ĐÓ** (28/08/2026,
   `17.4`). Fixture dựng bằng `new TextEncoder().encode()` cho ra một `Uint8Array` mà phép
