@@ -10,14 +10,15 @@
  * 🔴 Mọi tên là BỊA.
  */
 
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import JSZip from "jszip";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { NhacSaoLuu } from "../app/components/nhac-sao-luu";
 import { KhoangNhaMinh } from "../app/khoang/nha-minh";
-import { CHU_M6 } from "../config/disc-tu-dien";
+import { CHU_M6, CHU_NHAC_SAO_LUU } from "../config/disc-tu-dien";
 import { THU_MUC_MAY_DOC, THU_MUC_TONG_HOP } from "../modules/core/luu-tru/cay-sao-luu";
 import { DUONG_FONT, quenFontDaTai } from "../modules/report/xuat-pdf";
 import {
@@ -281,4 +282,85 @@ describe("🔴 bấm Sao lưu ⇒ cây thư mục đọc được", () => {
     expect(duong(zip).some((t) => t.startsWith(`${THU_MUC_MAY_DOC}/`))).toBe(true);
     expect(duong(zip).filter((t) => t.endsWith(".pdf"))).toEqual([]);
   }, 60_000);
+});
+
+/**
+ * 🔴 CỬA CANH SINH RA TỪ MỘT LỖI ĐÃ RA TỚI TAY NGƯỜI DÙNG (28/08/2026).
+ *
+ * Sản phẩm có HAI nút sao lưu. Cửa kiểm phía trên soi rất kỹ cây thư mục — nhưng nó chỉ
+ * `render(<KhoangNhaMinh />)`, tức là đứng canh MỘT trong HAI cánh cửa và im lặng về cánh
+ * kia. Nút trong hộp nhắc (V4.2) viết TRƯỚC khi PDF vào tệp sao lưu (GĐ16–GĐ17), và khi
+ * PDF vào thì không ai quay lại hỏi nó: nó vẫn gọi `saoLuuTatCa()`, đẩy xuống một tệp
+ * `.zip` **toàn JSON**. Chủ dự án bấm đúng cái nút tự bật lên trước mặt mình.
+ *
+ * Cùng một họ với hai lỗi đã trả giá trong tuần: nút *Xoá sạch* dọn thiếu hai phần ba
+ * bảng (`V3.1`), và `saoLuuTatCa()` đọc thiếu bảng (`16.5`). **Thêm một lối vào cho một
+ * việc thì phải đi hỏi lại MỌI lối vào khác của việc đó.**
+ */
+describe("🔴 HAI nút sao lưu phải ra ĐÚNG MỘT thứ", () => {
+  /** Bấm nút trong hộp nhắc sao lưu và chờ tệp .zip rơi ra. */
+  async function bamNutTrongHopNhac(): Promise<JSZip> {
+    render(<NhacSaoLuu hien onDong={() => {}} />);
+    fireEvent.click(await screen.findByRole("button", { name: CHU_NHAC_SAO_LUU.nut }));
+    await waitFor(() => expect(daTai).not.toBeNull(), { timeout: 30_000 });
+    return JSZip.loadAsync(daTai!.duLieu);
+  }
+
+  it("🔴 cùng một nhà ⇒ hai nút cho ra DANH SÁCH TỆP GIỐNG HỆT NHAU", async () => {
+    await dungNha();
+
+    const cayBuoc1 = duong(await bamSaoLuu()).sort();
+    cleanup();
+    daTai = null;
+    const cayHopNhac = duong(await bamNutTrongHopNhac()).sort();
+
+    // So cả danh sách chứ không chỉ đếm: thiếu một thư mục người vẫn có thể trùng số tệp.
+    expect(cayHopNhac).toEqual(cayBuoc1);
+  }, 120_000);
+
+  it("🔴 nút trong hộp nhắc có thư mục mang TÊN NGƯỜI và có PDF", async () => {
+    await dungNha();
+    const cay = duong(await bamNutTrongHopNhac());
+
+    // Đây chính là điều chủ dự án KHÔNG thấy: tên người, PDF, và thư mục Tổng hợp.
+    expect(cay.some((t) => t.startsWith("Mẹ Lan/"))).toBe(true);
+    expect(cay.some((t) => t.startsWith("Zozo/"))).toBe(true);
+    expect(cay.filter((t) => t.endsWith(".pdf")).length).toBeGreaterThan(0);
+    expect(cay.some((t) => t.startsWith(`${THU_MUC_TONG_HOP}/`))).toBe(true);
+  }, 60_000);
+
+  /**
+   * 🔴 CỬA ĐỌC THẲNG MÃ NGUỒN. Hai cửa trên kiểm HÀNH VI của hai nút đang có; cửa này
+   * chặn cái nút THỨ BA mà ai đó thêm vào tháng sau. Không có nó thì bài học này chỉ sống
+   * đúng tới lần thêm nút tiếp theo.
+   */
+  it("🔴 KHÔNG file giao diện nào được tự nhập hàm sao lưu — phải đi qua `app/tai-sao-luu.ts`", () => {
+    const CUA_CHUNG = join("app", "tai-sao-luu.ts");
+
+    /**
+     * 🔴 SOI CÂU `import`, KHÔNG SOI LỜI GỌI. Bản đầu của cửa này tìm `saoLuuTatCa(`
+     * trong toàn văn và lập tức bắt trúng… chính dòng BÌNH LUẬN dặn "đừng gọi
+     * saoLuuTatCa()" ở `nhac-sao-luu.tsx`. Cùng họ với hai lần đã trả giá: biệt danh
+     * "Bi" khớp vào chữ "Biệt danh" (11.6), và `endsWith("ket-qua.tsx")` khớp
+     * `chon-ban-ket-qua.tsx` (17.7). Câu `import` thì không lẫn được với văn xuôi.
+     */
+    const NHAP_HAM_SAO_LUU =
+      /import\s*\{[^}]*\bsaoLuuTatCa(?:KemTep)?\b[^}]*\}\s*from\s*["'][^"']*luu-tru\/sao-luu["']/u;
+    const pham: string[] = [];
+
+    const quet = (thuMuc: string) => {
+      for (const m of readdirSync(join(process.cwd(), thuMuc), { withFileTypes: true })) {
+        const duong = join(thuMuc, m.name);
+        if (m.isDirectory()) quet(duong);
+        else if (/\.tsx?$/u.test(m.name) && duong !== CUA_CHUNG) {
+          if (NHAP_HAM_SAO_LUU.test(readFileSync(join(process.cwd(), duong), "utf8"))) {
+            pham.push(duong);
+          }
+        }
+      }
+    };
+    quet("app");
+
+    expect(pham).toEqual([]);
+  });
 });

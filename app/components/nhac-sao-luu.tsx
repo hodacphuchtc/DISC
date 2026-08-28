@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 
 import { CHU_NHAC_SAO_LUU, KHOA_DA_NHAC_SAO_LUU } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
-import { TEN_TEP_SAO_LUU, saoLuuTatCa } from "@modules/core/luu-tru/sao-luu";
-import { taiXuong } from "@modules/core/luu-tru/tai-ve";
+import { taiBanSaoLuuVeMay } from "@/app/tai-sao-luu";
 
 /** Đã nhắc lần nào chưa. localStorage bị chặn thì coi như CHƯA — thà nhắc thừa còn hơn sót. */
 export function daNhacSaoLuu(): boolean {
@@ -62,8 +61,11 @@ export function NhacSaoLuu({
   async function tai() {
     datTrangThai("dangTai");
     try {
-      const { duLieu } = await saoLuuTatCa(new Date().toISOString());
-      datTrangThai(taiXuong(duLieu, `${TEN_TEP_SAO_LUU}.zip`) ? "xong" : "hong");
+      // 🔴 ĐI QUA CỬA DÙNG CHUNG, KHÔNG TỰ GỌI `saoLuuTatCa()`. Nút này từng tự gọi hàm
+      // đó và vì thế đẩy xuống một tệp .zip TOÀN JSON — không thư mục tên người, không
+      // PDF — trong khi nút ở bước 1 thì đủ. Người dùng bấm đúng cái nút tự bật lên
+      // trước mặt mình nên nhận đúng bản thiếu. Vì sao đầy đủ: `app/tai-sao-luu.ts`.
+      datTrangThai((await taiBanSaoLuuVeMay()) ? "xong" : "hong");
     } catch {
       datTrangThai("hong");
     }

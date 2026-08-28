@@ -426,7 +426,7 @@ export const CHU_NHAC_SAO_LUU = {
   nut: "Tải bản sao lưu về máy",
   nutBoQua: "Để sau",
   daTai: "Đã tải về máy.",
-  loiTai: "Chưa tải về được. Bạn thử lại bằng nút Sao lưu ở bước 1 nhé.",
+  loiTai: "Chưa tải về được. Bạn thử lại giúp mình nhé.",
 } as const;
 
 /** Khoá localStorage đánh dấu đã nhắc rồi — nhắc lại là thành nền, và nền thì không ai đọc. */
