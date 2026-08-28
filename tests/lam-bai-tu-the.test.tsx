@@ -8,6 +8,7 @@ import {
   CHU_HAN_MUC,
   CHU_LAM_BAI,
   CHU_BUOC,
+  CHU_THIEU_BAC,
   CHU_TRUOC_KHI_BAT_DAU,
 } from "../config/disc-tu-dien";
 import { moBuocLamBai } from "./duong-vao-bai";
@@ -111,14 +112,21 @@ describe("🔴 vào bài từ thẻ — KHÔNG hỏi tên lần nữa", () => {
     expect(screen.queryByLabelText(CHU_TRUOC_KHI_BAT_DAU.nhanO)).toBeNull();
   });
 
-  it("người CHƯA có lớp thì vẫn đi qua màn 1 — không đoán bừa bộ đề cho một đứa trẻ", async () => {
+  it("🔴 người ĐANG ĐI HỌC mà chưa có lớp: NÓI RA, không trắng màn", async () => {
+    // Trước V2.2 ca này rơi về màn "Ai đang cầm máy?" và người dùng bị hỏi lại vai + lớp —
+    // thứ mà sổ lẽ ra phải biết. Màn đó không còn, nên phải nói ra và chỉ đúng chỗ sửa.
+    // Tuyệt đối KHÔNG đoán bừa một bộ đề cho xong: đưa nhầm một em lớp 3 vào bộ THCS là
+    // bịa ra một con số mà sáu tháng sau không ai phân biệt được với số thật.
     await themNguoi("tv-1", "Zozo");
     await moBuocHai();
 
     bamLamBai();
 
     await waitFor(() =>
-      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Ai đang cầm máy/u),
+      expect(document.querySelector('[data-thu="khong-tuyen-duoc"]')).toBeTruthy(),
+    );
+    expect(document.querySelector('[data-thu="khong-tuyen-duoc"]')).toHaveTextContent(
+      CHU_THIEU_BAC.tieuDe.replace("{ten}", "Zozo"),
     );
   });
 

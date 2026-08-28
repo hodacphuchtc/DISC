@@ -1,9 +1,9 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
+import { CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import type { BaiLamLuu } from "../modules/core/luu-tru/kho-bai";
-import { DUONG_M1 } from "./duong-m1";
+import { nguoiChoBoDe, type MaBoDeThu } from "./duong-vao-bai";
 
 /**
  * 🔴 VÌ SAO CÓ FILE NÀY.
@@ -47,14 +47,15 @@ function traLoiTrangNay(lech: number) {
   });
 }
 
-/** Đi trọn một lượt làm bài, từ M1 tới lúc bản ghi được lưu. */
-function lamTronBai(duongM1: () => void) {
-  render(<KhoangDisc />);
-  duongM1();
-  bam(CHU_CHON.nutTiepTuc);
-  fireEvent.change(screen.getByLabelText(CHU_TRUOC_KHI_BAT_DAU.nhanO), {
-    target: { value: "Bi" },
-  });
+/** Đi trọn một lượt làm bài, từ lúc mở khoang tới lúc bản ghi được lưu. */
+function lamTronBai(ma: MaBoDeThu, cheDo?: "quan-sat") {
+  render(
+    <KhoangDisc
+      vaoTuThanhVien={nguoiChoBoDe(ma, "Zozo")}
+      onThoat={() => {}}
+      {...(cheDo ? { cheDo } : {})}
+    />,
+  );
   bam(CHU_TRUOC_KHI_BAT_DAU.nutBatDau);
 
   // Bấm cho tới khi hết câu. Chặn trên để test không treo nếu luồng đổi.
@@ -70,40 +71,54 @@ function lamTronBai(duongM1: () => void) {
   throw new Error("Không tới được nút Xem kết quả sau 40 màn.");
 }
 
-describe("🔴 bối cảnh màn 1 phải THEO ĐƯỢC vào bản ghi đã lưu", () => {
-  it("bộ QS: tuổi con đã hỏi thì phải nằm trong bản ghi", () => {
-    lamTronBai(() => {
-      DUONG_M1.QS(13);
-    });
-
-    expect(daLuu).toHaveLength(1);
-    expect(daLuu[0].boDe).toBe("QS");
-    // Chính con số này phân định lứa nội dung: bộ QS trải 8–15 tuổi, bắc qua cả tiểu học
-    // lẫn THCS, nên mã bộ đề một mình KHÔNG suy ra lứa được.
-    expect(daLuu[0].tuoi).toBe(13);
-  });
-
-  it("bộ Tiểu học: lớp đã hỏi thì phải nằm trong bản ghi", () => {
-    lamTronBai(() => {
-      DUONG_M1.TH(4);
-    });
+describe("🔴 bối cảnh của người trong sổ phải THEO ĐƯỢC vào bản ghi đã lưu", () => {
+  it("bộ Tiểu học: bậc học trong sổ phải nằm trong bản ghi", () => {
+    lamTronBai("TH");
 
     expect(daLuu).toHaveLength(1);
     expect(daLuu[0].boDe).toBe("TH");
     expect(daLuu[0].lop).toBe("4");
   });
 
-  it("hỏi rồi thì LƯU, nhưng TUỔI thì không bao giờ suy từ lớp", () => {
-    // 🔴 Đặc tả đổi ở 10.6: nhánh học sinh nay hỏi lớp MỘT lần cho cả hai cấp, nên bộ THCS
-    // cũng có lớp thật — lưu nó KHÔNG phải là bịa, vì em ấy vừa tự bấm.
-    // Phần chống bịa vẫn nguyên vẹn và mới là phần quan trọng: TUỔI phải trống, vì không ai
-    // hỏi tuổi ở nhánh này. Lớp 7 có cả bé 12 lẫn bé 13 — suy ra một con số rồi lưu như thể
-    // đã hỏi mới là bịa dữ liệu cá nhân của trẻ.
-    lamTronBai(() => DUONG_M1.THCS(7));
+  it("bộ THCS: bậc học theo được, và bài đóng dấu ĐÚNG người trong sổ", () => {
+    lamTronBai("THCS");
 
     expect(daLuu).toHaveLength(1);
     expect(daLuu[0].boDe).toBe("THCS");
-    expect(daLuu[0].tuoi, "tuổi bị suy ra từ lớp — đây là bịa dữ liệu").toBeUndefined();
     expect(daLuu[0].lop).toBe("7");
+    // 🔴 Gắn thành viên NGAY LÚC LƯU. Gán sau bằng cách dò tên là dựng lại đúng cái mơ hồ
+    // mà sổ gia đình sinh ra để dẹp: hai người trùng tên là bài về nhầm chỗ.
+    expect(daLuu[0].maThanhVien).toBe(nguoiChoBoDe("THCS").id);
+  });
+
+  it("🔴 mầm non: bậc \"mam-non\" theo được nguyên dạng CHUỖI, không hoá NaN", () => {
+    // Đây chính là chỗ trẻ mầm non từng bị đá khỏi luồng làm bài: `Number("mam-non")`
+    // ra NaN, và NaN lọt qua mọi phép so sánh mà không ai biết.
+    lamTronBai("MN");
+
+    expect(daLuu).toHaveLength(1);
+    expect(daLuu[0].boDe).toBe("MN");
+    expect(daLuu[0].lop).toBe("mam-non");
+  });
+
+  it("🔴 TUỔI KHÔNG BAO GIỜ được lưu — không ai hỏi nữa thì không được bịa", () => {
+    // Trước V2.2, màn 1 hỏi tuổi con ở nhánh bộ QS. Màn đó đã bị xoá, nên nay tuổi hoàn
+    // toàn không có nguồn. Suy nó từ lớp là bịa dữ liệu cá nhân của trẻ — lớp 7 có cả bé
+    // 12 lẫn bé 13. Cửa này canh cho không ai lặng lẽ thêm một phép suy như vậy.
+    for (const ma of ["TH", "THCS", "MN", "PH"] as const) {
+      daLuu.length = 0;
+      cleanup();
+      lamTronBai(ma);
+      expect(daLuu[0]?.tuoi, `bộ ${ma} lưu tuổi mà không ai hỏi`).toBeUndefined();
+    }
+  });
+
+  it("bộ quan sát: người lớn trả lời về trẻ, bản ghi vẫn thuộc về trẻ đó", () => {
+    lamTronBai("QS", "quan-sat");
+
+    expect(daLuu).toHaveLength(1);
+    expect(daLuu[0].boDe).toBe("QS");
+    expect(daLuu[0].nguoiTraLoi).toBe("nguoi-lon");
+    expect(daLuu[0].maThanhVien).toBe(nguoiChoBoDe("QS").id);
   });
 });

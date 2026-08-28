@@ -225,7 +225,7 @@ làm xong*. Hai con số này chẩn đoán ngược nhau, xem GĐ V4.
     Sửa `tests/so-lieu.test.tsx` để vào qua `?so-lieu=1`.
   - **(d)** 6 giờ.
 
-- [ ] 🔴 **V2.2 — Bước 2 là danh sách thành viên; xoá màn "Ai đang cầm máy?"**
+- [x] 🔴 **V2.2 — Bước 2 là danh sách thành viên; xoá màn "Ai đang cầm máy?"** ✅ (28/08/2026)
   - **(a)** Bước 2 render danh sách thẻ thành viên để chọn (đúng nghĩa *"hãy chọn cá nhân
     thực hiện"*), sổ trống thì chỉ về bước 1. **Xoá `app/khoang/chon-doi-tuong.tsx`** và
     nhánh `{ ten: "chon" }` trong `disc.tsx`. `BoiCanhChon` (lớp/tuổi) nay lấy từ bản ghi

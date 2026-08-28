@@ -351,24 +351,18 @@ export const NHANH_CAM_MAY: Record<MaNhanh, { ten: string; moTa: string }> = {
   },
 };
 
+/**
+ * 🔴 KHỐI NÀY ĐÃ CO LẠI CÒN HAI KHOÁ (V2.2).
+ *
+ * Trước đó nó là chữ của màn *"Ai đang cầm máy?"* — hỏi lớp, hỏi mục tiêu, hỏi tuổi con.
+ * Màn đó bị xoá khi mọi bài phải thuộc một người trong sổ, nên phần lớn khoá ở đây thành
+ * chữ không ai đọc. **Giữ lại chữ chết trong từ điển là mời người sau dùng nhầm nó** — vd
+ * gắn "Bạn đang học lớp mấy?" vào một màn khác rồi tưởng đó là câu đã được duyệt.
+ *
+ * Hai khoá còn lại vẫn có người dùng thật: nút quay lại của màn dặn dò, và hộp giải thích
+ * bắt buộc khi lớp 1–2 bị chuyển sang bản quan sát.
+ */
 export const CHU_CHON = {
-  nhanTren: "5–8 phút · không có câu nào đúng hay sai",
-  tieuDe: "Ai đang cầm máy?",
-  /** Hỏi MỘT lần cho cả ba cấp — lớp 1–12. Con số phân cấp ở `config/disc-nguong.ts`. */
-  hoiLop: "Bạn đang học lớp mấy?",
-  nhanLop: "Lớp {so}",
-  /**
-   * 🔴 Ô cuối cùng, cho người đã qua tuổi đi học phổ thông (11.5).
-   *
-   * Không viết "Đã đi làm": nhánh này còn có sinh viên, người đang ôn thi lại, người ở
-   * nhà. Hỏi thẳng cái mình cần biết — đã qua lớp 12 hay chưa — thì không loại ai ra.
-   */
-  nhanTren12: "Đã qua lớp 12",
-  hoiMucTieu: "Bạn muốn làm gì?",
-  mucTieuToi: "Tìm hiểu về chính tôi",
-  mucTieuCon: "Trả lời về con tôi",
-  hoiTuoiCon: "Con bạn bao nhiêu tuổi?",
-  nutTiepTuc: "Tiếp tục",
   nutQuayLai: "Quay lại",
   /**
    * 🔴 VĂN BẢN BẮT BUỘC HIỆN khi chuyển lớp 1–2 sang bản quan sát (DISC_BA.md §4.2).
@@ -380,16 +374,29 @@ export const CHU_CHON = {
       "Trẻ dưới 8 tuổi chưa tự nhìn lại được tính cách của mình, nên kết quả bé tự tick sẽ không đáng tin. Bố mẹ hoặc thầy cô trả lời giúp — dựa trên những gì thật sự nhìn thấy trong khoảng hai tuần gần đây.",
   },
   /**
-   * 🔴 Từ GĐ10 (hạng mục 10.6) đây là cửa DUY NHẤT dẫn tới bộ Mầm non, nên câu chữ không
-   * còn được nói riêng về chuyện đối chiếu nữa. Phụ huynh của một bé 4 tuổi chưa hề hỏi
-   * xin bản đối chiếu — đọc "bản đối chiếu hai góc nhìn cần con tự làm bài" là đọc lời
-   * giải thích cho một thứ họ không đòi.
+   * 🔴 Cửa DUY NHẤT còn dùng khối này là nút phụ *Bố mẹ trả lời về {tên}* trên thẻ trẻ
+   * chưa đủ 8 tuổi. Giữ nguyên câu chữ đã qua rà soát, đừng viết lại cho gọn.
    */
   giaiThichConDuoi8: {
     tieuDe: "Con dưới 8 tuổi dùng bản quan sát.",
     than:
       "Trẻ dưới 8 tuổi chưa tự nhìn lại được tính cách của mình, nên phần này bạn trả lời — dựa trên những gì thật sự nhìn thấy trong khoảng hai tuần gần đây. Khi con đủ 8 tuổi, hai người làm hai bài riêng rồi đối chiếu được với nhau.",
   },
+} as const;
+
+/* ── Thiếu bậc học ⇒ chưa làm bài được (V2.2) ────────────────────────────── */
+
+/**
+ * 🔴 Chỉ xảy ra với người ĐANG ĐI HỌC mà hồ sơ chưa có bậc. Trước V2.2, ca này rơi về màn
+ * *"Ai đang cầm máy?"* và người dùng bị hỏi lại vai + lớp — thứ sổ lẽ ra đã biết. Nay màn
+ * đó không còn, nên phải nói ra và chỉ đúng chỗ sửa.
+ */
+export const CHU_THIEU_BAC = {
+  tieuDe: "Chưa biết {ten} đang học lớp mấy",
+  than:
+    "Lớp quyết định bộ câu hỏi nào hợp với {ten}, nên chưa có lớp thì chưa bắt đầu được. " +
+    "Quay lại bước 1, bấm Sửa trên thẻ của {ten} rồi chọn lớp — mất vài giây thôi.",
+  nut: "Về bước 1 để chọn lớp",
 } as const;
 
 /* ── M2 — trước khi bắt đầu ──────────────────────────────────────────────── */

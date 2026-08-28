@@ -2,9 +2,9 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { KhoangDisc } from "../app/khoang/disc";
-import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
+import { CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import { napBoDe } from "../modules/core/bo-de/nap";
-import { DUONG_M1 } from "./duong-m1";
+import { nguoiChoBoDe, type MaBoDeThu } from "./duong-vao-bai";
 
 afterEach(() => {
   cleanup();
@@ -15,19 +15,23 @@ afterEach(() => {
 const bam = (ten: string | RegExp) =>
   fireEvent.click(screen.getByRole("button", { name: ten }));
 
-/** Vào M3 của một bộ đề. `duong` là chuỗi thao tác ở M1. */
-function vaoM3(duong: () => void, bietDanh = "Bi") {
-  render(<KhoangDisc />);
-  duong();
-  bam(CHU_CHON.nutTiepTuc);
-  fireEvent.change(screen.getByLabelText(CHU_TRUOC_KHI_BAT_DAU.nhanO), {
-    target: { value: bietDanh },
-  });
+/**
+ * Vào M3 của một bộ đề.
+ *
+ * 🔴 Từ V2.2 không còn chuỗi thao tác nào: dựng khoang cho một người mà vai + bậc của họ
+ * ra đúng bộ đề cần, rồi bấm Bắt đầu. Tên lấy từ sổ nên KHÔNG có ô nhập nữa.
+ * Tên bịa `"Zozo"` — `"Bi"` cũ nằm gọn trong chữ "**Bi**ệt danh" trên màn và từng làm
+ * một cửa kiểm đỏ oan.
+ */
+function vaoM3(ma: MaBoDeThu, ten = "Zozo") {
+  render(
+    <KhoangDisc vaoTuThanhVien={nguoiChoBoDe(ma, ten)} onThoat={() => {}} />,
+  );
   bam(CHU_TRUOC_KHI_BAT_DAU.nutBatDau);
 }
 
-const vaoTHCS = () => vaoM3(DUONG_M1.THCS);
-const vaoTieuHoc = () => vaoM3(() => DUONG_M1.TH(4));
+const vaoTHCS = () => vaoM3("THCS");
+const vaoTieuHoc = () => vaoM3("TH");
 
 /** Trả lời hết các câu đang hiện trên màn, chọn mức thứ `viTri` (đếm từ 0). */
 function traLoiTrangNay(viTri: number) {
@@ -74,7 +78,7 @@ describe("M3 — trình bày", () => {
   });
 
   it("nói rõ đang làm bài của AI — máy dùng chung", () => {
-    vaoM3(DUONG_M1.THCS, "Bống");
+    vaoM3("THCS", "Bống");
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Bống");
   });
 });
@@ -163,7 +167,7 @@ describe("M3 — lưu nháp", () => {
     traLoiTrangNay(3);
     cleanup();
 
-    vaoM3(DUONG_M1.THCS, "Bống");
+    vaoM3("THCS", "Bống");
     expect(screen.queryByText(CHU_LAM_BAI.tiepTucNhap)).toBeNull();
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "0");
   });
@@ -299,7 +303,10 @@ describe("🔴 nháp của phiên bản bộ câu CŨ — nói ra, không im l�
       "disc:nhap:TH",
       JSON.stringify({
         boDe: "TH",
-        bietDanh: "Bi",
+        // 🔴 Nháp gắn theo CẢ biệt danh, không chỉ theo bộ đề (quyết định 27/08/2026):
+        // máy giáo viên đi qua nhiều gia đình, trả nháp của bé A cho bé B là vừa lộ chéo
+        // vừa sai người. Nên tên ở đây phải khớp tên người mà `vaoTieuHoc()` dựng ra.
+        bietDanh: "Zozo",
         traLoi: { "TH-D1": 2 },
         batDau: "2026-08-27T01:20:00+07:00",
         giayDaLam: 30,

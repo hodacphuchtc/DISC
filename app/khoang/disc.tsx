@@ -1,18 +1,24 @@
 "use client";
 
 /**
- * Điều phối khoang DISC: M1 chọn đối tượng → M2 dặn dò → M3 làm bài → M4 kết quả.
- * Mỗi màn ở một file riêng; file này chỉ giữ trạng thái và nối chúng lại.
+ * Điều phối khoang DISC: dặn dò → làm bài → kết quả. Mỗi màn ở một file riêng; file này
+ * chỉ giữ trạng thái và nối chúng lại.
+ *
+ * 🔴 KHÔNG CÒN MÀN "AI ĐANG CẦM MÁY?" (V2.2). Mọi bài đều thuộc một người trong sổ, và bộ
+ * đề suy từ VAI + BẬC HỌC của người đó. Màn 1 tồn tại vì trước đây có lối làm bài tự do
+ * không gắn với ai — mà bài tự do thì rơi vào nhóm "chưa xếp" và không bao giờ vào được
+ * phân tích cả nhà, tức là đi tới một ngõ cụt.
  */
 
 import { useEffect, useRef, useState } from "react";
 
-import { ManChonDoiTuong, type BoiCanhChon } from "./chon-doi-tuong";
 import { ManKetQua } from "./ket-qua";
 import { LamBai } from "./lam-bai";
 import { TruocKhiBatDau } from "./truoc-khi-bat-dau";
 import { ManVungLech, useDoiChieu } from "./vung-lech";
 import { napBoDe } from "@modules/core/bo-de/nap";
+import { CHU_THIEU_BAC } from "@config/disc-tu-dien";
+import { MAU } from "@config/thuong-hieu";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
   boDeChoThanhVien,
@@ -26,7 +32,12 @@ import { docTatCa, luuBai } from "@modules/core/luu-tru/kho-bai";
 import { cham } from "@modules/report/cham";
 
 type Buoc =
-  | { readonly ten: "chon" }
+  /**
+   * 🔴 KHÔNG SUY RA ĐƯỢC BỘ ĐỀ. Từ V2.2 mọi bài phải thuộc một người trong sổ, và màn
+   * *"Ai đang cầm máy?"* đã bị xoá — nên không còn đường lui nào để hỏi lại vai/lớp.
+   * Nhánh này chỉ xảy ra khi hồ sơ thiếu bậc học, và nó phải NÓI RA, không được trắng màn.
+   */
+  | { readonly ten: "khong-tuyen-duoc" }
   | {
       readonly ten: "dan-do";
       readonly boDe: BoDe;
@@ -69,23 +80,25 @@ function maMoi(): string {
 export function KhoangDisc({
   vaoTuThanhVien,
   cheDo,
+  onThoat,
 }: {
-  readonly vaoTuThanhVien?: ThanhVien;
+  /** 🔴 BẮT BUỘC từ V2.2 — mọi bài đều thuộc một người trong sổ. */
+  readonly vaoTuThanhVien: ThanhVien;
   /** `"quan-sat"` ⇒ người lớn trả lời VỀ người này (bộ QS), không phải họ tự làm (V1.4). */
   readonly cheDo?: "quan-sat";
-} = {}) {
+  /** Quay về bước 2. Mọi lối lui trước đây đổ về màn 1; nay đổ về đây. */
+  readonly onThoat: () => void;
+}) {
   // 🔴 12.4 + V1.3 — vào bài từ THẺ THÀNH VIÊN thì bỏ luôn màn hỏi tên VÀ màn hỏi vai/lớp:
   // sổ đã biết cả ba. Định tuyến từ VAI + BẬC HỌC đã lưu; thiếu dữ kiện thì mới qua màn 1.
   const [buoc, datBuoc] = useState<Buoc>(() => {
-    if (!vaoTuThanhVien) return { ten: "chon" };
-
     // Chế độ quan sát: người lớn trả lời VỀ người này. Cửa ADR-002 nằm trong
     // `boDeQuanSatTheoLop()` — mầm non và lớp 1–2 ra bộ MN, từ lớp 3 mới ra bộ QS.
     if (cheDo === "quan-sat") {
       const ma = boDeQuanSatTheoLop(vaoTuThanhVien.lop);
       return ma
         ? { ten: "dan-do", boDe: napBoDe(ma), tenCoSan: vaoTuThanhVien.ten }
-        : { ten: "chon" };
+        : { ten: "khong-tuyen-duoc" };
     }
 
     const tuyen = boDeChoThanhVien(vaoTuThanhVien.vaiTro, vaoTuThanhVien.lop);
@@ -96,7 +109,7 @@ export function KhoangDisc({
           tenCoSan: vaoTuThanhVien.ten,
           ...(tuyen.giaiThich ? { giaiThich: tuyen.giaiThich } : {}),
         }
-      : { ten: "chon" };
+      : { ten: "khong-tuyen-duoc" };
   });
   // Đọc nguồn MỘT LẦN lúc gắn — đọc lúc dựng HTML tĩnh thì máy chủ không có location.
   const [nguon, datNguon] = useState("truc-tiep");
@@ -117,14 +130,8 @@ export function KhoangDisc({
   /** Mã bài trong kho — để nút "Kết thúc & xoá" biết xoá cái nào (QĐ7). */
   const [idBai, datIdBai] = useState<string | null>(null);
 
-  /**
-   * Lớp / tuổi con mà màn 1 đã hỏi. Giữ ngoài `buoc` vì nó không đổi trong suốt một lượt
-   * làm bài, và lượt sau luôn đi qua màn 1 nên không có đường mang giá trị cũ sang bài mới.
-   */
-  const [boiCanh, datBoiCanh] = useState<BoiCanhChon>({});
-
   /** Người trong sổ đang làm bài này, nếu vào từ thẻ thành viên (12.4). */
-  const maThanhVienDangLam = vaoTuThanhVien?.id;
+  const maThanhVienDangLam = vaoTuThanhVien.id;
 
   /**
    * Bậc học ghi kèm bản ghi bài.
@@ -136,8 +143,7 @@ export function KhoangDisc({
    * Giữ dạng CHUỖI suốt đường đi: `"mam-non"` không quy về số được, và đổi nó thành `NaN`
    * ở giữa đường đúng là cách trẻ mầm non từng bị đá khỏi luồng làm bài.
    */
-  const lopGhiKem =
-    vaoTuThanhVien?.lop ?? (boiCanh.lop !== undefined ? String(boiCanh.lop) : undefined);
+  const lopGhiKem = vaoTuThanhVien.lop;
 
   function xongBai(
     boDe: BoDe,
@@ -162,7 +168,6 @@ export function KhoangDisc({
       boDe: boDe.ma,
       maTre: bietDanh,
       ...(lopGhiKem !== undefined ? { lop: lopGhiKem } : {}),
-      ...(boiCanh.tuoiCon !== undefined ? { tuoi: boiCanh.tuoiCon } : {}),
       // 🔴 Đóng dấu thành viên NGAY LÚC LƯU. Gán sau bằng cách dò tên là dựng lại đúng
       // cái mơ hồ mà sổ gia đình sinh ra để dẹp: hai người trùng tên, hoặc một người đổi
       // tên giữa chừng, là bài về nhầm chỗ mà không ai biết.
@@ -197,15 +202,8 @@ export function KhoangDisc({
   }
 
   switch (buoc.ten) {
-    case "chon":
-      return (
-        <ManChonDoiTuong
-          onXong={(boDe, bc) => {
-            datBoiCanh(bc);
-            datBuoc({ ten: "dan-do", boDe });
-          }}
-        />
-      );
+    case "khong-tuyen-duoc":
+      return <KhongTuyenDuoc ten={vaoTuThanhVien.ten} onThoat={onThoat} />;
 
     case "dan-do":
       return (
@@ -214,7 +212,7 @@ export function KhoangDisc({
           bietDanhGoiY={buoc.bietDanhGoiY}
           tenCoSan={buoc.tenCoSan}
           giaiThich={buoc.giaiThich}
-          onQuayLai={() => datBuoc({ ten: "chon" })}
+          onQuayLai={onThoat}
           onBatDau={(bietDanh) => {
             ghiMoc("batDau", nguon, new Date().toISOString());
             datBuoc({
@@ -248,17 +246,16 @@ export function KhoangDisc({
           bietDanh={buoc.bietDanh}
           ketQua={buoc.ketQua}
           idBai={idBai}
-          onLamLai={() => datBuoc({ ten: "chon" })}
+          onLamLai={onThoat}
           onXemDoiChieu={(maTre) => datBuoc({ ten: "doi-chieu", maTre })}
           onLamBoConThieu={(ma, maTre) =>
             datBuoc({ ten: "dan-do", boDe: napBoDe(ma), bietDanhGoiY: maTre })
           }
-          tuoi={boiCanh.tuoiCon}
         />
       );
 
     case "doi-chieu":
-      return <ManDoiChieu maTre={buoc.maTre} datBuoc={datBuoc} />;
+      return <ManDoiChieu maTre={buoc.maTre} datBuoc={datBuoc} onThoat={onThoat} />;
   }
 }
 
@@ -266,9 +263,11 @@ export function KhoangDisc({
 function ManDoiChieu({
   maTre,
   datBuoc,
+  onThoat,
 }: {
   readonly maTre: string;
   readonly datBuoc: (b: Buoc) => void;
+  readonly onThoat: () => void;
 }) {
   const { ketQua } = useDoiChieu(maTre);
   if (!ketQua) return null;
@@ -276,8 +275,45 @@ function ManDoiChieu({
     <ManVungLech
       ketQua={ketQua}
       maTre={maTre}
-      onDong={() => datBuoc({ ten: "chon" })}
+      onDong={onThoat}
       onLamBo={(ma) => datBuoc({ ten: "dan-do", boDe: napBoDe(ma), bietDanhGoiY: maTre })}
     />
+  );
+}
+
+/**
+ * KHÔNG SUY RA ĐƯỢC BỘ ĐỀ CHO NGƯỜI NÀY.
+ *
+ * 🔴 Chỉ xảy ra với một người ĐANG ĐI HỌC mà hồ sơ chưa có bậc học. Trước V2.2, ca này rơi
+ * về màn *"Ai đang cầm máy?"* và người dùng bị hỏi lại vai + lớp — thứ mà sổ lẽ ra phải
+ * biết. Nay màn đó không còn, nên phải NÓI RA và chỉ đúng chỗ sửa.
+ *
+ * Tuyệt đối không đoán bừa một bộ đề để "cho xong": đưa nhầm một em lớp 3 vào bộ THCS là
+ * bịa ra một con số mà sáu tháng sau không ai phân biệt được với số thật.
+ */
+function KhongTuyenDuoc({
+  ten,
+  onThoat,
+}: {
+  readonly ten: string;
+  readonly onThoat: () => void;
+}) {
+  return (
+    <section data-thu="khong-tuyen-duoc" className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
+      <h1 className="text-[22px] leading-snug font-extrabold text-neutral-900">
+        {CHU_THIEU_BAC.tieuDe.replace("{ten}", ten)}
+      </h1>
+      <p className="mt-3 text-[15px] leading-relaxed text-neutral-700">
+        {CHU_THIEU_BAC.than.replace("{ten}", ten)}
+      </p>
+      <button
+        type="button"
+        onClick={onThoat}
+        className="mt-6 min-h-[48px] rounded-xl px-5 text-[16px] font-semibold text-white"
+        style={{ backgroundColor: MAU.timCongNghe }}
+      >
+        {CHU_THIEU_BAC.nut}
+      </button>
+    </section>
   );
 }

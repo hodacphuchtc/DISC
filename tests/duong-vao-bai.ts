@@ -66,3 +66,41 @@ export async function moBuocPhanTich(): Promise<void> {
   }
   await waitFor(() => expect(buocDangMo("phan-tich")).toBe(true));
 }
+
+/* ── Dựng thẳng khoang DISC cho một bộ đề (thay `DUONG_M1` cũ) ───────────── */
+
+/**
+ * 🔴 KHÔNG CÒN CHUỖI THAO TÁC NÀO ĐỂ ĐI. Bản cũ phải bấm qua màn *"Ai đang cầm máy?"* rồi
+ * chọn lớp / mục tiêu / tuổi con. Từ V2.2 màn đó không còn: bộ đề suy thẳng từ VAI + BẬC
+ * HỌC của người trong sổ, nên "đi tới bộ đề X" chỉ còn là "dựng khoang cho một người mà
+ * vai + bậc của họ ra bộ X".
+ *
+ * Bảng dưới đây vì thế cũng là bản đặc tả đọc được: mỗi bộ đề ĐÚNG MỘT hồ sơ dẫn tới.
+ * Thêm một cửa thứ hai vào bộ nào là thấy ngay ở đây.
+ */
+export const HO_SO_CHO_BO_DE = {
+  /** Người lớn tự đánh giá — vai không đi học nên không có bậc. */
+  PH: { vaiTro: "me", lop: undefined },
+  /** Mầm non: người lớn trả lời hộ. */
+  MN: { vaiTro: "con", lop: "mam-non" },
+  TH: { vaiTro: "con", lop: "4" },
+  THCS: { vaiTro: "con", lop: "7" },
+  /** Bộ quan sát: cùng hồ sơ trẻ từ lớp 3, nhưng vào bằng `cheDo: "quan-sat"`. */
+  QS: { vaiTro: "con", lop: "7" },
+} as const;
+
+export type MaBoDeThu = keyof typeof HO_SO_CHO_BO_DE;
+
+/** Một hồ sơ thành viên BỊA, đủ để dẫn tới đúng bộ đề cần thử. */
+export function nguoiChoBoDe(ma: MaBoDeThu, ten = "Zozo") {
+  const h = HO_SO_CHO_BO_DE[ma];
+  return {
+    id: `tv-thu-${ma}`,
+    ten,
+    vaiTro: h.vaiTro,
+    ...(h.lop ? { lop: h.lop } : {}),
+    thuTu: 0,
+    taoLuc: "2026-08-01T00:00:00.000Z",
+    suaLuc: "2026-08-01T00:00:00.000Z",
+  } as const;
+}

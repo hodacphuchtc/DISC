@@ -242,6 +242,7 @@ function KhoangDangLamBai({
       <KhoangDisc
         key={`${dangLamCho.tv.id}:${dangLamCho.cheDo ?? "tu-lam"}`}
         vaoTuThanhVien={dangLamCho.tv}
+        onThoat={onXong}
         {...(dangLamCho.cheDo ? { cheDo: dangLamCho.cheDo } : {})}
       />
     </div>

@@ -2,10 +2,10 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { KhoangDisc } from "../app/khoang/disc";
-import { CHU_CHON, CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
+import { CHU_LAM_BAI, CHU_TRUOC_KHI_BAT_DAU } from "../config/disc-tu-dien";
 import { docPhieu, xoaPhieu } from "../modules/core/do-phieu";
 import { docTatCa, xoaSach } from "../modules/core/luu-tru/kho-bai";
-import { DUONG_M1 } from "./duong-m1";
+import { nguoiChoBoDe, type MaBoDeThu } from "./duong-vao-bai";
 
 /**
  * 🔴 MỐC `baiThuHai` CÓ THẬT SỰ ĐƯỢC GHI KHÔNG.
@@ -34,13 +34,10 @@ function traLoiTrangNay(lech: number) {
 }
 
 /** Đi trọn một lượt làm bài với một biệt danh, tới lúc bài được lưu vào kho. */
-async function lamTronBai(bietDanh: string, duongM1: () => void) {
-  const man = render(<KhoangDisc />);
-  duongM1();
-  bam(CHU_CHON.nutTiepTuc);
-  fireEvent.change(screen.getByLabelText(CHU_TRUOC_KHI_BAT_DAU.nhanO), {
-    target: { value: bietDanh },
-  });
+async function lamTronBai(bietDanh: string, ma: MaBoDeThu = "TH") {
+  const man = render(
+    <KhoangDisc vaoTuThanhVien={nguoiChoBoDe(ma, bietDanh)} onThoat={() => {}} />,
+  );
   bam(CHU_TRUOC_KHI_BAT_DAU.nutBatDau);
 
   for (let vong = 0; vong < 40; vong += 1) {
@@ -75,32 +72,32 @@ afterEach(async () => {
 
 describe("🔴 mốc baiThuHai được ghi ĐÚNG LÚC, ĐÚNG MỘT LẦN", () => {
   it("một biệt danh làm hai bài ⇒ KHÔNG ghi mốc", async () => {
-    await lamTronBai("Zozo", () => DUONG_M1.TH(4));
-    await lamTronBai("Zozo", () => DUONG_M1.TH(4));
+    await lamTronBai("Zozo");
+    await lamTronBai("Zozo");
 
     expect((await docTatCa())).toHaveLength(2);
     expect(soLan("baiThuHai"), "một đứa trẻ làm hai bài không phải là hai người").toBe(0);
   });
 
   it("🔴 hai biệt danh khác nhau ⇒ ghi mốc", async () => {
-    await lamTronBai("Zozo", () => DUONG_M1.TH(4));
+    await lamTronBai("Zozo");
     expect(soLan("baiThuHai")).toBe(0);
 
-    await lamTronBai("Kiki", () => DUONG_M1.TH(4));
+    await lamTronBai("Kiki");
     expect(soLan("baiThuHai")).toBe(1);
   });
 
   it("người thứ ba làm tiếp KHÔNG ghi thêm — mốc đo 'đã từng đạt', không đo số lượt", async () => {
-    await lamTronBai("Zozo", () => DUONG_M1.TH(4));
-    await lamTronBai("Kiki", () => DUONG_M1.TH(4));
-    await lamTronBai("Mimi", () => DUONG_M1.TH(4));
+    await lamTronBai("Zozo");
+    await lamTronBai("Kiki");
+    await lamTronBai("Mimi");
 
     expect(soLan("baiThuHai")).toBe(1);
   });
 
   it("mốc KHÔNG kèm biệt danh, điểm số hay câu trả lời nào", async () => {
-    await lamTronBai("Zozo", () => DUONG_M1.TH(4));
-    await lamTronBai("Kiki", () => DUONG_M1.TH(4));
+    await lamTronBai("Zozo");
+    await lamTronBai("Kiki");
 
     const ban = docPhieu().find((b) => b.moc === "baiThuHai");
     expect(ban).toBeTruthy();
