@@ -101,7 +101,7 @@ export type BanGhiMoc = {
 };
 
 /** Điểm cắm cho đội dev: nối vào hệ thống đo của họ. Mặc định chỉ ghi trên máy. */
-export type GhiMoc = (ban: BanGhiMoc) => void;
+type GhiMoc = (ban: BanGhiMoc) => void;
 
 function docKho(): BanGhiMoc[] {
   try {

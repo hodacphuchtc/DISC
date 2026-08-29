@@ -134,7 +134,7 @@ export const LOP_MAM_NON = "mam-non";
 export const LOP_TREN_12 = "tren-12";
 
 /** Một lựa chọn bậc học: giá trị đem đi lưu, và mã chữ để `disc-tu-dien` tra nhãn. */
-export type TuyChonLop = {
+type TuyChonLop = {
   /** Giá trị lưu vào `ThanhVien.lop`. Số lớp thì là chuỗi số ("1".."12"). */
   readonly gia: string;
   /** Số lớp, nếu đây là một lớp phổ thông. `undefined` với mầm non và đã qua lớp 12. */
@@ -231,6 +231,30 @@ export const NGAY_TOI_THIEU_DE_SO_SANH = 90;
  * nội dung mới chưa duyệt, và cửa đã có sẵn thì rẻ hơn dựng lại.
  */
 export const MO_NOI_DUNG_TRE = true;
+
+/**
+ * MỞ TÍNH NĂNG MÃ MỜI (23.1) — tắt từ 29/08/2026 theo chốt của chủ dự án.
+ *
+ * Mã mời có HAI nửa và cờ này tắt CẢ HAI: nửa **GỬI** (khối QR ở màn kết quả) và nửa
+ * **NHẬN** (ô gõ mã trên bảng gia đình). Tắt riêng một nửa là bày ra một nút bấm vào rồi
+ * chẳng dẫn tới đâu — người kia quét QR xong không còn chỗ nhập.
+ *
+ * 🔴 CÁI GIÁ, ĐÃ NÓI VÀ ĐÃ CHỐT. Quyết định 27/08/2026 ghi mã mời là cách **gỡ trần "cả
+ * nhà dùng chung một máy"** mà không phá ADR-001 (không backend ⇒ mặc định cả nhà xếp hàng
+ * trên một điện thoại). Tắt nó là **nhận lại cái trần đó**. Đổi lại: gỡ được hạng mục
+ * "quét thử QR bằng hai điện thoại thật", vốn đang chặn ngày phát. Không hỏi lại.
+ *
+ * 🔴 CỜ NÀY KHÔNG ĐỤNG TỚI DỮ LIỆU ĐÃ CÓ. Máy nào đã từng nhận một hồ sơ qua mã thì hồ sơ
+ * đó VẪN nằm trong kho, và sáu đường đọc `nhanQuaMa` vẫn chạy đủ: mở khoá bước 2 · thẻ gia
+ * đình · bảng tổng hợp · bản phân tích · PDF sao lưu · nhãn nguồn trong báo cáo. Tắt hiển
+ * thị là một chuyện; làm một người biến mất khỏi bản phân tích của gia đình họ là chuyện
+ * khác hẳn. `tests/co-ma-moi.test.tsx` canh đúng điều này.
+ *
+ * 🔴 KHÔNG xoá mã nguồn mã mời khi tắt cờ. Cả lý do chọn cờ thay vì gỡ là để bật lại trong
+ * 30 giây; xoá `modules/core/gia-dinh/ma-moi.ts` là vứt luôn 294 dòng bộ mã hoá
+ * Reed–Solomon đã có cửa kiểm hội chứng canh.
+ */
+export const MO_MA_MOI = false;
 
 /**
  * Bộ đề nào nói về TRẺ.

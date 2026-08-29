@@ -3,13 +3,17 @@
 ## Bộ handle giai đoạn (`.claude/commands/`, thêm 06/08/2026)
 
 `/B1_y_tuong` bàn + phản biện (Plan Mode, KHÔNG code) → `/B2_lo_trinh` ghi hạng mục vào
-`Plan/PLAN_<MODULE>.md` chờ DUYỆT → `/B3_thi_cong` code theo GÓI trên DB dev →
+sổ đang hiệu lực ở gốc (`PLAN_V4.md`) chờ DUYỆT → `/B3_thi_cong` code theo GÓI trên LOCAL →
 `/B4_nghiem_thu` đòi bằng chứng + bộ cổng → `/B6_xuat_ban` soat → DUYỆT → phat-hanh.
 Mở/đóng phiên dùng `/mo_session` · `/dong_session` (bản TOÀN CỤC, không chép vào dự án).
 
-Bộ chuẩn của skill `khoi-tao-du-an` có 8 handle; dự án này CỐ Ý bỏ 3: `B5_luu_code`
-(đã có luật commit + `plan:chot-phien` riêng) · `B6_trien_khai` (hạ tầng xong từ lâu) ·
-`reset_db` (không có Supabase local; DB dev chứa dữ liệu thật — xóa là mất thật).
+Bộ chuẩn của skill `khoi-tao-du-an` có 8 handle; dự án này CỐ Ý bỏ 3, và **ba file lệnh
+tương ứng đã XOÁ khỏi `.claude/commands/` ngày 29/08/2026**: `B5_luu_code` (đã có luật
+commit riêng ở mục Git) · `B6_trien_khai` (dùng skill `cau-hinh-ha-tang` khi tới `26.1`) ·
+`reset_db` (không có CSDL nào để reset — ADR-001).
+
+*Trước 29/08 ba file ấy vẫn nằm trong `.claude/commands/` dù mục này nói đã bỏ — tài liệu
+tự mâu thuẫn với chính nó, và người đọc không biết bên nào đang có hiệu lực.*
 
 ## Plan Mode — bắt buộc khi
 
@@ -24,11 +28,11 @@ thật sự cần người.
 
 - Tự chạy liền các hạng mục TRONG plan; **mỗi hạng mục xong phải lint/test/build XANH
   mới được đi tiếp** — test xanh thay cho người duyệt từng bước.
-- Tick checkbox tại Plan/PLAN_<MODULE>.md (kèm `npm run plan:tien-do`) + báo cáo 3 dòng
+- Tick checkbox tại sổ đang hiệu lực ở gốc (`PLAN_V4.md`) + báo cáo 3 dòng
   từng mục (đã làm / kiểm chứng / tiếp theo) nhưng KHÔNG dừng chờ; báo cáo tổng cuối gói.
 - **DỪNG BẮT BUỘC chờ duyệt khi:** commit/push GitHub · deploy · migration production ·
-  ghi/xóa/vô hiệu hóa DỮ LIỆU THẬT (kể cả DB dev — đang chứa dữ liệu Teky + hồ sơ
-  nhân sự) · tác động ra ngoài thư mục dự án · việc phát sinh NGOÀI phạm vi plan.
+  ghi/xóa/vô hiệu hóa DỮ LIỆU THẬT (ở đây là IndexedDB của một máy đang có bài làm thật)
+  · tác động ra ngoài thư mục dự án · việc phát sinh NGOÀI phạm vi plan.
 - **Thiếu key/env/dịch vụ ngoài → GOM, đừng dừng:** ghi vào mục "Chờ ngoài" trong
   TRẠNG THÁI của CLAUDE.md kèm rõ _cần gì, để làm gì_, rồi chuyển sang hạng mục khác.
   Chỉ dừng khi TẤT CẢ hạng mục còn lại đều bị chặn — khi đó in danh sách
@@ -68,33 +72,32 @@ thì con số trả lời sai đúng câu người ta hỏi: _còn việc nào g
 Không đoán hộ — đoán hộ là đúng bệnh `MKT.LS` (một con số chẳng ai từng quyết mà đọc lên
 đầy thuyết phục). Chưa phân định thì chưa được tuyên bố "hết việc máy".
 
-**Máy sinh ra hai thứ, không gõ tay cái nào:**
-
-- `Plan/TIEN_DO.md` mục **`CÒN AI CHẶN`** — mỗi module một dòng: % khối MÁY + đếm 3 nhóm.
-- `Plan/VIEC_CON_LAI.md` — **việc NÀO** chưa xong, nhóm theo NGƯỜI/NGOÀI/MÁY kèm lý do.
-
-`npm run check:plan` canh cả hai (CI đỏ nếu lệch). **OVERVIEW của module chỉ TRỎ tới hai
-file này, KHÔNG chép danh sách sang** — chép là dựng bản sao thứ hai, và hai bản chỉ lệch
-vào đúng ngày ai đó sửa một bản.
+🔴 **DỰ ÁN NÀY KHÔNG CÓ MÁY SINH SỔ.** Bộ chuẩn của skill `khoi-tao-du-an` có
+`Plan/TIEN_DO.md`, `Plan/VIEC_CON_LAI.md` và một script `check:plan` sinh ra chúng — dự án DISC
+**không dùng** cái nào: nó có MỘT sổ đang hiệu lực ở gốc (`PLAN_V4.md`), không chia module,
+nên một bảng tổng hợp máy sinh chỉ là bản sao thứ hai của chính nó. Dòng `(e)` viết tay,
+đọc bằng mắt. *(Sửa 29/08/2026 — ba tên file và một lệnh npm ở trên chưa bao giờ tồn tại
+trong repo này, và tài liệu cũ dạy sai suốt từ đó.)*
 
 **Khi đóng một hạng mục:** tick `[x]` và **xóa dòng `(e)`** của nó (xong rồi thì không còn
 gì chặn). Khi BA hạng mục mới: viết `(e)` ngay từ đầu, đừng để lượt sau đi phân định lại.
 
-## Ba mức đọc sổ (chống đốt token — chốt 11/08/2026)
+## Ba mức đọc sổ (chống đốt token — chốt 11/08/2026, sửa 29/08/2026)
 
-> Sổ module đã phình (PLAN_CORE ~195KB, core/OVERVIEW ~148KB). Nạp trọn một sổ chỉ để trả
-> lời một câu là đốt 30–60K token vô ích. Luật chung: **file não >30KB thì grep trước,
-> Read theo khoảng (offset/limit); cần trọn file thì giao agent.**
+> Nạp trọn một sổ chỉ để trả lời một câu là đốt token vô ích. Luật chung: **file não >30KB
+> thì `grep` trước, Read theo khoảng (`offset`/`limit`); cần trọn file thì giao agent.**
+> Ở dự án này, file não lớn nhất là `docs/so-seo.md` (~26KB) và `modules/core/OVERVIEW.md`.
 
 - **Mức 1 — sửa code thường nhật trong module:** đọc OVERVIEW mục 1–4 (~1KB) +
-  `grep -n "^###"` mục 7 rồi Read ĐÚNG các tiêu đề con liên quan. KHÔNG đọc trọn mục 5.
-- **Mức 2 — làm tiếp hạng mục đang dở:** mức 1 + grep MÃ hạng mục trong OVERVIEW mục 5
-  và trong `Plan/PLAN_<MODULE>.md`, đọc đúng khối đó.
+  `grep -n "^###"` rồi Read ĐÚNG các tiêu đề con liên quan.
+  🔴 **Và `grep docs/so-seo.md` theo từ khoá của vùng đang sửa** — 44 bài học ở đó đều đổi
+  bằng một lỗi thật, đọc trước thì khỏi trả giá lần hai.
+- **Mức 2 — làm tiếp hạng mục đang dở:** mức 1 + grep MÃ hạng mục trong `PLAN_V4.md` (sổ
+  đang hiệu lực) và trong OVERVIEW của module, đọc đúng khối đó. Sổ cũ `PLAN_V3/V2/V1_LUU`
+  chỉ tra khi cần biết *vì sao*, không tick thêm.
 - **Mức 3 — BA gói mới / review lớn / câu hỏi liên-module:** KHÔNG tự đọc — giao
-  `researcher`/`ba-analyst` đọc trọn trong context riêng, trả tóm tắt ≤40 dòng kèm pointer.
-  Cần TOÀN CẢNH nhiều file một lượt → `npm run gop:kien-truc` (repomix) cấp gói nén cho
-  agent, thay 30 lượt Read lẻ. KHÔNG dùng repomix cho thi công thường nhật, KHÔNG gửi
-  gói nén ra ngoài máy (PII).
+  `researcher` đọc trọn trong context riêng, trả tóm tắt ≤40 dòng kèm pointer.
+  🔴 **KHÔNG gửi gói nén mã nguồn ra ngoài máy** (repo có nội dung viết về trẻ).
 
 ## Verification Loop
 
@@ -119,38 +122,25 @@ gì chặn). Khi BA hạng mục mới: viết `(e)` ngay từ đầu, đừng �
   Key findings / Risks / Recommendation / Next steps.
 - KHÔNG dùng subagent cho việc sửa 1 dòng.
 
-## Git + DEV SONG SONG nhiều session
+## Git
 
-> Viết lại 11/08/2026 — thay dòng worktree cũ từng mâu thuẫn với memory
-> `nhieu-session-song-song-mot-repo`.
+> 🔴 **Viết lại 29/08/2026.** Bản cũ mô tả một quy trình NHIỀU SESSION SONG SONG với
+> worktree cho từng module, migration CSDL, và một loạt script `plan:*` · `db-migrate` ·
+> `soat` · `phat-hanh`. **Không cái nào trong đó tồn tại ở dự án này:**
+> không có CSDL (ADR-001), không có thư mục `Plan/`, không có bốn lệnh npm ấy trong
+> `package.json`, và sản phẩm là MỘT khoang chứ không phải nhiều module chạy song song.
+> Tài liệu cũ đã dạy sai suốt từ 11/08. Cửa `tests/ngan-sach-context.test.ts` nay canh
+> chuyện đó: mọi `npm run <x>` viết trong tài liệu phải có thật trong `package.json`.
 
-**Bản đồ tuyến:** `npm run plan:phu-thuoc` in LỚP 0 (song song được ngay, nhóm
-MÁY/NGƯỜI/NGOÀI) → LỚP n → gợi ý phân tuyến. Nguồn quan hệ = dòng `(f)` của hạng mục.
-
-- **1 session = 1 module = 1 worktree = 1 nhánh** (`git worktree add ../disc-<mod>
--b goi/<mod>-<ten>`). Session nhánh CHỈ ghi: `modules/<X>/**`, route của X, test của X.
-- **File DÙNG CHUNG chỉ SESSION CHỦ đụng:** CLAUDE.md · Plan/* · config/ · scripts/
-  chung · `modules/core/**` · `database/migrations/`. Trước khi đụng: kiểm
-  `ps aux | grep claude`, có phiên khác thì HỎI người dùng.
-- 🔴 **Session nhánh KHÔNG tick sổ, KHÔNG chạy `plan:tien-do`** — tick 1 ô là ghi vào
-  `Plan/PLAN.md` gộp ⇒ conflict chắc chắn + `check:plan` đỏ chéo (đã đo). Tick = "ĐÃ
-  KIỂM CHỨNG" nên session CHỦ tick SAU merge + test xanh trên main.
-- **Điểm TUẦN TỰ HÓA (xếp hàng qua session chủ, ưu tiên làm TRƯỚC):** hạng mục
-  `modules/core/**` = lớp 0 ưu tiên, xong merge rồi các nhánh rebase · migration DB dev
-  CHỈ session chủ chạy (`db-migrate` không có lock — 2 tiến trình = SQL chạy 2 lần trên
-  DB dữ liệu thật; nhánh chỉ ĐỂ file .sql, merge rồi mới migrate) · e2e + dev server ở
-  CÂY CHÍNH, một session một thời điểm (worktree không có `.env*`) · `plan:tien-do`/
-  `chot-phien` chỉ session chủ.
-- **Xanh cục bộ của nhánh** = vitest + typecheck + `check:sast` (chạy được trong
-  worktree, symlink node_modules — khuôn trong memory). **Worktree KHÔNG phát hành
-  được** (thiếu `.env.production.local` — phat-hanh.ts cũng chặn sẵn).
-- **Merge:** session chủ `git fetch` → rebase/merge TUẦN TỰ từng nhánh vào main → test
-  sau mỗi merge → tick sổ + `plan:tien-do` MỘT lần → migration (nếu có) → `soat` →
-  DUYỆT → `phat-hanh`. Commit trên nhánh: stage theo ĐƯỜNG DẪN, cấm `git add -A`.
-- Merge conflict: giải thích ý nghĩa business 2 bên trước, sửa sau khi duyệt.
-- Commit/push: luôn hỏi trước (theo settings.json ask).
-- Mức nhẹ không cần mở nhiều cửa sổ: Agent tool `isolation: worktree` cho tác vụ độc lập
-  cùng lớp 0 — session chính làm session chủ điều phối.
+- **Commit/push: LUÔN HỎI TRƯỚC.** Đây là điểm DỪNG BẮT BUỘC, không phụ thuộc mode.
+- **Stage theo ĐƯỜNG DẪN, cấm `git add -A`** — quét bừa là cuốn theo việc dở của phiên
+  trước vào commit của mình, và lịch sử hết đọc được.
+- **Việc của người khác đang dở trong cây làm việc** thì tách thành commit RIÊNG của nó,
+  đừng trộn vào commit của mình.
+- **Hook `pre-commit` chạy gitleaks** trên phần đã stage. Nó đỏ thì DỪNG, đừng `--no-verify`.
+- Merge conflict: giải thích ý nghĩa nghiệp vụ của cả hai phía trước, sửa sau khi duyệt.
+- Cần chạy một việc độc lập trong bản sao repo: Agent tool `isolation: worktree`.
+  **Worktree KHÔNG phát hành được** và không nên dùng cho thi công thường nhật.
 
 ## Ba tầng năng lực
 

@@ -112,7 +112,7 @@ export const CHU_BUOC = {
 export const MA_TRUC = ["D", "I", "S", "C"] as const;
 export type MaTruc = (typeof MA_TRUC)[number];
 
-export type MoTaTruc = {
+type MoTaTruc = {
   readonly ten: string;
   /** Tên trục trong mô hình DISC. Chỉ hiện ở khối tra cứu, KHÔNG hiện ở nhãn biểu đồ. */
   readonly tenTiengAnh: string;
@@ -177,20 +177,6 @@ export const CHU = {
 } as const;
 
 /* ── Chữ trong từng khoang ───────────────────────────────────────────────── */
-
-export const CHU_DISC = {
-  nhanTren: "Bốn nhóm hành vi",
-  tieuDe: "DISC đo thiên hướng hành vi, không đo giỏi hay dốt.",
-  moTa: "Không có nhóm nào tốt hơn nhóm nào. Mỗi người là một pha trộn của cả bốn, chỉ khác nhau ở chỗ nhóm nào đậm hơn.",
-  ghiChuDangDung: "Phần chọn đối tượng và bộ câu hỏi chưa dựng xong.",
-} as const;
-
-export const CHU_LICH_SU = {
-  nhanTren: "Trên máy này",
-  tieuDe: "Bài đã làm",
-  moTa: "Kết quả lưu ngay trong trình duyệt của bạn, không gửi đi đâu. Danh sách bài, mở lại, xoá và sao lưu sẽ nằm ở đây.",
-  ghiChuDangDung: "Phần lưu trữ chưa dựng xong.",
-} as const;
 
 /* ── Chữ của màn kết quả ─────────────────────────────────────────────────── */
 
@@ -328,47 +314,6 @@ export const KHOI_DAN_NGUON = {
       "mình, thì bạn đúng — bạn biết con mình hơn một bảng câu hỏi.",
   ],
 } as const;
-
-/* ── Chọn đối tượng & định tuyến ─────────────────────────────────────────── */
-
-export const MA_DOI_TUONG = ["mam-non", "tieu-hoc", "thcs", "phu-huynh"] as const;
-export type MaDoiTuong = (typeof MA_DOI_TUONG)[number];
-
-export const DOI_TUONG: Record<MaDoiTuong, { ten: string; moTa: string }> = {
-  // 🔴 "3–7", KHÔNG phải "3–5". Metadata bộ đề (`config/disc-cau-hoi.ts` → MN.veAi) ghi
-  // "Bé 3–7 tuổi", và trên thực tế bộ này còn nhận cả lớp 1–2 lẫn mọi bé dưới 8 tuổi được
-  // chuyển sang. Nhãn "3–5" ở đây làm phụ huynh bé 6 tuổi tưởng sản phẩm không có phần của
-  // mình. Hai chỗ nói hai con số thì chỗ người dùng đọc được là chỗ sai đắt hơn.
-  "mam-non": { ten: "Mầm non", moTa: "Bé 3–7 tuổi · bố mẹ hoặc thầy cô trả lời giúp" },
-  "tieu-hoc": { ten: "Tiểu học", moTa: "Lớp 1–5" },
-  thcs: { ten: "Trung học cơ sở", moTa: "Lớp 6–9 · các em tự làm" },
-  "phu-huynh": { ten: "Phụ huynh", moTa: "Tìm hiểu về chính mình, hoặc trả lời về con" },
-};
-
-/**
- * 🔴 GĐ10 hạng mục 10.6 — MÀN 1 HỎI "AI ĐANG CẦM MÁY", KHÔNG HỎI "BÀI NÀY VỀ AI".
- *
- * Bốn thẻ cũ (Mầm non · Tiểu học · THCS · Phụ huynh) trộn hai câu hỏi khác nhau vào một
- * hàng: ba thẻ đầu nói về NGƯỜI ĐƯỢC ĐÁNH GIÁ, thẻ thứ tư nói về NGƯỜI TRẢ LỜI. Hậu quả
- * đo được: bố mẹ của một bé lớp 1 có HAI cửa cùng dẫn tới bộ Mầm non — bấm "Tiểu học →
- * Lớp 1", hoặc bấm "Phụ huynh → về con → 6 tuổi. Cửa nào cũng đúng, nên chẳng cửa nào
- * hiển nhiên, và người dùng phải đoán.
- *
- * Tách theo NGƯỜI CẦM MÁY thì mỗi bộ đề còn đúng một cửa, và tuổi/lớp chỉ hỏi MỘT lần.
- */
-export const MA_NHANH = ["hoc-sinh", "nguoi-lon"] as const;
-export type MaNhanh = (typeof MA_NHANH)[number];
-
-export const NHANH_CAM_MAY: Record<MaNhanh, { ten: string; moTa: string }> = {
-  "hoc-sinh": {
-    ten: "Em học sinh, tự làm bài",
-    moTa: "Lớp 1–9 · em tự đọc và tự trả lời",
-  },
-  "nguoi-lon": {
-    ten: "Bố mẹ hoặc thầy cô",
-    moTa: "Trả lời về một bạn nhỏ, hoặc tìm hiểu về chính mình",
-  },
-};
 
 /**
  * 🔴 KHỐI NÀY ĐÃ CO LẠI CÒN HAI KHOÁ (V2.2).

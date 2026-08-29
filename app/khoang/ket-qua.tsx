@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
 import { KhoiMaMoi } from "@/app/components/khoi-ma-moi";
+import { MO_MA_MOI } from "@config/disc-nguong";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
 import { TIEU_DE_KHOI } from "@config/disc-dien-giai";
 import { CHU_BA_BAN, CHU_BAN_KHOAN, CHU_KET_QUA, CHU_M4, TRUC } from "@config/disc-tu-dien";
@@ -285,7 +286,10 @@ export function ManKetQua({
         </div>
       )}
 
-      {ketQua.hopLe && (
+      {/* LỚP ① của cờ MO_MA_MOI (23.1) — nửa GỬI. Nửa NHẬN ở bang-gia-dinh.tsx (lớp ②),
+          đường GHI ở nha-minh.tsx (lớp ③). Tắt riêng một nửa là bày ra một mã QR mà máy
+          nhận không còn chỗ nào để nhập. */}
+      {MO_MA_MOI && ketQua.hopLe && (
         <KhoiMaMoi
           boDe={boDe.ma}
           diem={ketQua.diem}

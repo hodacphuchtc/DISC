@@ -223,7 +223,7 @@ export type MaBanKhoan = (typeof MA_BAN_KHOAN)[number];
  * không chẩn đoán gì hết — và một phụ huynh đang lo thì rất dễ đọc bất kỳ câu nào thành
  * chẩn đoán. Nên mỗi `loiMoDau` phải tự nói ra giới hạn của nó TRƯỚC khi nói phần có ích.
  */
-export type KhoiBanKhoan = {
+type KhoiBanKhoan = {
   readonly nhan: string;
   /** Trục liên quan nhất — dùng để đưa phần đó lên trước, KHÔNG dùng để kết luận. */
   readonly trucLienQuan: readonly MaTruc[];

@@ -47,7 +47,7 @@ export function chuoiChuanTac(nganHang: NganHang): string {
 }
 
 /** Băm SHA-256 dạng hex. Nhận hàm băm từ ngoài để phần lõi không phụ thuộc `node:crypto`. */
-export type HamBam = (chuoi: string) => string;
+type HamBam = (chuoi: string) => string;
 
 export function bamNganHang(nganHang: NganHang, bam: HamBam): string {
   return bam(chuoiChuanTac(nganHang));

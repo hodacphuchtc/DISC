@@ -35,7 +35,7 @@ export type MucTraLoi = {
   readonly mat?: string;
 };
 
-export type LoaiThang = "tan-suat" | "dong-y";
+type LoaiThang = "tan-suat" | "dong-y";
 
 export type BoDe = {
   readonly ma: MaBoDe;

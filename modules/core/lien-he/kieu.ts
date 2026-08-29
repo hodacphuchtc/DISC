@@ -15,7 +15,7 @@
  * Thuộc TẦNG LÕI: không React, không DOM.
  */
 
-export type KenhLienHe = "zalo" | "goi-dien";
+type KenhLienHe = "zalo" | "goi-dien";
 
 /** 🔴 Mọi trường ở đây đều do NGƯỜI LỚN tự nhập về CHÍNH HỌ. Không có gì của trẻ. */
 export type PhieuLienHe = {
@@ -33,8 +33,6 @@ export type PhieuLienHe = {
  * Hàm đội dev nối vào backend của họ.
  * Bản mặc định (`luuTamTrenMay`) chỉ ghi vào localStorage và mở Zalo.
  */
-export type GuiLienHe = (phieu: PhieuLienHe) => Promise<void> | void;
-
 /** Số điện thoại Việt Nam: 10 số, bắt đầu bằng 0. Chấp nhận khoảng trắng và dấu chấm. */
 export function chuanHoaSoDienThoai(tho: string): string {
   return tho.replace(/[\s.\-()]/gu, "");

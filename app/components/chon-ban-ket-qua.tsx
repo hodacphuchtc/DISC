@@ -20,7 +20,7 @@ import { CHU_CHON_BAN } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { hienNgayGio } from "@modules/core/tien-ich/ngay";
 
-export type BanCoTheXem = {
+type BanCoTheXem = {
   readonly id: string;
   /** ISO 8601 — mốc làm xong, dùng làm nhãn. */
   readonly ketThuc: string;

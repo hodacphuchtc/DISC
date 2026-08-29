@@ -18,13 +18,13 @@
 import { GIOI_HAN_BAI_MOI_NGUOI, GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
 
 /** Chỉ cần bấy nhiêu để xếp thứ tự. Nhận `BaiLamLuu` thật cũng vừa. */
-export type BaiCoThoiDiem = {
+type BaiCoThoiDiem = {
   readonly id: string;
   /** ISO 8601. */
   readonly ketThuc: string;
 };
 
-export type ThuMucCoThoiDiem = {
+type ThuMucCoThoiDiem = {
   readonly id: string;
   /** ISO 8601. */
   readonly taoLuc: string;

@@ -46,7 +46,7 @@ export type VaiGiaDinh = (typeof VAI_GIA_DINH)[number];
  * `laTreEm()` bên dưới vốn đã suy "là trẻ em" từ chính việc có lớp. Đoán sai thì lệch về
  * phía hỏi thừa một ô — rẻ hơn nhiều so với việc khoá một người khỏi bài của họ.
  */
-export const VAI_DANG_DI_HOC: readonly VaiGiaDinh[] = ["con", "anh-chi-em"];
+const VAI_DANG_DI_HOC: readonly VaiGiaDinh[] = ["con", "anh-chi-em"];
 
 /** Vai này có được hỏi bậc học không. */
 export function coHoiLop(vai: VaiGiaDinh): boolean {

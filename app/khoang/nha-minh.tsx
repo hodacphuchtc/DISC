@@ -24,6 +24,7 @@ import { ManKetQua } from "./ket-qua";
 import { HopThoaiHanMuc } from "@/app/components/hop-thoai-han-muc";
 import { KhoiSoSanh } from "@/app/components/khoi-so-sanh";
 import { GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
+import { MO_MA_MOI } from "@config/disc-nguong";
 import { CHU_M6 } from "@config/disc-tu-dien";
 import { napBoDe } from "@modules/core/bo-de/nap";
 import { MA_TRUC, type MaTruc } from "@modules/core/bo-de/kieu";
@@ -112,6 +113,11 @@ export function KhoangNhaMinh({
    * bốn con số + ngày phát — không phải tên, vì tên do máy nhận tự đặt.
    */
   async function nhanMa(ten: string, hoSo: HoSoMoi): Promise<boolean> {
+    // 🔴 LỚP ③ của cờ MO_MA_MOI (23.1) — ĐƯỜNG GHI, và là lớp quan trọng nhất. Hai lớp
+    // kia chỉ giấu nút; chặn ở đây mới đảm bảo cờ tắt rồi thì KHÔNG hồ sơ mới nào được đẻ
+    // ra, dù có ai gọi tới hàm này bằng đường nào. Bài học V4.1: cờ phải chặn ở BA chỗ.
+    if (!MO_MA_MOI) return false;
+
     const daCo = await docThanhVien();
     const dauVan = (h: { boDe: string; diem: Record<string, number>; ngayPhat: string }) =>
       `${h.boDe}|${h.ngayPhat}|${MA_TRUC.map((t) => h.diem[t]).join(",")}`;

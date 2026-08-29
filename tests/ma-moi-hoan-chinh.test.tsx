@@ -2,7 +2,6 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { KhoiMaMoi } from "../app/components/khoi-ma-moi";
-import { KhoangNhaMinh } from "../app/khoang/nha-minh";
 import { HAN_MA_MOI_NGAY } from "../config/disc-gia-dinh";
 import { CHU_MA_HONG, CHU_MA_MOI } from "../config/disc-tu-dien";
 import { chuanHoaMa, goiHoSo, moHoSo } from "../modules/core/gia-dinh/ma-moi";
@@ -51,6 +50,8 @@ beforeEach(async () => {
 afterEach(async () => {
   cleanup();
   vi.restoreAllMocks();
+  vi.doUnmock("@config/disc-nguong");
+  vi.resetModules();
   await xoaSach();
   await xoaSachThanhVien();
 });
@@ -116,7 +117,21 @@ describe("🔴 đầu PHÁT — khối mã mời ở màn kết quả", () => {
 });
 
 describe("🔴 đầu NHẬN — máy kia gõ mã vào sổ", () => {
+  /**
+   * 🔴 GIẢ LẬP CỜ `MO_MA_MOI` BẬT (23.1). Cờ mặc định TẮT nên ô nhập không dựng ra nữa.
+   * Sáu cửa trong khối này kiểm *"tính năng chạy ĐÚNG khi bật"* — điều vẫn còn đúng, và là
+   * thứ phải còn đúng vào ngày ai đó bật lại. Trạng thái TẮT do `tests/co-ma-moi.test.tsx`
+   * canh riêng.
+   *
+   * Import LƯỜI (`await import`) để `doMock` kịp ăn — khuôn của `tests/co-noi-dung-tre.test.tsx`.
+   */
   async function moNhaMinh() {
+    vi.resetModules();
+    vi.doMock("@config/disc-nguong", async (goc) => ({
+      ...(await goc<typeof import("../config/disc-nguong")>()),
+      MO_MA_MOI: true,
+    }));
+    const { KhoangNhaMinh } = await import("../app/khoang/nha-minh");
     render(<KhoangNhaMinh />);
     await waitFor(() => expect(screen.getByLabelText(CHU_MA_MOI.oNhap)).toBeTruthy());
   }

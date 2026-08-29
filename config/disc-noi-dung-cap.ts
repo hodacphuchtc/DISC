@@ -43,7 +43,7 @@ import type { HuongLechCap, KieuTrungKhop, TheQuyen } from "./disc-lech-cap";
 
 import type { MaTruc } from "@modules/core/bo-de/kieu";
 
-export type KhoiMoTaLech = {
+type KhoiMoTaLech = {
   /** Nói về chính người đang đọc. */
   readonly veToi: string;
   /** 🔴 Nói về người kia — BẮT BUỘC lật khung. Xem luật 1 ở đầu file. */

@@ -37,7 +37,7 @@ import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
 import { soSanhTheoThoiGian } from "@modules/report/so-sanh-thoi-gian";
 import { boDeChoThanhVien, boDeQuanSatTheoLop } from "@modules/test/dinh-tuyen";
-import { MO_NOI_DUNG_TRE, laBoDeTre } from "@config/disc-nguong";
+import { MO_MA_MOI, MO_NOI_DUNG_TRE, laBoDeTre } from "@config/disc-nguong";
 import type { CheDoXoaThanhVien, ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
   docTatCa,
@@ -218,7 +218,9 @@ export function KhoangBangGiaDinh({
         </section>
       )}
 
-      {onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
+      {/* LỚP ② của cờ MO_MA_MOI (23.1) — nửa NHẬN. Lớp ① ở màn kết quả (nửa GỬI),
+          lớp ③ ở đường GHI trong nha-minh.tsx. Ba lớp, ba tầng khác nhau. */}
+      {MO_MA_MOI && onNhanMa && <NhanMaMoi homNay={homNay()} onThem={onNhanMa} />}
 
       <p
         data-thu="thong-diep-chan"

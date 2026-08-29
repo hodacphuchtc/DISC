@@ -20,14 +20,6 @@ build/
 .turbo/
 *.tsbuildinfo
 
-# Vercel
-.vercel/
-
-# Supabase (local Docker — không commit dữ liệu/khối lượng lớn)
-.supabase/
-supabase/.branches/
-supabase/.temp/
-
 # Logs & OS
 logs/
 *.log
@@ -42,8 +34,15 @@ coverage/
 # Claude Code — cấu hình cục bộ của máy này, không đẩy lên
 .claude/settings.local.json
 
-# Bài làm thật để phân tích item — KHÔNG BAO GIỜ commit (NĐ 13/2023)
-/du-lieu-thu/
+# 🔴 BÀI LÀM THẬT ĐỂ PHÂN TÍCH ITEM — KHÔNG BAO GIỜ COMMIT (NĐ 13/2023).
+#
+# Không có gạch chéo đầu ⇒ khớp thư mục tên này ở MỌI cấp, không riêng gốc. Bản cũ ghi
+# "/du-lieu-thu/" nên nó chỉ chặn ở gốc — repo này PUBLIC, và một lần ai đó bỏ bài làm thật
+# vào một thư mục "du-lieu-thu" ở cấp khác là lộ dữ liệu trẻ em ra internet.
+du-lieu-thu/
+# Trừ bộ mẫu BỊA đang có, đã khai rõ trong docs/du-lieu-thu/README.md.
+!docs/du-lieu-thu/
+!docs/du-lieu-thu/**
 
 # Next tự sinh, và đổi qua lại giữa .next/types/ với .next/dev/types/ tuỳ lần cuối
 # chạy `dev` hay `build` — để trong git thì cây làm việc bẩn mãi. Đã kiểm: thiếu file
