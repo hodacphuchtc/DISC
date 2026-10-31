@@ -62,7 +62,7 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 29/08/2026 — GĐ23–GĐ25 xong, sổ V4 HẾT VIỆC MÁY)
+## TRẠNG THÁI (cập nhật 31/10/2026 — GĐ27 giao diện Aurora + nội dung gia đình: HẾT VIỆC MÁY, chờ bấm thử)
 
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V4.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
@@ -70,6 +70,8 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 ### 🟢 ĐÃ XONG
 
 **`PLAN_V4.md`: 8/10 ô ✅** — GĐ23 (mã mời) · GĐ24 (bảo mật) · GĐ25 (context + dọn rác).
+🆕 **GĐ27** (5 ô, 31/10/2026): mảng nhấn tối "Aurora" + radar + nội dung vợ↔chồng/anh-chị↔em
+(cờ `MO_NOI_DUNG_DOI`). Code + **1.579 test xanh**; **chưa tick** vì chưa ai nhìn bằng mắt.
 Hai ô còn lại chặn bởi NGƯỜI/NGOÀI. Ba sổ cũ (`V3` 7/10 · `V2` 25/27 · `V1_LUU` 68/68) đã
 đóng — chỉ để tra *vì sao*, đừng tick thêm.
 

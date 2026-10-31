@@ -62,4 +62,4 @@
 | 27/08/2026 | **Được nói CÁCH học, cấm ĐOÁN năng lực** | Luật §9.2 số 5 cấm gắn học lực. Cách tổ chức việc học cùng con là lời khuyên quy trình, khác hẳn dự đoán môn/năng lực. Ranh giới đặt ở đó và có test canh |
 | 27/08/2026 | **Cường độ chỉ đổi MỘT mệnh đề, không bao giờ đổi mạch văn** | Phép đo quá thô để đỡ thang cao/vừa/thấp: một nấc trả lời dịch 4–10 điểm tuỳ bộ. Không cố làm ngưỡng chính xác — mà chặn thiệt hại khi ngưỡng sai. Nội dung khoá theo THỨ HẠNG, vốn ổn định hơn nhiều |
 | 27/08/2026 | **Lời khuyên cho người lớn và bản tự đọc là HAI bộ chữ khác nhau** | Không phải bản dịch của nhau. Bê chữ viết cho phụ huynh sang bộ THCS rồi chỉ đổi tiêu đề là đúng lỗi đã trả giá sáng cùng ngày |
-
+| 30/10/2026 | **Giao diện đi theo phương án "Aurora công nghệ"**: nền tím đậm chỉ ở mảng nhấn | Chủ dự án chọn sau khi xem ba bản vẽ, biết rõ nó chạm Brand DNA "không nền tối nặng". Thu hẹp ngoại lệ ở hero/thẻ kết quả để vẫn giữ tỉ lệ trắng 55–65% và bản in sáng. Màu logo KHÔNG đổi |

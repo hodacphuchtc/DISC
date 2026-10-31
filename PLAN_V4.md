@@ -4,42 +4,42 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**29/08/2026 — GĐ23 + GĐ24 + GĐ25 xong trọn. Sổ HẾT VIỆC MÁY: 8/10 ô ✅.**
+**31/10/2026 — GĐ27 (giao diện Aurora + nội dung gia đình): TOÀN BỘ PHẦN MÁY ĐÃ LÀM, CHƯA AI NHÌN.**
 
-**1. Vừa xong.** Mã mời tắt bằng cờ · CSP theo băm cho bản deploy · `.gitignore` siết ·
-`CLAUDE.md` tách kho · tài liệu hết dạy sai · 26 export chết dọn xong.
-**1.428 test xanh** (+21), `kiem` + `build` xanh, gói chính **vẫn 290 KB gzip**.
+**1. Vừa xong.** Chủ dự án chọn phương án 2 "Aurora công nghệ" (30/10). Đã có: mảng nhấn tối
+`data-nhan-toi` (token + lưới + chip + in về nền sáng) · hero ở khung "DISC gia đình", màn
+"Trước khi bắt đầu", đầu màn làm bài · nút trả lời đang chọn nổi hẳn · radar + chip điểm ở
+Kết quả · tiêu đề mỗi bản ở Cả nhà · nội dung vợ↔chồng / anh-chị↔em (`config/disc-noi-dung-doi.ts`,
+cờ `MO_NOI_DUNG_DOI`) · hồ sơ ký có thêm A-CẶP, B4, B5. **1.579 test xanh**, build xanh,
+gói chính **294 KB / 300** — 🔴 CHỈ CÒN ~6 KB, hạng mục sau muốn thêm gì phải đo lại.
 
-**2. Đang dở.** Không còn hạng mục máy nào. Việc gần nhất: **chủ dự án bấm DEMO CUỐI của
-GĐ23 và GĐ25** (xem hai mục *DEMO CUỐI* trong sổ này).
+**2. Đang dở.** Không còn việc máy ở GĐ27. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu`
+(cổng 3100) ở 320/390 px và cửa sổ rộng, rồi bấm In ở một kết quả. Chưa tick 27.1–27.5.
 
-**3. Chặn ở NGƯỜI / NGOÀI.** `26.1` Cloudflare + tên miền (**chặn cứng ngày phát**) ·
-`26.2` bảy việc bấm mắt GĐ18 · hai chữ ký chuyên môn (xem `CLAUDE.md` mục TRẠNG THÁI).
+**3. Chặn ở NGƯỜI / NGOÀI.** Như cũ (`26.1`, `26.2`, hai chữ ký) **cộng**: B5 (nội dung mới
+của 27.5) chưa ai ký; hai hồ sơ ký đã ĐỔI nội dung — nếu đã gửi bản cũ phải gửi lại.
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- `npm audit` **0 lỗ hổng** · không `eval`/`innerHTML`/`dangerouslySetInnerHTML` · **không
-  một lời gọi mạng nào** rời máy · không `console.log` sót. ADR-001 đang được giữ thật.
-- **Ngân sách context:** `CLAUDE.md` 53.593 → **10.983 byte** (−80%); nạp cố định 74.549 →
-  **31.524 byte ≈ 9.851 token/lượt** (giảm ~13.400). Kho tra cứu nay ở `docs/so-seo.md`
-  (45 bài học) và `docs/decisions/nhat-ky-quyet-dinh.md` (52 quyết định).
-  `tests/ngan-sach-context.test.ts` canh trần để nó không phình lại.
-- **CSP dùng BĂM, sinh mỗi bản build.** `style-src` **buộc phải** có `'unsafe-inline'` (8
-  thuộc tính `style=` do React đặt, không băm được) — **cố ý, đừng "sửa"**.
-  `frame-ancestors 'self'` **sẽ phải đổi** khi app chủ nhúng: sửa `NGUON_NHUNG_CHO_PHEP`
-  ở `scripts/sinh-danh-sach-cache.mjs`.
-- **Vân tay service worker đổi mỗi lần build** kể cả khi mã không đổi (Next đúc `buildId`
-  ngẫu nhiên). KHÔNG phải lỗi, và **đừng ghim `generateBuildId`**.
-- **App chỉ có MỘT route** (`app/page.tsx`). Đừng suy cấu trúc URL từ tên thư mục component.
-- Xoá export chết **KHÔNG giảm byte nào** của gói chính — đó là vệ sinh mã, không phải tối ưu.
+- Node v26 có `localStorage` thử nghiệm che jsdom ⇒ ~180 test đỏ giả. Đã chặn bằng
+  `execArgv` trong `vitest.config.mts` (chỉ thêm cờ khi Node biết cờ).
+- `semgrep` CHƯA CÀI trên máy này nên bước cuối của `npm run kiem` không chạy được.
+- Xuất ảnh/PDF vẽ từ dữ liệu, KHÔNG đọc DOM ⇒ thẻ tối không ảnh hưởng chúng.
+- `tests/do-noi` cắt khối in tới `prefers-reduced-motion` đầu tiên ⇒ khối animation của mảng
+  tối đặt CUỐI `globals.css` có chủ đích. Đừng dời lên.
+- `ban-tong-hop.test` cấm câu ≥ 60 ký tự dùng chung giữa hai chiều của một cặp ⇒ mọi câu dài
+  của nội dung cặp phải mang `{toi}`/`{nguoiKia}`.
+- Khảo sát ghi sai: `mo-dau.tsx` là ba khối đầu BẢN BÁO CÁO, không phải màn chào.
 
-**5. Cạm bẫy** — nay ở `docs/so-seo.md` (grep theo từ khoá vùng đang sửa), **đừng chép vào đây**.
+**5. Cạm bẫy** — `docs/so-seo.md`; chưa thêm bài mới ở phiên này (nên thêm: *nội dung cặp phải
+mang tên người; test cắt khối in theo chuỗi*).
 
-**6. 🔴 CHƯA PUSH.** Commit của phiên này còn ở local.
+**6. 🔴 CHƯA COMMIT, CHƯA PUSH.** Toàn bộ GĐ27 còn ở cây làm việc (điểm dừng bắt buộc).
 
-**7. Lệnh phiên sau nên chạy.**
+**7. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 1.428 test; máy tải nặng thì npx vitest run --maxWorkers=2
-npm run xem-thu   # bản phát hành thật, cổng 3100 (?so-lieu=1 để đọc phễu)
+npm run kiem      # 1.579 test (semgrep sẽ báo thiếu — bình thường trên máy này)
+npm run xem-thu   # cổng 3100
+node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung cặp
 ```
 
 ---
@@ -334,6 +334,75 @@ chung một máy"* mà không phá ADR-001. Tắt nó là nhận lại cái tr�
 
 Một cái link công khai, mở được trên 4G, gửi cho người khác họ mở được — **và đẩy được bản
 vá tới nó, và Console sạch không một vi phạm CSP**.
+
+---
+
+## 🔴 GIAI ĐOẠN 27 — Giao diện "Aurora công nghệ" + nội dung gia đình sâu hơn
+
+> Chốt 30/10/2026: chủ dự án chọn **phương án 2** trong ba bản vẽ (hero/thẻ kết quả nền
+> tím đậm + lưới mạch điện + kính mờ + radar bốn trục; thân trang vẫn sáng). Bản vẽ gốc
+> chưa lưu trong repo. Ranh giới: **không đổi màu logo**, tối chỉ ở mảng nhấn (ADR trong
+> `nhat-ky-quyet-dinh.md`), **CSS thuần + SVG nội tuyến** (gói chính còn dư ~10 KB gzip),
+> mọi hiệu ứng có `motion-reduce:`, tương phản ≥ 4,5:1, in/PDF không mất nội dung.
+> 🔴 `26.1` cố ý deploy bản CŨ để tách rủi ro hạ tầng khỏi rủi ro code — GĐ27 đi sau nó
+> khi có host, nhưng làm được trên local ngay.
+
+- [ ] **27.1 — Nền tảng: token aurora + khối nhấn tối dùng chung**
+  - **(a)** `@theme` thêm token nền tím đậm, gradient mesh, lưới mạch, viền kính, glow cam.
+    Một lớp dùng chung `data-nhan-toi` (hero/thẻ kết quả) để chữ trên nền tối có bảng màu
+    riêng đạt tương phản. Cập nhật `config/thuong-hieu.ts` cho khớp.
+  - **(b)** `npm run xem-thu`, nhìn ở 320/390 px và bật giảm chuyển động.
+  - **(c)** `tests/do-noi`, `mau-va-chuyen-dong`, `be-ngang` xanh; thêm test đo tương phản
+    chữ trên nền tối.
+  - **(d)** 0,4 ngày.
+  - **(e) chặn:** MÁY.
+  - **Tiến độ 30/10/2026:** code + `tests/nen-toi.test.ts` xanh, build 289 KB. **CHƯA tick** —
+    (b) chưa ai nhìn bằng mắt (tiện ích Chrome không kết nối được lúc đó).
+
+- [ ] **27.2 — Màn Chào và Làm bài**
+  - **(a)** Hero tối ở khung `cac-buoc.tsx`, `truoc-khi-bat-dau.tsx` và đầu `lam-bai.tsx`; nút
+    trả lời đang chọn nổi hẳn (`thang-tra-loi.tsx`); thanh tiến độ phân đoạn mười ô.
+    🔴 LỆCH BẢN VẼ: bản vẽ có thang 5 ô vuông phát sáng, bản làm giữ nút dọc/ngang cũ + viền cam
+    (không đổi bố cục thang để khỏi vỡ test cho trẻ nhỏ). `mo-dau.tsx` KHÔNG phải màn chào.
+  - **(b)** Làm trọn một bài trên `xem-thu` ở 390 px.
+  - **(c)** Test hiện có xanh; chữ mới chỉ vào `config/disc-tu-dien.ts`.
+  - **(d)** 0,5 ngày.
+  - **(e) chặn:** MÁY (sau 27.1).
+  - **Tiến độ 31/10/2026:** HOÀN TẤT PHẦN MÁY — hero ở khung "DISC gia đình" + "Trước khi bắt đầu" + đầu màn làm bài; nút đang chọn có viền cam. Chờ chủ dự án bấm thử rồi tick.
+
+- [ ] **27.3 — Màn Kết quả: radar bốn trục + chip DISC**
+  - **(a)** `ket-qua.tsx`, `bieu-do-cot.tsx`: radar SVG có vẽ vào, chip D/I/S/C phát sáng.
+    Giữ bản in/PDF/ảnh chia sẻ đúng như cũ (không bóng, không nền tối khi in).
+  - **(b)** In thử + xuất ảnh + xuất PDF một kết quả mẫu.
+  - **(c)** `ban-in`, `hinh-minh-hoa`, test xuất ảnh/PDF xanh.
+  - **(d)** 0,5 ngày.
+  - **(e) chặn:** MÁY (sau 27.1).
+  - **Tiến độ 31/10/2026:** HOÀN TẤT PHẦN MÁY — radar + chip điểm trong thẻ tối; xuất ảnh/PDF không đọc DOM nên không ảnh hưởng. Chờ chủ dự án bấm In thử rồi tick.
+
+- [ ] **27.4 — Màn Cả nhà + mở rộng hồ sơ ký duyệt**
+  - **(a)** `ban-tong-hop.tsx`: tiêu đề mỗi bản là mảng tối + khối nội dung mối quan hệ.
+    🔴 LỆCH BẢN VẼ: `phan-tich.tsx` CHƯA đổi, và chip cặp (H ⇄ N) trong bản vẽ CHƯA làm. Mở rộng
+    `scripts/xuat-noi-dung-ky-duyet.mjs` để đọc cả `config/disc-noi-dung-cap.ts`
+    (56 đoạn hiện KHÔNG nằm trong hồ sơ ký nào).
+  - **(b)** Chạy script: 16 đoạn (có trẻ) vào Gói A, 40 đoạn vào Gói B.
+  - **(c)** Test hiện có xanh + test canh script phủ đủ file nội dung.
+  - **(d)** 0,4 ngày.
+  - **(e) chặn:** MÁY.
+  - **Tiến độ 30/10/2026:** PHẦN SCRIPT XONG — `scripts/xuat-noi-dung-ky-duyet.mjs` nay đọc
+    `disc-noi-dung-cap.ts` (16 đoạn vào Gói A mục *A-CẶP*, 40 đoạn vào Gói B mục *B4*), kèm
+    `tests/ho-so-ky-duyet-phu-du.test.ts`. Sửa luôn lỗi cũ in "undefined" 33 chỗ trong Gói A.
+    **Hai hồ sơ ĐÃ ĐỔI NỘI DUNG — nếu đã gửi ký bản cũ thì phải gửi lại.** Chưa làm: màn Cả
+    nhà theo bản vẽ. Chưa tick.
+  - **31/10/2026:** tiêu đề mỗi bản ở Cả nhà đã là mảng tối; mục B5 vào hồ sơ. HOÀN TẤT PHẦN MÁY.
+
+- [ ] **27.5 — Nội dung gia đình sâu hơn (bản NHÁP)**
+  - **(a)** Tách `ngang-vai` thành vợ↔chồng và anh↔chị↔em; tình huống hằng ngày; mẫu câu
+    nên nói/nên tránh; vòng xung đột; kế hoạch 7 ngày. Vào Gói B, có test như các đoạn cũ.
+  - **(b)** Đọc thử các tình huống trên màn Cả nhà.
+  - **(c)** `lech-cap`, `noi-dung-moi`, `ba-ban-noi-dung` mở rộng cho khuôn mới.
+  - **(d)** 1,5 ngày.
+  - **(e) chặn:** NGƯỜI — viết được ngay nhưng **chỉ phát cho khách thật sau khi chuyên
+    môn ký Gói B**; trước đó tắt khối này ở bản phát.
 
 ---
 

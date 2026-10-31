@@ -207,7 +207,10 @@ describe("cờ BẬT — rút lại được trong 30 giây", () => {
   it("🔴 và nhận một mã thật vào sổ vẫn chạy đúng", async () => {
     await dungNhaMinh(true);
     await screen.findByLabelText(CHU_MA_MOI.oNhap);
-    const ma = goiHoSo({ boDe: "PH", vai: "bo", diem: { ...DIEM }, ngayPhat: "2026-08-29" });
+    // 🔴 KHÔNG gõ cứng ngày: mã có hạn, ngày cố định thì một ngày nào đó test tự đỏ (đã đỏ
+    // từ khi trôi qua hạn của "2026-08-29"). `sv-SE` cho đúng dạng yyyy-mm-dd.
+    const homNay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+    const ma = goiHoSo({ boDe: "PH", vai: "bo", diem: { ...DIEM }, ngayPhat: homNay });
 
     fireEvent.change(screen.getByLabelText(CHU_MA_MOI.oNhap), { target: { value: ma } });
     fireEvent.click(screen.getByRole("button", { name: CHU_MA_MOI.nutMo }));

@@ -264,3 +264,18 @@
   theo NGƯỜI CẦM MÁY thì mỗi bộ đề còn đúng một cửa, và tuổi/lớp chỉ hỏi MỘT lần.
   **Bài học chung: một màn chọn mà các lựa chọn trả lời hai câu hỏi khác nhau thì nó không
   phải màn chọn, nó là một câu đố.**
+
+- **Nội dung cặp: mọi câu dài phải mang tên người (30/10/2026, GĐ27.5).** `tests/ban-tong-hop.test`
+  cấm câu ≥ 60 ký tự dùng chung giữa hai chiều của MỘT cặp (mẹ đọc về Bin, Bin đọc về mẹ). Bảy
+  ngày thử và nhãn khối gập đầu tiên viết câu cố định nên đỏ ngay. Sửa bằng `{toi}`/`{nguoiKia}`
+  trong từng câu dài, kể cả nhãn UI. **Nhãn UI chữ cố định cũng là "câu dùng chung".**
+- **Test cắt khối in theo CHUỖI nên thứ tự trong globals.css là luật (30/10/2026).**
+  `tests/do-noi` lấy từ lần xuất hiện đầu tiên của `@media print` tới lần đầu của
+  `prefers-reduced-motion`. Một chú thích có chữ "@media print" hoặc một khối animation chen
+  trước khối giảm chuyển động làm nó đọc thiếu khối in. Khối animation đặt CUỐI file.
+- **Node ≥ 25 che `localStorage` của jsdom (30/10/2026).** Node v26 gắn `localStorage` thử
+  nghiệm vào global và nó nổ khi không có `--localstorage-file` ⇒ ~180 test lưu trữ đỏ giả. Chặn
+  bằng `execArgv` trong `vitest.config.mts`. Test gõ cứng ngày (mã mời "2026-08-29") cũng tự đỏ
+  khi hạn trôi qua: luôn lấy ngày hôm nay.
+- **Khảo sát bằng agent có thể gán nhầm tên file (30/10/2026).** Báo cáo ghi `mo-dau.tsx` là màn
+  chào; thực ra nó là ba khối đầu BẢN BÁO CÁO. Màn chào thật là `cac-buoc.tsx`. Đọc file trước khi sửa.

@@ -341,7 +341,7 @@ DISC (khoang)
 | Logo SATA / ROBO | `#FF6F00` / `#800080` | `MAU_LOGO` — **Brand DNA cấm đổi, kể cả sang màu gần giống** |
 | Tỷ lệ màu | trắng 55–65% · tím 20–30% · cam 10–15% | `TY_LE_MAU` |
 | Font | Be Vietnam Pro (Regular + Bold) | `FONT` — ⚠️ lựa chọn TẠM theo ADR-004 |
-| Nền tối | **Cấm** — Brand DNA cấm "nền tối nặng" | Brand DNA |
+| Nền tối | **Cấm nền tối toàn trang.** Ngoại lệ chốt 30/10/2026: được dùng nền tím đậm ở **mảng nhấn** (hero, thẻ kết quả); thân trang và mọi bản in vẫn nền sáng | Brand DNA + `nhat-ky-quyet-dinh.md` |
 | Bo góc | `rounded-xl` cho thẻ và nút điều hướng | thanh-ben.tsx |
 | Chữ tiếng Việt | 100% có dấu, từ điển duy nhất ở `config/` | `.claude/rules/ngon-ngu-ui.md` |
 
