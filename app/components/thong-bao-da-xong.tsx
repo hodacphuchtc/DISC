@@ -35,6 +35,7 @@ export function ThongBaoDaXong({
   idBai,
   luuHong = false,
   hopLe,
+  onLamTiep,
 }: {
   readonly boDe: MaBoDe;
   readonly bietDanh: string;
@@ -42,6 +43,12 @@ export function ThongBaoDaXong({
   /** Lưu THẤT BẠI (không phải đang lưu). `idBai` còn `null` lúc đang lưu nên không dùng được. */
   readonly luuHong?: boolean;
   readonly hopLe: boolean;
+  /**
+   * Về danh sách cả nhà để làm tiếp. 🔴 KHÔNG nhảy thẳng vào bài của người kế: mọi bài mới phải
+   * đi qua cửa hạn mức ở màn Nhà mình (`batDauBaiMoi`) — một lối tắt từ đây là dựng đúng lối vòng
+   * mà cửa đó cấm. Nút chỉ đưa người dùng về đúng chỗ và nêu tên người cần làm tiếp.
+   */
+  readonly onLamTiep?: () => void;
 }) {
   const [doc, datDoc] = useState<Doc | null>(null);
 
@@ -133,6 +140,17 @@ export function ThongBaoDaXong({
               thieu.map((d) => `${d.ten} (${d.viec ? chuViecConThieu(d.viec).replace(/\.$/u, "") : ""})`).join("; "),
             )}`}
         </p>
+      )}
+      {onLamTiep && thieu.length > 0 && (
+        <button
+          type="button"
+          onClick={onLamTiep}
+          data-thu="nut-lam-tiep"
+          className="mt-3 min-h-[44px] rounded-xl border px-4 text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+          style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe, outlineColor: MAU.timCongNghe }}
+        >
+          {CHU_DAY_DU.nutLamTiep.replace("{ten}", thieu[0].ten)}
+        </button>
       )}
     </div>
   );

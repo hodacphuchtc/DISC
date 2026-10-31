@@ -13,9 +13,9 @@
  * Thuộc TẦNG GIAO DIỆN THAM CHIẾU (ADR-004).
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 
-import { ManBanTongHop, type NguoiCoBai } from "./ban-tong-hop";
+import type { NguoiCoBai } from "./ban-tong-hop";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { KhoiConThieuAi } from "@/app/components/con-thieu-ai";
 import { BangKiemDayDu } from "@/app/components/bang-kiem-day-du";
@@ -42,17 +42,32 @@ import {
   thuMucSapMat,
 } from "@modules/core/luu-tru/kho-bai";
 
+/**
+ * 29.8 — MÀN BẢN TỔNG HỢP NẠP LƯỜI. Nó kéo theo cả kho chữ của phân tích cả nhà (mô tả chỗ vênh,
+ * thoả thuận, việc thử…) mà chỉ cần SAU KHI bấm *Phân tích*; để trong gói nạp ngay thì gói chính
+ * chạm trần 300 KB. Nội dung vẫn vào DOM ngay khi màn mở, nên bản in có đủ.
+ */
+const ManBanTongHop = lazy(() =>
+  import("./ban-tong-hop").then((m) => ({ default: m.ManBanTongHop })),
+);
+
 export function KhoangPhanTich({
   onLamNgay,
 }: {
   /** Cho một người còn thiếu làm bài luôn trên máy này — mở bước 2 với người đó. */
   readonly onLamNgay?: (id: string) => void;
 } = {}) {
-  const [dangPhanTich, datDangPhanTich] = useState<readonly NguoiCoBai[] | null>(null);
-  const [choThuMuc, datChoThuMuc] = useState<readonly PhanTichGiaDinh[] | null>(null);
+  const [dangPhanTich, datDangPhanTich] = useState<
+    readonly NguoiCoBai[] | null
+  >(null);
+  const [choThuMuc, datChoThuMuc] = useState<readonly PhanTichGiaDinh[] | null>(
+    null,
+  );
   const [soNguoiCoHoSo, datSoNguoiCoHoSo] = useState<number | null>(null);
   /** Người trong sổ CHƯA có hồ sơ nào — chính là chỗ trống của bức tranh cả nhà. */
-  const [thieu, datThieu] = useState<readonly { id: string; ten: string }[]>([]);
+  const [thieu, datThieu] = useState<readonly { id: string; ten: string }[]>(
+    [],
+  );
   /** Các lần đã chạy, mới nhất trước. Tối đa `GIOI_HAN_THU_MUC`. */
   const [thuMuc, datThuMuc] = useState<readonly PhanTichGiaDinh[]>([]);
   /** Bản cũ đang mở lại — `null` = đang chạy bản mới. */
@@ -62,12 +77,19 @@ export function KhoangPhanTich({
   const [dayDu, datDayDu] = useState<readonly DayDuMotNguoi[]>([]);
 
   const demLai = useCallback(async () => {
-    const [tv, bai, pt] = await Promise.all([docThanhVien(), docTatCa(), docPhanTich()]);
+    const [tv, bai, pt] = await Promise.all([
+      docThanhVien(),
+      docTatCa(),
+      docPhanTich(),
+    ]);
     const coHoSo = (t: (typeof tv)[number]) =>
-      bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa);
+      bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) ||
+      Boolean(t.nhanQuaMa);
     datDayDu(dayDuCaNha(tv, bai));
     datSoNguoiCoHoSo(tv.filter(coHoSo).length);
-    datThieu(tv.filter((t) => !coHoSo(t)).map((t) => ({ id: t.id, ten: t.ten })));
+    datThieu(
+      tv.filter((t) => !coHoSo(t)).map((t) => ({ id: t.id, ten: t.ten })),
+    );
     // Mới nhất lên trước: người ta tìm lần vừa chạy nhiều hơn tìm lần đầu tiên.
     datThuMuc([...pt].sort((a, b) => b.taoLuc.localeCompare(a.taoLuc)));
   }, []);
@@ -96,7 +118,10 @@ export function KhoangPhanTich({
     const [tv, ds] = await Promise.all([docThanhVien(), docTatCa()]);
     ghiMoc("phanTichGiaDinh", "ba-buoc", new Date().toISOString());
     datDangPhanTich(
-      tv.map((t) => ({ tv: t, bai: ds.filter((b) => b.maThanhVien === t.id && b.ketQua.hopLe) })),
+      tv.map((t) => ({
+        tv: t,
+        bai: ds.filter((b) => b.maThanhVien === t.id && b.ketQua.hopLe),
+      })),
     );
   }
 
@@ -136,23 +161,27 @@ export function KhoangPhanTich({
 
   if (banCu) {
     return (
-      <ManBanTongHop
-        nguoi={[]}
-        banCoSan={banCu}
-        khoiThieu={khoiThieu}
-        onDong={() => datBanCu(null)}
-      />
+      <Suspense fallback={null}>
+        <ManBanTongHop
+          nguoi={[]}
+          banCoSan={banCu}
+          khoiThieu={khoiThieu}
+          onDong={() => datBanCu(null)}
+        />
+      </Suspense>
     );
   }
 
   if (dangPhanTich) {
     return (
-      <ManBanTongHop
-        nguoi={dangPhanTich}
-        chuaDuBan={new Set(dayDu.filter((d) => !d.daDu).map((d) => d.id))}
-        khoiThieu={khoiThieu}
-        onDong={() => datDangPhanTich(null)}
-      />
+      <Suspense fallback={null}>
+        <ManBanTongHop
+          nguoi={dangPhanTich}
+          chuaDuBan={new Set(dayDu.filter((d) => !d.daDu).map((d) => d.id))}
+          khoiThieu={khoiThieu}
+          onDong={() => datDangPhanTich(null)}
+        />
+      </Suspense>
     );
   }
 
@@ -163,7 +192,9 @@ export function KhoangPhanTich({
         <BangKiemDayDu ds={dayDu} />
         <KhungTestLaiTuKho />
       </div>
-      <p className={`text-[14px] leading-relaxed text-neutral-700 ${KHUNG.doc}`}>
+      <p
+        className={`text-[14px] leading-relaxed text-neutral-700 ${KHUNG.doc}`}
+      >
         {CHU_TONG_HOP.moTa}
       </p>
 
@@ -204,7 +235,11 @@ export function KhoangPhanTich({
       )}
 
       {loi && (
-        <p role="alert" className="mt-3 text-[14px]" style={{ color: MAU.camDamChoChu }}>
+        <p
+          role="alert"
+          className="mt-3 text-[14px]"
+          style={{ color: MAU.camDamChoChu }}
+        >
           {loi}
         </p>
       )}
@@ -237,7 +272,10 @@ export function KhoangPhanTich({
                   type="button"
                   onClick={() => moThuMuc(t)}
                   className="ml-auto min-h-[44px] rounded-xl border px-4 text-[14px] font-semibold"
-                  style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
+                  style={{
+                    borderColor: MAU.timCongNghe,
+                    color: MAU.timCongNghe,
+                  }}
                 >
                   {CHU_TONG_HOP.nutMoThuMuc}
                 </button>

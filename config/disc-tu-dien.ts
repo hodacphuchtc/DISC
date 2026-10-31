@@ -1018,6 +1018,12 @@ export const CHU_TONG_HOP = {
   nutHuy: "Huỷ",
   nutDong: "Đóng",
 
+  /** 29.8 — đọc nhanh cho phụ huynh: chọn người, mở/gập hết, và MỘT việc cụ thể nổi lên đầu. */
+  nhanChonNguoi: "Xem lời khuyên của",
+  nutMoHet: "Mở hết",
+  nutGapHet: "Gập hết",
+  homNayThu: "Hôm nay thử",
+  homNayThuVoi: "Hôm nay thử với {nguoiKia}",
   tieuDeBan: "Lời khuyên dành cho {ten}",
   /** Tóm tắt dưới tiêu đề khi gập: ai ở cạnh ai. Chi tiết xổ ra khi bấm. */
   tomTatBan: "Khi ở cạnh {ds} — bấm để xem chi tiết",
@@ -1083,6 +1089,15 @@ export const CHU_NOI_DUNG_DOI = {
     "việc dưới đây, “{toi}” là {tenToi}. Hết bảy ngày thì {toi} và {nguoiKia} ngồi lại xem " +
     "điều gì đã đỡ.",
   ghiChu: "Đây là gợi ý để {toi} và {nguoiKia} cùng thử, không phải kết luận về ai.",
+  /** 29.6 — bản dành cho BÉ đọc (hoặc bố mẹ đọc cùng bé): xưng hô theo vai người kia. */
+  moTaKeHoachTre:
+    "Việc nhỏ dành cho {tenToi}, làm cùng {goiNguoiKia}. Trong các việc dưới đây, “{xungTre}” là {tenToi}. Bố mẹ có thể đọc cùng bé. Hết bảy ngày thì {xungTre} và {goiNguoiKia} ngồi lại xem điều gì đã đỡ.",
+  ghiChuTre: "Đây là gợi ý để {xungTre} và {goiNguoiKia} cùng thử, không phải kết luận về ai.",
+  /** Bé chưa có lớp ⇒ KHÔNG đoán bậc; nhắc thêm lớp để có lời khuyên đúng tuổi. */
+  canThemLop: "Thêm lớp của {ten} ở thẻ của bé để có lời khuyên và kế hoạch đúng tuổi.",
+  tieuDeCungNhip: "Khi {tenToi} và {nguoiKia} cùng nhịp",
+  tomTatCungNhip: "Điểm mạnh chung, chỗ dễ trượt và một việc nuôi tiếp",
+  nhanNuoiTiep: "Nuôi tiếp",
 } as const;
 
 /**
@@ -1124,6 +1139,9 @@ export const CHU_DAY_DU = {
   banChuaDung:
     "Bản này chưa dùng được để phân tích (trả lời chưa đủ để kết luận). Nên làm lại.",
   caNha: "Cả nhà:",
+  /** Nút đi tiếp: đưa về danh sách, KHÔNG nhảy thẳng vào bài (mọi bài mới phải qua cửa hạn mức). */
+  nutLamTiep: "Về danh sách để làm tiếp cho {ten}",
+  nutLamTiepChung: "Về danh sách cả nhà",
 
   /** 28.4 — bảng kiểm "bộ test đã đủ chưa" ở đầu bước 3 (chặn MỀM, không khoá). */
   tieuDeKiem: "Bộ test đã đủ chưa?",

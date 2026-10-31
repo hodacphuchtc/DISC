@@ -9,7 +9,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { KeHoachBayNgay, TinhHuongHangNgay } from "../app/components/noi-dung-doi";
-import { HUONG_LECH_CAP, thayDaiTuCap } from "../config/disc-lech-cap";
+import { HUONG_LECH_CAP, MOI_QUAN_HE_CAP, thayDaiTuCap } from "../config/disc-lech-cap";
 import {
   KE_HOACH_BAY_NGAY,
   MOI_QUAN_HE,
@@ -17,7 +17,11 @@ import {
 } from "../config/disc-noi-dung-doi";
 import { CHU_NOI_DUNG_DOI } from "../config/disc-tu-dien";
 import { MA_TRUC } from "../modules/core/bo-de/kieu";
-import { moiQuanHeCua, phanTichGiaDinh } from "../modules/report/phan-tich-gia-dinh";
+import {
+  laBanPhanTichHopLe,
+  moiQuanHeCua,
+  phanTichGiaDinh,
+} from "../modules/report/phan-tich-gia-dinh";
 
 afterEach(cleanup);
 
@@ -32,8 +36,8 @@ const MOI_CHU = [
 ];
 
 describe("TINH_HUONG_DOI — đủ ô, đủ chữ", () => {
-  it("có đúng 16 ô, ô nào cũng đủ ba phần", () => {
-    expect(O).toHaveLength(16);
+  it("có đúng 24 ô (4 trục × 2 hướng × 3 mối quan hệ), ô nào cũng đủ ba phần", () => {
+    expect(O).toHaveLength(24);
     for (const { nhan, o } of O) {
       expect(o.tinhHuong.length, nhan).toBeGreaterThan(120);
       expect(o.nenNoi.length, nhan).toBeGreaterThan(30);
@@ -84,49 +88,123 @@ describe("KE_HOACH_BAY_NGAY", () => {
   });
 });
 
-describe("moiQuanHeCua — chỉ trả về khi chắc chắn", () => {
+describe("moiQuanHeCua — luôn trả một giá trị (29.0)", () => {
+  const L = (vaiTro: string) => ({ laTre: false, vaiTro }) as never;
+  const T = (vaiTro: string) => ({ laTre: true, vaiTro }) as never;
   it("hai trẻ ⇒ anh-chi-em", () => {
-    expect(moiQuanHeCua({ laTre: true, vaiTro: "con" }, { laTre: true, vaiTro: "con" })).toBe("anh-chi-em");
+    expect(moiQuanHeCua(T("con"), T("con"))).toBe("anh-chi-em");
   });
-  it("mẹ + bố hoặc mẹ + ba ⇒ vo-chong (thứ tự nào cũng được)", () => {
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "me" }, { laTre: false, vaiTro: "bo" })).toBe("vo-chong");
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "ba" }, { laTre: false, vaiTro: "me" })).toBe("vo-chong");
+  it("mẹ + bố ⇒ vo-chong (thứ tự nào cũng được)", () => {
+    expect(moiQuanHeCua(L("me"), L("bo"))).toBe("vo-chong");
+    expect(moiQuanHeCua(L("bo"), L("me"))).toBe("vo-chong");
   });
-  it("hai người cùng khai anh/chị/em (đã lớn) ⇒ anh-chi-em", () => {
-    expect(
-      moiQuanHeCua({ laTre: false, vaiTro: "anh-chi-em" }, { laTre: false, vaiTro: "anh-chi-em" }),
-    ).toBe("anh-chi-em");
+  it("🔴 ông + bà ⇒ vo-chong; còn mẹ + BÀ KHÔNG phải vợ chồng (ba là Bà, không phải bố)", () => {
+    expect(moiQuanHeCua(L("ong"), L("ba"))).toBe("vo-chong");
+    expect(moiQuanHeCua(L("me"), L("ba"))).toBe("nguoi-lon-khac");
+    expect(moiQuanHeCua(L("bo"), L("ba"))).toBe("nguoi-lon-khac");
   });
-  it("ông + mẹ, người thân, hai mẹ, thiếu vai, hoặc người lớn với trẻ ⇒ undefined (không đoán)", () => {
-    const L = (vaiTro?: never) => ({ laTre: false, ...(vaiTro ? { vaiTro } : {}) });
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "ong" }, { laTre: false, vaiTro: "me" })).toBeUndefined();
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "me" }, { laTre: false, vaiTro: "me" })).toBeUndefined();
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "khac" }, { laTre: false, vaiTro: "bo" })).toBeUndefined();
-    expect(moiQuanHeCua(L(), L())).toBeUndefined();
-    expect(moiQuanHeCua({ laTre: false, vaiTro: "me" }, { laTre: true, vaiTro: "con" })).toBeUndefined();
+  it("🔴 hai người LỚN cùng khai anh/chị/em ⇒ nguoi-lon-khac (nội dung anh-chi-em viết cho trẻ: chơi, đồ chơi)", () => {
+    expect(moiQuanHeCua(L("anh-chi-em"), L("anh-chi-em"))).toBe("nguoi-lon-khac");
+  });
+  it("người lớn khác (ông với mẹ, người thân, khác, hai mẹ) ⇒ nguoi-lon-khac", () => {
+    expect(moiQuanHeCua(L("ong"), L("me"))).toBe("nguoi-lon-khac");
+    expect(moiQuanHeCua(L("me"), L("me"))).toBe("nguoi-lon-khac");
+    expect(moiQuanHeCua(L("khac"), L("bo"))).toBe("nguoi-lon-khac");
+    expect(moiQuanHeCua(L("nguoi-than"), L("me"))).toBe("nguoi-lon-khac");
+  });
+  it("người lớn ↔ trẻ ⇒ đúng hướng, kể cả ông bà ↔ cháu", () => {
+    expect(moiQuanHeCua(L("me"), T("con"))).toBe("nguoi-lon-voi-tre");
+    expect(moiQuanHeCua(T("con"), L("me"))).toBe("tre-voi-nguoi-lon");
+    expect(moiQuanHeCua(L("ong"), T("con"))).toBe("nguoi-lon-voi-tre");
+    expect(moiQuanHeCua(T("con"), L("ba"))).toBe("tre-voi-nguoi-lon");
+  });
+  it("🔴 MA TRẬN: mọi vai × mọi vai × (trẻ|lớn) đều ra một mối quan hệ hợp lệ, không bao giờ rỗng", () => {
+    const vai = ["con", "me", "bo", "ba", "ong", "anh-chi-em", "nguoi-than", "khac"];
+    for (const x of vai)
+      for (const y of vai)
+        for (const tx of [true, false])
+          for (const ty of [true, false]) {
+            const kq = moiQuanHeCua({ laTre: tx, vaiTro: x } as never, { laTre: ty, vaiTro: y } as never);
+            expect(MOI_QUAN_HE_CAP).toContain(kq);
+          }
   });
 });
 
 describe("phanTichGiaDinh gắn moiQuanHe vào lát cắt ngang vai", () => {
   const diem = (d: number) => ({ D: d, I: 50, S: 50, C: 50 });
-  it("mẹ ↔ bố có moiQuanHe, mẹ ↔ con thì KHÔNG", () => {
+  it("mẹ ↔ bố là vo-chong; mẹ ↔ con là nguoi-lon-voi-tre kèm bậc của BÉ", () => {
     const k = phanTichGiaDinh([
       { id: "a", ten: "Mẹ Mai", laTre: false, vaiTro: "me", diem: diem(80) },
       { id: "b", ten: "Bố Bình", laTre: false, vaiTro: "bo", diem: diem(30) },
-      { id: "c", ten: "Bé Cúc", laTre: true, vaiTro: "con", diem: diem(50) },
+      { id: "c", ten: "Bé Cúc", laTre: true, vaiTro: "con", lop: "4", diem: diem(50) },
     ]);
     if (!k.phanTichDuoc) throw new Error("phải phân tích được");
     const banMe = k.ban.find((b) => b.toiId === "a")!;
     expect(banMe.latCat.find((l) => l.nguoiKiaId === "b")?.moiQuanHe).toBe("vo-chong");
-    expect(banMe.latCat.find((l) => l.nguoiKiaId === "c")?.moiQuanHe).toBeUndefined();
+    const veCon = banMe.latCat.find((l) => l.nguoiKiaId === "c")!;
+    expect(veCon).toMatchObject({
+      moiQuanHe: "nguoi-lon-voi-tre",
+      bacTre: "tieu-hoc",
+      vaiToi: "me",
+      vaiNguoiKia: "con",
+    });
+    // Chiều ngược lại: bé đọc về mẹ — bậc là của CHÍNH bé (người đọc).
+    const banBe = k.ban.find((b) => b.toiId === "c")!;
+    expect(banBe.latCat.find((l) => l.nguoiKiaId === "a")).toMatchObject({
+      moiQuanHe: "tre-voi-nguoi-lon",
+      bacTre: "tieu-hoc",
+      vaiToi: "con",
+      vaiNguoiKia: "me",
+    });
   });
-  it("thiếu vaiTro ⇒ lát cắt vẫn chạy, chỉ không có moiQuanHe (tương thích bản lưu cũ)", () => {
+
+  it("🔴 bé CHƯA có lớp ⇒ không có bacTre (không đoán), nhưng vẫn có moiQuanHe", () => {
+    const k = phanTichGiaDinh([
+      { id: "a", ten: "Mẹ Mai", laTre: false, vaiTro: "me", diem: diem(80) },
+      { id: "c", ten: "Bé Cúc", laTre: true, vaiTro: "con", diem: diem(30) },
+    ]);
+    if (!k.phanTichDuoc) throw new Error("phải phân tích được");
+    const l = k.ban[0].latCat[0];
+    expect(l.moiQuanHe).toBe("nguoi-lon-voi-tre");
+    expect(l.bacTre).toBeUndefined();
+  });
+
+  it("ông bà với cháu cũng ra bậc và vai đúng (xưng hô cháu sẽ lấy từ vai)", () => {
+    const k = phanTichGiaDinh([
+      { id: "o", ten: "Ông Sáu", laTre: false, vaiTro: "ong", diem: diem(80) },
+      { id: "c", ten: "Bé Na", laTre: true, vaiTro: "con", lop: "mam-non", diem: diem(30) },
+    ]);
+    if (!k.phanTichDuoc) throw new Error("phải phân tích được");
+    expect(k.ban[0].latCat[0]).toMatchObject({
+      moiQuanHe: "nguoi-lon-voi-tre",
+      bacTre: "nho",
+      vaiToi: "ong",
+      vaiNguoiKia: "con",
+    });
+  });
+
+  it("thiếu vaiTro ⇒ lát cắt vẫn chạy và vẫn có moiQuanHe (người lớn khác), không có vai", () => {
     const k = phanTichGiaDinh([
       { id: "a", ten: "An", laTre: false, diem: diem(80) },
       { id: "b", ten: "Bình", laTre: false, diem: diem(30) },
     ]);
     if (!k.phanTichDuoc) throw new Error("phải phân tích được");
-    expect(k.ban[0].latCat[0].moiQuanHe).toBeUndefined();
+    const l = k.ban[0].latCat[0];
+    expect(l.moiQuanHe).toBe("nguoi-lon-khac");
+    expect(l.vaiToi).toBeUndefined();
+  });
+
+  it("🔴 bản lưu CŨ (không có moiQuanHe/bacTre/vai) vẫn được nhận là hợp lệ để mở lại", () => {
+    const cu = [
+      {
+        toiId: "a",
+        tenLuc: "Mai",
+        latCat: [
+          { toiId: "a", nguoiKiaId: "b", tenNguoiKia: "Bình", theQuyen: "ngang-vai", trucLech: [] },
+        ],
+      },
+    ];
+    expect(laBanPhanTichHopLe(cu)).toBe(true);
   });
 });
 
@@ -155,6 +233,14 @@ describe("hai component", () => {
     const dong = document.querySelectorAll('[data-thu="ke-hoach-bay-ngay"] li');
     expect(dong).toHaveLength(7);
     for (const li of dong) expect(li.textContent).not.toMatch(/[{}]/u);
+  });
+
+  it("🔴 bé đọc kế hoạch có DÒNG AN TOÀN; người lớn đọc thì KHÔNG", () => {
+    render(<KeHoachBayNgay moiQuanHe="tre-voi-nguoi-lon" bacTre="tieu-hoc" vaiNguoiKia="me" tenToi="Bé Na" tenNguoiKia="Mẹ Lan" />);
+    expect(document.querySelector('[data-thu="dong-an-toan-tre"]')?.textContent).toContain("đau hoặc sợ");
+    cleanup();
+    render(<KeHoachBayNgay moiQuanHe="nguoi-lon-voi-tre" bacTre="tieu-hoc" tenToi="Mẹ Lan" tenNguoiKia="Bé Na" />);
+    expect(document.querySelector('[data-thu="dong-an-toan-tre"]')).toBeNull();
   });
 
   it("thayDaiTuCap ngang-vai xưng 'bạn' và gọi người kia bằng tên", () => {

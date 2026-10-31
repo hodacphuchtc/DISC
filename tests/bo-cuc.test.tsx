@@ -83,7 +83,8 @@ describe("🔴 nới cái CẦN nới", () => {
   it("🔴 mỗi bản trong lưới hai cột VẪN giữ khung đọc bên trong", () => {
     // Nới bố cục mà không giữ khung đọc bên trong thì mỗi cột rộng ~700px vẫn ổn, nhưng
     // trên màn 2560px mỗi cột thành ~1100px và dòng chữ lại dài y như trước khi sửa.
-    const nguon = doc("ban-tong-hop.tsx");
+    // 29.8: phần hiển thị một bản đã tách sang `ban-tong-hop-mot-ban.tsx` (luật file ≤ 500 dòng).
+    const nguon = doc("ban-tong-hop-mot-ban.tsx");
     const i = nguon.indexOf('data-thu="ban-tong-hop"');
     expect(i).toBeGreaterThan(-1);
     expect(nguon.slice(i - 200, i + 300)).toContain("KHUNG.doc");

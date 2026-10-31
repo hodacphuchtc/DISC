@@ -18,25 +18,19 @@
  */
 
 import { NutQuayLai } from "@/app/components/nut-quay-lai";
-import { Suspense, lazy, useState } from "react";
+import { useState } from "react";
 
 import {
   SO_THANH_VIEN_TOI_DA,
   laTreEm,
 } from "@config/disc-gia-dinh";
-import { MO_NOI_DUNG_DOI, MO_NOI_DUNG_TRE } from "@config/disc-nguong";
-import { KhoiGap } from "@/app/components/khoi-gap";
+import { MO_NOI_DUNG_TRE } from "@config/disc-nguong";
+import { LenhGap } from "@/app/components/khoi-gap";
+import { MotBan } from "./ban-tong-hop-mot-ban";
 import { banUuTien, nhanCuaBan } from "@modules/report/chon-ban";
 import { loaiCuaBoDe } from "@modules/core/gia-dinh/han-muc";
-import { thayDaiTuCap } from "@config/disc-lech-cap";
-import {
-  MO_TA_LECH,
-  THOA_THUAN,
-  TRUNG_KHOP,
-  VIEC_CUA_TOI,
-} from "@config/disc-noi-dung-cap";
 import { KHUNG } from "@config/bo-cuc";
-import { CHU_DAY_DU, CHU_HAN_MUC_THU_MUC, CHU_TONG_HOP, TRUC } from "@config/disc-tu-dien";
+import { CHU_HAN_MUC_THU_MUC, CHU_TONG_HOP } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { MaTruc } from "@modules/core/bo-de/kieu";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
@@ -45,23 +39,10 @@ import { hienNgayGio } from "@modules/core/tien-ich/ngay";
 import {
   phanTichGiaDinh,
   type BanPhanTich,
-  type LatCat,
   type NguoiTrongPhanTich,
 } from "@modules/report/phan-tich-gia-dinh";
 
 /** Một người kèm những bài họ có, để người dùng chọn. */
-/**
- * 27.5 — nội dung theo mối quan hệ NẠP LƯỜI. `config/disc-noi-dung-doi.ts` (~16 tình huống + 14
- * ngày thử) từng nằm trong gói nạp ngay và đẩy nó lên đúng trần 300 KB gzip. Mỗi lát cắt vẫn
- * gắn nó vào DOM ngay khi mount (hàng gập chỉ ẩn bằng CSS) nên bản in có đủ.
- */
-const TinhHuongHangNgay = lazy(() =>
-  import("@/app/components/noi-dung-doi").then((m) => ({ default: m.TinhHuongHangNgay })),
-);
-const KeHoachBayNgay = lazy(() =>
-  import("@/app/components/noi-dung-doi").then((m) => ({ default: m.KeHoachBayNgay })),
-);
-
 export type NguoiCoBai = {
   readonly tv: ThanhVien;
   readonly bai: readonly BaiLamLuu[];
@@ -110,6 +91,11 @@ export function ManBanTongHop({
   const [chon, datChon] = useState<Record<string, string>>({});
   const [ketQua, datKetQua] = useState<readonly BanPhanTich[] | null>(banCoSan ?? null);
   const [loi, datLoi] = useState<string | null>(null);
+  /** Lệnh "Mở hết / Gập hết" (29.8): `lan` tăng mỗi lần bấm để lệnh lặp lại vẫn có hiệu lực. */
+  const [lenh, datLenh] = useState<{ readonly kieu: "mo" | "gap"; readonly lan: number }>({
+    kieu: "gap",
+    lan: 0,
+  });
 
   /**
    * 🔴 CỜ TẮT NỘI DUNG TRẺ (V4.1) LOẠI TRẺ KHỎI PHÂN TÍCH.
@@ -130,6 +116,7 @@ export function ManBanTongHop({
       ten: n.tv.ten,
       laTre: laTreEm(n.tv.vaiTro, n.tv.lop),
       vaiTro: n.tv.vaiTro,
+      ...(n.tv.lop ? { lop: n.tv.lop } : {}),
       diem: diemCua(n, chon[n.tv.id])!,
     }));
 
@@ -169,6 +156,19 @@ export function ManBanTongHop({
       noiDung: ban,
     });
     if (!daLuu) datLoi(CHU_HAN_MUC_THU_MUC.hetChoLuu);
+  }
+
+  /**
+   * Chọn một người ở thanh trên đầu (29.8): MỞ bản của họ (nếu đang gập) rồi cuộn tới đó. Trên
+   * điện thoại khỏi cuộn dài qua cả nhà; trên web là mục lục nhanh. Bấm lại không gập lại.
+   */
+  function chonNguoi(toiId: string) {
+    const el = document.querySelector<HTMLElement>(`[data-ban="tv-${toiId}"]`);
+    if (!el) return;
+    const nut = el.querySelector<HTMLButtonElement>("h2 button");
+    if (nut && nut.getAttribute("aria-expanded") === "false") nut.click();
+    const giam = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView?.({ behavior: giam ? "auto" : "smooth", block: "start" });
   }
 
   /** In riêng bản của một người: giấu mọi dải khác, in, rồi trả lại nguyên trạng. */
@@ -222,17 +222,58 @@ export function ManBanTongHop({
           ))}
         </div>
 
+        {/* 29.8 — ĐỌC NHANH: thanh dính chọn người + mở/gập hết. Không in (data-khong-in). */}
+        <nav
+          data-khong-in
+          data-thu="chon-nguoi"
+          aria-label={CHU_TONG_HOP.nhanChonNguoi}
+          className="sticky top-0 z-10 mt-4 flex items-center gap-2 overflow-x-auto bg-white/95 py-2 backdrop-blur"
+        >
+          <span className="shrink-0 text-[14px] text-neutral-600">{CHU_TONG_HOP.nhanChonNguoi}:</span>
+          {ketQua.map((b) => (
+            <button
+              key={b.toiId}
+              type="button"
+              onClick={() => chonNguoi(b.toiId)}
+              className="min-h-[44px] shrink-0 rounded-full px-4 text-[15px] font-semibold text-white shadow-nut-chinh transition-[box-shadow,transform] duration-150 active:translate-y-px active:shadow-lun motion-reduce:transition-none"
+              style={{ backgroundColor: MAU.timCongNghe }}
+            >
+              {b.tenLuc}
+            </button>
+          ))}
+          <span className="ml-auto flex shrink-0 gap-2 pl-2">
+            {(
+              [
+                ["mo", CHU_TONG_HOP.nutMoHet],
+                ["gap", CHU_TONG_HOP.nutGapHet],
+              ] as const
+            ).map(([kieu, nhan]) => (
+              <button
+                key={kieu}
+                type="button"
+                onClick={() => datLenh((l) => ({ kieu, lan: l.lan + 1 }))}
+                className="min-h-[44px] rounded-full border px-4 text-[15px] font-semibold"
+                style={{ borderColor: MAU.timCongNghe, color: MAU.timCongNghe }}
+              >
+                {nhan}
+              </button>
+            ))}
+          </span>
+        </nav>
+
         {/* 🔴 HAI CỘT TỪ MỐC `lg` — đây là màn chữ nhiều nhất sản phẩm, cũng là chỗ
             đỡ cuộn được nhiều nhất. Mỗi cột vẫn giữ KHUNG ĐỌC bên trong `MotBan`, nên
             nới bố cục KHÔNG kéo dài dòng chữ ra.
             🔴 Luật IN TÁCH BẢN không vỡ: `[data-ban][data-an-khi-in] { display: none }`
             ở `globals.css` có độ đặc hiệu 0-2-0 và `display` thắng mọi bố cục grid —
             một ô grid bị `display:none` thì biến mất khỏi luồng, không để lại ô trống. */}
-        <div className={`mt-8 ${KHUNG.haiCot}`}>
-          {ketQua.map((b) => (
-            <MotBan key={b.toiId} ban={b} chuaDuBan={chuaDuBan} />
-          ))}
-        </div>
+        <LenhGap.Provider value={lenh}>
+          <div className={`mt-6 ${KHUNG.haiCot}`}>
+            {ketQua.map((b) => (
+              <MotBan key={b.toiId} ban={b} chuaDuBan={chuaDuBan} />
+            ))}
+          </div>
+        </LenhGap.Provider>
       </section>
     );
   }
@@ -306,142 +347,5 @@ export function ManBanTongHop({
         {CHU_TONG_HOP.nutChay}
       </button>
     </section>
-  );
-}
-
-/* ── Một bản: mọi lát cắt của MỘT người đọc ──────────────────────────────── */
-
-/**
- * 🔴 GỌN TRƯỚC, CHI TIẾT SAU. Mỗi người là MỘT hàng gập "Lời khuyên dành cho {tên}" (mảng
- * nhấn tối) kèm một dòng tóm tắt; bấm mới xổ ra các cặp, và mỗi cặp lại là một hàng gập có
- * tóm tắt riêng. Bản in mở hết (`[data-lop-sau]`), nên nội dung luôn nằm trong DOM.
- */
-function MotBan({
-  ban,
-  chuaDuBan,
-}: {
-  readonly ban: BanPhanTich;
-  readonly chuaDuBan?: ReadonlySet<string>;
-}) {
-  const dsNguoiKia = ban.latCat.map((l) => l.tenNguoiKia).join(", ");
-  return (
-    <section data-ban={`tv-${ban.toiId}`} data-thu="ban-tong-hop" className={KHUNG.doc}>
-      <KhoiGap
-        capTieuDe={2}
-        kieu="toi"
-        tieuDe={CHU_TONG_HOP.tieuDeBan.replace("{ten}", ban.tenLuc)}
-        tomTat={CHU_TONG_HOP.tomTatBan.replace("{ds}", dsNguoiKia)}
-      >
-        <div className="space-y-3">
-          {ban.latCat.map((l) => (
-            <MotLatCat
-              key={l.nguoiKiaId}
-              ten={ban.tenLuc}
-              lat={l}
-              chuaDu={Boolean(chuaDuBan?.has(l.toiId) || chuaDuBan?.has(l.nguoiKiaId))}
-            />
-          ))}
-        </div>
-      </KhoiGap>
-    </section>
-  );
-}
-
-function MotLatCat({
-  ten,
-  lat,
-  chuaDu = false,
-}: {
-  readonly ten: string;
-  readonly lat: LatCat;
-  /** Một trong hai người chưa đủ bản ⇒ nói thẳng kết quả cặp này có thể đổi khi làm thêm. */
-  readonly chuaDu?: boolean;
-}) {
-  const thay = (chu: string) => thayDaiTuCap(chu, lat.theQuyen, lat.tenNguoiKia);
-  const coKeHoach = MO_NOI_DUNG_DOI && Boolean(lat.moiQuanHe);
-
-  const tomTat =
-    lat.trucLech.length > 0
-      ? CHU_TONG_HOP.tomTatLechRo.replace("{ds}", lat.trucLech.map((t) => TRUC[t.truc].ten).join(", "))
-      : CHU_TONG_HOP.tomTatCungNhip;
-
-  return (
-    <article data-thu="lat-cat" data-nguoi-kia={lat.nguoiKiaId}>
-      <KhoiGap
-        tieuDe={CHU_TONG_HOP.nhanLatCat.replace("{ten}", ten).replace("{nguoiKia}", lat.tenNguoiKia)}
-        tomTat={
-          <>
-            {tomTat}
-            {coKeHoach && ` · ${CHU_TONG_HOP.tomTatCoBayNgay}`}
-            {chuaDu && (
-              <span data-thu="chua-du-ban" className="block font-semibold" style={{ color: MAU.camDamChoChu }}>
-                {CHU_DAY_DU.chuaDuBan}
-              </span>
-            )}
-          </>
-        }
-      >
-        {lat.trucLech.length > 0
-          ? lat.trucLech.map((t) => (
-              <div key={t.truc} className="mt-4 first:mt-0">
-                <h4 className="flex items-baseline gap-2 text-[14px] font-semibold text-neutral-800">
-                  <span aria-hidden="true" style={{ color: TRUC[t.truc].mau }}>
-                    ■
-                  </span>
-                  {TRUC[t.truc].ten}
-                </h4>
-                <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
-                  {thay(MO_TA_LECH[t.truc][t.huong].veToi)}
-                </p>
-                <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
-                  {thay(MO_TA_LECH[t.truc][t.huong].veNguoiKia)}
-                </p>
-                <p className="mt-3 rounded-lg px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900" style={{ backgroundColor: "#FFF4E6" }}>
-                  <strong className="font-semibold">
-                    {CHU_TONG_HOP.nhanViecCuaToi.replace("{ten}", ten)}:{" "}
-                  </strong>
-                  {thay(VIEC_CUA_TOI[t.truc][t.huong][lat.theQuyen])}
-                </p>
-                <p className="mt-2.5 text-[15px] leading-relaxed text-neutral-700">
-                  <strong className="font-semibold">{CHU_TONG_HOP.nhanThoaThuan}: </strong>
-                  {thay(THOA_THUAN[t.truc][t.huong])}
-                </p>
-                {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
-                  <Suspense fallback={null}>
-                    <TinhHuongHangNgay
-                      truc={t.truc}
-                      huong={t.huong}
-                      moiQuanHe={lat.moiQuanHe}
-                      tenToi={ten}
-                      tenNguoiKia={lat.tenNguoiKia}
-                    />
-                  </Suspense>
-                )}
-              </div>
-            ))
-          : lat.trungKhop && (
-              <div>
-                <h4 className="text-[14px] font-semibold text-neutral-800">
-                  {CHU_TONG_HOP.nhanTrungKhop}
-                </h4>
-                <ul className="mt-2 space-y-1.5">
-                  {lat.trungKhop.map((tk) => (
-                    <li key={tk.truc} className="text-[15px] leading-relaxed text-neutral-800">
-                      <span aria-hidden="true" className="mr-1.5" style={{ color: TRUC[tk.truc].mau }}>
-                        ■
-                      </span>
-                      {TRUNG_KHOP[tk.truc][tk.kieu]}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-        {coKeHoach && lat.moiQuanHe && (
-          <Suspense fallback={null}>
-            <KeHoachBayNgay moiQuanHe={lat.moiQuanHe} tenToi={ten} tenNguoiKia={lat.tenNguoiKia} />
-          </Suspense>
-        )}
-      </KhoiGap>
-    </article>
   );
 }

@@ -1,8 +1,17 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useId, useState, type ReactNode } from "react";
 
 import { MAU } from "@config/thuong-hieu";
+
+/**
+ * LỆNH "MỞ HẾT / GẬP HẾT" (29.8) — một nút ở đầu trang điều khiển MỌI hàng gập bên dưới, kể cả
+ * hàng lồng nhau. `lan` tăng mỗi lần bấm để cùng một lệnh bấm hai lần vẫn có hiệu lực.
+ */
+export const LenhGap = createContext<{ readonly kieu: "mo" | "gap"; readonly lan: number }>({
+  kieu: "gap",
+  lan: 0,
+});
 
 /**
  * HÀNG GẬP (28.x) — tiêu đề + tóm tắt luôn thấy, bấm mới xổ chi tiết xuống.
@@ -37,6 +46,12 @@ export function KhoiGap({
 }) {
   const [mo, datMo] = useState(moSan);
   const id = useId();
+  const lenh = useContext(LenhGap);
+  useEffect(() => {
+    if (lenh.lan === 0) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    datMo(lenh.kieu === "mo");
+  }, [lenh.kieu, lenh.lan]);
   const toi = kieu === "toi";
   const Tieu = capTieuDe === 2 ? "h2" : "h3";
 
@@ -70,8 +85,9 @@ export function KhoiGap({
             aria-controls={id}
             onClick={() => datMo(!mo)}
             className={[
-              "flex min-h-[44px] w-full items-center justify-between gap-3 text-left leading-snug font-bold focus-visible:outline-2 focus-visible:outline-offset-4",
-              toi ? "text-[20px] text-chu-tren-toi" : "text-[16px] text-neutral-900",
+              // 29.8 — vùng chạm ≥ 56 px và chữ to: phụ huynh đọc trên điện thoại, một tay.
+              "flex min-h-[56px] w-full items-center justify-between gap-3 text-left leading-snug font-bold focus-visible:outline-2 focus-visible:outline-offset-4",
+              toi ? "text-[21px] text-chu-tren-toi md:text-[22px]" : "text-[17px] text-neutral-900",
             ].join(" ")}
             style={{ outlineColor: toi ? "#FFB067" : MAU.timCongNghe }}
           >
@@ -81,13 +97,17 @@ export function KhoiGap({
         </Tieu>
         {tomTat && (
           <div
-            className={`mt-0.5 text-[14px] leading-snug ${toi ? "text-chu-mo-tren-toi" : "text-neutral-600"}`}
+            className={`mt-0.5 text-[15px] leading-snug ${toi ? "text-chu-mo-tren-toi" : "text-neutral-700"}`}
           >
             {tomTat}
           </div>
         )}
       </div>
-      <div id={id} data-lop-sau className={mo ? (toi ? "mt-3" : "px-4 pb-4") : "hidden"}>
+      <div
+        id={id}
+        data-lop-sau
+        className={mo ? (toi ? "mt-3 text-[16px] leading-relaxed" : "px-4 pb-4 text-[16px] leading-relaxed") : "hidden"}
+      >
         {children}
       </div>
     </div>

@@ -3,8 +3,8 @@
  * Tên người bịa.
  */
 
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ThongBaoDaXong } from "../app/components/thong-bao-da-xong";
 import { CHU_DAY_DU } from "../config/disc-tu-dien";
@@ -110,5 +110,36 @@ describe("ThongBaoDaXong", () => {
   it("bản không hợp lệ thì nói chưa dùng được để phân tích", () => {
     render(<ThongBaoDaXong boDe="PH" bietDanh="Mai" idBai={null} hopLe={false} />);
     expect(document.body.textContent).toContain(CHU_DAY_DU.banChuaDung);
+  });
+});
+
+describe("nút đi tiếp (28.2)", () => {
+  it("còn người thiếu ⇒ có nút nêu ĐÍCH DANH người đó, bấm gọi onLamTiep", async () => {
+    await luuThanhVien(tv({}));
+    await luuThanhVien(tv({ id: "tv-lan", ten: "Lan", vaiTro: "bo", thuTu: 1 }));
+    await luuBai(bai({ id: "m1" }));
+    const dichVu = vi.fn();
+
+    render(<ThongBaoDaXong boDe="PH" bietDanh="Mai" idBai="m1" hopLe onLamTiep={dichVu} />);
+    const nut = await screen.findByRole("button", { name: CHU_DAY_DU.nutLamTiep.replace("{ten}", "Lan") });
+    fireEvent.click(nut);
+    expect(dichVu).toHaveBeenCalledTimes(1);
+  });
+
+  it("cả nhà đã đủ ⇒ KHÔNG có nút (không còn ai để làm tiếp)", async () => {
+    await luuThanhVien(tv({}));
+    await luuBai(bai({ id: "m1" }));
+    render(<ThongBaoDaXong boDe="PH" bietDanh="Mai" idBai="m1" hopLe onLamTiep={vi.fn()} />);
+    await waitFor(() => expect(document.querySelector('[data-thu="ca-nha-con-thieu"]')).toBeTruthy());
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
+  it("không truyền callback ⇒ không có nút", async () => {
+    await luuThanhVien(tv({}));
+    await luuThanhVien(tv({ id: "tv-lan", ten: "Lan", vaiTro: "bo", thuTu: 1 }));
+    await luuBai(bai({ id: "m1" }));
+    render(<ThongBaoDaXong boDe="PH" bietDanh="Mai" idBai="m1" hopLe />);
+    await waitFor(() => expect(document.querySelector('[data-thu="ca-nha-con-thieu"]')).toBeTruthy());
+    expect(screen.queryByRole("button")).toBeNull();
   });
 });

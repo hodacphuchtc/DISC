@@ -52,6 +52,7 @@ export function ManKetQua({
   banKhoan,
   vuaXong = false,
   luuHong = false,
+  onLamTiep,
 }: {
   readonly boDe: BoDe;
   readonly bietDanh: string;
@@ -70,6 +71,8 @@ export function ManKetQua({
   readonly vuaXong?: boolean;
   /** Bài VỪA làm mà lưu thất bại (28.2) — khác với "đang lưu" (`idBai` còn `null`). */
   readonly luuHong?: boolean;
+  /** Về danh sách để làm tiếp (28.2). Chỉ có ý nghĩa khi vừa làm xong một bài. */
+  readonly onLamTiep?: () => void;
 }) {
   // §9.2 luật 6: bộ MN và TH đều PHẢI mở đầu bằng câu rào. Nhưng hai bộ có hai người đọc
   // khác nhau — bộ MN là bố mẹ trả lời hộ, bộ TH là chính em học sinh cầm máy — nên hai câu
@@ -178,7 +181,14 @@ export function ManKetQua({
       <div className="grid gap-x-12 xl:grid-cols-2 xl:items-start print:block">
       <div className={KHUNG.doc}>
       {vuaXong && (
-        <ThongBaoDaXong boDe={boDe.ma} bietDanh={bietDanh} idBai={idBai} luuHong={luuHong} hopLe />
+        <ThongBaoDaXong
+          boDe={boDe.ma}
+          bietDanh={bietDanh}
+          idBai={idBai}
+          luuHong={luuHong}
+          hopLe
+          {...(onLamTiep ? { onLamTiep } : {})}
+        />
       )}
       <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
         {boDe.ten} · {bietDanh}

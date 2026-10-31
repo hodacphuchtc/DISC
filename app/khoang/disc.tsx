@@ -269,6 +269,7 @@ export function KhoangDisc({
           idBai={idBai}
           vuaXong
           luuHong={luuHong}
+          onLamTiep={onThoat}
           onLamLai={onThoat}
           onXemDoiChieu={(maTre) => datBuoc({ ten: "doi-chieu", maTre })}
           onLamBoConThieu={(ma, maTre) =>
