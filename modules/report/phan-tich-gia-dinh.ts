@@ -16,9 +16,15 @@
  */
 
 import { SO_THANH_VIEN_TOI_DA, soTrucTheoN } from "@config/disc-gia-dinh";
-import type { HuongLechCap, TheQuyen, KieuTrungKhop } from "@config/disc-lech-cap";
+import type {
+  HuongLechCap,
+  KieuTrungKhop,
+  MoiQuanHeCap,
+  TheQuyen,
+} from "@config/disc-lech-cap";
 import type { VaiGiaDinh } from "@config/disc-gia-dinh";
-import type { MoiQuanHe } from "@config/disc-noi-dung-doi";
+import type { BacTre } from "@modules/core/gia-dinh/bac-hoc";
+import { bacCuaTre } from "@modules/core/gia-dinh/bac-hoc";
 import { NGUONG_VUNG_LECH } from "@config/disc-nguong";
 import { MA_TRUC, type MaTruc } from "@modules/core/bo-de/kieu";
 
@@ -30,6 +36,8 @@ export type NguoiTrongPhanTich = {
   readonly ten: string;
   /** `true` khi người này là trẻ em — quyết định THẾ QUYỀN của mỗi lát cắt. */
   readonly laTre: boolean;
+  /** Lớp của người này (chuỗi, đúng dạng lưu ở `ThanhVien.lop`) — để chọn lời khuyên theo bậc. */
+  readonly lop?: string;
   /**
    * Vai trong nhà — CHỈ để suy ra mối quan hệ (vợ ↔ chồng hay anh chị em) cho nội dung 27.5.
    * Không bắt buộc: thiếu thì lát cắt dùng nội dung chung `ngang-vai` như trước.
@@ -52,10 +60,14 @@ export type LatCat = {
   readonly tenNguoiKia: string;
   readonly theQuyen: TheQuyen;
   /**
-   * Mối quan hệ cụ thể khi `theQuyen` là `ngang-vai` VÀ suy ra được. Vắng mặt ⇒ giao diện
-   * rơi về nội dung chung. 🔴 Tuỳ chọn: thư mục đã lưu từ phiên bản cũ không có trường này.
+   * Mối quan hệ cụ thể (29.0): luôn suy ra được cho bản mới. 🔴 Tuỳ chọn: thư mục đã lưu từ
+   * phiên bản cũ không có trường này — vắng mặt ⇒ giao diện rơi về nội dung chung.
    */
-  readonly moiQuanHe?: MoiQuanHe;
+  readonly moiQuanHe?: MoiQuanHeCap;
+  /** Bậc của ĐỨA TRẺ trong cặp (người đọc hoặc người kia). Vắng ⇒ chưa có lớp ⇒ hỏi, không đoán. */
+  readonly bacTre?: BacTre;
+  readonly vaiToi?: VaiGiaDinh;
+  readonly vaiNguoiKia?: VaiGiaDinh;
   /** Những trục lệch rõ nhất, đã cắt theo `soTrucTheoN`. Rỗng ⇒ xem `trungKhop`. */
   readonly trucLech: readonly TrucLech[];
   /** 🔴 Chỉ có khi `trucLech` rỗng — bốn trục đều trùng khớp. KHÔNG để trống. */
@@ -88,21 +100,28 @@ export function theQuyenCua(toiLaTre: boolean, nguoiKiaLaTre: boolean): TheQuyen
 }
 
 /**
- * Suy mối quan hệ của hai người NGANG VAI. Chỉ trả về khi chắc chắn:
- *  · cả hai là trẻ, hoặc cả hai khai là anh/chị/em ⇒ `anh-chi-em`
- *  · một người là mẹ, người kia là bố/ba ⇒ `vo-chong`
- * Mọi trường hợp khác (ông bà, người thân, khác) ⇒ `undefined`, không đoán.
+ * Suy mối quan hệ của MỘT lát cắt — luôn trả về một giá trị.
+ *
+ *  · người lớn ↔ trẻ ⇒ `nguoi-lon-voi-tre` / `tre-voi-nguoi-lon` (khớp `theQuyenCua`)
+ *  · hai TRẺ ⇒ `anh-chi-em` (nội dung nói chuyện chơi, đồ chơi, giờ học). Hai người LỚN cùng khai
+ *    anh/chị/em ⇒ `nguoi-lon-khac`: nội dung `anh-chi-em` viết cho trẻ, đọc với người lớn là vỡ
+ *  · hai người lớn là một cặp (mẹ+bố, hoặc ông+bà) ⇒ `vo-chong`
+ *  · hai người lớn còn lại (ông/bà với con dâu/rể, người thân, khác…) ⇒ `nguoi-lon-khac`
+ *
+ * 🔴 `ba` là BÀ (xem `CHU_VAI`), không phải "ba" = bố. Bản 27.5 từng gộp mẹ+bà thành vợ
+ * chồng — sai; cặp ông+bà mới là một cặp.
  */
 export function moiQuanHeCua(
   a: Pick<NguoiTrongPhanTich, "laTre" | "vaiTro">,
   b: Pick<NguoiTrongPhanTich, "laTre" | "vaiTro">,
-): MoiQuanHe | undefined {
-  if (a.laTre && b.laTre) return "anh-chi-em";
-  if (a.laTre !== b.laTre) return undefined;
-  if (a.vaiTro === "anh-chi-em" && b.vaiTro === "anh-chi-em") return "anh-chi-em";
+): MoiQuanHeCap {
+  if (a.laTre !== b.laTre) return a.laTre ? "tre-voi-nguoi-lon" : "nguoi-lon-voi-tre";
+  if (a.laTre) return "anh-chi-em";
   const cap = new Set([a.vaiTro, b.vaiTro]);
-  if (cap.has("me") && (cap.has("bo") || cap.has("ba")) && cap.size === 2) return "vo-chong";
-  return undefined;
+  if (cap.size === 2 && ((cap.has("me") && cap.has("bo")) || (cap.has("ong") && cap.has("ba")))) {
+    return "vo-chong";
+  }
+  return "nguoi-lon-khac";
 }
 
 /** Bốn trục của một cặp VÔ HƯỚNG, nhìn từ `a`. Bản của `b` soi gương từ đây. */
@@ -172,13 +191,23 @@ export function phanTichGiaDinh(
         const bon = bonTrucTheoCap.get(daoDau ? `${j}|${i}` : `${i}|${j}`)!;
         const trucLech = catTheoN(bon, ds.length, daoDau);
         const theQuyen = theQuyenCua(toi.laTre, nguoiKia.laTre);
-        const moiQuanHe = theQuyen === "ngang-vai" ? moiQuanHeCua(toi, nguoiKia) : undefined;
+        const moiQuanHe = moiQuanHeCua(toi, nguoiKia);
+        // Bậc của ĐỨA TRẺ trong cặp: người kia nếu người đọc là người lớn, người đọc nếu là trẻ.
+        const bacTre =
+          theQuyen === "nguoi-lon-voi-tre"
+            ? bacCuaTre(nguoiKia.lop)
+            : theQuyen === "tre-voi-nguoi-lon"
+              ? bacCuaTre(toi.lop)
+              : undefined;
         const chung: LatCat = {
           toiId: toi.id,
           nguoiKiaId: nguoiKia.id,
           tenNguoiKia: nguoiKia.ten,
           theQuyen,
-          ...(moiQuanHe ? { moiQuanHe } : {}),
+          moiQuanHe,
+          ...(bacTre ? { bacTre } : {}),
+          ...(toi.vaiTro ? { vaiToi: toi.vaiTro } : {}),
+          ...(nguoiKia.vaiTro ? { vaiNguoiKia: nguoiKia.vaiTro } : {}),
           trucLech,
         };
         return trucLech.length > 0

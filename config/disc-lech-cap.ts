@@ -45,6 +45,23 @@ export const THE_QUYEN = ["nguoi-lon-voi-tre", "tre-voi-nguoi-lon", "ngang-vai"]
 export type TheQuyen = (typeof THE_QUYEN)[number];
 
 /** Hai người cùng cao hoặc cùng nhẹ ở một trục. */
+/**
+ * MỐI QUAN HỆ CỦA MỘT LÁT CẮT (29.0) — mịn hơn `TheQuyen`.
+ *
+ * `TheQuyen` chỉ nói ai ở thế nào so với ai (người lớn/trẻ/ngang vai). Nội dung sâu cần biết
+ * cụ thể hơn: vợ chồng khác anh chị em, người lớn với trẻ khác trẻ với người lớn. Luôn suy ra
+ * được (không còn `undefined`) — trước 29.0 chỉ cặp vợ chồng và anh chị em có, các cặp còn lại
+ * rơi im lặng về nội dung chung.
+ */
+export const MOI_QUAN_HE_CAP = [
+  "vo-chong",
+  "anh-chi-em",
+  "nguoi-lon-khac",
+  "nguoi-lon-voi-tre",
+  "tre-voi-nguoi-lon",
+] as const;
+export type MoiQuanHeCap = (typeof MOI_QUAN_HE_CAP)[number];
+
 export const KIEU_TRUNG_KHOP = ["cung-noi", "cung-nhe"] as const;
 export type KieuTrungKhop = (typeof KIEU_TRUNG_KHOP)[number];
 
