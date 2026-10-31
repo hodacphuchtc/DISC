@@ -2,7 +2,7 @@
 
 > Hồ sơ ký duyệt **thứ hai**, tách khỏi gói A có chủ đích.
 
-Gần tham vấn hơn gói A. Người ký chịu trách nhiệm ở mức khác, nên tách riêng.
+Gần tham vấn hơn gói A. Người ký chịu trách nhiệm ở mức khác, nên tách riêng. Từ 14.3, gói này còn gồm nội dung nói về quan hệ giữa HAI NGƯỜI LỚN trong nhà (vợ ↔ chồng): nhận xét bạn đời của một người là bước xa hơn hẳn so với lời khuyên nuôi dạy con, và người ký cần biết mình đang ký cái đó.
 
 🔴 **Vì sao tách.** Gói A mô tả hành vi một đứa trẻ và đưa lời khuyên nuôi dạy. Gói B đưa
 phản hồi tính cách cho một **người lớn về chính họ** — việc này gần tham vấn hơn hẳn, và
@@ -79,4 +79,222 @@ Hiện cùng khối lệch phong cách, nhưng **không nhận xét đứa trẻ
 3. Vế “cái giá đi kèm” có luôn đi sau một vế ghi nhận điểm mạnh không?
 4. Có chỗ nào một phụ huynh đang căng thẳng đọc thành **lỗi tại mình** không?
 5. Với người đọc không có ai hỗ trợ chuyên môn bên cạnh, nội dung này có **an toàn** không?
+
+---
+
+## B4. Nhìn về PHÍA NGƯỜI KIA — bạn đời, anh chị em, mọi cặp (27.4)
+
+Nguồn: `config/disc-noi-dung-cap.ts`. 🔴 Trước 27/10/2026 phần này **chưa nằm trong hồ sơ ký nào**.
+Năm câu ở B3 áp dụng cho cả B4. Thêm hai câu riêng:
+
+6. Đoạn nói về **người kia** (“veNguoiKia”) có luôn **lật khung** thành điểm mạnh, không đọc thành lời chê người vắng mặt không?
+7. Các đoạn dùng chung cho cả cặp có trẻ lẫn cặp người lớn (B4.1, B4.3, B4.4) có **an toàn với cả hai** không? Người ký gói A cũng cần xem chúng.
+
+“bạn” = người đang đọc; người kia ghi là [tên người kia].
+
+### B4.1 Mô tả chỗ vênh (16 đoạn — dùng chung mọi cặp)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia — về bạn:** Bạn quyết nhanh và muốn bắt tay vào việc ngay khi đã thấy đường đi. Trong nhà, điều đó giữ cho mọi thứ chạy được — có người khởi động thì việc mới bắt đầu. Cái giá đi kèm là bạn thường chốt xong trước khi người bên cạnh kịp có ý kiến, rồi ngạc nhiên khi họ có vẻ không hào hứng lắm với thứ vừa được quyết.
+- **khi nhóm này của bạn cao hơn người kia — về người kia:** [tên người kia] cần thêm một nhịp trước khi quyết. Chuyện này dễ bị đọc thành chần chừ hoặc không quan tâm, nhưng thật ra khoảng lặng đó là lúc [tên người kia] đang cân nhắc thật — và những thứ [tên người kia] nghĩ ra trong khoảng lặng ấy thường là thứ đã bị bỏ qua khi mọi người quyết vội.
+- **khi nhóm này của bạn thấp hơn người kia — về bạn:** Bạn thích nhìn kỹ trước khi bước, và không thấy cần phải quyết ngay khi chưa rõ đường. Cái được là bạn ít khi phải quay lại sửa. Cái giá là khi có người bên cạnh chạy nhanh hơn, bạn dễ thấy mình bị đẩy đi — rồi hoặc là im, hoặc là phanh lại, mà cả hai đều không nói ra được điều bạn thật sự nghĩ.
+- **khi nhóm này của bạn thấp hơn người kia — về người kia:** [tên người kia] quyết nhanh và muốn làm ngay. Nhìn từ ngoài, tốc độ đó dễ bị đọc thành hấp tấp hoặc không thèm hỏi ai. Thật ra [tên người kia] thường đã nghĩ xong trong đầu từ trước, chỉ là phần nghĩ ấy không nói thành lời — nên người bên cạnh chỉ thấy phần kết luận.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia — về bạn:** Bạn bắt chuyện dễ, kể được, và kéo được người khác vào việc chung. Trong nhà, bạn thường là người làm cho không khí ấm lên. Cái giá đi kèm là bạn dễ lấp đầy mọi khoảng lặng — mà có người lại cần đúng khoảng lặng đó mới nói được điều họ đang nghĩ.
+- **khi nhóm này của bạn cao hơn người kia — về người kia:** [tên người kia] nói ít hơn và cần thời gian trước khi mở lời. Điều này dễ bị đọc thành lạnh nhạt hoặc giận dỗi, nhưng thật ra [tên người kia] chỉ đang chưa sẵn sàng nói. Im lặng ở đây không phải một thông điệp — nó chỉ là im lặng.
+- **khi nhóm này của bạn thấp hơn người kia — về bạn:** Bạn cần một quãng yên trước khi nói, và thường chọn ít người mà thân thay vì nhiều người mà nhạt. Cái được là khi bạn nói thì lời nói có sức nặng. Cái giá là ở chỗ đông người hoặc trong một cuộc trò chuyện dồn dập, bạn dễ bị coi như đang không tham gia, trong khi thật ra bạn đang nghe rất kỹ.
+- **khi nhóm này của bạn thấp hơn người kia — về người kia:** [tên người kia] nói nhiều và bắt chuyện dễ. Nhìn từ ngoài, điều đó dễ bị đọc thành lấn át hoặc không để ý tới người khác. Thật ra với [tên người kia], nói chính là cách nghĩ — [tên người kia] vừa nói vừa tìm ra ý mình, chứ không phải đã có sẵn ý rồi mới nói ra.
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia — về bạn:** Bạn giữ được nhịp đều, giữ lời, và không bỏ ngang giữa chừng — nên người khác hay dựa vào bạn. Cái giá đi kèm là thay đổi vào phút chót làm bạn mất sức nhiều hơn hẳn người khác, và bạn thường chịu đựng thay vì nói ra là mình đang khó chịu.
+- **khi nhóm này của bạn cao hơn người kia — về người kia:** [tên người kia] đổi kế hoạch dễ hơn và không thấy đó là chuyện lớn. Điều này dễ bị đọc thành thiếu tôn trọng thời gian của người khác, nhưng thật ra [tên người kia] không cảm nhận sự thay đổi nặng như bạn — với [tên người kia], đổi kế hoạch là một lựa chọn bình thường chứ không phải một cú phanh gấp.
+- **khi nhóm này của bạn thấp hơn người kia — về bạn:** Bạn xoay chuyển nhanh, đổi hướng được giữa chừng mà không thấy khó. Cái được là bạn không bị kẹt khi mọi thứ lệch khỏi dự tính. Cái giá là bạn hay quên rằng với người bên cạnh, một thay đổi nhỏ có thể là cả một buổi phải sắp lại — và họ thường không nói ra điều đó.
+- **khi nhóm này của bạn thấp hơn người kia — về người kia:** [tên người kia] cần biết trước và cần nhịp đều. Nhìn từ ngoài, chuyện đó dễ bị đọc thành cứng nhắc hay ngại cái mới. Thật ra [tên người kia] chỉ đang giữ cho mọi thứ chạy được — và phần lớn những việc chạy đều trong nhà là do có người như [tên người kia] nhận lấy.
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia — về bạn:** Bạn muốn nắm đủ thông tin rồi mới quyết, và làm kỹ nên ít sai sót. Trong nhà, bạn thường là người phát hiện ra chỗ chưa ổn trước khi nó thành vấn đề. Cái giá đi kèm là bạn dễ hỏi thêm một câu nữa vào đúng lúc người kia đã muốn xong, và câu hỏi ấy nghe như một lời nghi ngờ dù bạn không định thế.
+- **khi nhóm này của bạn cao hơn người kia — về người kia:** [tên người kia] quyết được khi thông tin còn thiếu, và không thấy đó là mạo hiểm. Điều này dễ bị đọc thành cẩu thả, nhưng thật ra [tên người kia] đang tính sẵn đường sửa nếu sai — cách của [tên người kia] là làm rồi chỉnh, không phải chỉnh xong mới làm.
+- **khi nhóm này của bạn thấp hơn người kia — về bạn:** Bạn quyết được với thứ đang có và không cần chờ đủ mọi thông tin. Cái được là mọi việc không bị treo. Cái giá là bạn dễ bỏ qua một chi tiết mà người kỹ tính hơn đã thấy từ đầu — và khi họ nêu ra, bạn dễ nghe thành họ đang bới lỗi thay vì đang giúp.
+- **khi nhóm này của bạn thấp hơn người kia — về người kia:** [tên người kia] muốn nắm đủ trước khi quyết, và hỏi rất nhiều. Nhìn từ ngoài, chuỗi câu hỏi đó dễ bị đọc thành thiếu tin tưởng. Thật ra [tên người kia] hỏi vì muốn việc chạy trót lọt — mỗi câu hỏi là một cái bẫy đã được gỡ trước, chứ không phải một lời phản đối.
+
+### B4.2 Một việc thử ngay — giữa hai người lớn NGANG VAI (8 đoạn)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia:** Lần tới khi bạn định chốt một việc chung, nói ra suy nghĩ của mình dưới dạng đề xuất chứ không phải kết luận, rồi đợi [tên người kia] trả lời.
+- **khi nhóm này của bạn thấp hơn người kia:** Lần tới khi [tên người kia] chốt nhanh quá, nói ngay lúc đó là bạn cần thêm một nhịp — thay vì đồng ý rồi khó chịu về sau.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia:** Trong cuộc nói chuyện tới, thử đếm xem bạn nói bao nhiêu và [tên người kia] nói bao nhiêu. Chỉ đếm thôi, chưa cần sửa gì.
+- **khi nhóm này của bạn thấp hơn người kia:** Lần tới khi bạn thấy mình đang lùi khỏi cuộc trò chuyện, thử nói một câu ngắn về điều mình nghĩ trước khi lùi hẳn.
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia:** Lần tới khi [tên người kia] đổi kế hoạch, thử nói ngay lúc đó là bạn cần biết trước — thay vì để bụng rồi bực về sau.
+- **khi nhóm này của bạn thấp hơn người kia:** Lần tới khi bạn định đổi giờ hay đổi việc, nhắn trước một câu. Không phải xin phép — chỉ là cho [tên người kia] kịp sắp lại.
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia:** Lần tới khi bạn định hỏi thêm, nói trước lý do hỏi. Một câu hỏi có lý do nghe khác hẳn một câu hỏi trống.
+- **khi nhóm này của bạn thấp hơn người kia:** Lần tới khi bạn thấy sốt ruột vì bị hỏi nhiều, thử dành trọn mười phút trả lời hết, rồi mới bắt đầu việc.
+
+### B4.3 Thoả thuận hai tuần (8 đoạn — dùng chung mọi cặp)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia:** Thử trong hai tuần: trước khi chốt một việc liên quan tới cả hai, bạn đếm đến ba và hỏi [tên người kia] nghĩ gì; [tên người kia] nói ra ý mình ngay lúc đó, kể cả khi chưa nghĩ xong hẳn. Hết hai tuần, mỗi người kể một lần thấy cách này dễ chịu và một lần thấy khó.
+- **khi nhóm này của bạn thấp hơn người kia:** Thử trong hai tuần: bạn nói ra ý mình ngay khi [tên người kia] vừa nêu việc, kể cả khi ý đó còn dở dang; [tên người kia] đợi hết câu rồi mới chốt. Hết hai tuần, ngồi lại xem có việc nào đã đỡ phải làm lại nhờ cách này.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia:** Thử trong hai tuần: mỗi lần hỏi [tên người kia] một câu, bạn đợi đủ năm giây rồi mới nói tiếp; [tên người kia] thử trả lời ngay cả khi câu trả lời còn ngắn. Hết hai tuần, xem có chuyện gì được nói ra mà trước đó chưa từng.
+- **khi nhóm này của bạn thấp hơn người kia:** Thử trong hai tuần: bạn nói trước một câu về việc mình cần khoảng lặng, thay vì im rồi để người kia đoán; [tên người kia] chừa lại một quãng yên trong ngày và không lấp nó. Hết hai tuần, mỗi người kể một lần thấy nhẹ hơn.
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia:** Thử trong hai tuần: [tên người kia] báo trước mỗi khi định đổi kế hoạch, dù chỉ báo trước mười phút; bạn nói thẳng khi một thay đổi làm mình mệt, thay vì nhận rồi chịu. Hết hai tuần, xem còn lần nào phải sắp lại cả buổi mà không ai biết trước.
+- **khi nhóm này của bạn thấp hơn người kia:** Thử trong hai tuần: bạn báo trước mỗi khi đổi kế hoạch, dù chỉ mười phút; [tên người kia] nói ra khi thấy mệt thay vì lặng lẽ gánh. Hết hai tuần, ngồi lại xem cái gì đã bớt căng và cái gì vẫn còn.
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia:** Thử trong hai tuần: bạn gom câu hỏi lại hỏi một lượt thay vì hỏi rải rác suốt buổi; [tên người kia] trả lời thật thay vì gạt đi cho xong. Hết hai tuần, xem có việc nào chạy trót lọt hơn nhờ đã hỏi đủ từ đầu.
+- **khi nhóm này của bạn thấp hơn người kia:** Thử trong hai tuần: bạn dành mười phút trả lời hết câu hỏi của [tên người kia] một lượt, trước khi bắt đầu việc; [tên người kia] chốt lại sau mười phút đó dù còn chỗ chưa rõ. Hết hai tuần, mỗi người kể một lần thấy cách này đỡ mất sức hơn.
+
+### B4.4 Khi hai người cùng nhóm nổi hoặc cùng nhóm nhẹ (8 đoạn — dùng chung mọi cặp)
+
+#### Nhóm Chủ động (D)
+
+- **Cùng nổi:** Cả hai đều quyết nhanh. Việc trong nhà ít khi bị treo — nhưng cũng ít khi có ai phanh lại.
+- **Cùng nhẹ:** Cả hai đều thích nhìn kỹ trước khi bước. Ít quyết hỏng, nhưng có việc nằm chờ hơi lâu.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng nổi:** Cả hai đều dễ bắt chuyện. Nhà thường vui — và khoảng lặng thì hiếm, kể cả lúc cần.
+- **Cùng nhẹ:** Cả hai đều cần quãng yên. Ở cùng nhau rất nhẹ, nhưng chuyện khó dễ bị để đó không ai mở lời.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng nổi:** Cả hai đều giữ nhịp đều và giữ lời. Rất dễ dựa vào nhau — và cũng rất ngại phá nhịp đó.
+- **Cùng nhẹ:** Cả hai đều xoay nhanh và đổi hướng dễ. Linh hoạt, nhưng thói quen chung thì khó giữ.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng nổi:** Cả hai đều muốn nắm đủ rồi mới quyết. Ít sai sót — và cũng dễ cùng nhau chờ quá lâu.
+- **Cùng nhẹ:** Cả hai đều quyết được với thứ đang có. Việc chạy nhanh, nhưng chi tiết dễ cùng bị bỏ qua.
+
+---
+
+## B5. Nội dung theo MỐI QUAN HỆ — vợ ↔ chồng và anh/chị ↔ em (27.5, BẢN NHÁP)
+
+Nguồn: `config/disc-noi-dung-doi.ts`. Tắt được cả khối bằng cờ `MO_NOI_DUNG_DOI`.
+Khác B4: B4 dùng chung một khoá cho mọi cặp ngang vai nên câu phải đủ chung; B5 có tình huống
+riêng cho từng mối quan hệ. Năm câu ở B3 và hai câu ở B4 áp dụng cho cả B5. Thêm ba câu riêng:
+
+8. Mỗi tình huống chỉ mô tả **vòng phản ứng nhìn thấy được**, không đoán nguyên nhân bên trong ai — đúng chưa?
+9. Câu “Nên tránh” là để **nhận ra** lúc căng thẳng, không phải để trách ai — người đọc có hiểu như vậy không?
+10. Kế hoạch bảy ngày có việc nào **đòi một bên đổi nhiều hơn bên kia** không?
+
+“bạn” = người đang đọc; người kia ghi là [tên người kia].
+
+### B5 · Vợ ↔ chồng — tình huống hằng ngày (8 ô)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia** — Chuyện chi tiêu hay kế hoạch cuối tuần: bạn đã nghĩ xong và nói luôn kết luận. [tên người kia] cần thêm một nhịp để cân nhắc nên chỉ đáp “để xem”. Bạn đọc đó là chưa đồng ý và hỏi lại; [tên người kia] thấy bị thúc nên nói càng ít.
+  - *Nên nói:* “Mình đang nghiêng về phương án này, [tên người kia] thấy sao? Tối nay nghĩ thêm cũng được, mai mình nghe.”
+  - *Nên tránh:* “Vậy là quyết xong rồi nhé.” hoặc “Sao cứ phải nghĩ lâu thế?”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] chốt kế hoạch rất nhanh, bạn chưa kịp nghĩ xong nên gật tạm hoặc im lặng. Sau đó bạn thấy lấn cấn, nhắc lại muộn; [tên người kia] thấy như vừa bị đổi ý giữa chừng.
+  - *Nên nói:* “Cho mình tới tối nghĩ rồi trả lời nhé. Mình sẽ nói rõ là đồng ý hay muốn đổi.”
+  - *Nên tránh:* “Gì cũng được.” rồi sau đó nhắc lại, hoặc “Sao giờ mới nói?”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia** — Tối về bạn muốn kể hết chuyện trong ngày. [tên người kia] cần một lúc yên trước khi nói chuyện. Bạn hỏi dồn, [tên người kia] đáp ngắn; bạn thấy bị xa cách, còn [tên người kia] thấy bị đòi hỏi.
+  - *Nên nói:* “Mình có chuyện muốn kể. [tên người kia] cần nghỉ chút thì cứ nói, lát mình kể.”
+  - *Nên tránh:* “Sao [tên người kia] chẳng nói gì với mình hết vậy?”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] kể nhiều và muốn được hỏi lại. Bạn vẫn nghe nhưng ít đáp; [tên người kia] đọc đó là thờ ơ. Thật ra bạn đang nghe và cần thời gian để nói thành lời.
+  - *Nên nói:* “Mình đang nghe đây. Cho mình một lát nghĩ rồi mình nói lại ý mình nhé.”
+  - *Nên tránh:* Im lặng không báo gì, hoặc “Mình mệt, đừng kể nữa.”
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia** — [tên người kia] hay nghĩ ra thay đổi (đổi lịch, đổi chỗ). Bạn quen nhịp cũ nên thấy bị xáo và nói “cứ như cũ đi”; [tên người kia] thấy ý mình bị gạt đi.
+  - *Nên nói:* “Mình cần biết trước một ngày để chuẩn bị. Với việc này mình thử đổi một lần xem sao.”
+  - *Nên tránh:* “Lúc nào cũng thay đổi, mệt lắm.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] giữ lịch quen thuộc, còn bạn rủ đổi kế hoạch phút chót. [tên người kia] chưa kịp xoay xở nên từ chối; bạn thấy bị cứng nhắc.
+  - *Nên nói:* “Mình muốn thử cái mới ở việc này. Mình báo từ sáng được không?”
+  - *Nên tránh:* “Sao không thử một lần cho biết?”
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bạn muốn xem kỹ số liệu và chi tiết trước khi quyết, còn [tên người kia] thấy đại khái là đủ. Bạn chỉnh lại từng chi tiết; [tên người kia] thấy như bị soi.
+  - *Nên nói:* “Mình thấy cái này cần xem kỹ hơn một chút. Mình tự tra rồi tóm lại cho [tên người kia] hai dòng nhé.”
+  - *Nên tránh:* “Chỗ này sai rồi.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] muốn xem kỹ từng khoản, còn bạn chỉ cần nắm ý chính. Khi bị hỏi chi tiết bạn thấy như bị kiểm tra, còn [tên người kia] chỉ muốn chắc chắn.
+  - *Nên nói:* “Mình chưa nhớ chi tiết, tối mình xem lại rồi trả lời. Còn ý chính là…”
+  - *Nên tránh:* “Sao phải tính chi li vậy?”
+
+### B5 · Vợ ↔ chồng — bảy ngày thử
+
+- Ngày 1 — Chỉ quan sát. Để ý một lần [tên người kia] làm việc đúng theo cách của [tên người kia], và không nhận xét gì.
+- Ngày 2 — Hỏi một câu mở: “Hôm nay có gì làm [tên người kia] vui hay phiền?” Rồi nghe đủ hai phút, không chen.
+- Ngày 3 — Nói một điều bạn cần bằng “mình cần…”, thay vì “[tên người kia] lúc nào cũng…”.
+- Ngày 4 — Chọn một việc nhà nhỏ, để [tên người kia] làm theo cách của [tên người kia]. Không sửa lại.
+- Ngày 5 — Dành mười phút không điện thoại, theo nhịp [tên người kia] cần: kể chuyện, hoặc ngồi yên cạnh nhau.
+- Ngày 6 — Cảm ơn một việc cụ thể [tên người kia] đã làm trong tuần, nói rõ việc đó là gì.
+- Ngày 7 — Ngồi lại mười phút. Bạn và [tên người kia] mỗi người kể một lần thấy dễ chịu và một lần thấy khó, rồi chọn một điều giữ sang tuần sau.
+
+### B5 · Anh/chị ↔ em — tình huống hằng ngày (8 ô)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia** — Hai người chọn trò chơi hoặc phim: bạn đã chọn xong và rủ làm ngay. [tên người kia] cần nghĩ thêm nên chưa trả lời; bạn bắt đầu một mình, còn [tên người kia] thấy mình bị bỏ lại phía sau.
+  - *Nên nói:* “Mình muốn chơi cái này. [tên người kia] thấy sao? Muốn đổi thì nói mình nghe.”
+  - *Nên tránh:* “Mình chọn rồi, theo đi.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] chọn nhanh và làm luôn. Bạn chưa kịp nghĩ nên đi theo, xong mới thấy mình không thích. Nói ra muộn thì [tên người kia] thấy như bị chê.
+  - *Nên nói:* “Cho mình một phút xem đã nhé, mình sẽ nói được hay không.”
+  - *Nên tránh:* “Thôi gì cũng được.” rồi hờn.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bạn kể chuyện liên tục lúc hai người ngồi cùng, trong khi [tên người kia] cần yên để làm việc của mình. Bạn nói tiếp, [tên người kia] đóng cửa lại.
+  - *Nên nói:* “Mình có chuyện muốn kể. Giờ [tên người kia] nghe được không, hay để lát?”
+  - *Nên tránh:* “Nghe mình nói đi mà!”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] hay rủ chơi và kể chuyện. Sau giờ học bạn cần ở một mình một lúc, nên từ chối ngắn; [tên người kia] thấy như bị bỏ rơi.
+  - *Nên nói:* “Mình muốn ở yên 15 phút, xong mình sang chơi với [tên người kia].”
+  - *Nên tránh:* “Đi chỗ khác đi.”
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia** — [tên người kia] hay đổi ý, đổi chỗ; bạn quen làm theo thứ tự cũ. Bạn giữ đồ đạc và lịch như cũ, còn [tên người kia] thấy bị chặn.
+  - *Nên nói:* “Mình quen làm theo thứ tự cũ. Mình thử đổi một lần, lần sau [tên người kia] báo mình trước nhé.”
+  - *Nên tránh:* “Không đổi, cứ như cũ.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] có thói quen riêng (chỗ ngồi, giờ giấc) còn bạn thay đổi liên tục. [tên người kia] cáu lên, bạn thấy khó hiểu vì mình chỉ muốn đổi cho vui.
+  - *Nên nói:* “Mình muốn đổi cái này. Ngày mai đổi, [tên người kia] thấy được không?”
+  - *Nên tránh:* “Có gì đâu mà phải giữ.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bạn muốn chơi đúng luật từng bước, còn [tên người kia] chơi thoải mái. Bạn sửa liên tục vì muốn trò chơi diễn ra cho trọn vẹn; [tên người kia] thấy mình lúc nào cũng làm sai nên bỏ cuộc giữa chừng, và cả hai đều tiếc ván chơi.
+  - *Nên nói:* “Mình hay để ý luật. Mình nhắc một lần thôi, còn lại cứ chơi vui nhé.”
+  - *Nên tránh:* “Sai rồi, làm lại!”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] muốn mọi thứ cho đúng, còn bạn làm đại khái cho nhanh. Bị sửa nhiều thì bạn thấy mất vui, trong khi [tên người kia] chỉ muốn giúp.
+  - *Nên nói:* “Mình chưa rành chỗ này, [tên người kia] chỉ mình một lần nhé, mình thử.”
+  - *Nên tránh:* “Làm gì mà căng thế.”
+
+### B5 · Anh/chị ↔ em — bảy ngày thử
+
+- Ngày 1 — Chỉ để ý. Hôm nay [tên người kia] làm gì đúng theo cách của [tên người kia]? Nhớ một việc, không cần nói.
+- Ngày 2 — Hỏi [tên người kia]: “Hôm nay có gì vui hoặc khó chịu không?” Nghe hết rồi mới kể chuyện của mình.
+- Ngày 3 — Nói một điều bạn cần bằng “mình muốn…”, thay vì “[tên người kia] cứ…”.
+- Ngày 4 — Để [tên người kia] chọn trò chơi hoặc cách làm một lần, và đi theo tới cuối.
+- Ngày 5 — Mười phút chơi chung theo cách [tên người kia] thích, hoặc mười phút yên ai làm việc nấy nếu [tên người kia] cần thế.
+- Ngày 6 — Nói cảm ơn một việc cụ thể [tên người kia] đã làm, nói rõ việc đó là gì.
+- Ngày 7 — Ngồi lại năm phút cùng nhau. Bạn và [tên người kia] mỗi người nói một điều thấy vui và một điều thấy khó trong tuần, rồi chọn một điều giữ tiếp.
 

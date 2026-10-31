@@ -17,6 +17,8 @@
 
 import { SO_THANH_VIEN_TOI_DA, soTrucTheoN } from "@config/disc-gia-dinh";
 import type { HuongLechCap, TheQuyen, KieuTrungKhop } from "@config/disc-lech-cap";
+import type { VaiGiaDinh } from "@config/disc-gia-dinh";
+import type { MoiQuanHe } from "@config/disc-noi-dung-doi";
 import { NGUONG_VUNG_LECH } from "@config/disc-nguong";
 import { MA_TRUC, type MaTruc } from "@modules/core/bo-de/kieu";
 
@@ -28,6 +30,11 @@ export type NguoiTrongPhanTich = {
   readonly ten: string;
   /** `true` khi người này là trẻ em — quyết định THẾ QUYỀN của mỗi lát cắt. */
   readonly laTre: boolean;
+  /**
+   * Vai trong nhà — CHỈ để suy ra mối quan hệ (vợ ↔ chồng hay anh chị em) cho nội dung 27.5.
+   * Không bắt buộc: thiếu thì lát cắt dùng nội dung chung `ngang-vai` như trước.
+   */
+  readonly vaiTro?: VaiGiaDinh;
   readonly diem: Readonly<Record<MaTruc, number>>;
 };
 
@@ -44,6 +51,11 @@ export type LatCat = {
   readonly nguoiKiaId: string;
   readonly tenNguoiKia: string;
   readonly theQuyen: TheQuyen;
+  /**
+   * Mối quan hệ cụ thể khi `theQuyen` là `ngang-vai` VÀ suy ra được. Vắng mặt ⇒ giao diện
+   * rơi về nội dung chung. 🔴 Tuỳ chọn: thư mục đã lưu từ phiên bản cũ không có trường này.
+   */
+  readonly moiQuanHe?: MoiQuanHe;
   /** Những trục lệch rõ nhất, đã cắt theo `soTrucTheoN`. Rỗng ⇒ xem `trungKhop`. */
   readonly trucLech: readonly TrucLech[];
   /** 🔴 Chỉ có khi `trucLech` rỗng — bốn trục đều trùng khớp. KHÔNG để trống. */
@@ -73,6 +85,24 @@ export type KetQuaPhanTichGiaDinh =
 export function theQuyenCua(toiLaTre: boolean, nguoiKiaLaTre: boolean): TheQuyen {
   if (toiLaTre === nguoiKiaLaTre) return "ngang-vai";
   return toiLaTre ? "tre-voi-nguoi-lon" : "nguoi-lon-voi-tre";
+}
+
+/**
+ * Suy mối quan hệ của hai người NGANG VAI. Chỉ trả về khi chắc chắn:
+ *  · cả hai là trẻ, hoặc cả hai khai là anh/chị/em ⇒ `anh-chi-em`
+ *  · một người là mẹ, người kia là bố/ba ⇒ `vo-chong`
+ * Mọi trường hợp khác (ông bà, người thân, khác) ⇒ `undefined`, không đoán.
+ */
+export function moiQuanHeCua(
+  a: Pick<NguoiTrongPhanTich, "laTre" | "vaiTro">,
+  b: Pick<NguoiTrongPhanTich, "laTre" | "vaiTro">,
+): MoiQuanHe | undefined {
+  if (a.laTre && b.laTre) return "anh-chi-em";
+  if (a.laTre !== b.laTre) return undefined;
+  if (a.vaiTro === "anh-chi-em" && b.vaiTro === "anh-chi-em") return "anh-chi-em";
+  const cap = new Set([a.vaiTro, b.vaiTro]);
+  if (cap.has("me") && (cap.has("bo") || cap.has("ba")) && cap.size === 2) return "vo-chong";
+  return undefined;
 }
 
 /** Bốn trục của một cặp VÔ HƯỚNG, nhìn từ `a`. Bản của `b` soi gương từ đây. */
@@ -141,11 +171,14 @@ export function phanTichGiaDinh(
         const daoDau = j < i;
         const bon = bonTrucTheoCap.get(daoDau ? `${j}|${i}` : `${i}|${j}`)!;
         const trucLech = catTheoN(bon, ds.length, daoDau);
+        const theQuyen = theQuyenCua(toi.laTre, nguoiKia.laTre);
+        const moiQuanHe = theQuyen === "ngang-vai" ? moiQuanHeCua(toi, nguoiKia) : undefined;
         const chung: LatCat = {
           toiId: toi.id,
           nguoiKiaId: nguoiKia.id,
           tenNguoiKia: nguoiKia.ten,
-          theQuyen: theQuyenCua(toi.laTre, nguoiKia.laTre),
+          theQuyen,
+          ...(moiQuanHe ? { moiQuanHe } : {}),
           trucLech,
         };
         return trucLech.length > 0

@@ -268,3 +268,13 @@ export const BO_DE_TRE: readonly string[] = ["MN", "TH", "THCS", "QS"];
 export function laBoDeTre(ma: string): boolean {
   return BO_DE_TRE.includes(ma);
 }
+
+/**
+ * 🔴 CỜ NỘI DUNG THEO MỐI QUAN HỆ (27.5) — tình huống, câu nên nói / nên tránh và bảy ngày
+ * thử cho vợ ↔ chồng và anh/chị ↔ em (`config/disc-noi-dung-doi.ts`).
+ *
+ * Là BẢN NHÁP thuộc Gói B, chưa có chữ ký chuyên môn. Cùng tinh thần `MO_NOI_DUNG_TRE`:
+ * không lật quyết định phát hành, chỉ làm cho nó rút lại được trong 30 giây — đặt `false`,
+ * dựng lại, khối này biến mất khỏi màn Cả nhà; phần `disc-noi-dung-cap.ts` cũ còn nguyên.
+ */
+export const MO_NOI_DUNG_DOI = true;

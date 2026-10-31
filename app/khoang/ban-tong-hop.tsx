@@ -24,7 +24,8 @@ import {
   SO_THANH_VIEN_TOI_DA,
   laTreEm,
 } from "@config/disc-gia-dinh";
-import { MO_NOI_DUNG_TRE } from "@config/disc-nguong";
+import { MO_NOI_DUNG_DOI, MO_NOI_DUNG_TRE } from "@config/disc-nguong";
+import { KeHoachBayNgay, TinhHuongHangNgay } from "@/app/components/noi-dung-doi";
 import { thayDaiTuCap } from "@config/disc-lech-cap";
 import {
   MO_TA_LECH,
@@ -104,6 +105,7 @@ export function ManBanTongHop({
       id: n.tv.id,
       ten: n.tv.ten,
       laTre: laTreEm(n.tv.vaiTro, n.tv.lop),
+      vaiTro: n.tv.vaiTro,
       diem: diemCua(n, chon[n.tv.id])!,
     }));
 
@@ -279,12 +281,12 @@ function MotBan({ ban }: { readonly ban: BanPhanTich }) {
       data-thu="ban-tong-hop"
       className={`space-y-4 ${KHUNG.doc}`}
     >
-      <h2
-        className="border-b pb-2 text-[20px] leading-snug font-bold"
-        style={{ color: MAU.timCongNghe, borderColor: MAU.vienMo }}
-      >
-        {CHU_TONG_HOP.tieuDeBan.replace("{ten}", ban.tenLuc)}
-      </h2>
+      {/* GĐ27.4 — tiêu đề mỗi bản là một mảng nhấn tối (bản in trả về nền sáng). */}
+      <div data-nhan-toi className="px-5 py-4">
+        <h2 className="text-[20px] leading-snug font-bold text-chu-tren-toi">
+          {CHU_TONG_HOP.tieuDeBan.replace("{ten}", ban.tenLuc)}
+        </h2>
+      </div>
       {ban.latCat.map((l) => (
         <MotLatCat key={l.nguoiKiaId} ten={ban.tenLuc} lat={l} />
       ))}
@@ -326,6 +328,14 @@ function MotLatCat({ ten, lat }: { readonly ten: string; readonly lat: LatCat })
                 <strong className="font-semibold">{CHU_TONG_HOP.nhanThoaThuan}: </strong>
                 {thay(THOA_THUAN[t.truc][t.huong])}
               </p>
+              {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
+                <TinhHuongHangNgay
+                  truc={t.truc}
+                  huong={t.huong}
+                  moiQuanHe={lat.moiQuanHe}
+                  tenNguoiKia={lat.tenNguoiKia}
+                />
+              )}
             </div>
           ))
         : lat.trungKhop && (
@@ -345,6 +355,9 @@ function MotLatCat({ ten, lat }: { readonly ten: string; readonly lat: LatCat })
               </ul>
             </div>
           )}
+      {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
+        <KeHoachBayNgay moiQuanHe={lat.moiQuanHe} tenNguoiKia={lat.tenNguoiKia} />
+      )}
     </article>
   );
 }

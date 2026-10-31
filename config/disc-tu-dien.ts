@@ -1047,3 +1047,13 @@ export const CHU_HAN_MUC_THU_MUC = {
     "Máy đã hết chỗ lưu nên bản phân tích này chưa được giữ lại. Tải về máy trước, rồi " +
     "xoá bớt vài lần chạy cũ ở danh sách bên dưới.",
 } as const;
+
+/** Nhãn cho nội dung theo mối quan hệ (27.5). Nội dung chính ở `disc-noi-dung-doi.ts`. */
+export const CHU_NOI_DUNG_DOI = {
+  tieuDeTinhHuong: "Chuyện hằng ngày hay gặp",
+  nhanNenNoi: "Nên nói",
+  nhanNenTranh: "Nên tránh",
+  tieuDeKeHoach: "Bảy ngày thử",
+  moTaKeHoach: "Mỗi ngày một việc nhỏ. Hết bảy ngày thì {toi} và {nguoiKia} ngồi lại xem điều gì đã đỡ.",
+  ghiChu: "Đây là gợi ý để {toi} và {nguoiKia} cùng thử, không phải kết luận về ai.",
+} as const;

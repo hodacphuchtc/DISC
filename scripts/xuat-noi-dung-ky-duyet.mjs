@@ -40,6 +40,13 @@ const { LOI_KHUYEN, TU_MINH, BAN_KHOAN, MA_BAN_KHOAN, LECH_PHONG_CACH, GOI_KY_DU
 const { DIEN_GIAI, CHU_THE, TIEU_DE_KHOI } = await import(
   new URL("config/disc-dien-giai.ts", GOC).href
 );
+const { MO_TA_LECH, THOA_THUAN, VIEC_CUA_TOI, TRUNG_KHOP } = await import(
+  new URL("config/disc-noi-dung-cap.ts", GOC).href
+);
+const { TINH_HUONG_DOI, KE_HOACH_BAY_NGAY, MOI_QUAN_HE } = await import(
+  new URL("config/disc-noi-dung-doi.ts", GOC).href
+);
+const { thayDaiTuCap } = await import(new URL("config/disc-lech-cap.ts", GOC).href);
 const { TRUC } = await import(new URL("config/disc-tu-dien.ts", GOC).href);
 const { thayChuThe } = await import(new URL("modules/report/dien-giai.ts", GOC).href);
 
@@ -84,7 +91,7 @@ p(
 for (const [ma, khoi] of Object.entries(DIEN_GIAI)) {
   p(`### Kiểu \`${ma}\``, "");
   for (const bo of ["MN", "QS", "THCS"]) {
-    p(`**Bộ ${TEN_BO[bo]}** (gọi người làm bài là “${CHU_THE[bo].thuong}”)`, "");
+    p(`**Bộ ${TEN_BO[bo]}** (gọi người làm bài là “${CHU_THE[bo].con.thuong}”)`, "");
     p(`- *${TIEU_DE_KHOI.trongNhuTheNao}:* ${thayChuThe(khoi.trongNhuTheNao, bo)}`);
     p(`- *${TIEU_DE_KHOI.diemManh}:* ${thayChuThe(khoi.diemManh, bo)}`);
     p(`- *${TIEU_DE_KHOI.choCanDeY}:* ${thayChuThe(khoi.choCanDeY, bo)}`);
@@ -185,6 +192,32 @@ for (const t of TRUC_MA) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   GÓI A, PHẦN CẶP — "việc của tôi" khi một bên là TRẺ (27.4).
+
+   🔴 56 đoạn của `config/disc-noi-dung-cap.ts` từng KHÔNG nằm trong hồ sơ ký nào, vì script
+   này không import file đó. Cách chia: câu nói VỚI/VỀ TRẺ → gói A (ở đây); câu giữa hai người
+   LỚN ngang vai + các khối dùng chung (mô tả chỗ vênh, thoả thuận, trùng khớp) → gói B.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const TEN_KIA = "[tên người kia]";
+const HUONG_NHAN = { "toi-cao-hon": "khi nhóm này của bạn cao hơn người kia", "toi-thap-hon": "khi nhóm này của bạn thấp hơn người kia" };
+const TEN_THE_QUYEN = { "nguoi-lon-voi-tre": "Người lớn nói với trẻ", "tre-voi-nguoi-lon": "Trẻ nói với người lớn" };
+
+p("---", "");
+p("## A-CẶP. Một việc thử ngay khi hai người lệch phong cách — phía có TRẺ", "");
+p("Hiện ở bản tổng hợp cả nhà. “bạn” = người đang đọc; người kia ghi là " + TEN_KIA + ".");
+p("🔴 Thế quyền **Trẻ nói với người lớn** không giao trẻ việc điều chỉnh người lớn — người ký xem có đúng vậy không.", "");
+for (const t of TRUC_MA) {
+  p(`### Nhóm ${TRUC[t].ten} (${t})`, "");
+  for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+    for (const q of ["nguoi-lon-voi-tre", "tre-voi-nguoi-lon"]) {
+      p(`- **${TEN_THE_QUYEN[q]}, ${HUONG_NHAN[h]}:** ${thayDaiTuCap(VIEC_CUA_TOI[t][h][q], q, TEN_KIA)}`);
+    }
+  }
+  p("");
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    HỒ SƠ GÓI B — phản hồi tính cách cho NGƯỜI LỚN về chính họ.
    ══════════════════════════════════════════════════════════════════════════ */
 
@@ -230,6 +263,79 @@ pB("3. Vế “cái giá đi kèm” có luôn đi sau một vế ghi nhận đi
 pB("4. Có chỗ nào một phụ huynh đang căng thẳng đọc thành **lỗi tại mình** không?");
 pB("5. Với người đọc không có ai hỗ trợ chuyên môn bên cạnh, nội dung này có **an toàn** không?");
 pB("");
+
+pB("---", "");
+pB("## B4. Nhìn về PHÍA NGƯỜI KIA — bạn đời, anh chị em, mọi cặp (27.4)", "");
+pB("Nguồn: `config/disc-noi-dung-cap.ts`. 🔴 Trước 27/10/2026 phần này **chưa nằm trong hồ sơ ký nào**.");
+pB("Năm câu ở B3 áp dụng cho cả B4. Thêm hai câu riêng:", "");
+pB("6. Đoạn nói về **người kia** (“veNguoiKia”) có luôn **lật khung** thành điểm mạnh, không đọc thành lời chê người vắng mặt không?");
+pB("7. Các đoạn dùng chung cho cả cặp có trẻ lẫn cặp người lớn (B4.1, B4.3, B4.4) có **an toàn với cả hai** không? Người ký gói A cũng cần xem chúng.", "");
+pB("“bạn” = người đang đọc; người kia ghi là " + TEN_KIA + ".", "");
+
+pB("### B4.1 Mô tả chỗ vênh (16 đoạn — dùng chung mọi cặp)", "");
+for (const t of TRUC_MA) {
+  pB(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+  for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+    const k = MO_TA_LECH[t][h];
+    pB(`- **${HUONG_NHAN[h]} — về bạn:** ${thayDaiTuCap(k.veToi, "ngang-vai", TEN_KIA)}`);
+    pB(`- **${HUONG_NHAN[h]} — về người kia:** ${thayDaiTuCap(k.veNguoiKia, "ngang-vai", TEN_KIA)}`);
+  }
+  pB("");
+}
+
+pB("### B4.2 Một việc thử ngay — giữa hai người lớn NGANG VAI (8 đoạn)", "");
+for (const t of TRUC_MA) {
+  pB(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+  for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+    pB(`- **${HUONG_NHAN[h]}:** ${thayDaiTuCap(VIEC_CUA_TOI[t][h]["ngang-vai"], "ngang-vai", TEN_KIA)}`);
+  }
+  pB("");
+}
+
+pB("### B4.3 Thoả thuận hai tuần (8 đoạn — dùng chung mọi cặp)", "");
+for (const t of TRUC_MA) {
+  pB(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+  for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+    pB(`- **${HUONG_NHAN[h]}:** ${thayDaiTuCap(THOA_THUAN[t][h], "ngang-vai", TEN_KIA)}`);
+  }
+  pB("");
+}
+
+pB("### B4.4 Khi hai người cùng nhóm nổi hoặc cùng nhóm nhẹ (8 đoạn — dùng chung mọi cặp)", "");
+for (const t of TRUC_MA) {
+  pB(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+  pB(`- **Cùng nổi:** ${thayDaiTuCap(TRUNG_KHOP[t]["cung-noi"], "ngang-vai", TEN_KIA)}`);
+  pB(`- **Cùng nhẹ:** ${thayDaiTuCap(TRUNG_KHOP[t]["cung-nhe"], "ngang-vai", TEN_KIA)}`);
+  pB("");
+}
+
+
+pB("---", "");
+pB("## B5. Nội dung theo MỐI QUAN HỆ — vợ ↔ chồng và anh/chị ↔ em (27.5, BẢN NHÁP)", "");
+pB("Nguồn: `config/disc-noi-dung-doi.ts`. Tắt được cả khối bằng cờ `MO_NOI_DUNG_DOI`.");
+pB("Khác B4: B4 dùng chung một khoá cho mọi cặp ngang vai nên câu phải đủ chung; B5 có tình huống");
+pB("riêng cho từng mối quan hệ. Năm câu ở B3 và hai câu ở B4 áp dụng cho cả B5. Thêm ba câu riêng:", "");
+pB("8. Mỗi tình huống chỉ mô tả **vòng phản ứng nhìn thấy được**, không đoán nguyên nhân bên trong ai — đúng chưa?");
+pB("9. Câu “Nên tránh” là để **nhận ra** lúc căng thẳng, không phải để trách ai — người đọc có hiểu như vậy không?");
+pB("10. Kế hoạch bảy ngày có việc nào **đòi một bên đổi nhiều hơn bên kia** không?", "");
+pB("“bạn” = người đang đọc; người kia ghi là " + TEN_KIA + ".", "");
+const TEN_QH = { "vo-chong": "Vợ ↔ chồng", "anh-chi-em": "Anh/chị ↔ em" };
+for (const q of MOI_QUAN_HE) {
+  pB(`### B5 · ${TEN_QH[q]} — tình huống hằng ngày (8 ô)`, "");
+  for (const tr of TRUC_MA) {
+    pB(`#### Nhóm ${TRUC[tr].ten} (${tr})`, "");
+    for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+      const o = TINH_HUONG_DOI[tr][h][q];
+      pB(`- **${HUONG_NHAN[h]}** — ${thayDaiTuCap(o.tinhHuong, "ngang-vai", TEN_KIA)}`);
+      pB(`  - *Nên nói:* ${thayDaiTuCap(o.nenNoi, "ngang-vai", TEN_KIA)}`);
+      pB(`  - *Nên tránh:* ${thayDaiTuCap(o.nenTranh, "ngang-vai", TEN_KIA)}`);
+    }
+    pB("");
+  }
+  pB(`### B5 · ${TEN_QH[q]} — bảy ngày thử`, "");
+  for (const ngay of KE_HOACH_BAY_NGAY[q]) pB(`- ${thayDaiTuCap(ngay, "ngang-vai", TEN_KIA)}`);
+  pB("");
+}
 
 /**
  * 🔴 HAI TỆP, KHÔNG PHẢI MỘT.
