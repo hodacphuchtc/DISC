@@ -14,6 +14,8 @@ trung tính, giao diện đọc nhanh cho phụ huynh (điện thoại + web). *
 **2. Đang dở.** Không còn việc máy ở GĐ29. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu` (cổng 3100)
 với dữ liệu bịa. 🔴 Chrome extension chưa kết nối nên **chưa ai nhìn bằng mắt** màn nào của GĐ29.
 
+**2a. Repo được TẶNG cộng đồng CEO Minh Trí (Zalo, 31/10)** để họ tích hợp, không bán. Repo CHƯA có file `LICENSE` — đề xuất MIT, chờ anh duyệt tên tác giả rồi thêm + push. Nội dung về trẻ vẫn chưa có chữ ký chuyên môn.
+
 **2b. Cần anh quyết (không phải việc máy):** khối "Hiểu nhau để thương nhau hơn" ở bước 3 (xung đột với
 luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
 
