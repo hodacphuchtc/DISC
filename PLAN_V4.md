@@ -4,12 +4,12 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**31/10/2026 — GĐ29: PHẦN MÁY ĐÃ LÀM TRÊN LOCAL, CHƯA COMMIT, CHƯA AI BẤM THỬ.**
+**31/10/2026 — GĐ29: PHẦN MÁY XONG, ĐÃ PUSH (`7b2f39d`), CHƯA AI BẤM THỬ.**
 
-**1. Vừa xong.** GĐ27 + GĐ28 đã push (commit `6d5c5bd`). **GĐ29** (CHƯA commit): phân tích sâu cho MỌI
+**1. Vừa xong.** GĐ27 + GĐ28 + **GĐ29** đã push (GĐ29 = 4 commit, đỉnh `7b2f39d`). GĐ29: phân tích sâu cho MỌI
 cặp trong nhà (người lớn↔người lớn, người lớn→trẻ, trẻ→người lớn, cùng nhịp) × 3 bậc trẻ, xưng hô
 trung tính, giao diện đọc nhanh cho phụ huynh (điện thoại + web). **2.195 test xanh**, gói chính
-**~295 KB / 300** (dư ~5 KB). Không ô nào tick.
+**~295 KB / 300** (dư ~5 KB). Không ô nào tick (luật dự án: chỉ tick khi có người bấm thử).
 
 **2. Đang dở.** Không còn việc máy ở GĐ29. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu` (cổng 3100)
 với dữ liệu bịa. 🔴 Chrome extension chưa kết nối nên **chưa ai nhìn bằng mắt** màn nào của GĐ29.
@@ -31,7 +31,7 @@ luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
 
 **5. Cạm bẫy** — `docs/so-seo.md` (đã thêm 4 bài mới của GĐ29).
 
-**6. 🔴 GĐ29 CHƯA COMMIT.** (Commit/push chờ chủ dự án duyệt.)
+**6.** Cây làm việc sạch, `main` khớp `origin/main`.
 
 **7. Lệnh phiên sau.**
 ```bash
