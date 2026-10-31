@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
 import { BieuDoRadar } from "@/app/components/bieu-do-radar";
+import { ThongBaoDaXong } from "@/app/components/thong-bao-da-xong";
+import { KhungTestLaiTuKho } from "@/app/components/khung-test-lai";
 import { ChipBonTruc } from "@/app/components/chip-bon-truc";
 import { KhoiMaMoi } from "@/app/components/khoi-ma-moi";
 import { MO_MA_MOI } from "@config/disc-nguong";
@@ -48,6 +50,8 @@ export function ManKetQua({
   onLamBoConThieu,
   tuoi,
   banKhoan,
+  vuaXong = false,
+  luuHong = false,
 }: {
   readonly boDe: BoDe;
   readonly bietDanh: string;
@@ -62,6 +66,10 @@ export function ManKetQua({
   readonly tuoi?: number;
   /** Mã điều phụ huynh đang băn khoăn, nếu đã chọn. */
   readonly banKhoan?: string;
+  /** Bài VỪA làm xong (không phải xem lại bài cũ) ⇒ hiện thông báo "đã xong, bản thứ N" (28.2). */
+  readonly vuaXong?: boolean;
+  /** Bài VỪA làm mà lưu thất bại (28.2) — khác với "đang lưu" (`idBai` còn `null`). */
+  readonly luuHong?: boolean;
 }) {
   // §9.2 luật 6: bộ MN và TH đều PHẢI mở đầu bằng câu rào. Nhưng hai bộ có hai người đọc
   // khác nhau — bộ MN là bố mẹ trả lời hộ, bộ TH là chính em học sinh cầm máy — nên hai câu
@@ -84,6 +92,9 @@ export function ManKetQua({
   if (!ketQua.hopLe) {
     return (
       <section className="max-w-2xl px-5 py-10 md:px-12 md:py-16">
+        {vuaXong && (
+          <ThongBaoDaXong boDe={boDe.ma} bietDanh={bietDanh} idBai={idBai} luuHong={luuHong} hopLe={false} />
+        )}
         <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
           {boDe.ten} · {bietDanh}
         </p>
@@ -166,6 +177,9 @@ export function ManKetQua({
     <section className={`${KHUNG.trang} px-5 py-10 md:px-12 md:py-16`}>
       <div className="grid gap-x-12 xl:grid-cols-2 xl:items-start print:block">
       <div className={KHUNG.doc}>
+      {vuaXong && (
+        <ThongBaoDaXong boDe={boDe.ma} bietDanh={bietDanh} idBai={idBai} luuHong={luuHong} hopLe />
+      )}
       <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
         {boDe.ten} · {bietDanh}
       </p>
@@ -209,6 +223,11 @@ export function ManKetQua({
         trucNheNhat={trucNheNhat}
         motViec={motViecNgay}
       />
+
+      {/* 28.6 — nhắc test lại 6 tháng: to, ngay sau tóm tắt, ở chỗ ai cũng thấy. */}
+      <div className="mt-6">
+        <KhungTestLaiTuKho />
+      </div>
 
       {/* Radar đứng NGOÀI vùng có nhãn: nó chỉ là bản nhìn, ẩn khỏi trình đọc màn hình, và
           bốn con số thật nằm ở biểu đồ cột ngay dưới. */}

@@ -18,10 +18,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { CHU_VAI, GIOI_HAN_BAI_MOI_NGUOI } from "@config/disc-gia-dinh";
+import { CHU_VAI } from "@config/disc-gia-dinh";
 import {
   CHU_BANG_GIA_DINH,
-  CHU_MA_MOI,
   CHU_SO_SANH,
   CHU_THONG_DIEP,
   CHU_TRE_TAM_DONG,
@@ -32,6 +31,11 @@ import { MAU } from "@config/thuong-hieu";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { FormThanhVien, HoiXoa } from "@/app/components/form-thanh-vien";
 import { MinhHoa, NhanVat } from "@/app/components/nhan-vat";
+import { KhungTestLaiTuKho } from "@/app/components/khung-test-lai";
+import { SoBanDaLam } from "@/app/components/so-ban-da-lam";
+import { dauVaoDayDu } from "@/app/dau-vao-day-du";
+import { tinhDayDu } from "@modules/report/do-day-du-bo-test";
+import { banUuTien } from "@modules/report/chon-ban";
 import { NhanMaMoi } from "@/app/components/nhan-ma-moi";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import { MA_TRUC, type MaTruc as MaTrucKieu } from "@modules/core/bo-de/kieu";
@@ -135,9 +139,9 @@ export function KhoangBangGiaDinh({
           </p>
           {/* 🔴 LÝ DO QUAY LẠI (13.2). Không có dòng này thì sản phẩm chỉ được dùng một
               lần rồi thôi — mà mục tiêu của cả gói là GIỮ CHÂN, không phải đo một lần. */}
-          <p data-thu="nhac-lam-lai" className="mt-1 text-[14px] text-neutral-500">
-            {CHU_SO_SANH.nhacLamLai}
-          </p>
+          <div className="mt-4">
+            <KhungTestLaiTuKho />
+          </div>
 
           <div className="mt-6 flex flex-wrap items-baseline justify-between gap-3">
             <h2 className="text-[16px] font-bold text-neutral-900">{CHU_BANG_GIA_DINH.tieuDe}</h2>
@@ -290,10 +294,11 @@ function TheThanhVien({
       diem: (b.ketQua as { diem: Record<MaTrucKieu, number> }).diem,
     })),
   );
-  const moiNhat = bai[0];
+  // 28.3 — CÙNG bộ chọn với phân tích cả nhà: bản hợp lệ mới nhất. Trước đây `bai[0]` nên bản
+  // mới nhất mà hỏng làm thẻ mất điểm dù bên dưới còn một bản dùng được.
+  const moiNhat = banUuTien(bai) ?? bai[0];
   // Ưu tiên bài làm THẬT trên máy này; không có thì dùng hồ sơ nhận qua mã mời (13.1).
   const diem = moiNhat?.ketQua.hopLe ? moiNhat.ketQua.diem : (tv.nhanQuaMa?.diem ?? null);
-  const chiCoMa = bai.length === 0 && Boolean(tv.nhanQuaMa);
 
   /**
    * Nhóm nổi trội của người này — quyết định màu viền và con robot nhỏ trên thẻ (16.8).
@@ -326,24 +331,12 @@ function TheThanhVien({
         <span className="shrink-0 text-[13px] text-neutral-500">{CHU_VAI[tv.vaiTro]}</span>
       </div>
 
-      {/* Sổ tiến độ: một chấm đầy cho mỗi bài đã làm. Nhìn lướt là biết ai chưa xong. */}
-      <p data-thu="so-tien-do" className="mt-2 text-[14px] text-neutral-600">
-        <span
-          aria-hidden="true"
-          className="mr-1.5 tracking-widest"
-          style={{ color: trucNoiTroi ? TRUC[trucNoiTroi].mau : MAU.camNangLuong }}
-        >
-          {"●".repeat(bai.length)}
-          {"○".repeat(Math.max(GIOI_HAN_BAI_MOI_NGUOI - bai.length, 0))}
-        </span>
-        {chiCoMa
-          ? CHU_MA_MOI.nhanNhanQuaMa
-          : bai.length === 0
-          ? CHU_BANG_GIA_DINH.chuaLamBai
-          : CHU_BANG_GIA_DINH.demBai
-              .replace("{so}", String(bai.length))
-              .replace("{gioiHan}", String(GIOI_HAN_BAI_MOI_NGUOI))}
-      </p>
+      {/* 28.1 — sổ bản đã làm: mấy bản, loại nào, ngày nào, đủ chưa. Nhìn lướt là biết ai
+          còn thiếu gì. Đủ/thiếu lấy từ chính điều kiện của màn đối chiếu hai góc nhìn. */}
+      <SoBanDaLam
+        day={tinhDayDu(tv, bai, dauVaoDayDu(tv))}
+        mauNoiTroi={trucNoiTroi ? TRUC[trucNoiTroi].mau : undefined}
+      />
 
       {diem && (
         <ul className="mt-2.5 flex gap-3" aria-label="Bốn nhóm">

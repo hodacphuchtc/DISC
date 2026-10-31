@@ -136,6 +136,8 @@ export function KhoangDisc({
 
   /** Mã bài trong kho — để nút "Kết thúc & xoá" biết xoá cái nào (QĐ7). */
   const [idBai, datIdBai] = useState<string | null>(null);
+  /** `idBai === null` gộp "đang lưu" với "lưu hỏng"; cờ này tách riêng chuyện thứ hai (28.2). */
+  const [luuHong, datLuuHong] = useState(false);
 
   /** Người trong sổ đang làm bài này, nếu vào từ thẻ thành viên (12.4). */
   const maThanhVienDangLam = vaoTuThanhVien.id;
@@ -167,6 +169,7 @@ export function KhoangDisc({
     // IndexedDB ghi xong mới được xem kết quả của mình — và kho có hỏng thì cũng không
     // được chặn đường đi.
     datIdBai(null);
+    datLuuHong(false);
     datBuoc({ ten: "ket-qua", boDe, bietDanh, ketQua });
 
     const id = maMoi();
@@ -187,6 +190,7 @@ export function KhoangDisc({
       phienBanBoDe: PHIEN_BAN_BO_DE,
     }).then(async (daLuu) => {
       if (daLuu) datIdBai(id);
+      else datLuuHong(true);
       // 🔴 Ghi mốc SAU khi lưu xong và ĐỌC LẠI TỪ KHO, không cộng dồn trong đầu: kho là
       // nơi duy nhất biết máy này thật sự có mấy biệt danh, kể cả bài của những lần mở
       // trước. Và chỉ ghi MỘT lần — mốc này đo "đã từng đạt", không đo số lượt.
@@ -263,6 +267,8 @@ export function KhoangDisc({
           bietDanh={buoc.bietDanh}
           ketQua={buoc.ketQua}
           idBai={idBai}
+          vuaXong
+          luuHong={luuHong}
           onLamLai={onThoat}
           onXemDoiChieu={(maTre) => datBuoc({ ten: "doi-chieu", maTre })}
           onLamBoConThieu={(ma, maTre) =>

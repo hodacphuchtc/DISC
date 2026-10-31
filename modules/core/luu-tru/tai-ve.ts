@@ -59,6 +59,27 @@ export function taiXuong(duLieu: Uint8Array, tenTep: string): boolean {
   }
 }
 
+/**
+ * Đẩy một đoạn VĂN BẢN xuống máy (tệp lịch .ics…). Cùng luật tên tệp với `taiXuong`: không
+ * chứa tên người.
+ */
+export function taiXuongVanBan(noiDung: string, tenTep: string, kieu: string): boolean {
+  try {
+    if (typeof document === "undefined" || typeof URL.createObjectURL !== "function") {
+      return false;
+    }
+    const url = URL.createObjectURL(new Blob([noiDung], { type: kieu }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = tenTep;
+    a.click();
+    URL.revokeObjectURL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Tên tệp cho thư mục của một người — theo NGÀY, không theo tên người. */
 export function tenTepThuMuc(taoLuc: string): string {
   return `${TEN_TEP_THU_MUC}-${taoLuc.slice(0, 10)}.zip`;

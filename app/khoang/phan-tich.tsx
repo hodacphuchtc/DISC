@@ -18,9 +18,13 @@ import { useCallback, useEffect, useState } from "react";
 import { ManBanTongHop, type NguoiCoBai } from "./ban-tong-hop";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { KhoiConThieuAi } from "@/app/components/con-thieu-ai";
+import { BangKiemDayDu } from "@/app/components/bang-kiem-day-du";
+import { KhungTestLaiTuKho } from "@/app/components/khung-test-lai";
+import { dayDuCaNha } from "@/app/dau-vao-day-du";
+import type { DayDuMotNguoi } from "@modules/report/do-day-du-bo-test";
 import { HopThoaiThuMuc } from "@/app/components/hop-thoai-han-muc";
 import { GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
-import { CHU_BUOC, CHU_TONG_HOP } from "@config/disc-tu-dien";
+import { CHU_BUOC, CHU_DAY_DU, CHU_TONG_HOP } from "@config/disc-tu-dien";
 import { KHUNG } from "@config/bo-cuc";
 import { MAU } from "@config/thuong-hieu";
 import { ghiMoc } from "@modules/core/do-phieu";
@@ -54,11 +58,14 @@ export function KhoangPhanTich({
   /** Bản cũ đang mở lại — `null` = đang chạy bản mới. */
   const [banCu, datBanCu] = useState<readonly BanPhanTich[] | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
+  /** Độ đầy đủ từng người (28.4): bảng kiểm "bộ test đã đủ chưa" và nhãn "chưa đủ bản". */
+  const [dayDu, datDayDu] = useState<readonly DayDuMotNguoi[]>([]);
 
   const demLai = useCallback(async () => {
     const [tv, bai, pt] = await Promise.all([docThanhVien(), docTatCa(), docPhanTich()]);
     const coHoSo = (t: (typeof tv)[number]) =>
       bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa);
+    datDayDu(dayDuCaNha(tv, bai));
     datSoNguoiCoHoSo(tv.filter(coHoSo).length);
     datThieu(tv.filter((t) => !coHoSo(t)).map((t) => ({ id: t.id, ten: t.ten })));
     // Mới nhất lên trước: người ta tìm lần vừa chạy nhiều hơn tìm lần đầu tiên.
@@ -142,6 +149,7 @@ export function KhoangPhanTich({
     return (
       <ManBanTongHop
         nguoi={dangPhanTich}
+        chuaDuBan={new Set(dayDu.filter((d) => !d.daDu).map((d) => d.id))}
         khoiThieu={khoiThieu}
         onDong={() => datDangPhanTich(null)}
       />
@@ -150,6 +158,11 @@ export function KhoangPhanTich({
 
   return (
     <section data-thu="buoc-phan-tich" className="px-4 py-5">
+      {/* 28.4 — GỌN: bảng kiểm tóm tắt một dòng, bấm mới xổ chi tiết. Chặn MỀM: không khoá nút. */}
+      <div className={`mb-4 space-y-3 ${KHUNG.doc}`}>
+        <BangKiemDayDu ds={dayDu} />
+        <KhungTestLaiTuKho />
+      </div>
       <p className={`text-[14px] leading-relaxed text-neutral-700 ${KHUNG.doc}`}>
         {CHU_TONG_HOP.moTa}
       </p>
@@ -179,6 +192,14 @@ export function KhoangPhanTich({
       {soNguoiCoHoSo !== null && (
         <p className="mt-2.5 text-[13px] text-neutral-500">
           {CHU_BUOC.sanSangPhanTich.replace("{so}", String(soNguoiCoHoSo))}
+          {dayDu.length > 0 && (
+            <span data-thu="du-ban-o-nut">
+              {" · "}
+              {CHU_DAY_DU.tongNguoi
+                .replace("{du}", String(dayDu.filter((d) => d.daDu).length))
+                .replace("{tong}", String(dayDu.length))}
+            </span>
+          )}
         </p>
       )}
 

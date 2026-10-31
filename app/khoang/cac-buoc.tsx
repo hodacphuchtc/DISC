@@ -26,6 +26,9 @@ import { KhoangNhaMinh } from "./nha-minh";
 import { KhoangPhanTich } from "./phan-tich";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { MinhHoa } from "@/app/components/nhan-vat";
+import { dayDuCaNha } from "@/app/dau-vao-day-du";
+import { CHU_DAY_DU } from "@config/disc-tu-dien";
+import { tongKetDayDu, type DayDuMotNguoi } from "@modules/report/do-day-du-bo-test";
 import { ChipBonTruc } from "@/app/components/chip-bon-truc";
 import { KhoiGiuDuLieu } from "@/app/components/khoi-giu-du-lieu";
 import { NutQuayLai } from "@/app/components/nut-quay-lai";
@@ -42,6 +45,8 @@ const TOI_THIEU_DE_PHAN_TICH = 2;
 type Dem = {
   readonly soNguoi: number;
   readonly soDaLam: number;
+  /** 28.1 — đủ BẢN (khác "đã làm"): bé từ lớp 3 cần cả hai góc nhìn. */
+  readonly dayDu: readonly DayDuMotNguoi[];
 };
 
 export function KhoangCacBuoc() {
@@ -76,7 +81,7 @@ export function KhoangCacBuoc() {
       (t) =>
         bai.some((b) => b.maThanhVien === t.id && b.ketQua.hopLe) || Boolean(t.nhanQuaMa),
     ).length;
-    datDem({ soNguoi: tv.length, soDaLam });
+    datDem({ soNguoi: tv.length, soDaLam, dayDu: dayDuCaNha(tv, bai) });
 
     // 🔴 Khoảnh khắc ĐẦU TIÊN gia đình có thứ đáng để mất: hai người trở lên đã làm xong.
     // Một bài lẻ thì làm lại mất tám phút; hai bài là một bức tranh không dựng lại được.
@@ -258,6 +263,7 @@ export function KhoangCacBuoc() {
                   >
                     {lyDoKhoa ?? trangThai(ma)}
                   </span>
+                  {ma === "nha-minh" && dem.soNguoi > 0 && <TomTatDayDu ds={dem.dayDu} />}
                 </span>
               </button>
 
@@ -333,5 +339,17 @@ function KhoangDangLamBai({
         {...(dangLamCho.cheDo ? { cheDo: dangLamCho.cheDo } : {})}
       />
     </div>
+  );
+}
+
+/** Dòng tóm tắt "3/4 người đủ bản · Còn thiếu: …" dưới tên bước 1 (28.1). */
+function TomTatDayDu({ ds }: { readonly ds: readonly DayDuMotNguoi[] }) {
+  const tk = tongKetDayDu(ds);
+  return (
+    <span data-thu="day-du-tom-tat" className="mt-0.5 block text-[13px] text-neutral-700">
+      {CHU_DAY_DU.tongNguoi.replace("{du}", String(tk.soDu)).replace("{tong}", String(tk.tong))}
+      {tk.conThieu.length > 0 &&
+        ` · ${CHU_DAY_DU.tomTatThieu.replace("{ds}", tk.conThieu.map((d) => d.ten).join(", "))}`}
+    </span>
   );
 }

@@ -18,14 +18,16 @@
  */
 
 import { NutQuayLai } from "@/app/components/nut-quay-lai";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 
 import {
   SO_THANH_VIEN_TOI_DA,
   laTreEm,
 } from "@config/disc-gia-dinh";
 import { MO_NOI_DUNG_DOI, MO_NOI_DUNG_TRE } from "@config/disc-nguong";
-import { KeHoachBayNgay, TinhHuongHangNgay } from "@/app/components/noi-dung-doi";
+import { KhoiGap } from "@/app/components/khoi-gap";
+import { banUuTien, nhanCuaBan } from "@modules/report/chon-ban";
+import { loaiCuaBoDe } from "@modules/core/gia-dinh/han-muc";
 import { thayDaiTuCap } from "@config/disc-lech-cap";
 import {
   MO_TA_LECH,
@@ -34,7 +36,7 @@ import {
   VIEC_CUA_TOI,
 } from "@config/disc-noi-dung-cap";
 import { KHUNG } from "@config/bo-cuc";
-import { CHU_HAN_MUC_THU_MUC, CHU_TONG_HOP, TRUC } from "@config/disc-tu-dien";
+import { CHU_DAY_DU, CHU_HAN_MUC_THU_MUC, CHU_TONG_HOP, TRUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { MaTruc } from "@modules/core/bo-de/kieu";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
@@ -48,6 +50,18 @@ import {
 } from "@modules/report/phan-tich-gia-dinh";
 
 /** Một người kèm những bài họ có, để người dùng chọn. */
+/**
+ * 27.5 — nội dung theo mối quan hệ NẠP LƯỜI. `config/disc-noi-dung-doi.ts` (~16 tình huống + 14
+ * ngày thử) từng nằm trong gói nạp ngay và đẩy nó lên đúng trần 300 KB gzip. Mỗi lát cắt vẫn
+ * gắn nó vào DOM ngay khi mount (hàng gập chỉ ẩn bằng CSS) nên bản in có đủ.
+ */
+const TinhHuongHangNgay = lazy(() =>
+  import("@/app/components/noi-dung-doi").then((m) => ({ default: m.TinhHuongHangNgay })),
+);
+const KeHoachBayNgay = lazy(() =>
+  import("@/app/components/noi-dung-doi").then((m) => ({ default: m.KeHoachBayNgay })),
+);
+
 export type NguoiCoBai = {
   readonly tv: ThanhVien;
   readonly bai: readonly BaiLamLuu[];
@@ -61,15 +75,23 @@ function diemCua(
   n: NguoiCoBai,
   idBaiChon: string | undefined,
 ): Readonly<Record<MaTruc, number>> | null {
-  const bai = n.bai.find((b) => b.id === idBaiChon) ?? n.bai[0];
+  // 28.3 — mặc định là bản HỢP LỆ mới nhất (ưu tiên góc nhìn tự làm). Bản mới nhất mà hỏng
+  // không còn đẩy cả người ấy ra khỏi phân tích khi bên dưới còn một bản dùng được.
+  const bai = n.bai.find((b) => b.id === idBaiChon) ?? banUuTien(n.bai);
   if (bai?.ketQua.hopLe) return bai.ketQua.diem;
   return n.tv.nhanQuaMa?.diem ?? null;
+}
+
+/** Mã bài thật sự được dùng cho một người — một nơi duy nhất, để ô chọn và bản lưu không lệch. */
+function idBaiDung(n: NguoiCoBai, idBaiChon: string | undefined): string | undefined {
+  return (n.bai.find((b) => b.id === idBaiChon) ?? banUuTien(n.bai))?.id ?? n.bai[0]?.id;
 }
 
 export function ManBanTongHop({
   nguoi,
   banCoSan,
   khoiThieu,
+  chuaDuBan,
   onDong,
 }: {
   readonly nguoi: readonly NguoiCoBai[];
@@ -79,6 +101,8 @@ export function ManBanTongHop({
    * từng đọc (nội dung ở `config/` có thể đã sửa), rồi gọi nó là "lần chạy ngày hôm đó".
    */
   readonly banCoSan?: readonly BanPhanTich[];
+  /** Id những người CHƯA ĐỦ BẢN (28.4): lát cắt có họ được gắn nhãn "có thể thay đổi khi làm thêm". */
+  readonly chuaDuBan?: ReadonlySet<string>;
   /** Khối *còn thiếu ai* — vẽ trên ĐẦU bản, đúng lúc người ta vừa thấy bản này hay. */
   readonly khoiThieu?: React.ReactNode;
   readonly onDong: () => void;
@@ -138,7 +162,9 @@ export function ManBanTongHop({
     // lại nói khác nhau.
     const daLuu = await luuPhanTich({
       id: `pt-${bayGio}`,
-      maBai: coHoSo.map((n) => chon[n.tv.id] ?? n.bai[0]?.id).filter(Boolean),
+      maBai: coHoSo
+        .map((n) => idBaiDung(n, chon[n.tv.id]))
+        .filter((x): x is string => Boolean(x)),
       taoLuc: bayGio,
       noiDung: ban,
     });
@@ -204,7 +230,7 @@ export function ManBanTongHop({
             một ô grid bị `display:none` thì biến mất khỏi luồng, không để lại ô trống. */}
         <div className={`mt-8 ${KHUNG.haiCot}`}>
           {ketQua.map((b) => (
-            <MotBan key={b.toiId} ban={b} />
+            <MotBan key={b.toiId} ban={b} chuaDuBan={chuaDuBan} />
           ))}
         </div>
       </section>
@@ -230,7 +256,7 @@ export function ManBanTongHop({
             {n.bai.length > 0 ? (
               <select
                 aria-label={`Chọn bài cho ${n.tv.ten}`}
-                value={chon[n.tv.id] ?? n.bai[0].id}
+                value={idBaiDung(n, chon[n.tv.id]) ?? n.bai[0].id}
                 onChange={(e) => datChon((c) => ({ ...c, [n.tv.id]: e.target.value }))}
                 className="ml-auto rounded-lg border px-2 py-1.5 text-[14px]"
                 style={{ borderColor: MAU.vienMo }}
@@ -241,7 +267,18 @@ export function ManBanTongHop({
                      chọn sai bài, trong khi nó chọn đúng. Thứ hỏng là cái NHÃN.
                      Tên người đã là nhãn của cả dòng nên không lặp lại ở đây. */
                   <option key={b.id} value={b.id}>
-                    {b.boDe} · {hienNgayGio(b.ketThuc)}
+                    {loaiCuaBoDe(b.boDe) === "quan-sat"
+                      ? CHU_TONG_HOP.loaiQuanSatNgan
+                      : CHU_TONG_HOP.loaiTuLamNgan}{" "}
+                    · {b.boDe} · {hienNgayGio(b.ketThuc)} (
+                    {CHU_TONG_HOP[
+                      ({
+                        "moi-nhat": "nhanMoiNhat",
+                        "ban-cu": "nhanBanCu",
+                        "khong-dung-duoc": "nhanKhongDung",
+                      } as const)[nhanCuaBan(n.bai, b)]
+                    ]}
+                    )
                   </option>
                 ))}
               </select>
@@ -274,90 +311,137 @@ export function ManBanTongHop({
 
 /* ── Một bản: mọi lát cắt của MỘT người đọc ──────────────────────────────── */
 
-function MotBan({ ban }: { readonly ban: BanPhanTich }) {
+/**
+ * 🔴 GỌN TRƯỚC, CHI TIẾT SAU. Mỗi người là MỘT hàng gập "Lời khuyên dành cho {tên}" (mảng
+ * nhấn tối) kèm một dòng tóm tắt; bấm mới xổ ra các cặp, và mỗi cặp lại là một hàng gập có
+ * tóm tắt riêng. Bản in mở hết (`[data-lop-sau]`), nên nội dung luôn nằm trong DOM.
+ */
+function MotBan({
+  ban,
+  chuaDuBan,
+}: {
+  readonly ban: BanPhanTich;
+  readonly chuaDuBan?: ReadonlySet<string>;
+}) {
+  const dsNguoiKia = ban.latCat.map((l) => l.tenNguoiKia).join(", ");
   return (
-    <section
-      data-ban={`tv-${ban.toiId}`}
-      data-thu="ban-tong-hop"
-      className={`space-y-4 ${KHUNG.doc}`}
-    >
-      {/* GĐ27.4 — tiêu đề mỗi bản là một mảng nhấn tối (bản in trả về nền sáng). */}
-      <div data-nhan-toi className="px-5 py-4">
-        <h2 className="text-[20px] leading-snug font-bold text-chu-tren-toi">
-          {CHU_TONG_HOP.tieuDeBan.replace("{ten}", ban.tenLuc)}
-        </h2>
-      </div>
-      {ban.latCat.map((l) => (
-        <MotLatCat key={l.nguoiKiaId} ten={ban.tenLuc} lat={l} />
-      ))}
+    <section data-ban={`tv-${ban.toiId}`} data-thu="ban-tong-hop" className={KHUNG.doc}>
+      <KhoiGap
+        capTieuDe={2}
+        kieu="toi"
+        tieuDe={CHU_TONG_HOP.tieuDeBan.replace("{ten}", ban.tenLuc)}
+        tomTat={CHU_TONG_HOP.tomTatBan.replace("{ds}", dsNguoiKia)}
+      >
+        <div className="space-y-3">
+          {ban.latCat.map((l) => (
+            <MotLatCat
+              key={l.nguoiKiaId}
+              ten={ban.tenLuc}
+              lat={l}
+              chuaDu={Boolean(chuaDuBan?.has(l.toiId) || chuaDuBan?.has(l.nguoiKiaId))}
+            />
+          ))}
+        </div>
+      </KhoiGap>
     </section>
   );
 }
 
-function MotLatCat({ ten, lat }: { readonly ten: string; readonly lat: LatCat }) {
+function MotLatCat({
+  ten,
+  lat,
+  chuaDu = false,
+}: {
+  readonly ten: string;
+  readonly lat: LatCat;
+  /** Một trong hai người chưa đủ bản ⇒ nói thẳng kết quả cặp này có thể đổi khi làm thêm. */
+  readonly chuaDu?: boolean;
+}) {
   const thay = (chu: string) => thayDaiTuCap(chu, lat.theQuyen, lat.tenNguoiKia);
+  const coKeHoach = MO_NOI_DUNG_DOI && Boolean(lat.moiQuanHe);
+
+  const tomTat =
+    lat.trucLech.length > 0
+      ? CHU_TONG_HOP.tomTatLechRo.replace("{ds}", lat.trucLech.map((t) => TRUC[t.truc].ten).join(", "))
+      : CHU_TONG_HOP.tomTatCungNhip;
 
   return (
-    <article data-thu="lat-cat" data-nguoi-kia={lat.nguoiKiaId} className="rounded-2xl border p-4 md:p-5" style={{ borderColor: MAU.vienMo }}>
-      <h3 className="text-[15px] font-semibold text-neutral-900">
-        {CHU_TONG_HOP.nhanLatCat.replace("{ten}", ten).replace("{nguoiKia}", lat.tenNguoiKia)}
-      </h3>
-
-      {lat.trucLech.length > 0
-        ? lat.trucLech.map((t) => (
-            <div key={t.truc} className="mt-4">
-              <h4 className="flex items-baseline gap-2 text-[14px] font-semibold text-neutral-800">
-                <span aria-hidden="true" style={{ color: TRUC[t.truc].mau }}>
-                  ■
-                </span>
-                {TRUC[t.truc].ten}
-              </h4>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
-                {thay(MO_TA_LECH[t.truc][t.huong].veToi)}
-              </p>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
-                {thay(MO_TA_LECH[t.truc][t.huong].veNguoiKia)}
-              </p>
-              <p className="mt-3 rounded-lg px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900" style={{ backgroundColor: "#FFF4E6" }}>
-                <strong className="font-semibold">
-                  {CHU_TONG_HOP.nhanViecCuaToi.replace("{ten}", ten)}:{" "}
-                </strong>
-                {thay(VIEC_CUA_TOI[t.truc][t.huong][lat.theQuyen])}
-              </p>
-              <p className="mt-2.5 text-[15px] leading-relaxed text-neutral-700">
-                <strong className="font-semibold">{CHU_TONG_HOP.nhanThoaThuan}: </strong>
-                {thay(THOA_THUAN[t.truc][t.huong])}
-              </p>
-              {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
-                <TinhHuongHangNgay
-                  truc={t.truc}
-                  huong={t.huong}
-                  moiQuanHe={lat.moiQuanHe}
-                  tenNguoiKia={lat.tenNguoiKia}
-                />
-              )}
-            </div>
-          ))
-        : lat.trungKhop && (
-            <div className="mt-4">
-              <h4 className="text-[14px] font-semibold text-neutral-800">
-                {CHU_TONG_HOP.nhanTrungKhop}
-              </h4>
-              <ul className="mt-2 space-y-1.5">
-                {lat.trungKhop.map((tk) => (
-                  <li key={tk.truc} className="text-[15px] leading-relaxed text-neutral-800">
-                    <span aria-hidden="true" className="mr-1.5" style={{ color: TRUC[tk.truc].mau }}>
-                      ■
-                    </span>
-                    {TRUNG_KHOP[tk.truc][tk.kieu]}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-      {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
-        <KeHoachBayNgay moiQuanHe={lat.moiQuanHe} tenNguoiKia={lat.tenNguoiKia} />
-      )}
+    <article data-thu="lat-cat" data-nguoi-kia={lat.nguoiKiaId}>
+      <KhoiGap
+        tieuDe={CHU_TONG_HOP.nhanLatCat.replace("{ten}", ten).replace("{nguoiKia}", lat.tenNguoiKia)}
+        tomTat={
+          <>
+            {tomTat}
+            {coKeHoach && ` · ${CHU_TONG_HOP.tomTatCoBayNgay}`}
+            {chuaDu && (
+              <span data-thu="chua-du-ban" className="block font-semibold" style={{ color: MAU.camDamChoChu }}>
+                {CHU_DAY_DU.chuaDuBan}
+              </span>
+            )}
+          </>
+        }
+      >
+        {lat.trucLech.length > 0
+          ? lat.trucLech.map((t) => (
+              <div key={t.truc} className="mt-4 first:mt-0">
+                <h4 className="flex items-baseline gap-2 text-[14px] font-semibold text-neutral-800">
+                  <span aria-hidden="true" style={{ color: TRUC[t.truc].mau }}>
+                    ■
+                  </span>
+                  {TRUC[t.truc].ten}
+                </h4>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
+                  {thay(MO_TA_LECH[t.truc][t.huong].veToi)}
+                </p>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-neutral-800">
+                  {thay(MO_TA_LECH[t.truc][t.huong].veNguoiKia)}
+                </p>
+                <p className="mt-3 rounded-lg px-3.5 py-3 text-[15px] leading-relaxed text-neutral-900" style={{ backgroundColor: "#FFF4E6" }}>
+                  <strong className="font-semibold">
+                    {CHU_TONG_HOP.nhanViecCuaToi.replace("{ten}", ten)}:{" "}
+                  </strong>
+                  {thay(VIEC_CUA_TOI[t.truc][t.huong][lat.theQuyen])}
+                </p>
+                <p className="mt-2.5 text-[15px] leading-relaxed text-neutral-700">
+                  <strong className="font-semibold">{CHU_TONG_HOP.nhanThoaThuan}: </strong>
+                  {thay(THOA_THUAN[t.truc][t.huong])}
+                </p>
+                {MO_NOI_DUNG_DOI && lat.moiQuanHe && (
+                  <Suspense fallback={null}>
+                    <TinhHuongHangNgay
+                      truc={t.truc}
+                      huong={t.huong}
+                      moiQuanHe={lat.moiQuanHe}
+                      tenToi={ten}
+                      tenNguoiKia={lat.tenNguoiKia}
+                    />
+                  </Suspense>
+                )}
+              </div>
+            ))
+          : lat.trungKhop && (
+              <div>
+                <h4 className="text-[14px] font-semibold text-neutral-800">
+                  {CHU_TONG_HOP.nhanTrungKhop}
+                </h4>
+                <ul className="mt-2 space-y-1.5">
+                  {lat.trungKhop.map((tk) => (
+                    <li key={tk.truc} className="text-[15px] leading-relaxed text-neutral-800">
+                      <span aria-hidden="true" className="mr-1.5" style={{ color: TRUC[tk.truc].mau }}>
+                        ■
+                      </span>
+                      {TRUNG_KHOP[tk.truc][tk.kieu]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+        {coKeHoach && lat.moiQuanHe && (
+          <Suspense fallback={null}>
+            <KeHoachBayNgay moiQuanHe={lat.moiQuanHe} tenToi={ten} tenNguoiKia={lat.tenNguoiKia} />
+          </Suspense>
+        )}
+      </KhoiGap>
     </article>
   );
 }

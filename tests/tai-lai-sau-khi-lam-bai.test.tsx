@@ -13,7 +13,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { CHU_BANG_GIA_DINH } from "../config/disc-tu-dien";
+import { CHU_BANG_GIA_DINH, CHU_DAY_DU } from "../config/disc-tu-dien";
 import { KhoangBangGiaDinh } from "../app/khoang/bang-gia-dinh";
 import {
   luuBai,
@@ -76,7 +76,9 @@ describe("thẻ tự cập nhật, không cần F5", () => {
     await luuBai(bai());
 
     await waitFor(() => {
-      expect(screen.getByText("1/2 bài")).toBeInTheDocument();
+      expect(document.querySelector("[data-thu=\"so-tien-do\"]")?.textContent).toContain(
+        CHU_DAY_DU.soBan.replace("{so}", "1"),
+      );
     });
   });
 

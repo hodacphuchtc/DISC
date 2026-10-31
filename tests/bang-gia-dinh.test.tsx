@@ -2,8 +2,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { KhoangBangGiaDinh } from "../app/khoang/bang-gia-dinh";
-import { CHU_VAI, GIOI_HAN_BAI_MOI_NGUOI } from "../config/disc-gia-dinh";
-import { CHU_BANG_GIA_DINH } from "../config/disc-tu-dien";
+import { CHU_VAI } from "../config/disc-gia-dinh";
+import { CHU_BANG_GIA_DINH, CHU_DAY_DU } from "../config/disc-tu-dien";
 import {
   docTatCa,
   docThanhVien,
@@ -235,11 +235,12 @@ describe("sổ tiến độ — nhìn một cái biết ai chưa làm", () => {
     expect(the()[0].textContent).toContain(CHU_BANG_GIA_DINH.chuaLamBai);
   });
 
-  it("người đã làm thì hiện {so}/{gioiHan}", async () => {
+  it("người đã làm thì hiện số bản theo loại (28.1), không còn \"n/2 bài\" gộp", async () => {
     await luuThanhVien(nguoi("tv-1", "Zozo"));
     await luuBai(bai({ maThanhVien: "tv-1" }));
     await moBang();
-    expect(the()[0].textContent).toContain(`1/${GIOI_HAN_BAI_MOI_NGUOI} bài`);
+    expect(the()[0].textContent).toContain(CHU_DAY_DU.soBan.replace("{so}", "1"));
+    expect(the()[0].textContent).not.toMatch(/\d+\/\d+ bài/u);
   });
 
   it("hiện vai của từng người", async () => {

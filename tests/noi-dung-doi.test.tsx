@@ -132,7 +132,13 @@ describe("phanTichGiaDinh gắn moiQuanHe vào lát cắt ngang vai", () => {
 
 describe("hai component", () => {
   it("TinhHuongHangNgay thay tên, không sót chỗ giữ, có đủ nên nói / nên tránh", () => {
-    render(<TinhHuongHangNgay truc="D" huong="toi-cao-hon" moiQuanHe="vo-chong" tenNguoiKia="Bình" />);
+    render(<TinhHuongHangNgay
+        truc="D"
+        huong="toi-cao-hon"
+        moiQuanHe="vo-chong"
+        tenToi="Mai"
+        tenNguoiKia="Bình"
+      />);
     const khoi = document.querySelector('[data-thu="tinh-huong-doi"]')!;
     expect(khoi.textContent).toContain("Bình");
     expect(khoi.textContent).not.toMatch(/[{}]/u);
@@ -141,8 +147,11 @@ describe("hai component", () => {
   });
 
   it("KeHoachBayNgay có đủ bảy ngày trong DOM (cả khi khối gập, để bản in mở được)", () => {
-    render(<KeHoachBayNgay moiQuanHe="anh-chi-em" tenNguoiKia="Cúc" />);
-    expect(screen.getAllByText(CHU_NOI_DUNG_DOI.tieuDeKeHoach).length).toBeGreaterThan(0);
+    render(<KeHoachBayNgay moiQuanHe="anh-chi-em" tenToi="Mai" tenNguoiKia="Cúc" />);
+    // 🔴 Tiêu đề nêu đích danh AI được khuyên và làm cùng ai (chủ dự án: "đang khuyên ai?").
+    const tieuDe = CHU_NOI_DUNG_DOI.tieuDeKeHoach.replace("{tenToi}", "Mai").replace("{nguoiKia}", "Cúc");
+    expect(screen.getAllByText(tieuDe).length).toBeGreaterThan(0);
+    expect(document.body.textContent).toContain("“bạn” là Mai");
     const dong = document.querySelectorAll('[data-thu="ke-hoach-bay-ngay"] li');
     expect(dong).toHaveLength(7);
     for (const li of dong) expect(li.textContent).not.toMatch(/[{}]/u);

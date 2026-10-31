@@ -337,3 +337,74 @@ describe("hai người y hệt nhau ⇒ vẫn có chữ, không màn trắng", (
     expect(ban()[0].textContent).toContain(CHU_TONG_HOP.nhanTrungKhop);
   });
 });
+
+/**
+ * 28.3 + giao diện gập — ca hồi quy và hành vi "gọn trước, chi tiết sau".
+ */
+describe("28.3 — bản mới nhất bị hỏng KHÔNG đẩy người đó ra khỏi phân tích", () => {
+  const HONG = { hopLe: false, lyDo: "PHANG" } as unknown as BaiLamLuu["ketQua"];
+  const NGUOI: NguoiCoBai[] = [
+    {
+      tv: tv("me", "Mẹ Lan", "me"),
+      bai: [
+        { ...bai("b-me-hong", diem(0, 0, 0, 0), "2026-08-28T10:00:00+07:00"), ketQua: HONG },
+        bai("b-me-tot", diem(75, 50, 40, 55), "2026-08-01T10:00:00+07:00"),
+      ],
+    },
+    { tv: tv("bo", "Bố Nam", "bo"), bai: [bai("b-bo", diem(52, 40, 58, 80))] },
+  ];
+
+  it("ô chọn mặc định rơi vào bản HỢP LỆ cũ hơn, không phải bản hỏng", () => {
+    render(<ManBanTongHop nguoi={NGUOI} onDong={() => {}} />);
+    const o = screen.getByRole("combobox", { name: "Chọn bài cho Mẹ Lan" }) as HTMLSelectElement;
+    expect(o.value).toBe("b-me-tot");
+  });
+
+  it("vẫn ra đủ hai bản (Mẹ Lan không bị loại)", async () => {
+    chay(NGUOI);
+    await waitFor(() => expect(ban()).toHaveLength(2));
+  });
+
+  it("nhãn nói rõ 'không dùng được' cho bản hỏng", () => {
+    render(<ManBanTongHop nguoi={NGUOI} onDong={() => {}} />);
+    const o = screen.getByRole("combobox", { name: "Chọn bài cho Mẹ Lan" }) as HTMLSelectElement;
+    expect([...o.options].map((x) => x.textContent).join(" | ")).toContain(CHU_TONG_HOP.nhanKhongDung);
+  });
+});
+
+describe("giao diện gập — tiêu đề rõ ràng, chi tiết xổ khi bấm", () => {
+  it("tiêu đề là 'Lời khuyên dành cho {tên}', không còn 'đọc về cả nhà'", async () => {
+    chay();
+    await waitFor(() => expect(ban()).toHaveLength(3));
+    for (const b of ban()) {
+      expect(b.querySelector("h2")?.textContent).toMatch(/^Lời khuyên dành cho /u);
+      expect(b.textContent).not.toContain("đọc về cả nhà");
+    }
+  });
+
+  it("🔴 mặc định mọi hàng GẬP (gọn), nhưng nội dung vẫn có trong DOM cho bản in", async () => {
+    chay();
+    await waitFor(() => expect(ban()).toHaveLength(3));
+    const nut = ban()[0].querySelector("h2 button")!;
+    expect(nut.getAttribute("aria-expanded")).toBe("false");
+    expect(ban()[0].querySelectorAll('[data-thu="lat-cat"]')).toHaveLength(2);
+  });
+
+  it("bấm tên một người ⇒ xổ ra các cặp; bấm một cặp ⇒ xổ chi tiết cặp đó", async () => {
+    chay();
+    await waitFor(() => expect(ban()).toHaveLength(3));
+    fireEvent.click(ban()[0].querySelector("h2 button")!);
+    expect(ban()[0].querySelector("h2 button")!.getAttribute("aria-expanded")).toBe("true");
+    const nutCap = ban()[0].querySelector('[data-thu="lat-cat"] h3 button')!;
+    expect(nutCap.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(nutCap);
+    expect(nutCap.getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("mỗi cặp có dòng tóm tắt luôn thấy khi gập", async () => {
+    chay();
+    await waitFor(() => expect(ban()).toHaveLength(3));
+    const lat = ban()[0].querySelector('[data-thu="lat-cat"]')!;
+    expect(lat.textContent).toMatch(/Điểm khác nhau rõ|khá cùng nhịp/u);
+  });
+});
