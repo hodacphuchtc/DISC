@@ -17,6 +17,7 @@
  */
 
 import type { KetQua, MaBoDe } from "@modules/core/bo-de/kieu";
+import type { LoaiBai } from "@modules/core/gia-dinh/han-muc";
 import type {
   CheDoXoaThanhVien,
   PhanTichGiaDinh,
@@ -101,12 +102,14 @@ export type KhoDisc = {
     maThanhVien: string,
     gioiHan: number,
     soBaiSapThem?: number,
+    loai?: LoaiBai,
   ) => Promise<string[]>;
   /** Chỉ ĐỌC: những bài SẼ mất nếu người này làm thêm một bài — để đem đi hỏi. */
   readonly baiSapMat: (
     maThanhVien: string,
     gioiHan: number,
     soBaiSapThem?: number,
+    loai?: LoaiBai,
   ) => Promise<BaiLamLuu[]>;
   readonly donThuMucPhanTich: (gioiHan: number, soSapThem?: number) => Promise<string[]>;
   /** Chỉ ĐỌC: những thư mục SẼ mất nếu chạy thêm một lần phân tích. */

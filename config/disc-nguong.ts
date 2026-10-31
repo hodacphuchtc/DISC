@@ -278,3 +278,12 @@ export function laBoDeTre(ma: string): boolean {
  * dựng lại, khối này biến mất khỏi màn Cả nhà; phần `disc-noi-dung-cap.ts` cũ còn nguyên.
  */
 export const MO_NOI_DUNG_DOI = true;
+
+/**
+ * 🔴 SAU BAO NHIÊU THÁNG THÌ NHẮC CẢ NHÀ LÀM LẠI (28.6).
+ *
+ * Tính cách và cách ứng xử đổi theo thời gian, nên một bức tranh chỉ có giá trị khi còn mới.
+ * Sáu tháng là lời dặn của chủ dự án (30/10/2026) và lớn hơn sàn so sánh theo thời gian
+ * (`NGAY_TOI_THIEU_DE_SO_SANH` = 90 ngày) — tức khi đến hạn, hai lần đo đã đủ xa để so được.
+ */
+export const THANG_NHAC_LAI = 6;

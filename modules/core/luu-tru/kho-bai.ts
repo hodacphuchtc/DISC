@@ -12,7 +12,11 @@
  * được làm hỏng bài đang làm — mọi hàm trả về giá trị rỗng thay vì ném.
  */
 
-import { chonBaiPhaiXoa, chonThuMucPhaiXoa } from "@modules/core/gia-dinh/han-muc";
+import {
+  chonBaiPhaiXoa,
+  chonThuMucPhaiXoa,
+  type LoaiBai,
+} from "@modules/core/gia-dinh/han-muc";
 import type {
   CheDoXoaThanhVien,
   PhanTichGiaDinh,
@@ -466,6 +470,7 @@ function donBaiThanhVienIdb(
   maThanhVien: string,
   gioiHan: number,
   soBaiSapThem = 1,
+  loai?: LoaiBai,
 ): Promise<string[]> {
   return moKho().then(
     (db) =>
@@ -479,7 +484,7 @@ function donBaiThanhVienIdb(
 
           yc.onsuccess = () => {
             const cua = (yc.result as BaiLamLuu[]) ?? [];
-            for (const nanNhan of chonBaiPhaiXoa(cua, gioiHan, soBaiSapThem)) {
+            for (const nanNhan of chonBaiPhaiXoa(cua, gioiHan, soBaiSapThem, loai)) {
               bang.delete(nanNhan.id);
               daXoa.push(nanNhan.id);
             }
@@ -504,12 +509,14 @@ async function baiSapMatIdb(
   maThanhVien: string,
   gioiHan: number,
   soBaiSapThem = 1,
+  loai?: LoaiBai,
 ): Promise<BaiLamLuu[]> {
   const ds = await docTatCaIdb();
   return chonBaiPhaiXoa(
     ds.filter((b) => b.maThanhVien === maThanhVien),
     gioiHan,
     soBaiSapThem,
+    loai,
   );
 }
 
@@ -718,12 +725,16 @@ export const donBaiThanhVien = (
   maThanhVien: string,
   gioiHan: number,
   soBaiSapThem = 1,
-): Promise<string[]> => khoDangDung().donBaiThanhVien(maThanhVien, gioiHan, soBaiSapThem);
+  loai?: LoaiBai,
+): Promise<string[]> =>
+  khoDangDung().donBaiThanhVien(maThanhVien, gioiHan, soBaiSapThem, loai);
 export const baiSapMat = (
   maThanhVien: string,
   gioiHan: number,
   soBaiSapThem = 1,
-): Promise<BaiLamLuu[]> => khoDangDung().baiSapMat(maThanhVien, gioiHan, soBaiSapThem);
+  loai?: LoaiBai,
+): Promise<BaiLamLuu[]> =>
+  khoDangDung().baiSapMat(maThanhVien, gioiHan, soBaiSapThem, loai);
 export const donThuMucPhanTich = (gioiHan: number, soSapThem = 1): Promise<string[]> =>
   khoDangDung().donThuMucPhanTich(gioiHan, soSapThem);
 export const thuMucSapMat = (

@@ -33,6 +33,8 @@ import {
   type KetQuaSoSanh,
 } from "@modules/report/so-sanh-thoi-gian";
 import { ghiMoc } from "@modules/core/do-phieu";
+import { loaiCuaBoDe, type LoaiBai } from "@modules/core/gia-dinh/han-muc";
+import { boDeChoThanhVien } from "@modules/test/dinh-tuyen";
 import type { HoSoMoi } from "@modules/core/gia-dinh/ma-moi";
 import type { ThanhVien } from "@modules/core/gia-dinh/kieu";
 import {
@@ -66,6 +68,7 @@ export function KhoangNhaMinh({
     tv: ThanhVien;
     sapMat: BaiLamLuu[];
     cheDo?: "quan-sat";
+    loai: LoaiBai;
   } | null>(null);
   const [xemSoSanh, datXemSoSanh] = useState<{ ten: string; ketQua: KetQuaSoSanh } | null>(null);
 
@@ -95,14 +98,20 @@ export function KhoangNhaMinh({
    */
   async function batDauBaiMoi(tv: ThanhVien, cheDo?: "quan-sat") {
     if (!onLamBai) return;
-    const sapMat = await baiSapMat(tv.id, GIOI_HAN_BAI_MOI_NGUOI);
+    // 🔴 28.0 — hạn mức tính theo (người, LOẠI): bài sắp làm thuộc góc nhìn nào thì chỉ bài
+    // cùng góc nhìn đó mới có thể bị thay. Chưa suy ra được bộ đề thì coi là tự làm.
+    const loai: LoaiBai =
+      cheDo === "quan-sat"
+        ? "quan-sat"
+        : loaiCuaBoDe(boDeChoThanhVien(tv.vaiTro, tv.lop)?.boDe ?? "PH");
+    const sapMat = await baiSapMat(tv.id, GIOI_HAN_BAI_MOI_NGUOI, 1, loai);
     if (sapMat.length === 0) {
       onLamBai(tv, cheDo);
       return;
     }
     // 🔴 Bài quan sát ĐI CHUNG một hàng rào hạn mức với bài tự làm. Cho nó một lối đi
     // riêng vòng qua đây là dựng đúng cái lối tắt mà chú thích của hàm này cấm.
-    datChoHanMuc({ tv, sapMat, cheDo });
+    datChoHanMuc({ tv, sapMat, cheDo, loai });
   }
 
   /**
@@ -140,7 +149,7 @@ export function KhoangNhaMinh({
 
   async function xacNhanHanMuc() {
     if (!choHanMuc) return;
-    await donBaiThanhVien(choHanMuc.tv.id, GIOI_HAN_BAI_MOI_NGUOI);
+    await donBaiThanhVien(choHanMuc.tv.id, GIOI_HAN_BAI_MOI_NGUOI, 1, choHanMuc.loai);
     const { tv, cheDo } = choHanMuc;
     datChoHanMuc(null);
     napLai();
@@ -210,6 +219,7 @@ export function KhoangNhaMinh({
       {choHanMuc && (
         <HopThoaiHanMuc
           sapMat={choHanMuc.sapMat}
+          loai={choHanMuc.loai}
           onHuy={() => datChoHanMuc(null)}
           onTiepTuc={() => void xacNhanHanMuc()}
         />

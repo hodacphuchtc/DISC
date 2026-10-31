@@ -16,12 +16,35 @@
  */
 
 import { GIOI_HAN_BAI_MOI_NGUOI, GIOI_HAN_THU_MUC } from "@config/disc-gia-dinh";
+import type { MaBoDe } from "@modules/core/bo-de/kieu";
+
+/**
+ * LOẠI BÀI (28.0) — hạn mức tính theo (người, loại), không gộp.
+ *
+ * 🔴 Vì sao: một bé từ lớp 3 có HAI góc nhìn — bé tự làm (TH/THCS) và bố mẹ làm cho bé (QS,
+ * hoặc MN với bé nhỏ). Gộp chung hạn mức 2 bản thì hai góc nhìn đã lấp đầy hạn mức, và lần
+ * test lại sau 6 tháng xoá bản cũ nhất — có thể chính là bản của góc nhìn còn lại, làm màn
+ * đối chiếu biến mất. Tính riêng từng loại thì mỗi góc nhìn giữ 2 bản của nó.
+ *
+ * Loại suy từ bộ đề, KHÔNG lưu thêm trường nào (không đổi schema, không tăng PHIEN_BAN_KHO).
+ * Phải khớp `laBanQuanSat()` ở `modules/test/dinh-tuyen.ts` — core không import được module
+ * `test`, nên `tests/han-muc.test.ts` canh sự trùng khớp đó.
+ */
+export type LoaiBai = "tu-lam" | "quan-sat";
+
+const BO_DE_QUAN_SAT: readonly MaBoDe[] = ["MN", "QS"];
+
+export function loaiCuaBoDe(ma: MaBoDe): LoaiBai {
+  return BO_DE_QUAN_SAT.includes(ma) ? "quan-sat" : "tu-lam";
+}
 
 /** Chỉ cần bấy nhiêu để xếp thứ tự. Nhận `BaiLamLuu` thật cũng vừa. */
 type BaiCoThoiDiem = {
   readonly id: string;
   /** ISO 8601. */
   readonly ketThuc: string;
+  /** Có thì mới lọc được theo loại; thiếu thì coi như không thuộc loại nào được hỏi. */
+  readonly boDe?: MaBoDe;
 };
 
 type ThuMucCoThoiDiem = {
@@ -53,10 +76,13 @@ export function chonBaiPhaiXoa<T extends BaiCoThoiDiem>(
   ds: readonly T[],
   gioiHan: number = GIOI_HAN_BAI_MOI_NGUOI,
   soBaiSapThem = 1,
+  loai?: LoaiBai,
 ): T[] {
-  if (gioiHan <= 0) return [...ds];
+  // 🔴 Có `loai` thì CHỈ xét bài cùng loại — bài của góc nhìn kia không bao giờ là nạn nhân.
+  const xet = loai ? ds.filter((b) => b.boDe !== undefined && loaiCuaBoDe(b.boDe) === loai) : ds;
+  if (gioiHan <= 0) return [...xet];
   const giuLai = Math.max(gioiHan - soBaiSapThem, 0);
-  return xepMoiTruoc(ds, (x) => x.ketThuc).slice(giuLai);
+  return xepMoiTruoc(xet, (x) => x.ketThuc).slice(giuLai);
 }
 
 /** Cùng luật, cho thư mục phân tích cả nhà. */

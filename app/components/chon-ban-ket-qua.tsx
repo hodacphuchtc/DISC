@@ -3,7 +3,7 @@
 /**
  * DẢI CHỌN BẢN Ở MÀN KẾT QUẢ (17.2).
  *
- * 🔴 VÌ SAO CÓ. Mỗi người giữ tối đa 2 bài trên máy (`GIOI_HAN_BAI_MOI_NGUOI`), nhưng màn
+ * 🔴 VÌ SAO CÓ. Mỗi người giữ tối đa 2 bản MỖI LOẠI trên máy (`GIOI_HAN_BAI_MOI_NGUOI`, 28.0), nhưng màn
  * *Xem kết quả* trước đây chỉ mở được `bai[0]` — bài mới nhất. Làm hai lần đo mà chỉ đọc
  * lại được một thì lần đo kia coi như không tồn tại.
  *

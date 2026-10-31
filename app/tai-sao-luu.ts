@@ -72,7 +72,7 @@ export async function cayTepDocDuoc(): Promise<TepKem[]> {
       daDungTen.add(ten);
       tenThuMuc.set(tv.id, ten);
 
-      // Bài của người này, mới trước. Trần 2 bài/người đã do kho canh (GIOI_HAN_BAI_MOI_NGUOI).
+      // Bài của người này, mới trước. Trần 2 bản MỖI LOẠI (tự làm / quan sát) đã do kho canh (GIOI_HAN_BAI_MOI_NGUOI, 28.0).
       const cuaHo = ds.filter((b) => b.maThanhVien === tv.id && b.ketQua.hopLe);
       for (const b of cuaHo) {
         const mot = await xuatPdfMotBai({

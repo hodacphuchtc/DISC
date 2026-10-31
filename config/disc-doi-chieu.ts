@@ -60,6 +60,10 @@ export const CHU_DOI_CHIEU = {
   cotCon: "Con tự thấy",
   cotBoMe: "Bố mẹ thấy",
   cotLech: "Lệch",
+  /** 28.5 — nói bằng CHỮ ai thấy cao hơn và bao nhiêu điểm, để không phải đoán dấu +/−. */
+  huongConCao: "Con tự thấy cao hơn bố mẹ thấy {so} điểm",
+  huongBoMeCao: "Bố mẹ thấy cao hơn con tự thấy {so} điểm",
+  huongGanNhau: "Hai góc nhìn gần nhau",
   /** 🔴 Câu kết BẮT BUỘC ở cuối màn đối chiếu (§8.4). Không được rút gọn. */
   cauKet:
     "Lệch nhau không có nghĩa là ai đó sai. Trẻ hành xử khác nhau ở nhà, ở lớp, ở chỗ bạn bè — và đó chính là thứ bảng này cho thấy. Hãy dùng nó để hỏi con, đừng dùng để kết luận về con.",

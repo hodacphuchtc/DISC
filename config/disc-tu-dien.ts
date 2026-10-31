@@ -790,6 +790,20 @@ export const CHU_HAN_MUC = {
   moTa:
     "Mỗi người giữ tối đa {gioiHan} bài trên máy này. Bắt đầu bài mới thì bài dưới đây " +
     "sẽ bị xoá khỏi máy — tải về giữ lại trước nếu bạn cần.",
+  /**
+   * 28.0 — hạn mức tính RIÊNG từng góc nhìn, nên lời nhắc nói đúng góc nhìn nào đang đầy.
+   * Bài của góc nhìn kia không bị đụng tới.
+   */
+  moTaTheoLoai: {
+    "tu-lam":
+      "Mỗi người giữ tối đa {gioiHan} bản do chính mình tự làm trên máy này. Bắt đầu bản mới " +
+      "thì bản cũ nhất dưới đây sẽ bị xoá — tải về giữ lại trước nếu bạn cần. Bản do người " +
+      "khác làm giúp không bị ảnh hưởng.",
+    "quan-sat":
+      "Mỗi bé giữ tối đa {gioiHan} bản do bố mẹ làm cho con trên máy này. Bắt đầu bản mới " +
+      "thì bản cũ nhất dưới đây sẽ bị xoá — tải về giữ lại trước nếu bạn cần. Bản con tự làm " +
+      "không bị ảnh hưởng.",
+  },
   nhanDanhSach: "Bài sẽ bị xoá",
   mauDong: "Bài {boDe} · làm ngày {ngay}",
   nutTaiVe: "Tải về giữ lại",
@@ -981,7 +995,6 @@ export const CHU_SO_SANH = {
     "Hai bài mới cách nhau {so} ngày. Gần quá thì chênh lệch đọc được phần lớn là sai số " +
     "của phép đo, không phải thay đổi thật. Quay lại sau khoảng {toiThieu} ngày nhé.",
   /** Lý do quay lại — đặt ngay trên bảng gia đình. */
-  nhacLamLai: "Làm lại sau khoảng 6 tháng để xem có gì đổi.",
 } as const;
 
 /* ── Bản tổng hợp cả nhà (14.4) ──────────────────────────────────────────── */
@@ -1005,7 +1018,18 @@ export const CHU_TONG_HOP = {
   nutHuy: "Huỷ",
   nutDong: "Đóng",
 
-  tieuDeBan: "{ten} đọc về cả nhà",
+  tieuDeBan: "Lời khuyên dành cho {ten}",
+  /** Tóm tắt dưới tiêu đề khi gập: ai ở cạnh ai. Chi tiết xổ ra khi bấm. */
+  tomTatBan: "Khi ở cạnh {ds} — bấm để xem chi tiết",
+  tomTatLechRo: "Điểm khác nhau rõ: {ds}",
+  tomTatCungNhip: "Hai người khá cùng nhịp",
+  tomTatCoBayNgay: "có kế hoạch bảy ngày thử",
+  /** Nhãn trong ô chọn bản (28.3). */
+  nhanMoiNhat: "mới nhất",
+  nhanBanCu: "bản cũ",
+  nhanKhongDung: "không dùng được",
+  loaiTuLamNgan: "Tự làm",
+  loaiQuanSatNgan: "Bố mẹ làm cho con",
   nhanLatCat: "{ten} và {nguoiKia}",
   nhanViecCuaToi: "Một việc {ten} làm được",
   nhanThoaThuan: "Thử cùng nhau",
@@ -1050,10 +1074,87 @@ export const CHU_HAN_MUC_THU_MUC = {
 
 /** Nhãn cho nội dung theo mối quan hệ (27.5). Nội dung chính ở `disc-noi-dung-doi.ts`. */
 export const CHU_NOI_DUNG_DOI = {
-  tieuDeTinhHuong: "Chuyện hằng ngày hay gặp",
   nhanNenNoi: "Nên nói",
   nhanNenTranh: "Nên tránh",
-  tieuDeKeHoach: "Bảy ngày thử",
-  moTaKeHoach: "Mỗi ngày một việc nhỏ. Hết bảy ngày thì {toi} và {nguoiKia} ngồi lại xem điều gì đã đỡ.",
+  tieuDeTinhHuong: "Chuyện hằng ngày hay gặp giữa {tenToi} và {nguoiKia}",
+  tieuDeKeHoach: "Bảy ngày thử của {tenToi} với {nguoiKia}",
+  moTaKeHoach:
+    "Việc nhỏ dành cho {tenToi} (người đang đọc trang này), làm cùng {nguoiKia}. Trong các " +
+    "việc dưới đây, “{toi}” là {tenToi}. Hết bảy ngày thì {toi} và {nguoiKia} ngồi lại xem " +
+    "điều gì đã đỡ.",
   ghiChu: "Đây là gợi ý để {toi} và {nguoiKia} cùng thử, không phải kết luận về ai.",
+} as const;
+
+/**
+ * ĐỘ ĐẦY ĐỦ CỦA BỘ TEST (28.1) — thẻ thành viên, bước 1, cổng phân tích mềm.
+ * Logic ở `modules/report/do-day-du-bo-test.ts`; ở đây chỉ có chữ.
+ */
+export const CHU_DAY_DU = {
+  nhanTuLam: "Con tự làm",
+  nhanQuanSat: "Bố mẹ làm cho con",
+  chuaLam: "chưa làm",
+  soBan: "{so} bản",
+  ganNhat: "gần nhất {ngay}",
+  daLamNguoiLon: "Đã làm {so} bản",
+  daDu: "Đủ bản",
+  banHong: "Có bản chưa dùng được — nên làm lại.",
+  /** Một câu đầy đủ cho từng lý do còn thiếu — nói ĐÍCH DANH việc cần làm tiếp. */
+  viec: {
+    CHUA_LAM: "Chưa có bản nào.",
+    CHUA_BIET_BAC_HOC: "Chưa biết bậc học của bé — sửa thẻ để chọn đúng bộ câu hỏi.",
+    THIEU_BAN_CON: "Còn thiếu bản con tự làm.",
+    THIEU_BAN_BO_ME: "Còn thiếu bản bố mẹ làm cho con.",
+    KHAC_PHIEN_BAN:
+      "Hai bản làm ở hai phiên bản câu hỏi khác nhau — làm lại một bản để so được.",
+    QUA_HAN:
+      "Hai bản cách nhau {soNgay} ngày (tối đa {toiDa}) — làm lại bản cũ hơn để so được.",
+  },
+  /** Dòng tóm tắt ở bước 1 và đầu bước 3. */
+  tongNguoi: "{du}/{tong} người đủ bản",
+  tomTatThieu: "Còn thiếu: {ds}",
+
+  /** 28.2 — thông báo ngay sau khi làm xong một bài. */
+  xongTieuDe: "Đã xong bài của {ten}.",
+  banThu:
+    "Đây là bản thứ {n} của loại “{loai}”. Mỗi loại giữ tối đa {gioiHan} bản; phân tích luôn dùng bản mới nhất.",
+  loaiTuLam: "tự làm",
+  loaiQuanSat: "bố mẹ làm cho con",
+  khongLuu:
+    "Chưa lưu được bài này vào máy. Hãy tải kết quả về hoặc làm lại để không mất.",
+  banChuaDung:
+    "Bản này chưa dùng được để phân tích (trả lời chưa đủ để kết luận). Nên làm lại.",
+  caNha: "Cả nhà:",
+
+  /** 28.4 — bảng kiểm "bộ test đã đủ chưa" ở đầu bước 3 (chặn MỀM, không khoá). */
+  tieuDeKiem: "Bộ test đã đủ chưa?",
+  kiemDu: "Cả nhà đã đủ bản — bức tranh đầy đủ nhất để phân tích.",
+  kiemGoiY:
+    "Phân tích vẫn chạy được, nhưng làm đủ bản trước thì lời khuyên sát hơn và ít phải đổi sau này.",
+  chuaDuBan: "chưa đủ bản — có thể thay đổi khi làm thêm",
+} as const;
+
+/**
+ * NHẮC TEST LẠI MỖI 6 THÁNG (28.6) — khung to, dễ thấy. Logic ở `modules/report/han-test-lai.ts`.
+ *
+ * 🔴 Giọng nói về VIỆC CHĂM SÓC NHAU, không về "tiến bộ" hay "cải thiện" (cùng luật với
+ * `so-sanh-thoi-gian.test`): người ta test lại để kịp hiểu và điều chỉnh, không để chấm điểm
+ * xem mình đã "tốt lên" chưa.
+ */
+export const CHU_TEST_LAI = {
+  tieuDe: "Nhớ test lại sau mỗi 6 tháng",
+  lyDo:
+    "Tính cách và cách ứng xử của mỗi người đổi theo thời gian. Làm lại bài để kịp thấy điều " +
+    "gì đã đổi, rồi cùng điều chỉnh — để cả nhà hiểu, thương và chăm sóc nhau hơn.",
+  lanToi: "Lần tới: {ngay}",
+  conNgay: "còn {so} ngày",
+  homNay: "đúng hôm nay",
+  quaHan: "đã quá {so} ngày",
+  denHan: "Đã đến hạn test lại",
+  nguoiDenHan: "Đến hạn: {ds}",
+  chuaCoHan: "Khi có người làm xong bài, app sẽ tính ngày test lại cho cả nhà.",
+  /** Dòng nhỏ trên từng thẻ thành viên. */
+  theRieng: "Test lại: {ngay} ({con})",
+  nutLich: "Thêm vào lịch điện thoại",
+  daTaiLich: "Đã tải tệp lịch. Mở tệp trên điện thoại để thêm lời nhắc.",
+  loiTaiLich: "Chưa tải được tệp lịch. Bạn nhớ ghi lại ngày này nhé.",
 } as const;

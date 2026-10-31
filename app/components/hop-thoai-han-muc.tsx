@@ -20,15 +20,19 @@ import { CHU_HAN_MUC, CHU_HAN_MUC_THU_MUC } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import { hienNgay, hienNgayGio } from "@modules/core/tien-ich/ngay";
 import type { PhanTichGiaDinh } from "@modules/core/gia-dinh/kieu";
+import type { LoaiBai } from "@modules/core/gia-dinh/han-muc";
 import type { BaiLamLuu } from "@modules/core/luu-tru/kho-bai";
 import { goiCacBai, taiXuong, tenTepThuMuc } from "@modules/core/luu-tru/tai-ve";
 
 export function HopThoaiHanMuc({
   sapMat,
+  loai,
   onHuy,
   onTiepTuc,
 }: {
   readonly sapMat: readonly BaiLamLuu[];
+  /** Loại bài sắp làm (28.0). Có thì lời nhắc nói rõ "bản con tự làm" / "bản bố mẹ làm cho con". */
+  readonly loai?: LoaiBai;
   readonly onHuy: () => void;
   readonly onTiepTuc: () => void;
 }) {
@@ -62,7 +66,10 @@ export function HopThoaiHanMuc({
           {CHU_HAN_MUC.tieuDe}
         </h2>
         <p className="mt-2 text-[14px] leading-relaxed text-neutral-700">
-          {CHU_HAN_MUC.moTa.replace("{gioiHan}", String(GIOI_HAN_BAI_MOI_NGUOI))}
+          {(loai ? CHU_HAN_MUC.moTaTheoLoai[loai] : CHU_HAN_MUC.moTa).replace(
+            "{gioiHan}",
+            String(GIOI_HAN_BAI_MOI_NGUOI),
+          )}
         </p>
 
         <h3 className="mt-5 text-[12px] font-semibold tracking-widest uppercase" style={{ color: MAU.camDamChoChu }}>
