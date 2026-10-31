@@ -67,3 +67,8 @@
 | 31/10/2026 | **Cổng "bộ test đã đủ" là chặn MỀM** | Chặn cứng khoá nhầm gia đình đang dùng thử và thiếu một người là không xem được gì. Thay vào đó nói thẳng ai còn thiếu bản nào và gắn nhãn "chưa đủ bản" ở từng cặp |
 | 31/10/2026 | **Nhắc test lại 6 tháng bằng khung to + tệp .ics, không thông báo đẩy** | App không có máy chủ nên không gửi thông báo được; .ics là cách duy nhất để điện thoại tự nhắc mà không cần mở app, và không chứa tên ai (ADR-005) |
 | 31/10/2026 | **Lời khuyên cá nhân là hàng GẬP, tiêu đề "Lời khuyên dành cho {tên}"** | "{tên} đọc về cả nhà" khó hiểu; bảng điều khiển phải gọn, chi tiết bấm mới xổ. Nội dung luôn nằm trong DOM để bản in có đủ |
+| 31/10/2026 | **Nội dung sâu cho MỌI cặp, không chỉ vợ chồng** | Gia đình thật có bố mẹ↔con, con↔bố mẹ, ông bà↔cháu; chỉ làm vợ↔chồng thì phần lớn nhà không có gì để đọc. 5 loại cặp luôn suy được từ vai |
+| 31/10/2026 | **Bậc trẻ 3 nhóm (nhỏ / tiểu học / lớn) và KHÔNG đoán khi chưa có lớp** | Lời khuyên cho bé 5 tuổi khác bé lớp 9; đoán sai bậc thì khuyên sai đối tượng. Chưa có lớp thì nhắc thêm lớp |
+| 31/10/2026 | **Xưng hô trung tính: người lớn nói "mình" + tên bé, bé xưng theo vai người kia** | Một câu dùng được cho cả bố, mẹ, ông, bà mà không gượng; {xungTre} và {goiNguoiKia} thay theo vai |
+| 31/10/2026 | **Giao diện đọc nhanh: Hôm nay thử + chọn người + Mở hết/Gập hết** | Phụ huynh đọc trên điện thoại, ít thời gian; thứ làm được ngay hôm nay phải nổi lên đầu, chi tiết bấm mới xổ |
+| 31/10/2026 | **Ông bà↔cháu dùng CHUNG nội dung bố mẹ↔con** | Cùng cấu trúc quan hệ người lớn→trẻ; chỉ đổi xưng hô. Khỏi viết và khỏi xin ký thêm một bộ nội dung |

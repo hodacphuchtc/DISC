@@ -4,39 +4,38 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**31/10/2026 — GĐ27 + GĐ28: TOÀN BỘ PHẦN MÁY ĐÃ LÀM, CHƯA AI BẤM THỬ.**
+**31/10/2026 — GĐ29: PHẦN MÁY ĐÃ LÀM TRÊN LOCAL, CHƯA COMMIT, CHƯA AI BẤM THỬ.**
 
-**1. Vừa xong.** GĐ27 (giao diện Aurora, đã push `c1d4ede`) và **GĐ28** (CHƯA commit): hạn mức 2 bản
-MỖI LOẠI · sổ bản đã làm trên thẻ · thông báo "đã xong, bản thứ N" · sửa chọn bản · bảng kiểm
-"bộ test đã đủ chưa" (chặn mềm) · giao diện GẬP ("Lời khuyên dành cho {tên}", bấm mới xổ) ·
-đồng hành hằng ngày cho hai góc nhìn về con (128 chuỗi, nạp lười) · khung nhắc test lại 6 tháng
-+ tệp lịch .ics. **1.821 test xanh**, build xanh, gói chính **298 KB / 300** — 🔴 CÒN ~2 KB.
+**1. Vừa xong.** GĐ27 + GĐ28 đã push (commit `6d5c5bd`). **GĐ29** (CHƯA commit): phân tích sâu cho MỌI
+cặp trong nhà (người lớn↔người lớn, người lớn→trẻ, trẻ→người lớn, cùng nhịp) × 3 bậc trẻ, xưng hô
+trung tính, giao diện đọc nhanh cho phụ huynh (điện thoại + web). **2.195 test xanh**, gói chính
+**~295 KB / 300** (dư ~5 KB). Không ô nào tick.
 
-**2. Đang dở.** Không còn việc máy ở GĐ27/GĐ28. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu`
-(cổng 3100) với dữ liệu bịa: nhà 4 người (2 lớn, 1 bé lớp 4, 1 bé mầm non). Không ô nào tick.
+**2. Đang dở.** Không còn việc máy ở GĐ29. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu` (cổng 3100)
+với dữ liệu bịa. 🔴 Chrome extension chưa kết nối nên **chưa ai nhìn bằng mắt** màn nào của GĐ29.
 
-**2b. Để NGOÀI lần này (cần anh quyết hoặc làm sau):** nút "sang người/bản kế tiếp" ở thông báo đã xong ·
-khối "Hiểu nhau để thương nhau hơn" ở bước 3 (xung đột với luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
+**2b. Cần anh quyết (không phải việc máy):** khối "Hiểu nhau để thương nhau hơn" ở bước 3 (xung đột với
+luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
 
 **3. Chặn ở NGƯỜI / NGOÀI.** `26.1` Cloudflare + tên miền · `26.2` bảy việc bấm GĐ18 · hai chữ ký.
-🔴 **Hồ sơ ký đổi nội dung 2 lần trong phiên này** (A-CẶP, A-ĐỒNG-HÀNH, B4, B5) — gửi lại nếu đã gửi.
+🔴 **Hồ sơ ký đổi nội dung LẦN NỮA** (thêm A-NL→TRẺ, A-TRẺ→NL, A-CÙNG-NHỊP, B6) — gửi lại nếu đã gửi.
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- Gói chính: `disc-noi-dung-doi` (nội dung cặp) và `disc-dong-hanh` PHẢI nạp lười (`React.lazy`); đưa
-  về gói nạp ngay là chạm trần. Chunk lười có mặt trong `out/danh-sach-cache.json`, không trong index.html.
-- Hạn mức đếm theo (người, LOẠI): bé có tối đa 4 bản. `loaiCuaBoDe` (core) phải khớp `laBanQuanSat` (test canh).
-- Màn đối chiếu hai góc nhìn vẫn đòi hai bài cách nhau ≤ 60 ngày; thẻ báo đúng điều đó (lấy từ `doiChieu`).
-- Node v26: `execArgv` trong `vitest.config.mts`; `semgrep` chưa cài (CI chạy).
-- Lazy + test đồng bộ: mô-đun đã nạp ở test trước thì test sau render ĐỒNG BỘ ⇒ đừng dùng `<h2>` mới trong
-  khối lười (test M5 đếm h2).
+- Nạp lười `KhungTestLai`/`ThongBaoDaXong` làm gói chính TĂNG (Next preload khối lười nằm trong cây
+  dựng sẵn vào index.html) — đừng thử lại.
+- Nạp lười cả màn `ban-tong-hop` hạ ~4 KB — cái này có tác dụng.
+- Khối lười dùng cấp tiêu đề khác h2 vì test M5 đếm h2.
+- Gói chính: `disc-noi-dung-doi` và `disc-dong-hanh` PHẢI nạp lười; chunk lười nằm trong
+  `out/danh-sach-cache.json`, không trong index.html.
+- Node v26: `execArgv` trong `vitest.config.mts`; `semgrep` chưa cài ở máy (CI chạy).
 
-**5. Cạm bẫy** — `docs/so-seo.md` (đã thêm 4 bài mới của GĐ28).
+**5. Cạm bẫy** — `docs/so-seo.md` (đã thêm 4 bài mới của GĐ29).
 
-**6. 🔴 GĐ28 CHƯA COMMIT.** (Commit/push chờ chủ dự án duyệt.)
+**6. 🔴 GĐ29 CHƯA COMMIT.** (Commit/push chờ chủ dự án duyệt.)
 
 **7. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 1.821 test (semgrep báo thiếu — bình thường trên máy này)
+npm run kiem      # 2.195 test (semgrep báo thiếu — bình thường trên máy này)
 npm run xem-thu   # cổng 3100
 node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung cặp / đồng hành
 ```
@@ -430,10 +429,10 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 - [ ] **28.2 — Thông báo "đã xong, đây là bản thứ N"**
   - **(a)** `thong-bao-da-xong.tsx` ở đầu màn kết quả của bài VỪA làm: bản thứ mấy của loại nào,
     cả nhà còn thiếu ai; lưu hỏng thì báo thật (cờ `luuHong` tách khỏi "đang lưu").
-    🔴 **Chưa làm (kế hoạch có):** nút nhảy thẳng sang người/bản kế tiếp — cần truyền callback từ
-    `disc.tsx` ra khung các bước; hiện người dùng bấm *Quay lại* về thẻ rồi chọn. Đã dọn
-    `module.config.json` (hết trỏ tới `lich-su.tsx` đã mất).
-  - **(c)** `thong-bao-da-xong.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG (trừ nút kế tiếp).
+    Nút **"Về danh sách để làm tiếp cho {tên}"** đưa về màn Nhà mình, nêu đích danh người thiếu.
+    🔴 CỐ Ý KHÔNG nhảy thẳng vào bài của người kế: mọi bài mới phải qua cửa hạn mức ở `nha-minh.tsx`.
+    Đã dọn `module.config.json` (hết trỏ tới `lich-su.tsx` đã mất).
+  - **(c)** `thong-bao-da-xong.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
 - [ ] **28.3 — Sửa lỗ hổng chọn bản**
   - **(a)** `chon-ban.ts`: mặc định bản HỢP LỆ MỚI NHẤT bất kể loại (đúng lời chủ dự án); ô chọn ghi
@@ -466,6 +465,67 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
     🔴 **KHÔNG làm, cần chủ dự án quyết:** khối "Hiểu nhau để thương nhau hơn" ở đầu bước 3 — chú thích
     `CHU_THONG_DIEP` ghi thông điệp nhân văn CHỈ ở bảng gia đình (rải nhiều chỗ thành khẩu hiệu).
   - **Tiến độ 31/10:** XONG.
+
+---
+
+## 🔴 GIAI ĐOẠN 29 — Phân tích sâu cho MỌI cặp trong nhà
+
+> Chốt 31/10/2026: GĐ27 chỉ có nội dung sâu cho vợ↔chồng và anh-chị↔em. Gia đình thật còn bố mẹ↔con,
+> con↔bố mẹ, ông bà↔cháu. Phân tích phải sâu cho mọi cặp, theo bậc của bé, và đọc nhanh được trên
+> điện thoại. 🔴 Không ô nào tick: (b) của mọi ô là *bấm thật trên máy*, chưa ai bấm.
+
+- [ ] **29.0 — Ống dẫn dữ liệu cho mọi cặp**
+  - **(a)** `modules/core/gia-dinh/bac-hoc.ts`: bậc `nho`/`tieu-hoc`/`lon`, KHÔNG đoán khi chưa có lớp ·
+    `MoiQuanHeCap` 5 loại, luôn suy được · `LatCat` thêm `bacTre`/`vaiToi`/`vaiNguoiKia`.
+    🔴 Sửa lỗi: `ba` là **Bà** (không phải bố) nên mẹ+bà KHÔNG phải vợ chồng; ông+bà mới là cặp.
+  - **(b)** Nhà có bà + mẹ ⇒ cặp đó không ra nội dung "vợ chồng". **(c)** `tests/bac-hoc.test.ts`,
+    `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,5 ngày. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.1 — Xưng hô trung tính**
+  - **(a)** `config/disc-xung-ho.ts`: `{xungTre}` = con/cháu/em theo vai người kia · `{goiNguoiKia}` =
+    Bố/Mẹ/Ông/Bà. Người lớn nói "mình" + tên bé; bé xưng theo vai người kia.
+  - **(c)** `tests/xung-ho.test.ts`. **(d)** 0,3 ngày. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.2 — Nội dung người lớn khác ↔ người lớn**
+  - **(a)** 8 ô + 7 ngày thử, cho cặp người lớn không phải vợ chồng (Gói B).
+  - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,4 ngày.
+  - **(e) chặn:** NGƯỜI — nội dung Gói B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.3 — Người lớn → trẻ × 3 bậc**
+  - **(a)** `config/disc-noi-dung-voi-tre.ts`: 24 ô + 21 ngày thử (Gói A). Ông bà↔cháu dùng CHUNG nội
+    dung bố mẹ↔con.
+  - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,8 ngày.
+  - **(e) chặn:** NGƯỜI — nội dung về TRẺ, Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.4 — Trẻ → người lớn × 3 bậc**
+  - **(a)** `config/disc-noi-dung-tre-voi-nl.ts`. 🔴 Luật HẸP: chỉ là cách NÓI RA điều mình cần; KHÔNG
+    giao trẻ việc điều chỉnh người lớn.
+  - **(c)** `tests/noi-dung-moi-quan-he.test.ts` (kể cả test cấm câu giao việc cho trẻ). **(d)** 0,6 ngày.
+  - **(e) chặn:** NGƯỜI — Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.5 — Cùng nhịp**
+  - **(a)** `config/disc-noi-dung-cung-nhip.ts`: 40 ô cho cặp có phong cách trùng khớp (A + B).
+  - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,4 ngày.
+  - **(e) chặn:** NGƯỜI — Gói A + B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.6 — Giao diện tổng quát hoá cho mọi cặp**
+  - **(a)** `app/components/noi-dung-doi.tsx` chạy cho mọi cặp; bé chưa có lớp thì nhắc **thêm lớp**,
+    KHÔNG đoán bậc.
+  - **(c)** `tests/phu-moi-cap.test.tsx`, `tests/noi-dung-doi.test.tsx`. **(d)** 0,5 ngày.
+  - **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **29.7 — Hồ sơ ký đổi nội dung**
+  - **(a)** Thêm A-NL→TRẺ, A-TRẺ→NL, A-CÙNG-NHỊP, B6 vào `scripts/xuat-noi-dung-ky-duyet.mjs`; test phủ
+    544 chuỗi (gồm dòng an toàn của bé) (`tests/ho-so-ky-duyet-phu-du.test.ts`). 🔴 Gửi lại hồ sơ nếu đã gửi.
+  - **(d)** 0,3 ngày. **Tiến độ 31/10:** XONG.
+
+- [ ] **29.8 — Giao diện đọc cho phụ huynh (điện thoại + web)**
+  - **(a)** "Hôm nay thử" nổi ở tiêu đề từng người và từng cặp · thanh chọn người dính trên đầu · nút
+    Mở hết/Gập hết · chữ ≥16px · vùng chạm ≥56px · màn `ban-tong-hop` NẠP LƯỜI để hạ gói chính.
+  - **(b)** Mở trên điện thoại thật: đọc được một người trong ≤ 2 lần chạm.
+  - **(c)** `tests/khoi-gap.test.tsx`, `tests/ban-tong-hop.test.tsx`, cổng chunk lười. **(d)** 0,5 ngày.
+  - **(e) chặn:** NGƯỜI — chưa ai nhìn bằng mắt (Chrome extension chưa kết nối).
+  - **Tiến độ 31/10:** PHẦN MÁY XONG.
 
 ---
 

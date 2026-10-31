@@ -290,3 +290,13 @@
 - **Test mốc nền cần đợi hàng đợi kho trống (31/10/2026).** Mốc `baiThuHai` ghi ở nền SAU khi bài vào
   kho; kiểm ngay là chạy đua, và chỉ xanh khi chưa có lượt đọc kho nào xếp hàng trước. Thêm một khối
   đọc kho ở màn kết quả là đủ làm nó đỏ — đợi rồi mới kiểm.
+- **`ba` trong sổ vai là BÀ, không phải bố (31/10/2026).** Suy "vợ chồng" từ vai mà coi `ba` là bố thì
+  mẹ + bà thành cặp vợ chồng. Cặp vợ chồng chỉ có ở mẹ+bố; ông+bà mới là cặp ông bà. Mọi suy luận từ vai
+  phải có test cho tổ hợp mẹ+bà.
+- **Test "câu dài không dùng chung giữa hai chiều" chỉ áp cho phần LỆCH (31/10/2026).** Hai ô đối hướng
+  của phần lệch phải khác chữ; còn phần cùng nhịp của cặp dùng chung chữ, và phần trùng khớp cũ vốn giống
+  nhau. Áp cho cả ba thì test đỏ oan.
+- **`React.lazy` một khối nằm trong cây prerender KHÔNG hạ gói chính (31/10/2026).** Next preload khối đó
+  vào index.html nên gói chính tăng thay vì giảm. Chỉ nạp lười cả màn (như `ban-tong-hop`, hạ ~4 KB) mới có tác dụng.
+- **Test so toàn câu sau khi thay xưng hô dễ gãy với nội dung nhiều chỗ giữ chỗ (31/10/2026).** Câu có
+  nhiều `{xungTre}`/`{goiNguoiKia}` thì so toàn câu phải dựng kỳ vọng bằng cùng hàm thay thế, đừng gõ tay.

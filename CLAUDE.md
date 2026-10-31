@@ -62,7 +62,7 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 31/10/2026 — GĐ27 + GĐ28 HẾT VIỆC MÁY, chờ bấm thử)
+## TRẠNG THÁI (cập nhật 31/10/2026 — GĐ27–GĐ29 HẾT VIỆC MÁY, chờ bấm thử)
 
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V4.md`** (mục *BÀN GIAO PHIÊN GẦN
 > NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
@@ -74,6 +74,9 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 (cờ `MO_NOI_DUNG_DOI`). 🆕 **GĐ28** (8 ô): hạn mức 2 bản MỖI LOẠI · sổ bản đã làm · cổng phân tích mềm ·
 hàng gập "Lời khuyên dành cho {tên}" · đồng hành hằng ngày cho hai góc nhìn về con · nhắc test lại 6 tháng
 + .ics. **1.821 test xanh**, gói chính 298/300 KB; **chưa tick** vì chưa ai bấm thử.
+🆕 **GĐ29** (9 ô, CHƯA commit): phân tích sâu cho MỌI cặp (người lớn↔người lớn, người lớn↔trẻ, cùng nhịp) × 3 bậc
+trẻ · xưng hô trung tính · giao diện đọc nhanh ("Hôm nay thử", chọn người, Mở/Gập hết). **2.195 test xanh**,
+gói chính ~295/300 KB; hồ sơ ký đổi nội dung lần nữa. **Chưa tick** — chưa ai nhìn bằng mắt.
 Hai ô còn lại chặn bởi NGƯỜI/NGOÀI. Ba sổ cũ (`V3` 7/10 · `V2` 25/27 · `V1_LUU` 68/68) đã
 đóng — chỉ để tra *vì sao*, đừng tick thêm.
 
