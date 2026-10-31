@@ -49,6 +49,14 @@ const { TINH_HUONG_DOI, KE_HOACH_BAY_NGAY, MOI_QUAN_HE } = await import(
 const { DONG_HANH_CHUNG, DONG_HANH_THEO_BAC, DONG_HANH_TRUNG_KHOP } = await import(
   new URL("config/disc-dong-hanh.ts", GOC).href
 );
+const { TINH_HUONG_VOI_TRE, KE_HOACH_VOI_TRE } = await import(
+  new URL("config/disc-noi-dung-voi-tre.ts", GOC).href
+);
+const { TINH_HUONG_TRE_VOI_NL, KE_HOACH_TRE_VOI_NL, CHU_AN_TOAN_TRE } = await import(
+  new URL("config/disc-noi-dung-tre-voi-nl.ts", GOC).href
+);
+const { CUNG_NHIP } = await import(new URL("config/disc-noi-dung-cung-nhip.ts", GOC).href);
+const { thayXungHo } = await import(new URL("config/disc-xung-ho.ts", GOC).href);
 const { thayDaiTuCap } = await import(new URL("config/disc-lech-cap.ts", GOC).href);
 const { TRUC } = await import(new URL("config/disc-tu-dien.ts", GOC).href);
 const { thayChuThe } = await import(new URL("modules/report/dien-giai.ts", GOC).href);
@@ -267,6 +275,91 @@ for (const t of TRUC_MA) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   GÓI A — NỘI DUNG THEO MỐI QUAN HỆ CÓ TRẺ (29.3, 29.4, 29.5).
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const TEN_BAC = { nho: "Mầm non – lớp 2", "tieu-hoc": "Lớp 3–5", lon: "Lớp 6 trở lên" };
+const HUONG_NGUOI_LON = { "toi-cao-hon": "người lớn NỔI hơn bé ở nhóm này", "toi-thap-hon": "người lớn NHẸ hơn bé ở nhóm này" };
+const HUONG_TRE = { "toi-cao-hon": "bé NỔI hơn người lớn ở nhóm này", "toi-thap-hon": "bé NHẸ hơn người lớn ở nhóm này" };
+const TEN_BE = "[tên bé]";
+const TEN_NL = "[tên người lớn]";
+// Người lớn nói bằng "mình" và gọi bé bằng tên nên dùng chung cho bố mẹ lẫn ông bà.
+const veTre = (c) => thayXungHo(c, "nguoi-lon-voi-tre", TEN_BE, { vaiNguoiKia: "con" });
+// Bé xưng/gọi theo vai người lớn: in theo bố/mẹ ("con", "Mẹ"); với ông/bà tự thành "cháu", "Ông/Bà".
+const veNl = (c) => thayXungHo(c.split("{tenToi}").join(TEN_BE), "tre-voi-nguoi-lon", TEN_NL, { vaiNguoiKia: "me" });
+
+p("---", "");
+p("## A-NL→TRẺ. Người lớn ở cạnh một đứa trẻ: tình huống hằng ngày (BẢN NHÁP, 29.3)", "");
+p("Nguồn: `config/disc-noi-dung-voi-tre.ts`. Người đọc là BỐ MẸ / ÔNG BÀ đọc về một bé. “bạn” = người lớn đang đọc;");
+p("bé ghi là " + TEN_BE + ". Dùng chung cho bố mẹ ↔ con và ông bà ↔ cháu (người lớn nói “mình”, gọi bé bằng tên).");
+p("Năm điều người ký xác nhận: (1) bên nào cũng có lý do chính đáng, không đổ lỗi; (2) chỉ mô tả vòng phản ứng");
+p("nhìn thấy được; (3) việc là của NGƯỜI LỚN làm trước, không giao bé tự sửa mình; (4) việc hợp tuổi từng bậc;");
+p("(5) câu “Nên tránh” để nhận ra lúc căng thẳng, không để trách bố mẹ.", "");
+for (const b of ["nho", "tieu-hoc", "lon"]) {
+  p(`### Bậc ${TEN_BAC[b]}`, "");
+  for (const t of TRUC_MA) {
+    p(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+    for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+      const o = TINH_HUONG_VOI_TRE[t][h][b];
+      p(`- **Khi ${HUONG_NGUOI_LON[h]}** — ${veTre(o.tinhHuong)}`);
+      p(`  - *Nên nói:* ${veTre(o.nenNoi)}`);
+      p(`  - *Nên tránh:* ${veTre(o.nenTranh)}`);
+    }
+    p("");
+  }
+  p(`**Bảy ngày thử — bậc ${TEN_BAC[b]}**`, "");
+  for (const ngay of KE_HOACH_VOI_TRE[b]) p(`- ${veTre(ngay)}`);
+  p("");
+}
+
+p("---", "");
+p("## A-TRẺ→NL. Bé ở cạnh người lớn: cách bé NÓI RA điều mình cần (BẢN NHÁP, 29.4)", "");
+p("Nguồn: `config/disc-noi-dung-tre-voi-nl.ts`. 🔴 LUẬT HẸP NHẤT: chỉ nói cách bé NÓI RA điều mình cần và một");
+p("lý do có lý của người lớn. **Tuyệt đối không giao bé việc điều chỉnh, làm vui hay chăm sóc người lớn.**");
+p("Với bố/mẹ in dưới đây bé xưng “con”, gọi “Mẹ”; với ông/bà tự thành “cháu”, “Ông/Bà”. Bậc nhỏ: bố mẹ đọc cùng bé.", "");
+p("🔴 Dòng an toàn cố định cuối mỗi kế hoạch của bé: “" + veNl(CHU_AN_TOAN_TRE) + "”", "");
+p("Hai câu người ký xác nhận thêm: (1) có chỗ nào **giao bé trách nhiệm điều chỉnh người lớn** không?");
+p("(2) vế “thật ra…” có tả người lớn bằng một lý do **có lý, không biện hộ cho hành vi làm bé tổn thương** không?", "");
+for (const b of ["nho", "tieu-hoc", "lon"]) {
+  p(`### Bậc ${TEN_BAC[b]}`, "");
+  for (const t of TRUC_MA) {
+    p(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+    for (const h of ["toi-cao-hon", "toi-thap-hon"]) {
+      const o = TINH_HUONG_TRE_VOI_NL[t][h][b];
+      p(`- **Khi ${HUONG_TRE[h]}** — ${veNl(o.tinhHuong)}`);
+      p(`  - *Nên nói:* ${veNl(o.nenNoi)}`);
+      p(`  - *Nên tránh:* ${veNl(o.nenTranh)}`);
+    }
+    p("");
+  }
+  p(`**Bảy ngày thử — bậc ${TEN_BAC[b]}**`, "");
+  for (const ngay of KE_HOACH_TRE_VOI_NL[b]) p(`- ${veNl(ngay)}`);
+  p("");
+}
+
+p("---", "");
+p("## A-CÙNG-NHỊP. Khi hai người cùng nhịp — phía có trẻ (BẢN NHÁP, 29.5)", "");
+p("Nguồn: `config/disc-noi-dung-cung-nhip.ts`. Hiện ở lát cắt mà hai người KHÔNG lệch nhau rõ ở nhóm nào.");
+p("Mỗi ô: điểm mạnh chung + chỗ cùng dễ trượt + một việc nuôi tiếp. Phía người lớn với nhau nằm ở Gói B (mục B6).", "");
+const TEN_CAP_A = { "nguoi-lon-voi-tre": "Người lớn → trẻ", "tre-voi-nguoi-lon": "Trẻ → người lớn", "anh-chi-em": "Anh/chị ↔ em" };
+const veCap = (q, c) =>
+  q === "tre-voi-nguoi-lon"
+    ? veNl(c)
+    : thayDaiTuCap(c, q === "nguoi-lon-voi-tre" ? "nguoi-lon-voi-tre" : "ngang-vai", q === "nguoi-lon-voi-tre" ? TEN_BE : TEN_KIA);
+for (const q of ["nguoi-lon-voi-tre", "tre-voi-nguoi-lon", "anh-chi-em"]) {
+  p(`### ${TEN_CAP_A[q]}`, "");
+  for (const t of TRUC_MA) {
+    p(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+    for (const k of ["cung-noi", "cung-nhe"]) {
+      const o = CUNG_NHIP[q][t][k];
+      p(`- **${k === "cung-noi" ? "Cùng NỔI" : "Cùng NHẸ"}** — ${veCap(q, o.tinhHuong)}`);
+      p(`  - *Nuôi tiếp:* ${veCap(q, o.nuoiTiep)}`);
+    }
+    p("");
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    HỒ SƠ GÓI B — phản hồi tính cách cho NGƯỜI LỚN về chính họ.
    ══════════════════════════════════════════════════════════════════════════ */
 
@@ -368,7 +461,7 @@ pB("8. Mỗi tình huống chỉ mô tả **vòng phản ứng nhìn thấy đư
 pB("9. Câu “Nên tránh” là để **nhận ra** lúc căng thẳng, không phải để trách ai — người đọc có hiểu như vậy không?");
 pB("10. Kế hoạch bảy ngày có việc nào **đòi một bên đổi nhiều hơn bên kia** không?", "");
 pB("“bạn” = người đang đọc; người kia ghi là " + TEN_KIA + ".", "");
-const TEN_QH = { "vo-chong": "Vợ ↔ chồng", "anh-chi-em": "Anh/chị ↔ em" };
+const TEN_QH = { "vo-chong": "Vợ ↔ chồng", "anh-chi-em": "Anh/chị ↔ em", "nguoi-lon-khac": "Người lớn khác ↔ người lớn" };
 for (const q of MOI_QUAN_HE) {
   pB(`### B5 · ${TEN_QH[q]} — tình huống hằng ngày (8 ô)`, "");
   for (const tr of TRUC_MA) {
@@ -384,6 +477,23 @@ for (const q of MOI_QUAN_HE) {
   pB(`### B5 · ${TEN_QH[q]} — bảy ngày thử`, "");
   for (const ngay of KE_HOACH_BAY_NGAY[q]) pB(`- ${thayDaiTuCap(ngay, "ngang-vai", TEN_KIA)}`);
   pB("");
+}
+
+pB("---", "");
+pB("## B6. Khi hai NGƯỜI LỚN cùng nhịp (29.5, BẢN NHÁP)", "");
+pB("Nguồn: `config/disc-noi-dung-cung-nhip.ts`. Vợ ↔ chồng và người lớn khác ↔ người lớn. “bạn” = người đang đọc;");
+pB("người kia ghi là " + TEN_KIA + ". Phía có trẻ nằm ở Gói A.", "");
+for (const q of ["vo-chong", "nguoi-lon-khac"]) {
+  pB(`### ${TEN_QH[q]}`, "");
+  for (const t of TRUC_MA) {
+    pB(`#### Nhóm ${TRUC[t].ten} (${t})`, "");
+    for (const k of ["cung-noi", "cung-nhe"]) {
+      const o = CUNG_NHIP[q][t][k];
+      pB(`- **${k === "cung-noi" ? "Cùng NỔI" : "Cùng NHẸ"}** — ${thayDaiTuCap(o.tinhHuong, "ngang-vai", TEN_KIA)}`);
+      pB(`  - *Nuôi tiếp:* ${thayDaiTuCap(o.nuoiTiep, "ngang-vai", TEN_KIA)}`);
+    }
+    pB("");
+  }
 }
 
 /**

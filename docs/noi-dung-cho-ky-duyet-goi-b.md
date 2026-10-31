@@ -298,3 +298,118 @@ riêng cho từng mối quan hệ. Năm câu ở B3 và hai câu ở B4 áp dụ
 - Ngày 6 — Nói cảm ơn một việc cụ thể [tên người kia] đã làm, nói rõ việc đó là gì.
 - Ngày 7 — Ngồi lại năm phút cùng nhau. Bạn và [tên người kia] mỗi người nói một điều thấy vui và một điều thấy khó trong tuần, rồi chọn một điều giữ tiếp.
 
+### B5 · Người lớn khác ↔ người lớn — tình huống hằng ngày (8 ô)
+
+#### Nhóm Chủ động (D)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bàn chuyện chung của cả nhà (đổi chỗ đồ, lịch đón bé, sửa nhà): bạn đã nghĩ xong và nói thẳng kết luận. [tên người kia] cần thêm một nhịp để cân nhắc và quen được hỏi ý trước, nên chỉ đáp “để xem”. Bạn đọc đó là chưa đồng ý; [tên người kia] thấy việc nhà đã bị định sẵn.
+  - *Nên nói:* “Mình nghĩ nên làm cách này. [tên người kia] thấy sao? Cần thì tối nay mình bàn lại.”
+  - *Nên tránh:* “Việc này tôi quyết rồi, không cần bàn nữa.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] chốt nhanh việc chung (lịch đón bé, chuyện chi tiêu), còn bạn cần xem kỹ rồi mới nói. Bạn gật tạm hoặc im, sau đó lấn cấn; [tên người kia] thấy như đã thống nhất rồi mà vẫn bị nhắc lại.
+  - *Nên nói:* “Cho mình thời gian đến tối rồi mình trả lời rõ ràng nhé.”
+  - *Nên tránh:* “Sao lúc nãy không nói luôn?”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bạn hay kể chuyện và bàn bạc nhiều lúc cả nhà ngồi cùng; [tên người kia] cần yên để nghỉ hoặc làm việc riêng. Bạn hỏi han thêm cho gần gũi, còn [tên người kia] đáp ngắn để giữ khoảng yên.
+  - *Nên nói:* “Mình có chuyện muốn kể. [tên người kia] nghe được lúc nào thì nói mình nhé.”
+  - *Nên tránh:* “Sao [tên người kia] chẳng chịu nói chuyện với mình?”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] hay bắt chuyện và muốn được hỏi lại; bạn cần một lúc yên mới nói được. Bạn lắng nghe nhưng ít đáp, và [tên người kia] dễ đọc đó là thờ ơ.
+  - *Nên nói:* “Mình đang nghe đây. Cho mình một lát nghĩ rồi mình nói lại.”
+  - *Nên tránh:* “Mình mệt, đừng kể nữa.”
+
+#### Nhóm Ổn định (S)
+
+- **khi nhóm này của bạn cao hơn người kia** — [tên người kia] hay đề nghị đổi cách làm trong nhà (giờ ăn, chỗ để đồ, cách chăm bé); bạn quen nhịp cũ nên thấy bị xáo và nói “cứ như cũ đi”. [tên người kia] thấy ý của mình bị gạt đi.
+  - *Nên nói:* “Mình cần biết trước một ngày để quen. Việc này mình thử đổi một lần xem sao.”
+  - *Nên tránh:* “Nhà này xưa nay vẫn làm thế, đổi làm gì.”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] giữ nếp quen trong nhà, còn bạn hay đề nghị thử cách mới. [tên người kia] chưa kịp xoay xở nên từ chối, và bạn thấy đề nghị của mình khó được thử.
+  - *Nên nói:* “Mình muốn thử một cách khác ở việc này. Mình báo trước từ sáng được không?”
+  - *Nên tránh:* “Cứ cứng nhắc mãi thì làm sao thay đổi được.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **khi nhóm này của bạn cao hơn người kia** — Bạn muốn việc chung (sổ chi tiêu, lịch đưa đón) rõ ràng từng chi tiết; [tên người kia] thấy đại khái là đủ. Bạn hỏi lại từng khoản, còn [tên người kia] thấy như bị kiểm tra.
+  - *Nên nói:* “Mình thấy khoản này cần ghi rõ. Mình tự ghi rồi báo lại [tên người kia] hai dòng thôi.”
+  - *Nên tránh:* “Khoản này sai rồi, sao không ghi cho đúng?”
+- **khi nhóm này của bạn thấp hơn người kia** — [tên người kia] muốn việc chung rõ ràng từng khoản, còn bạn chỉ cần nắm ý chính. Khi bị hỏi chi tiết bạn thấy như bị kiểm tra, trong khi [tên người kia] chỉ muốn chắc chắn.
+  - *Nên nói:* “Mình chưa nhớ chi tiết, tối mình xem lại rồi trả lời. Ý chính là…”
+  - *Nên tránh:* “Sao phải tính chi li vậy?”
+
+### B5 · Người lớn khác ↔ người lớn — bảy ngày thử
+
+- Ngày 1 — Chỉ quan sát. Để ý một lần [tên người kia] làm việc đúng theo nếp của [tên người kia], và không nhận xét.
+- Ngày 2 — Hỏi một câu mở: “[tên người kia] thấy cách sắp xếp trong nhà dạo này thế nào?” Rồi nghe đủ hai phút, không chen.
+- Ngày 3 — Nói một việc bạn cần bằng “mình cần…”, thay vì “[tên người kia] lúc nào cũng…”.
+- Ngày 4 — Chọn một việc chung nhỏ, để [tên người kia] làm theo cách của [tên người kia] và không sửa lại.
+- Ngày 5 — Dành mười phút cùng nhau, không điện thoại, theo nhịp [tên người kia] cần: trò chuyện hoặc ngồi yên.
+- Ngày 6 — Cảm ơn một việc cụ thể [tên người kia] đã làm cho cả nhà trong tuần.
+- Ngày 7 — Ngồi lại mười phút. Bạn và [tên người kia] mỗi người nói một điều thấy dễ chịu và một điều thấy khó trong cách sống chung, rồi chọn một điều giữ sang tuần sau.
+
+---
+
+## B6. Khi hai NGƯỜI LỚN cùng nhịp (29.5, BẢN NHÁP)
+
+Nguồn: `config/disc-noi-dung-cung-nhip.ts`. Vợ ↔ chồng và người lớn khác ↔ người lớn. “bạn” = người đang đọc;
+người kia ghi là [tên người kia]. Phía có trẻ nằm ở Gói A.
+
+### Vợ ↔ chồng
+
+#### Nhóm Chủ động (D)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều quyết nhanh nên việc chung ít khi bị treo. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng chốt trước khi hỏi ý nhau, rồi mới thấy mỗi người đang đi một đường.
+  - *Nuôi tiếp:* Trước khi chốt việc lớn, mỗi người nói một câu “mình nghiêng về…” rồi dừng ba giây để nghe [tên người kia].
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thích nhìn kỹ trước khi quyết nên ít phải quay lại sửa. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng chờ người kia mở lời nên việc nằm đó lâu.
+  - *Nuôi tiếp:* Đặt hạn cho mỗi việc đang treo: đến thứ Sáu, ai nêu đề xuất đầu tiên thì bạn và [tên người kia] chốt trong ngày.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều dễ bắt chuyện nên nhà thường vui. Chỗ dễ trượt giữa bạn và [tên người kia] là ít có khoảng lặng, nên chuyện khó dễ trôi qua giữa những chuyện vui.
+  - *Nuôi tiếp:* Mỗi tối hai lượt: bạn nói hai phút rồi [tên người kia] nói hai phút, người kia chỉ nghe.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều cần quãng yên nên ở cạnh nhau rất nhẹ. Chỗ dễ trượt giữa bạn và [tên người kia] là chuyện khó cứ để đó vì không ai là người mở lời.
+  - *Nuôi tiếp:* Hẹn một lúc cố định mỗi tuần để bạn và [tên người kia] mỗi người nói một điều đang giữ trong lòng, một câu thôi.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều giữ nhịp đều nên rất dễ dựa vào nhau. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng ngại phá nhịp, nên điều cần đổi bị hoãn mãi.
+  - *Nuôi tiếp:* Mỗi tháng cùng [tên người kia] thử một thay đổi nhỏ (đổi một món, đổi một lối đi) rồi xem cả hai thấy thế nào.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều linh hoạt nên đổi kế hoạch rất dễ. Chỗ dễ trượt giữa bạn và [tên người kia] là không ai giữ nếp, nên nhà thiếu một nhịp ổn định để dựa vào.
+  - *Nuôi tiếp:* Chọn một nếp cố định (bữa tối chung hoặc giờ ngủ) để bạn và [tên người kia] cùng giữ trong một tháng.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều chú ý chi tiết nên việc nhà được làm kỹ. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng bắt lỗi nhau, và một chi tiết nhỏ thành một cuộc tranh luận.
+  - *Nuôi tiếp:* Thống nhất với [tên người kia] một danh sách ngắn những việc cần làm thật đúng; còn lại cả hai cùng chấp nhận “đủ rồi”.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thoải mái với chi tiết nên nhà nhẹ nhàng. Chỗ dễ trượt giữa bạn và [tên người kia] là sót một việc quan trọng vì mỗi bên tưởng bên kia đã lo.
+  - *Nuôi tiếp:* Cùng [tên người kia] ghi ra giấy ba việc không được sót trong tuần và treo ở chỗ cả hai nhìn thấy.
+
+### Người lớn khác ↔ người lớn
+
+#### Nhóm Chủ động (D)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều quyết nhanh nên việc chung của nhà gọn gàng. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng nói “để mình lo” rồi làm trùng việc của nhau.
+  - *Nuôi tiếp:* Mỗi tuần chia rõ với [tên người kia] ai đứng ra việc chung nào; người kia chỉ hỏi khi cần.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều cân nhắc kỹ nên ít va chạm. Chỗ dễ trượt giữa bạn và [tên người kia] là việc chung nằm chờ vì không ai nêu trước.
+  - *Nuôi tiếp:* Đặt một ngày cố định mỗi tuần để bạn và [tên người kia] ngồi chốt việc chung.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều cởi mở nên nhà đầm ấm. Chỗ dễ trượt giữa bạn và [tên người kia] là chuyện nghiêm túc bị lẫn vào chuyện vui và không được bàn tới.
+  - *Nuôi tiếp:* Chọn một lúc mỗi tuần để bạn và [tên người kia] nói riêng một chuyện nghiêm túc, còn lại cứ vui.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều ít nói nên sống chung rất yên. Chỗ dễ trượt giữa bạn và [tên người kia] là ít biết người kia đang nghĩ gì.
+  - *Nuôi tiếp:* Mỗi ngày hỏi [tên người kia] một câu nhỏ như “hôm nay ổn không?” và nghe câu trả lời.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều giữ nếp nên nhà có nhịp rất ổn định. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng ngại đổi nên những chỗ cần đổi cứ để nguyên.
+  - *Nuôi tiếp:* Mỗi tháng bạn cùng [tên người kia] rà một nếp cũ và hỏi xem nó còn hợp với cả nhà không.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều linh hoạt nên thích nghi nhanh. Chỗ dễ trượt giữa bạn và [tên người kia] là nhà thiếu một vài nếp cố định để cả nhà dựa vào.
+  - *Nuôi tiếp:* Chọn một nếp chung (bữa tối cả nhà hoặc giờ họp nhà) để bạn và [tên người kia] cùng giữ.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều coi trọng chi tiết nên sổ sách và lịch rất rõ. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng kiểm lại nhau.
+  - *Nuôi tiếp:* Chia với [tên người kia] mỗi người một mảng và tin mảng của nhau, chỉ gặp lại khi có số bất thường.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thoải mái nên nhà dễ chịu. Chỗ dễ trượt giữa bạn và [tên người kia] là sót hạn hoặc khoản quan trọng vì mỗi bên tưởng bên kia đã lo.
+  - *Nuôi tiếp:* Cùng [tên người kia] ghi các hạn quan trọng vào một tờ lịch chung ở chỗ cả nhà nhìn thấy.
+

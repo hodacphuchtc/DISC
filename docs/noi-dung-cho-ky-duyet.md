@@ -878,3 +878,411 @@ Người đọc là BỐ MẸ. Mọi việc là việc bố mẹ làm trước, 
 - **Điều đang tốt đẹp:** Hai góc nhìn khớp nhau: sự kỹ lưỡng của con được bố mẹ nhìn thấy.
 - **Nuôi tiếp:** Giữ tiêu chí rõ ràng, và cùng con tập chấp nhận “đủ rồi” ở những việc không quan trọng.
 
+---
+
+## A-NL→TRẺ. Người lớn ở cạnh một đứa trẻ: tình huống hằng ngày (BẢN NHÁP, 29.3)
+
+Nguồn: `config/disc-noi-dung-voi-tre.ts`. Người đọc là BỐ MẸ / ÔNG BÀ đọc về một bé. “bạn” = người lớn đang đọc;
+bé ghi là [tên bé]. Dùng chung cho bố mẹ ↔ con và ông bà ↔ cháu (người lớn nói “mình”, gọi bé bằng tên).
+Năm điều người ký xác nhận: (1) bên nào cũng có lý do chính đáng, không đổ lỗi; (2) chỉ mô tả vòng phản ứng
+nhìn thấy được; (3) việc là của NGƯỜI LỚN làm trước, không giao bé tự sửa mình; (4) việc hợp tuổi từng bậc;
+(5) câu “Nên tránh” để nhận ra lúc căng thẳng, không để trách bố mẹ.
+
+### Bậc Mầm non – lớp 2
+
+#### Nhóm Chủ động (D)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Buổi sáng đi học: bạn đã tính sẵn mọi việc và nói liền một mạch “mặc áo, đi giày, đi thôi”. [tên bé] còn nhỏ, cần từng bước và thời gian để làm theo; bạn giục thêm thì [tên bé] càng chậm lại hoặc khóc.
+  - *Nên nói:* “[tên bé] ơi, mình mặc áo trước nhé. Xong mình báo mình đi giày.”
+  - *Nên tránh:* “Nhanh lên, trễ rồi!”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] chạy tới làm ngay và muốn tự làm tất cả; bạn cần nhìn kỹ trước nên giữ lại “để mình xem đã”. [tên bé] thấy bị chặn đúng lúc đang hào hứng.
+  - *Nên nói:* “[tên bé] muốn tự làm thì mình cho thử. Mình đứng đây xem nhé.”
+  - *Nên tránh:* “Khoan, để mình làm cho nhanh.”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Đón [tên bé] về, bạn hỏi liền một tràng “hôm nay vui không, ăn gì, chơi với ai?”. [tên bé] còn nhỏ và cần yên một lúc mới kể được; bạn thấy bé ít nói, còn [tên bé] thấy mình bị hỏi dồn.
+  - *Nên nói:* “Về rồi nè. [tên bé] cứ nghỉ một lát, lúc nào muốn kể thì kể mình nghe.”
+  - *Nên tránh:* “Sao không nói gì hết, trả lời đi.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] kể không ngừng và muốn bạn đáp lại từng câu; bạn cần yên tĩnh để làm việc nhà. [tên bé] thấy bạn không quan tâm, trong khi bạn vẫn đang nghe.
+  - *Nên nói:* “Mình đang nghe nè. Cho mình xong việc này, mình ngồi nghe [tên bé] kể hết nhé.”
+  - *Nên tránh:* “Đừng nói nữa, để mình làm việc.”
+
+#### Nhóm Ổn định (S)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — [tên bé] mỗi ngày muốn chơi một kiểu, đổi áo, đổi chỗ ngồi; bạn quen nếp đều nên khó theo kịp. [tên bé] thấy mình bị gò mỗi khi bạn nói “như hôm qua đi”.
+  - *Nên nói:* “Hôm nay mình thử một cách khác một lần. Mai mình quay lại nếp cũ nhé.”
+  - *Nên tránh:* “Hôm qua đã thế rồi, sao hôm nay lại đổi?”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — Bạn hay đổi kế hoạch đột xuất (đi chơi, đổi giờ ngủ); [tên bé] cần nếp quen để thấy an toàn. [tên bé] khóc hoặc bám vì chưa kịp chuẩn bị.
+  - *Nên nói:* “Chiều nay mình đi chơi. Mình báo trước để [tên bé] chuẩn bị.”
+  - *Nên tránh:* “Có gì đâu mà khóc, chỉ đi chơi thôi mà.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Bạn muốn đồ chơi xếp đúng chỗ và ăn xong dọn gọn; [tên bé] còn nhỏ, chơi xong bỏ đó. Bạn nhắc đi nhắc lại, còn [tên bé] thấy mình lúc nào cũng bị chỉnh.
+  - *Nên nói:* “Mình cùng cất đồ chơi nhé. [tên bé] cất xe, mình cất sách.”
+  - *Nên tránh:* “Bừa quá, dọn lại đi!”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] muốn xếp đồ chơi thẳng hàng và khóc khi bị xáo; bạn xếp cho nhanh, bỏ cả vào hộp. [tên bé] thấy việc mình vừa làm xong bị phá.
+  - *Nên nói:* “Mình biết [tên bé] xếp rất đẹp. Mình hỏi trước khi cất nhé.”
+  - *Nên tránh:* “Xếp làm gì cho mất công, cho cả vào hộp đi.”
+
+**Bảy ngày thử — bậc Mầm non – lớp 2**
+
+- Ngày 1 — Chỉ quan sát. Để ý một lúc [tên bé] chơi hoặc làm việc theo cách riêng của [tên bé], và không chỉnh gì.
+- Ngày 2 — Ngồi xuống ngang tầm mắt [tên bé] và hỏi một câu đơn giản: “Hôm nay [tên bé] thích nhất điều gì?” Rồi chờ.
+- Ngày 3 — Báo trước một việc sắp xảy ra bằng một câu ngắn cho [tên bé]: “Năm phút nữa mình đi tắm nhé.”
+- Ngày 4 — Cho [tên bé] tự chọn một việc nhỏ (áo nào, cốc nào) và không đổi lại.
+- Ngày 5 — Mười phút chơi theo ý [tên bé]: bạn đi theo, không dẫn.
+- Ngày 6 — Nói với [tên bé] một việc cụ thể bé đã làm, ví dụ “[tên bé] đã tự cất giày, mình thấy vui.”
+- Ngày 7 — Ngồi lại với chính mình năm phút. Bạn nhớ điều gì giúp [tên bé] dễ chịu nhất tuần này, rồi chọn một việc giữ sang tuần sau.
+
+### Bậc Lớp 3–5
+
+#### Nhóm Chủ động (D)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Giờ làm bài tối: bạn quyết luôn môn nào làm trước và làm trong bao lâu. [tên bé] cần tự chọn một phần và nghĩ xong mới bắt đầu; bạn thấy [tên bé] chần chừ, còn [tên bé] thấy mình bị ra lệnh.
+  - *Nên nói:* “Tối nay [tên bé] chọn làm môn nào trước nhé. Bắt đầu lúc nào cũng được trong mười phút tới.”
+  - *Nên tránh:* “Làm toán trước, rồi mới đến văn, không bàn nữa.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] thích bắt tay vào làm ngay (làm thủ công, thí nghiệm) trong khi bạn muốn đọc hướng dẫn và chuẩn bị kỹ. [tên bé] thấy bị giữ lại; bạn lo việc bị làm hỏng.
+  - *Nên nói:* “Mình cho [tên bé] thử trước một lần. Hỏng cũng được, mình xem cùng.”
+  - *Nên tránh:* “Chưa đọc hướng dẫn mà đã vội làm.”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Bạn kể nhiều và hỏi nhiều lúc ăn cơm; [tên bé] thích ngồi lặng ăn hoặc nghĩ riêng. Bạn tưởng đang gần gũi, còn [tên bé] thấy bữa cơm thành giờ bị hỏi.
+  - *Nên nói:* “Bữa nay mình kể trước một chuyện nhé. [tên bé] muốn kể thì kể, không thì thôi.”
+  - *Nên tránh:* “Kể nghe đi, giấu gì mà không nói?”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] về nhà là kể chuyện lớp, bạn bè, cô giáo; bạn nghe nhưng ít phản hồi vì mệt. [tên bé] kể càng to hơn.
+  - *Nên nói:* “Mình mệt nhưng vẫn muốn nghe. Mười phút nhé, [tên bé] kể cho mình chuyện vui nhất.”
+  - *Nên tránh:* “Kể lắm thế, mệt người.”
+
+#### Nhóm Ổn định (S)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — [tên bé] muốn đổi kế hoạch cuối tuần và hay đổi sở thích; bạn cần biết trước và quen nếp. Bạn nói “cứ như cũ”, còn [tên bé] thấy ý mình không được nghe.
+  - *Nên nói:* “Mình cần biết trước một ngày để quen. Lần này mình thử đổi một lần cùng [tên bé].”
+  - *Nên tránh:* “Suốt ngày đổi ý, chẳng biết đường nào mà lần.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — Bạn rủ đi chơi phút chót khi [tên bé] đã có dự định hoặc đang làm dở; [tên bé] khó chuyển nhanh nên từ chối. Bạn thấy [tên bé] cứng nhắc.
+  - *Nên nói:* “Mình định đi chơi chiều nay. [tên bé] xong việc rồi mình đi nhé.”
+  - *Nên tránh:* “Đi chơi cũng không chịu, khó chiều quá.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Bạn muốn bài làm chữ đẹp và đúng từng chi tiết; [tên bé] làm xong là xong. Bạn sửa từng lỗi, còn [tên bé] thấy mất hứng làm.
+  - *Nên nói:* “Mình thấy phần này [tên bé] làm rất ổn. Có một chỗ nhỏ, [tên bé] muốn xem cùng mình không?”
+  - *Nên tránh:* “Sai rồi, xoá làm lại.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] làm bài rất kỹ, tẩy xoá nhiều và mất thời gian; bạn chỉ cần xong. Bạn giục “thôi được rồi”, còn [tên bé] thấy việc mình làm không được coi trọng.
+  - *Nên nói:* “Mình thấy [tên bé] làm rất cẩn thận. Mình để thêm mười phút, rồi mình cùng nghỉ.”
+  - *Nên tránh:* “Được rồi, có thế mà cũng làm lâu.”
+
+**Bảy ngày thử — bậc Lớp 3–5**
+
+- Ngày 1 — Chỉ quan sát. Ghi nhớ một lần [tên bé] làm việc theo cách của [tên bé], và không nhận xét.
+- Ngày 2 — Hỏi một câu mở sau giờ học: “Hôm nay có chuyện gì [tên bé] muốn kể không?” rồi nghe đủ hai phút.
+- Ngày 3 — Cho [tên bé] chọn một phần của buổi tối (làm bài trước hay chơi trước) và tôn trọng lựa chọn đó.
+- Ngày 4 — Nói rõ điều bạn cần bằng “mình cần…”, thay vì “[tên bé] lúc nào cũng…”.
+- Ngày 5 — Mười phút làm một việc [tên bé] thích, theo cách của [tên bé].
+- Ngày 6 — Cảm ơn một việc cụ thể [tên bé] đã làm trong tuần và nói rõ việc đó là gì.
+- Ngày 7 — Ngồi lại mười phút. Bạn và [tên bé] mỗi người nói một điều thấy vui và một điều thấy khó trong tuần, rồi chọn một điều giữ tiếp.
+
+### Bậc Lớp 6 trở lên
+
+#### Nhóm Chủ động (D)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Chuyện giờ giấc và việc riêng của [tên bé]: bạn đã có sẵn quy định và nói gọn “cứ thế mà làm”. [tên bé] đang muốn được bàn bạc như người lớn; bạn thấy mình chỉ giữ nề nếp, còn [tên bé] thấy mình không có tiếng nói.
+  - *Nên nói:* “Mình nêu một lo ngại, còn cách làm thì [tên bé] đề xuất trước. Mình nghe rồi mới nói ý mình.”
+  - *Nên tránh:* “Ở nhà này tôi quyết, không thương lượng.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] quyết nhanh chuyện của mình (chọn câu lạc bộ, bạn bè) rồi mới báo; bạn cần thời gian để hỏi và tìm hiểu. [tên bé] thấy mình bị nghi ngờ; bạn thấy mình bị đặt trước việc đã rồi.
+  - *Nên nói:* “Mình cần nghe [tên bé] kể lý do rồi mới nói được ý mình. Cho mình một ngày nhé.”
+  - *Nên tránh:* “Sao không hỏi mình trước mà đã quyết rồi?”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Bạn muốn trò chuyện nhiều với [tên bé] và hay gõ cửa hỏi han; [tên bé] đang cần không gian riêng. Bạn thấy bị xa cách, còn [tên bé] thấy mình bị theo dõi.
+  - *Nên nói:* “Mình luôn có mặt. Lúc nào [tên bé] muốn nói chuyện thì cứ tìm mình.”
+  - *Nên tránh:* “Lớn rồi nên chẳng còn kể gì với người nhà nữa.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] chia sẻ nhiều chuyện và cảm xúc, còn bạn khó đáp bằng lời. [tên bé] thấy mình bị lờ đi; thật ra bạn đang nghĩ cách trả lời cho đúng.
+  - *Nên nói:* “Mình chưa biết nói sao cho đúng, nhưng mình đang nghe. Cứ kể tiếp nhé.”
+  - *Nên tránh:* “Chuyện đó có gì đâu mà phải buồn.”
+
+#### Nhóm Ổn định (S)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — [tên bé] đang thử nhiều thứ mới (bạn, phong cách, kế hoạch); bạn bất an vì mọi thứ đổi quá nhanh. [tên bé] thấy bạn không tin mình.
+  - *Nên nói:* “Mình lo vì mình quen nếp cũ. Cho mình biết trước, mình sẽ ủng hộ [tên bé] thử.”
+  - *Nên tránh:* “[tên bé] thay đổi quá, mình chẳng nhận ra nữa.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — Bạn thay đổi nhịp sinh hoạt cả nhà (giờ ăn, giờ đi) mà ít báo; [tên bé] thấy lịch học và nghỉ của mình bị phá. [tên bé] im lặng rồi bực dần.
+  - *Nên nói:* “Mình sẽ báo [tên bé] sớm khi cả nhà đổi lịch. Nếu thấy vướng thì [tên bé] nói với mình.”
+  - *Nên tránh:* “Chuyện nhỏ, đổi chút thì có sao đâu.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi người lớn NỔI hơn bé ở nhóm này** — Bạn hay xem lại việc của [tên bé] (bài vở, lịch) để chắc không sót; [tên bé] thấy mình bị soi xét và không được tin.
+  - *Nên nói:* “Mình tin [tên bé]. Nếu cần kiểm lại cùng thì [tên bé] cho mình biết lúc nào tiện.”
+  - *Nên tránh:* “Để mình xem lại cho chắc, tự làm thì thế nào cũng sót.”
+- **Khi người lớn NHẸ hơn bé ở nhóm này** — [tên bé] chuẩn bị rất kỹ và lo khi mọi thứ chưa chắc chắn; bạn nghĩ cứ thử rồi tính. [tên bé] thấy bạn coi nhẹ nỗi lo của mình.
+  - *Nên nói:* “Mình thấy [tên bé] đã chuẩn bị kỹ rồi. Nếu còn lo điều gì, mình ngồi liệt kê cùng nhau.”
+  - *Nên tránh:* “Lo gì nhiều, cứ làm đi rồi tính.”
+
+**Bảy ngày thử — bậc Lớp 6 trở lên**
+
+- Ngày 1 — Chỉ quan sát. Để ý một lần [tên bé] tự quyết một việc nhỏ và cách [tên bé] làm, không nhận xét.
+- Ngày 2 — Hỏi ý [tên bé] trước khi nói ý mình về một việc của nhà: “[tên bé] thấy sao?”
+- Ngày 3 — Nói điều bạn lo bằng một câu “mình lo vì…”, rồi hỏi [tên bé] muốn xử lý thế nào.
+- Ngày 4 — Trao cho [tên bé] toàn quyền một việc nhỏ (giờ học, đồ dùng) và không kiểm tra giữa chừng.
+- Ngày 5 — Mười phút bên [tên bé] theo cách [tên bé] chọn (đi dạo, ăn vặt, ngồi im), không khuyên nhủ.
+- Ngày 6 — Cảm ơn [tên bé] một việc đã làm cho cả nhà, nói thật lòng.
+- Ngày 7 — Ngồi lại mười phút. Bạn và [tên bé] mỗi người nói một điều dễ chịu và một điều khó trong cách sống cùng nhau, rồi chọn một điều giữ tiếp.
+
+---
+
+## A-TRẺ→NL. Bé ở cạnh người lớn: cách bé NÓI RA điều mình cần (BẢN NHÁP, 29.4)
+
+Nguồn: `config/disc-noi-dung-tre-voi-nl.ts`. 🔴 LUẬT HẸP NHẤT: chỉ nói cách bé NÓI RA điều mình cần và một
+lý do có lý của người lớn. **Tuyệt đối không giao bé việc điều chỉnh, làm vui hay chăm sóc người lớn.**
+Với bố/mẹ in dưới đây bé xưng “con”, gọi “Mẹ”; với ông/bà tự thành “cháu”, “Ông/Bà”. Bậc nhỏ: bố mẹ đọc cùng bé.
+
+🔴 Dòng an toàn cố định cuối mỗi kế hoạch của bé: “Nếu có ai làm con đau hoặc sợ, hãy nói với một người lớn khác mà con tin.”
+
+Hai câu người ký xác nhận thêm: (1) có chỗ nào **giao bé trách nhiệm điều chỉnh người lớn** không?
+(2) vế “thật ra…” có tả người lớn bằng một lý do **có lý, không biện hộ cho hành vi làm bé tổn thương** không?
+
+### Bậc Mầm non – lớp 2
+
+#### Nhóm Chủ động (D)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con muốn tự chọn và làm ngay, còn Mẹ hay nói “để mình xem đã”. Con thấy bị chặn; có thể Mẹ đang nghĩ cho con được an toàn.
+  - *Nên nói:* “Mẹ ơi, con muốn tự làm, Mẹ cho con thử ạ.”
+  - *Nên tránh:* “Không cho thì con không làm nữa!”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ nói nhanh và làm ngay, còn con cần xem kỹ rồi mới làm theo. Con đứng yên hoặc im lặng; có thể Mẹ chỉ muốn xong sớm cho con đỡ mệt.
+  - *Nên nói:* “Mẹ ơi, con chưa kịp, Mẹ đợi con một chút ạ.”
+  - *Nên tránh:* “Con không chịu đâu!”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con có nhiều chuyện muốn kể ngay, còn Mẹ đang bận làm việc. Con kể to hơn và kéo tay; có thể Mẹ rất muốn nghe, chỉ chưa rảnh.
+  - *Nên nói:* “Mẹ ơi, lúc nào Mẹ rảnh con kể chuyện cho Mẹ nghe ạ?”
+  - *Nên tránh:* “Mẹ nghe con đi, nghe ngay đi!”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ hỏi han và nói chuyện nhiều, còn con cần ngồi yên chơi một mình một lát. Con quay mặt đi hoặc im; có thể Mẹ chỉ muốn gần con.
+  - *Nên nói:* “Mẹ ơi, cho con chơi một mình một lát, xong con chạy sang Mẹ ạ.”
+  - *Nên tránh:* “Đi chỗ khác đi!”
+
+#### Nhóm Ổn định (S)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con quen làm theo thứ tự cũ (ăn xong rồi mới chơi, đi đường quen), còn Mẹ hay đổi sang cách khác. Con khóc vì chưa kịp quen; có thể Mẹ chỉ nghĩ cách mới cũng sẽ vui.
+  - *Nên nói:* “Mẹ ơi, Mẹ nói trước cho con biết với ạ.”
+  - *Nên tránh:* “Con không đi đâu, con muốn như cũ!”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con thích thử cái mới và đổi trò chơi liên tục, còn Mẹ quen nếp đều. Con thấy bị giữ lại; có thể Mẹ muốn con thấy an toàn.
+  - *Nên nói:* “Mẹ ơi, hôm nay con muốn thử chơi trò mới, Mẹ chơi với con nhé?”
+  - *Nên tránh:* “Chán quá, lúc nào cũng như cũ!”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con muốn xếp đồ thật thẳng và làm cho đúng, còn Mẹ làm cho nhanh gọn. Con khóc vì bị xáo; có thể Mẹ chưa biết việc đó quan trọng với con.
+  - *Nên nói:* “Mẹ ơi, con xếp xong rồi, Mẹ đừng xếp lại giúp con ạ.”
+  - *Nên tránh:* “Mẹ làm hỏng hết rồi!”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con chơi xong chưa kịp cất, còn Mẹ muốn mọi thứ ngăn nắp. Con thấy bị nhắc hoài; có thể Mẹ quen nhà gọn.
+  - *Nên nói:* “Mẹ ơi, con chơi xong rồi con cất cùng Mẹ nhé.”
+  - *Nên tránh:* “Cất làm gì, mai lại chơi!”
+
+**Bảy ngày thử — bậc Mầm non – lớp 2**
+
+- Ngày 1 — Người lớn đọc cùng bé. Con chỉ cần nhớ một việc làm con vui hôm nay.
+- Ngày 2 — Tập nói một câu: “Mẹ ơi, con cần…”. Bé chọn điều mình cần (nước, chơi, nghỉ) và nói với Mẹ.
+- Ngày 3 — Khi con thấy bực, tập nói “con đang bực”. Nếu con muốn được ôm thì nói “con muốn được ôm”.
+- Ngày 4 — Nói lời cảm ơn Mẹ về một việc cụ thể: “Cảm ơn Mẹ đã nấu cơm cho con.”
+- Ngày 5 — Cùng Mẹ làm một việc nhỏ trong mười phút (xếp đồ, tưới cây, vẽ tranh).
+- Ngày 6 — Kể cho Mẹ nghe một chuyện con thích nhất trong ngày.
+- Ngày 7 — Cả nhà ngồi lại năm phút. Bé nói một điều vui và một điều chưa vui trong tuần, người lớn lắng nghe, rồi cùng chọn một điều giữ tiếp.
+
+### Bậc Lớp 3–5
+
+#### Nhóm Chủ động (D)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con nghĩ ra cách làm và muốn bắt đầu ngay, còn Mẹ cần thêm thời gian để xem. Con sốt ruột và nói to hơn; có thể Mẹ đang cân nhắc để việc không hỏng.
+  - *Nên nói:* “Mẹ ơi, con có một cách làm. Mẹ nghe con nói một phút được không ạ?”
+  - *Nên tránh:* “Sao Mẹ lúc nào cũng chậm?”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ chốt kế hoạch rất nhanh, còn con cần nghĩ xong mới đồng ý. Con gật tạm rồi thấy không thích; có thể Mẹ chưa biết con cần nghĩ thêm một lúc.
+  - *Nên nói:* “Mẹ cho con nghĩ một phút rồi con trả lời ạ.”
+  - *Nên tránh:* “Thôi gì cũng được.”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con về là kể chuyện lớp ngay, còn Mẹ mới về tới nhà và cần nghỉ. Con thấy không ai nghe; có thể Mẹ nghe được sau một lúc yên.
+  - *Nên nói:* “Mẹ nghỉ một lát đi ạ, rồi con kể chuyện vui hôm nay cho Mẹ nghe.”
+  - *Nên tránh:* “Mẹ chẳng bao giờ nghe con cả.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ hay hỏi “hôm nay thế nào?” ngay khi con vừa về, còn con cần một lúc yên. Con trả lời cộc lốc; có thể Mẹ chỉ muốn biết con vui hay mệt.
+  - *Nên nói:* “Mẹ cho con nghỉ mười phút, xong con kể Mẹ nghe ạ.”
+  - *Nên tránh:* “Đừng hỏi nữa, phiền quá!”
+
+#### Nhóm Ổn định (S)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con cần biết trước kế hoạch cuối tuần, còn Mẹ hay đổi vào phút chót. Con bực và không muốn đi; có thể Mẹ cũng phải đổi theo hoàn cảnh.
+  - *Nên nói:* “Mẹ cho con biết sớm một chút để con chuẩn bị với ạ.”
+  - *Nên tránh:* “Lúc nào cũng đổi, con không đi nữa.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con muốn đổi cách làm hoặc thử việc mới, còn Mẹ quen làm theo nếp. Con thấy ý mình khó được thử; có thể Mẹ chưa biết con muốn thử điều đó.
+  - *Nên nói:* “Mẹ ơi, con muốn thử cách này một lần thôi. Nếu không hợp, con sẽ quay lại cách cũ.”
+  - *Nên tránh:* “Mẹ cứng nhắc quá!”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con muốn làm thật kỹ và đúng, còn Mẹ nhắc “được rồi, xong đi”. Con thấy việc mình bị coi nhẹ; có thể Mẹ lo con mệt.
+  - *Nên nói:* “Mẹ ơi, con làm kỹ thêm mười phút nữa rồi nghỉ ạ.”
+  - *Nên tránh:* “Con chưa xong, đừng giục con!”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con làm bài nhanh gọn, còn Mẹ xem kỹ từng chỗ. Con thấy bị soi; có thể Mẹ muốn giúp con làm trọn.
+  - *Nên nói:* “Mẹ ơi, con làm xong rồi. Mẹ chỉ giúp con một chỗ thôi, được không ạ?”
+  - *Nên tránh:* “Mẹ chê hoài, con chẳng làm nữa.”
+
+**Bảy ngày thử — bậc Lớp 3–5**
+
+- Ngày 1 — Chỉ để ý. Hôm nay có việc gì làm con thấy dễ chịu? Nhớ một việc, không cần nói.
+- Ngày 2 — Nói một điều con cần bằng câu bắt đầu “con cần…” hoặc “con muốn…”, thay vì “Mẹ lúc nào cũng…”.
+- Ngày 3 — Khi con chưa kịp nghĩ, nói “con cần thêm một phút ạ” rồi đợi, để Mẹ biết con đang suy nghĩ.
+- Ngày 4 — Chọn lúc Mẹ thoải mái để kể một chuyện ở trường, kể đến hết rồi hỏi Mẹ một câu.
+- Ngày 5 — Cùng Mẹ làm một việc nhỏ, mỗi người một phần, rồi nói với nhau mình thấy thế nào.
+- Ngày 6 — Nói cảm ơn Mẹ một việc cụ thể và nói rõ việc đó là gì.
+- Ngày 7 — Ngồi lại mười phút với Mẹ. Con nói một điều thấy vui và một điều thấy khó trong tuần, Mẹ cũng nói của mình, rồi cả hai chọn một điều giữ tiếp.
+
+### Bậc Lớp 6 trở lên
+
+#### Nhóm Chủ động (D)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con đã có ý kiến riêng và muốn được quyết một số việc của mình, còn Mẹ vẫn quen quyết thay. Con thấy mình chưa được tin; có thể Mẹ chưa quen nhìn con lớn lên.
+  - *Nên nói:* “Mẹ ơi, việc này con muốn được cùng quyết. Con xin trình bày lý do để Mẹ nghe ạ.”
+  - *Nên tránh:* “Con lớn rồi, Mẹ không có quyền quyết.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ hay quyết nhanh chuyện của cả nhà, còn con cần xem kỹ và nghe lý do. Con thấy tiếng nói của mình đến muộn; có thể Mẹ chưa biết con đang nghĩ gì về chuyện đó.
+  - *Nên nói:* “Mẹ cho con thời gian đến tối rồi con nói ý kiến của con nhé.”
+  - *Nên tránh:* “Cái gì cũng Mẹ quyết, hỏi con làm gì.”
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con muốn chia sẻ nhiều với Mẹ, cả chuyện nhỏ lẫn chuyện lớn, còn Mẹ chỉ đáp ngắn khi mệt. Con thấy bị gạt đi; có thể Mẹ mệt chứ không hết quan tâm.
+  - *Nên nói:* “Mẹ ơi, con có chuyện muốn kể. Lúc nào Mẹ thoải mái thì báo con nhé.”
+  - *Nên tránh:* “Thôi con chẳng kể gì với Mẹ nữa.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Mẹ hay gõ cửa và hỏi han nhiều, còn con đang cần không gian riêng. Con đóng cửa hoặc cáu; có thể Mẹ chỉ lo và muốn gần.
+  - *Nên nói:* “Mẹ ơi, con cần ở yên một lát. Tối nay con sẽ ra nói chuyện với Mẹ ạ.”
+  - *Nên tránh:* “Mẹ đừng xen vào chuyện của con!”
+
+#### Nhóm Ổn định (S)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con cần lịch sinh hoạt ổn định để học, còn Mẹ thay đổi giờ giấc cả nhà khá thường xuyên. Con thấy rối và mệt; có thể Mẹ chưa biết lịch đó quan trọng với con.
+  - *Nên nói:* “Mẹ ơi, lịch học của con cần ổn định. Nếu đổi, Mẹ báo con trước một ngày được không ạ?”
+  - *Nên tránh:* “Mẹ cứ làm con rối hết lên.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con muốn thay đổi (kiểu tóc, nhóm bạn, cách học), còn Mẹ lo vì quen con như cũ. Con thấy bị cản; có thể Mẹ cần thời gian để làm quen.
+  - *Nên nói:* “Mẹ ơi, con đang muốn thử điều này. Mẹ cho con giải thích lý do rồi Mẹ nghĩ thêm ạ.”
+  - *Nên tránh:* “Mẹ chẳng chịu hiểu gì cả.”
+
+#### Nhóm Cẩn trọng (C)
+
+- **Khi bé NỔI hơn người lớn ở nhóm này** — Con chuẩn bị rất kỹ và lo khi chưa chắc chắn, còn Mẹ nói “cứ làm đi rồi tính”. Con thấy nỗi lo bị coi nhẹ; có thể Mẹ muốn trấn an.
+  - *Nên nói:* “Mẹ ơi, con thấy lo vì còn chưa chắc. Mẹ giúp con liệt kê việc cần làm được không ạ?”
+  - *Nên tránh:* “Mẹ chẳng hiểu con đang lo gì.”
+- **Khi bé NHẸ hơn người lớn ở nhóm này** — Con làm việc theo cách thoải mái, còn Mẹ hay hỏi chi tiết và kiểm lại. Con thấy bị nghi ngờ; có thể Mẹ lo lắng nên muốn chắc.
+  - *Nên nói:* “Mẹ ơi, con muốn tự kiểm lại trước, rồi cho Mẹ xem nếu cần ạ.”
+  - *Nên tránh:* “Mẹ lúc nào cũng không tin con.”
+
+**Bảy ngày thử — bậc Lớp 6 trở lên**
+
+- Ngày 1 — Chỉ quan sát. Để ý điều gì làm con thấy dễ chịu khi ở cạnh Mẹ, và điều gì chưa.
+- Ngày 2 — Viết ra một điều con cần ở Mẹ và vì sao, bằng một hai câu bắt đầu “con cần… vì…”.
+- Ngày 3 — Chọn lúc cả hai thoải mái để nói điều đã viết, dùng “con cảm thấy…” thay vì “Mẹ luôn…”.
+- Ngày 4 — Hỏi Mẹ một câu về ngày của Mẹ và nghe hết.
+- Ngày 5 — Nếu con cần không gian riêng, nói trước giờ con sẽ ra nói chuyện, thay vì đóng cửa im lặng.
+- Ngày 6 — Cảm ơn Mẹ một việc cụ thể trong tuần, nói thật lòng.
+- Ngày 7 — Ngồi lại mười phút. Con và Mẹ mỗi người nói một điều dễ chịu và một điều khó trong tuần, rồi chọn một điều giữ tiếp.
+
+---
+
+## A-CÙNG-NHỊP. Khi hai người cùng nhịp — phía có trẻ (BẢN NHÁP, 29.5)
+
+Nguồn: `config/disc-noi-dung-cung-nhip.ts`. Hiện ở lát cắt mà hai người KHÔNG lệch nhau rõ ở nhóm nào.
+Mỗi ô: điểm mạnh chung + chỗ cùng dễ trượt + một việc nuôi tiếp. Phía người lớn với nhau nằm ở Gói B (mục B6).
+
+### Người lớn → trẻ
+
+#### Nhóm Chủ động (D)
+
+- **Cùng NỔI** — Bạn và [tên bé] đều quyết đoán nên có nhiều ý kiến riêng. Chỗ dễ trượt là cả hai cùng muốn là người quyết, và buổi nói chuyện dễ thành giằng co.
+  - *Nuôi tiếp:* Chia việc theo mảng: [tên bé] quyết một phần của buổi tối, bạn quyết phần còn lại, và nói trước từ đầu.
+- **Cùng NHẸ** — Bạn và [tên bé] đều thận trọng nên hay cùng chờ nhau. Chỗ dễ trượt là bữa tối hoặc kế hoạch cuối tuần chẳng ai nêu, đến sát giờ mới vội.
+  - *Nuôi tiếp:* Hỏi [tên bé] trước một ngày “mai mình làm gì?” và cho [tên bé] chọn một trong hai.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng NỔI** — Bạn và [tên bé] đều thích kể và thích trò chuyện nên bữa cơm rộn ràng. Chỗ dễ trượt là ai cũng kể mà chẳng ai nghe hết.
+  - *Nuôi tiếp:* Đặt luật bữa cơm “kể trọn”: mỗi người, kể cả [tên bé], được kể hết một chuyện không bị ngắt.
+- **Cùng NHẸ** — Bạn và [tên bé] đều ít nói nên bên nhau rất nhẹ nhàng. Chỗ dễ trượt là hai bên đều đợi người kia mở lời nên điều cần nói để lâu.
+  - *Nuôi tiếp:* Cuối ngày hỏi [tên bé] đúng một câu, ví dụ “hôm nay có điều gì làm [tên bé] vui không?”, và chờ.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng NỔI** — Bạn và [tên bé] đều thích nếp quen nên nhà rất ổn định. Chỗ dễ trượt là cả hai cùng ngại thay đổi, kể cả khi [tên bé] đã lớn thêm một bậc.
+  - *Nuôi tiếp:* Mỗi tháng cùng [tên bé] thử một thay đổi nhỏ, ví dụ một món mới hoặc một lối đi khác, rồi hỏi [tên bé] thấy sao.
+- **Cùng NHẸ** — Bạn và [tên bé] đều linh hoạt nên đổi kế hoạch dễ dàng. Chỗ dễ trượt là nhà ít nếp cố định để bé dựa vào.
+  - *Nuôi tiếp:* Chọn một nếp cố định cho [tên bé] (giờ ngủ hoặc bữa tối) và cùng giữ trong một tháng.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng NỔI** — Bạn và [tên bé] đều chú ý chi tiết nên việc được làm kỹ. Chỗ dễ trượt là cả hai cùng muốn cho đúng nên căng thẳng lúc làm bài hoặc dọn dẹp.
+  - *Nuôi tiếp:* Thống nhất với [tên bé] thế nào là “đủ rồi” cho từng việc và dừng đúng lúc đó.
+- **Cùng NHẸ** — Bạn và [tên bé] đều thoải mái nên nhà nhẹ nhàng. Chỗ dễ trượt là sót việc quan trọng như đồ dùng học tập hoặc hẹn lịch vì mỗi bên tưởng bên kia đã lo.
+  - *Nuôi tiếp:* Cùng [tên bé] chuẩn bị đồ cho ngày mai vào một giờ cố định mỗi tối.
+
+### Trẻ → người lớn
+
+#### Nhóm Chủ động (D)
+
+- **Cùng NỔI** — Con và Mẹ đều thích quyết nhanh nên làm gì cũng hăng. Chỗ dễ trượt là cả hai cùng muốn theo ý mình lúc gấp.
+  - *Nuôi tiếp:* Con thử nói trước một câu khi gấp: “Mẹ cho con nói một câu rồi Mẹ nói ạ.”
+- **Cùng NHẸ** — Con và Mẹ đều cẩn thận nên ít xảy ra va chạm. Chỗ dễ trượt là cả hai cùng chờ nhau nói trước.
+  - *Nuôi tiếp:* Con thử là người đề nghị một việc nhỏ cho cuối tuần với Mẹ, chỉ một câu.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng NỔI** — Con và Mẹ đều thích trò chuyện nên nói với nhau rất vui. Chỗ dễ trượt là cả hai cùng nói một lúc nên chẳng ai nghe hết.
+  - *Nuôi tiếp:* Con thử nói “con kể xong, Mẹ kể nhé” để mỗi người một lượt.
+- **Cùng NHẸ** — Con và Mẹ đều ít nói nên bên nhau rất yên. Chỗ dễ trượt là điều cần nói để lâu vì cả hai đều chờ.
+  - *Nuôi tiếp:* Mỗi tối con thử kể với Mẹ một điều nhỏ trong ngày, chỉ một câu.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng NỔI** — Con và Mẹ đều thích nếp quen nên rất dễ chịu bên nhau. Chỗ dễ trượt là cả hai cùng ngại thử cái mới.
+  - *Nuôi tiếp:* Con thử nói với Mẹ một điều con muốn thử, nếu con muốn.
+- **Cùng NHẸ** — Con và Mẹ đều dễ đổi nên rất linh hoạt. Chỗ dễ trượt là lịch chung hay bị lộn xộn.
+  - *Nuôi tiếp:* Con thử cùng Mẹ chọn một nếp nhỏ để giữ mỗi ngày, ví dụ bữa tối chung.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng NỔI** — Con và Mẹ đều coi trọng chi tiết nên việc làm kỹ. Chỗ dễ trượt là cả hai cùng bắt lỗi nhau.
+  - *Nuôi tiếp:* Con thử nói “việc này con làm đủ tốt rồi ạ” khi đã làm xong phần cần thiết.
+- **Cùng NHẸ** — Con và Mẹ đều thoải mái nên dễ chịu bên nhau. Chỗ dễ trượt là quên một việc quan trọng vì mỗi bên tưởng bên kia đã lo.
+  - *Nuôi tiếp:* Con thử nói với Mẹ một việc con cần nhớ cho ngày mai để người lớn ghi giúp.
+
+### Anh/chị ↔ em
+
+#### Nhóm Chủ động (D)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều muốn quyết và bắt đầu ngay nên chơi rất sôi nổi. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng muốn chọn trước nên giằng co.
+  - *Nuôi tiếp:* Chia lượt chọn với [tên người kia]: hôm nay bạn chọn, mai [tên người kia] chọn, và nói to khi đổi lượt.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều không vội chọn nên chơi nhẹ nhàng. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng “gì cũng được” nên chẳng ai bắt đầu.
+  - *Nuôi tiếp:* Đổi lượt đề xuất trước: hôm nay bạn nêu một trò, mai [tên người kia] nêu một trò.
+
+#### Nhóm Ảnh hưởng (I)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều hay kể và hay nói nên luôn có chuyện. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng nói một lúc nên chẳng ai nghe hết.
+  - *Nuôi tiếp:* Chia lượt kể với [tên người kia]: mỗi người kể trọn một chuyện, người kia chỉ được hỏi một câu.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thích ở yên nên ngồi cạnh nhau rất êm. Chỗ dễ trượt giữa bạn và [tên người kia] là nhiều điều muốn nói mà không ai bắt đầu.
+  - *Nuôi tiếp:* Mỗi ngày bạn nói với [tên người kia] một điều mình thích về hôm nay, chỉ một câu.
+
+#### Nhóm Ổn định (S)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều quen nếp nên rất dễ chơi và sống chung. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng ngại thử cái mới.
+  - *Nuôi tiếp:* Mỗi tuần thử cùng [tên người kia] một trò hoặc một cách chơi mới, chỉ một lần.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thích đổi và thử nên không bao giờ chán. Chỗ dễ trượt giữa bạn và [tên người kia] là đồ đạc và lịch chơi hay xáo trộn vì không ai giữ nếp.
+  - *Nuôi tiếp:* Chọn một việc cố định mà bạn và [tên người kia] cùng giữ mỗi ngày, ví dụ cất đồ chơi sau khi chơi.
+
+#### Nhóm Cẩn trọng (C)
+
+- **Cùng NỔI** — Bạn và [tên người kia] đều làm kỹ và đúng luật nên chơi công bằng. Chỗ dễ trượt giữa bạn và [tên người kia] là cả hai cùng bắt lỗi nhau nên mất vui.
+  - *Nuôi tiếp:* Nhắc luật một lần đầu trò chơi, sau đó bạn và [tên người kia] cùng chơi vui, không sửa nhau giữa chừng.
+- **Cùng NHẸ** — Bạn và [tên người kia] đều thoải mái nên chơi dễ chịu. Chỗ dễ trượt giữa bạn và [tên người kia] là quên luật hoặc quên cất đồ vì mỗi bên tưởng bên kia đã lo.
+  - *Nuôi tiếp:* Cùng [tên người kia] chọn một việc “ai chơi thì người đó cất” và nhắc nhau bằng một dấu hiệu vui.
+
