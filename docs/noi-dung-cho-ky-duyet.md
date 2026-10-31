@@ -677,3 +677,204 @@ Hiện ở bản tổng hợp cả nhà. “bạn” = người đang đọc; ng
 - **Người lớn nói với trẻ, khi nhóm này của bạn thấp hơn người kia:** Lần tới khi [tên người kia] hỏi thêm, thử trả lời đủ thay vì gạt đi cho xong. Câu hỏi đó thường là một cái bẫy đang được gỡ trước.
 - **Trẻ nói với người lớn, khi nhóm này của bạn thấp hơn người kia:** Khi [tên người kia] hỏi nhiều, thử trả lời hết một lượt rồi hỏi lại: “Còn gì con cần nói thêm không ạ?” Hỏi lại nhanh hơn là đoán.
 
+---
+
+## A-ĐỒNG-HÀNH. Khi hai góc nhìn về con lệch: bố mẹ làm gì mỗi ngày (BẢN NHÁP, 28.5)
+
+Nguồn: `config/disc-dong-hanh.ts`. Hiện ở màn *Hai góc nhìn về con*, dưới phần mô tả chỗ lệch.
+Người đọc là BỐ MẸ. Mọi việc là việc bố mẹ làm trước, không giao con tự sửa. Năm điều người ký xác nhận:
+
+1. Mỗi ô có tả **cả hai phía bằng một lý do có lý**, không đổ lỗi cho con hay cho bố mẹ không?
+2. Có chỗ nào đọc thành **chẩn đoán, gắn nhãn hoặc nói bản chất** của con không?
+3. Câu “Nên tránh” có đọc thành **trách bố mẹ** thay vì giúp bố mẹ nhận ra không?
+4. Việc ở bậc Tiểu học và bậc THCS có **hợp lứa tuổi** và an toàn không?
+5. Với bố mẹ đang căng thẳng, nội dung này có **an toàn** và không làm họ thấy mình là lỗi không?
+
+### Nhóm Chủ động (D)
+
+#### Khi con tự thấy mình CAO hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Ở nhà [tên con] thường chờ người lớn quyết, nên bố mẹ ít có dịp thấy con cầm trịch và nghĩ con chủ động vừa phải.
+- **Con có thể đang trải qua:** Con thấy mình có chính kiến, hay nghĩ ra cách làm, nhất là ở lớp và chỗ bạn bè. Ở nhà con có thể đang nhường vì nghĩ người lớn đã có sẵn đáp án.
+- **Dấu hiệu việc này có tác dụng:** Con tự đề xuất cách làm hoặc kể mình đã nghĩ ra cách gì ở lớp; con bớt cãi vì thấy ý mình được nghe.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Cho con chọn một việc nhỏ buổi sáng (mặc áo nào, ăn món nào trước) và để con quyết, không đổi lại.
+    - Sau giờ học: Hỏi “hôm nay ở lớp con là người nghĩ ra cách gì?” rồi chỉ nghe, đừng sửa.
+    - Trước khi ngủ: Giao con một việc của ngày mai mà con tự lên cách làm; bố mẹ chỉ hỏi “cần giúp gì không?”.
+    - Nên nói: “Việc này con muốn làm theo cách nào? Bố mẹ nghe con trước.”
+    - Nên tránh: “Người lớn nói sao thì làm vậy, đừng cãi.”
+    - Câu hỏi để hỏi con: “Ở lớp có lúc nào con là người nghĩ ra cách cho cả nhóm không? Kể bố mẹ nghe đi.”
+  - *Bậc THCS*
+    - Buổi sáng: Báo kế hoạch trong ngày bằng một câu ngắn rồi hỏi “phần nào con muốn tự sắp xếp?”, đừng giao sẵn từng bước.
+    - Sau giờ học: Hỏi về một quyết định con vừa đưa ra ở trường (nhóm, câu lạc bộ, hẹn với bạn) và “con thấy kết quả thế nào?”.
+    - Trước khi ngủ: Dành năm phút nói chuyện ngang hàng về một việc con đang cầm lái; hỏi ý con trước khi cho ý mình.
+    - Nên nói: “Chuyện này con quyết. Bố mẹ chỉ nêu một lo ngại để con cân nhắc thôi.”
+    - Nên tránh: “Con còn nhỏ, biết gì mà quyết.”
+    - Câu hỏi để hỏi con: “Nếu con là người chịu trách nhiệm chuyện này, con sẽ làm gì trước?”
+
+#### Khi con tự thấy mình THẤP hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Nhìn từ ngoài [tên con] ra yêu cầu, đòi tự làm, quyết nhanh, nên bố mẹ quen nghĩ con rất mạnh mẽ.
+- **Con có thể đang trải qua:** Con thấy mình hay đắn đo và không chắc ý mình đúng. Bên trong con có thể đang tự hỏi nhiều hơn vẻ ngoài bố mẹ nhìn thấy.
+- **Dấu hiệu việc này có tác dụng:** Con mở đầu bằng “con nghĩ là…” mà không ngó bố mẹ trước; con chịu nói ra khi chưa chắc thay vì cãi hay im.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Khen một lần con quyết nhanh và đúng việc sáng nay, nói rõ việc đó là gì, không thêm “nhưng”.
+    - Sau giờ học: Hỏi “hôm nay có việc gì con muốn làm mà chưa dám không?” và đừng vội làm giúp.
+    - Trước khi ngủ: Kể một lần chính bố mẹ cũng từng lưỡng lự rồi mới quyết, để con thấy ngập ngừng là chuyện bình thường.
+    - Nên nói: “Con chưa chắc cũng không sao. Mình thử một cách rồi xem, sai thì đổi.”
+    - Nên tránh: “Con lúc nào cũng tự tin lắm mà, sợ gì.”
+    - Câu hỏi để hỏi con: “Có việc nào con muốn tự làm nhưng chưa dám không?”
+  - *Bậc THCS*
+    - Buổi sáng: Ở việc con đang lưỡng lự, hỏi “con cần thêm gì để quyết?” thay vì “sao chưa quyết?”.
+    - Sau giờ học: Nghe chuyện con đắn đo mà không chê “nghĩ nhiều”; tóm lại một câu cho con thấy bố mẹ hiểu.
+    - Trước khi ngủ: Nói với con rằng bên ngoài có thể trông rất chắc chắn mà bên trong vẫn có lúc chưa chắc, và điều đó bình thường.
+    - Nên nói: “Bố mẹ thấy con quyết rất nhanh, và bố mẹ biết có lúc trong lòng con chưa chắc. Cần nói thì bố mẹ nghe.”
+    - Nên tránh: “Con mạnh mẽ nhất nhà, lo gì.”
+    - Câu hỏi để hỏi con: “Việc nào gần đây con đã quyết xong mà vẫn còn lăn tăn?”
+
+#### Khi hai góc nhìn khớp nhau
+
+- **Điều đang tốt đẹp:** Hai góc nhìn khớp nhau: con được thấy đúng là người có chính kiến.
+- **Nuôi tiếp:** Tiếp tục cho con những việc nhỏ để con tự quyết, và nói rõ khi nào bố mẹ cần quyết thay con, thay vì chỉ ra lệnh.
+
+### Nhóm Ảnh hưởng (I)
+
+#### Khi con tự thấy mình CAO hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Ở nhà [tên con] ít kể chuyện, nên bố mẹ nghe được ít chuyện trường lớp và nghĩ con kín tiếng.
+- **Con có thể đang trải qua:** Con thấy mình hay nói, hay kết bạn, có nhiều chuyện để kể. Có thể ở nhà chưa ai hỏi đúng lúc con muốn kể.
+- **Dấu hiệu việc này có tác dụng:** Con tự kể một chuyện trong ngày mà không cần hỏi, và chuyện con kể dài hơn trước.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Dành hai phút đầu ngày chỉ để nghe con nói bất cứ điều gì, không nhắc việc.
+    - Sau giờ học: Đón con bằng một câu mở “hôm nay chuyện gì vui nhất?” rồi đợi đủ lâu, đừng hỏi dồn nhiều câu.
+    - Trước khi ngủ: Mười phút cuối ngày để con kể tự do, cất điện thoại đi.
+    - Nên nói: “Kể tiếp đi, rồi sao nữa? Bố mẹ muốn nghe.”
+    - Nên tránh: “Nói ít thôi, làm bài đi đã.”
+    - Câu hỏi để hỏi con: “Chuyện gì hôm nay con muốn kể nhất mà chưa có dịp?”
+  - *Bậc THCS*
+    - Buổi sáng: Nhắn con một câu quan tâm bằng tin nhắn hoặc mẩu giấy, không kèm yêu cầu gì.
+    - Sau giờ học: Ngồi cạnh làm việc khác để con tự bắt chuyện; ở tuổi này con thường kể khi không bị hỏi dồn.
+    - Trước khi ngủ: Hỏi một chuyện về bạn bè của con và nghe đến hết, không đánh giá.
+    - Nên nói: “Bố mẹ có thời gian nghe con. Lúc nào con muốn kể thì nói nhé.”
+    - Nên tránh: “Chuyện trẻ con, kể làm gì.”
+    - Câu hỏi để hỏi con: “Có chuyện gì con kể được cho bạn mà chưa kể được cho nhà không?”
+
+#### Khi con tự thấy mình THẤP hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Ở nhà [tên con] vui vẻ, hay kể, nên bố mẹ nghĩ con thoải mái ở mọi nơi.
+- **Con có thể đang trải qua:** Con thấy mình ngại ở chỗ đông người và ít khi dám nói trước lớp. Sự hoạt bát ở nhà chưa chắc theo con ra ngoài.
+- **Dấu hiệu việc này có tác dụng:** Con kể có chuyện mình ngại hoặc lo ở lớp; con thử phát biểu một câu hoặc rủ một bạn.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Nói trước với con hôm nay sẽ có người lạ hay nơi đông, để con có thời gian chuẩn bị.
+    - Sau giờ học: Hỏi “có lúc nào ở lớp con muốn nói mà ngại không?” và đừng ép con phát biểu.
+    - Trước khi ngủ: Cùng con tập trước một câu có thể nói ngày mai (chào cô, xin phép, hỏi bạn).
+    - Nên nói: “Ở nhà con nói giỏi lắm. Mai ở lớp chỉ cần thử một câu thôi, thế là đủ rồi.”
+    - Nên tránh: “Sao ở nhà nói nhiều thế mà ra ngoài lại im?”
+    - Câu hỏi để hỏi con: “Nơi nào con thấy dễ nói nhất, nơi nào khó nhất?”
+  - *Bậc THCS*
+    - Buổi sáng: Đừng gọi con là “hoạt bát” trước mặt người khác; để con tự chọn lúc nào muốn nổi bật.
+    - Sau giờ học: Hỏi nhẹ về một tình huống con né, mà không bàn chuyện “phải mạnh dạn lên”.
+    - Trước khi ngủ: Nói với con rằng ngại nơi đông là chuyện của rất nhiều người, kể cả người lớn.
+    - Nên nói: “Ở nhà con thoải mái, còn ở ngoài có lúc ngại. Cả hai đều là con, bố mẹ hiểu.”
+    - Nên tránh: “Mạnh dạn lên, đừng làm mất mặt bố mẹ.”
+    - Câu hỏi để hỏi con: “Tình huống nào gần đây khiến con chỉ muốn ở yên một chỗ?”
+
+#### Khi hai góc nhìn khớp nhau
+
+- **Điều đang tốt đẹp:** Hai góc nhìn khớp nhau: con kể và kết nối ở nhà giống như ở ngoài.
+- **Nuôi tiếp:** Giữ thói quen nghe con kể cuối ngày; thử hỏi sâu thêm một lớp, ví dụ “lúc đó con thấy thế nào?”.
+
+### Nhóm Ổn định (S)
+
+#### Khi con tự thấy mình CAO hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Những lúc [tên con] phản ứng ở nhà thì bố mẹ nhớ rõ hơn những lúc con lặng lẽ nhường, nên thấy con nóng và đổi nhanh.
+- **Con có thể đang trải qua:** Con thấy mình hay nhường và giữ yên để mọi người đỡ buồn. Phần nhường đó ở ngoài thì bố mẹ ít thấy.
+- **Dấu hiệu việc này có tác dụng:** Con nói ra một điều mình đã nhường hoặc đã chịu; con bớt “nổ” bất ngờ vì đã có chỗ để nói.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Báo trước một ngày khi có thay đổi (đón muộn, đổi lịch) để con khỏi bị bất ngờ.
+    - Sau giờ học: Hỏi “hôm nay con đã nhường ai điều gì?” và nói “cảm ơn con đã nhường” khi nghe xong.
+    - Trước khi ngủ: Cho con một phút nói “điều con cố chịu hôm nay”, không sửa, không rút bài học.
+    - Nên nói: “Bố mẹ thấy hôm nay con đã nhường nhiều. Cảm ơn con. Có điều gì con muốn nói không?”
+    - Nên tránh: “Có thế mà cũng khóc, nhường em chút không được à?”
+    - Câu hỏi để hỏi con: “Hôm nay có điều gì con giữ trong lòng không?”
+  - *Bậc THCS*
+    - Buổi sáng: Cho con biết sớm lịch cả tuần để con chủ động sắp xếp, tránh đổi phút chót.
+    - Sau giờ học: Đừng hỏi dồn; mở lời bằng “hôm nay nhìn con hơi mệt” rồi chờ.
+    - Trước khi ngủ: Nói với con rằng con có quyền nói “không” hoặc “để con nghĩ” mà bố mẹ không giận.
+    - Nên nói: “Con không phải lúc nào cũng nhường. Nếu con thấy không ổn, nói với bố mẹ, bố mẹ nghe.”
+    - Nên tránh: “Con lớn rồi, phải biết nhường chứ.”
+    - Câu hỏi để hỏi con: “Có điều gì con đã chịu một mình mà muốn bố mẹ biết không?”
+
+#### Khi con tự thấy mình THẤP hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** [tên con] ít than phiền và ít đòi hỏi, nên bố mẹ thấy con điềm đạm, dễ tính và nghĩ mọi thứ ổn.
+- **Con có thể đang trải qua:** Bên trong con có thể đang sốt ruột, không thích bị giục hoặc bị đổi kế hoạch, dù vẻ ngoài vẫn yên.
+- **Dấu hiệu việc này có tác dụng:** Con nói “con cần thêm thời gian” hoặc “con chưa sẵn sàng” thay vì im; con báo trước khi thấy quá tải.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Đừng giục dồn; báo thời gian theo từng chặng (“còn mười phút nữa nhé”).
+    - Sau giờ học: Hỏi “hôm nay có lúc nào con muốn nhanh hơn hoặc chậm lại không?”.
+    - Trước khi ngủ: Cho con tự chọn thứ tự các việc tối nay thay vì sắp sẵn.
+    - Nên nói: “Con cứ làm theo nhịp của con, bố mẹ đợi. Cần nhanh thì bố mẹ sẽ nói trước.”
+    - Nên tránh: “Nhanh lên! Sao con cứ từ từ thế?”
+    - Câu hỏi để hỏi con: “Khi bị giục, trong người con thấy thế nào?”
+  - *Bậc THCS*
+    - Buổi sáng: Hỏi ý con trước khi đổi kế hoạch cuối tuần; nếu buộc phải đổi, nói lý do.
+    - Sau giờ học: Con im không có nghĩa là con ổn; hỏi “hôm nay thế nào?” thay cho “ổn chứ?”.
+    - Trước khi ngủ: Mười phút ngồi với con, không việc gì và không màn hình.
+    - Nên nói: “Bố mẹ biết con hay không nói khi sốt ruột. Cứ nói “con cần thêm thời gian” là bố mẹ hiểu.”
+    - Nên tránh: “Con thế nào cũng được nhỉ, dễ tính mà.”
+    - Câu hỏi để hỏi con: “Việc nào gần đây con muốn bố mẹ đừng giục hoặc đừng đổi?”
+
+#### Khi hai góc nhìn khớp nhau
+
+- **Điều đang tốt đẹp:** Hai góc nhìn khớp nhau: nhịp đều và sự điềm đạm của con được nhìn thấy đúng.
+- **Nuôi tiếp:** Vẫn báo trước khi có thay đổi; thỉnh thoảng hỏi riêng “có điều gì con đang chịu không?” vì con ít tự nói.
+
+### Nhóm Cẩn trọng (C)
+
+#### Khi con tự thấy mình CAO hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** Ở đồ đạc và việc nhà [tên con] ít chỉn chu, nên bố mẹ chưa thấy phần kỹ lưỡng con dành cho việc con thật sự quan tâm.
+- **Con có thể đang trải qua:** Con thấy mình kỹ ở việc con coi trọng và dễ khó chịu khi làm dở. Ở việc con không để tâm thì con buông.
+- **Dấu hiệu việc này có tác dụng:** Con kể về một việc mình làm kỹ và vì sao; con thử cách chia nhỏ ở một việc nhà.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Cho con xem việc trong ngày bằng bảng nhỏ hoặc hình; con thích biết việc nào tới trước.
+    - Sau giờ học: Hỏi “hôm nay con làm kỹ việc gì nhất?” và khen đúng chỗ kỹ đó.
+    - Trước khi ngủ: Cùng con chọn đúng một việc nhà để làm đến nơi đến chốn, với tiêu chí đơn giản (ví dụ sách xếp theo thứ tự).
+    - Nên nói: “Bố mẹ thấy con làm việc này rất kỹ. Việc nhà mình làm vừa đủ thôi, không cần hoàn hảo.”
+    - Nên tránh: “Sao ở nhà con bừa bộn thế?”
+    - Câu hỏi để hỏi con: “Việc nào con thấy phải làm cho đúng, việc nào làm tạm cũng được?”
+  - *Bậc THCS*
+    - Buổi sáng: Thống nhất sớm một tiêu chí “xong” cho việc nhà (một câu, nhìn là biết) thay vì nhắc “dọn cho gọn”.
+    - Sau giờ học: Hỏi về một việc con làm kỹ và con học được gì; không gạn hỏi sang việc chưa làm.
+    - Trước khi ngủ: Cho con một mục tiêu nhỏ cho ngày mai và để con tự chọn cách kiểm.
+    - Nên nói: “Bố mẹ thấy con kỹ ở việc con coi trọng. Việc nhà mình chốt một chuẩn vừa phải nhé.”
+    - Nên tránh: “Con lười việc nhà, chỉ biết lo cho mình.”
+    - Câu hỏi để hỏi con: “Với việc nhà, thế nào là “đủ rồi” theo con?”
+
+#### Khi con tự thấy mình THẤP hơn bố mẹ thấy
+
+- **Bố mẹ có thể đang thấy:** [tên con] ít khi làm hỏng việc, nên bố mẹ thấy con chỉn chu, cẩn thận và nghĩ con yên tâm về mình.
+- **Con có thể đang trải qua:** Con thấy mình luôn còn chỗ chưa trọn và khắt khe với chính mình. Vẻ chỉn chu bố mẹ thấy có thể đi cùng nhiều lo lắng bên trong.
+- **Dấu hiệu việc này có tác dụng:** Con dám nộp một việc khi chưa hoàn hảo; con nói “thế này cũng được rồi” về một việc.
+  - *Bậc Tiểu học*
+    - Buổi sáng: Nói trước một câu chấp nhận: “hôm nay làm được phần nào cũng được, không cần hoàn hảo”.
+    - Sau giờ học: Khi con tẩy xoá nhiều, nói “bố mẹ thấy con rất cố gắng” thay vì “sao bẩn thế”.
+    - Trước khi ngủ: Kể một lỗi nhỏ bố mẹ vừa mắc và cách bố mẹ sửa, để con thấy mắc lỗi là chuyện bình thường.
+    - Nên nói: “Chỗ này con làm được vậy là ổn rồi. Lần sau mình thử cách khác.”
+    - Nên tránh: “Con phải làm cho thật đúng, đừng để bố mẹ thất vọng.”
+    - Câu hỏi để hỏi con: “Lúc nào con thấy mình làm chưa trọn vẹn?”
+  - *Bậc THCS*
+    - Buổi sáng: Khen quá trình và cách con xử lý lúc gặp lỗi, đừng chỉ khen kết quả hoàn hảo.
+    - Sau giờ học: Hỏi nhẹ “hôm nay con đã bỏ qua cho mình điều gì chưa?”, đừng biến thành bài giảng.
+    - Trước khi ngủ: Đặt giới hạn thời gian cho một việc con hay làm mãi (ví dụ bài tập) rồi hỏi “đủ rồi chứ?”.
+    - Nên nói: “Bố mẹ không cần con hoàn hảo. Bố mẹ cần con khoẻ và vui.”
+    - Nên tránh: “Cố thêm chút nữa là trọn vẹn rồi, sao dừng ở đây?”
+    - Câu hỏi để hỏi con: “Điều gì làm con khó bỏ qua cho mình khi làm chưa trọn?”
+
+#### Khi hai góc nhìn khớp nhau
+
+- **Điều đang tốt đẹp:** Hai góc nhìn khớp nhau: sự kỹ lưỡng của con được bố mẹ nhìn thấy.
+- **Nuôi tiếp:** Giữ tiêu chí rõ ràng, và cùng con tập chấp nhận “đủ rồi” ở những việc không quan trọng.
+

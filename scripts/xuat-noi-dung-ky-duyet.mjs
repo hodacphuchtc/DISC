@@ -46,6 +46,9 @@ const { MO_TA_LECH, THOA_THUAN, VIEC_CUA_TOI, TRUNG_KHOP } = await import(
 const { TINH_HUONG_DOI, KE_HOACH_BAY_NGAY, MOI_QUAN_HE } = await import(
   new URL("config/disc-noi-dung-doi.ts", GOC).href
 );
+const { DONG_HANH_CHUNG, DONG_HANH_THEO_BAC, DONG_HANH_TRUNG_KHOP } = await import(
+  new URL("config/disc-dong-hanh.ts", GOC).href
+);
 const { thayDaiTuCap } = await import(new URL("config/disc-lech-cap.ts", GOC).href);
 const { TRUC } = await import(new URL("config/disc-tu-dien.ts", GOC).href);
 const { thayChuThe } = await import(new URL("modules/report/dien-giai.ts", GOC).href);
@@ -214,6 +217,52 @@ for (const t of TRUC_MA) {
       p(`- **${TEN_THE_QUYEN[q]}, ${HUONG_NHAN[h]}:** ${thayDaiTuCap(VIEC_CUA_TOI[t][h][q], q, TEN_KIA)}`);
     }
   }
+  p("");
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GÓI A, PHẦN ĐỒNG HÀNH — khi hai góc nhìn về CON lệch nhau, bố mẹ làm gì mỗi ngày (28.5).
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const TEN_CON = "[tên con]";
+const dienCon = (c) => c.split("{ten}").join(TEN_CON);
+const TEN_HUONG_DH = {
+  "con-cao-hon": "con tự thấy mình CAO hơn bố mẹ thấy",
+  "con-thap-hon": "con tự thấy mình THẤP hơn bố mẹ thấy",
+};
+
+p("---", "");
+p("## A-ĐỒNG-HÀNH. Khi hai góc nhìn về con lệch: bố mẹ làm gì mỗi ngày (BẢN NHÁP, 28.5)", "");
+p("Nguồn: `config/disc-dong-hanh.ts`. Hiện ở màn *Hai góc nhìn về con*, dưới phần mô tả chỗ lệch.");
+p("Người đọc là BỐ MẸ. Mọi việc là việc bố mẹ làm trước, không giao con tự sửa. Năm điều người ký xác nhận:", "");
+p("1. Mỗi ô có tả **cả hai phía bằng một lý do có lý**, không đổ lỗi cho con hay cho bố mẹ không?");
+p("2. Có chỗ nào đọc thành **chẩn đoán, gắn nhãn hoặc nói bản chất** của con không?");
+p("3. Câu “Nên tránh” có đọc thành **trách bố mẹ** thay vì giúp bố mẹ nhận ra không?");
+p("4. Việc ở bậc Tiểu học và bậc THCS có **hợp lứa tuổi** và an toàn không?");
+p("5. Với bố mẹ đang căng thẳng, nội dung này có **an toàn** và không làm họ thấy mình là lỗi không?", "");
+for (const t of TRUC_MA) {
+  p(`### Nhóm ${TRUC[t].ten} (${t})`, "");
+  for (const h of ["con-cao-hon", "con-thap-hon"]) {
+    const c = DONG_HANH_CHUNG[t][h];
+    p(`#### Khi ${TEN_HUONG_DH[h]}`, "");
+    p(`- **Bố mẹ có thể đang thấy:** ${dienCon(c.boMeThay)}`);
+    p(`- **Con có thể đang trải qua:** ${dienCon(c.conThay)}`);
+    p(`- **Dấu hiệu việc này có tác dụng:** ${dienCon(c.dauHieu)}`);
+    for (const b of ["TH", "THCS"]) {
+      const o = DONG_HANH_THEO_BAC[t][h][b];
+      p(`  - *Bậc ${b === "TH" ? "Tiểu học" : "THCS"}*`);
+      p(`    - Buổi sáng: ${dienCon(o.sang)}`);
+      p(`    - Sau giờ học: ${dienCon(o.sauGioHoc)}`);
+      p(`    - Trước khi ngủ: ${dienCon(o.truocKhiNgu)}`);
+      p(`    - Nên nói: ${dienCon(o.nenNoi)}`);
+      p(`    - Nên tránh: ${dienCon(o.nenTranh)}`);
+      p(`    - Câu hỏi để hỏi con: ${dienCon(o.cauHoi)}`);
+    }
+    p("");
+  }
+  p(`#### Khi hai góc nhìn khớp nhau`, "");
+  p(`- **Điều đang tốt đẹp:** ${DONG_HANH_TRUNG_KHOP[t].giu}`);
+  p(`- **Nuôi tiếp:** ${DONG_HANH_TRUNG_KHOP[t].nuoiTiep}`);
   p("");
 }
 

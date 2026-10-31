@@ -77,6 +77,27 @@ describe("M5 — vùng lệch", () => {
   });
 });
 
+describe("28.5 — hướng lệch bằng CHỮ, không bắt đoán dấu +/−", () => {
+  it("con tự thấy cao hơn ⇒ nói rõ ai cao hơn và bao nhiêu điểm", () => {
+    ve(capDayDu); // D: con 80, bố mẹ 35 ⇒ lệch +45
+    const dong = [...document.querySelectorAll('[data-thu="huong-lech"]')].map((e) => e.textContent);
+    expect(dong).toHaveLength(4);
+    expect(dong[0]).toBe("Con tự thấy cao hơn bố mẹ thấy 45 điểm");
+  });
+
+  it("bố mẹ thấy cao hơn ⇒ nói ngược lại", () => {
+    ve(capDayDu); // I: con 30, bố mẹ 70 ⇒ lệch −40
+    const dong = [...document.querySelectorAll('[data-thu="huong-lech"]')].map((e) => e.textContent);
+    expect(dong[1]).toBe("Bố mẹ thấy cao hơn con tự thấy 40 điểm");
+  });
+
+  it("trục khớp nhau ⇒ 'Hai góc nhìn gần nhau', không nêu số điểm", () => {
+    ve(capDayDu); // C: con 55, bố mẹ 52 ⇒ lệch +3
+    const dong = [...document.querySelectorAll('[data-thu="huong-lech"]')].map((e) => e.textContent);
+    expect(dong[3]).toBe("Hai góc nhìn gần nhau");
+  });
+});
+
 describe("🔴 M5 — KHÔNG BAO GIỜ hiện màn hình rỗng", () => {
   it("thiếu bài bố mẹ ⇒ mời làm, nói rõ số câu và thời gian", () => {
     ve([bai("THCS", { D: 80, I: 30, S: 40, C: 55 })]);

@@ -1,7 +1,7 @@
 "use client";
 
 import { NutQuayLai } from "@/app/components/nut-quay-lai";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 
 import { CHU_DOI_CHIEU } from "@config/disc-doi-chieu";
 import { NGUONG_VUNG_LECH } from "@config/disc-nguong";
@@ -12,6 +12,12 @@ import { napBoDe } from "@modules/core/bo-de/nap";
 import { docTatCa } from "@modules/core/luu-tru/kho-bai";
 import { doiChieu, type KetQuaDoiChieu, type LyDoChuaGhep } from "@modules/report/doi-chieu";
 import { boDeConTuLam } from "@modules/test/dinh-tuyen";
+
+/**
+ * 28.5 — khối "đồng hành cùng con" NẠP LƯỜI (gói chính còn dư rất ít so với trần 300 KB).
+ * `export default` ở `dong-hanh-voi-con.tsx` là điều `lazy` đòi.
+ */
+const DongHanhVoiCon = lazy(() => import("@/app/components/dong-hanh-voi-con"));
 
 /** Tính vùng lệch cho một biệt danh, đọc thẳng từ kho. */
 export function useDoiChieu(maTre: string | null) {
@@ -151,6 +157,18 @@ export function ManVungLech({
                       />
                       {TRUC[h.truc].ten}
                     </span>
+                    {/* 28.5 — hướng lệch bằng chữ ngay dưới tên trục. */}
+                    <span
+                      data-thu="huong-lech"
+                      className="mt-0.5 block text-[12px] leading-snug font-normal text-neutral-600"
+                    >
+                      {h.mucLech === "trungKhop"
+                        ? CHU_DOI_CHIEU.huongGanNhau
+                        : (h.lech > 0 ? CHU_DOI_CHIEU.huongConCao : CHU_DOI_CHIEU.huongBoMeCao).replace(
+                            "{so}",
+                            String(Math.abs(Math.round(h.lech))),
+                          )}
+                    </span>
                   </th>
                   <td className="py-3 text-right text-neutral-700 tabular-nums">
                     {h.diemCon.toFixed(0)}
@@ -189,6 +207,19 @@ export function ManVungLech({
               nhìn thấy đang rất gần nhau.
             </p>
           )}
+
+          {/* 28.5 — "vậy bố mẹ làm gì mỗi ngày?". NẠP LƯỜI: ~130 chuỗi này chỉ cần khi mở màn
+              này, còn gói chính chỉ dư vài KB. Nội dung vào DOM ngay khi màn mở, nên bản in có đủ. */}
+          <Suspense fallback={null}>
+            <DongHanhVoiCon
+              ten={maTre}
+              bac={ketQua.baiCon.boDe === "THCS" ? "THCS" : "TH"}
+              trucLech={ketQua.dienGiai.flatMap((d) => {
+                const h = ketQua.bang.find((b) => b.truc === d.truc);
+                return h ? [{ truc: d.truc, huong: h.huong }] : [];
+              })}
+            />
+          </Suspense>
 
           {/* 🔴 CÂU KẾT BẮT BUỘC (§8.4). Không được rút gọn, không được bỏ. */}
           <p
