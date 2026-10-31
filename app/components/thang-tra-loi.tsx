@@ -53,8 +53,10 @@ export function ThangTraLoi({
               to
                 ? "flex min-h-[56px] items-center gap-3 px-4 text-[18px]"
                 : "min-h-[44px] px-3.5 text-[14px]",
+              // GĐ27.2 — nút đang chọn nổi hẳn: nền tím đặc, mép sáng, viền cam bao ngoài.
+              // `ring` KHÔNG phải bóng đã đặt tên nên không vi phạm luật chỉ-dùng-token-bóng.
               dangChon
-                ? "border-transparent font-semibold text-white"
+                ? "border-transparent font-semibold text-white shadow-nut-chinh ring-2 ring-cam-nang-luong ring-offset-2"
                 : "border-neutral-300 text-neutral-800 hover:bg-neutral-50",
             ].join(" ")}
             style={{
@@ -80,18 +82,35 @@ export function ThanhTienTrinh({
   phanTram,
   daLam,
   tong,
+  trenNenToi = false,
 }: {
   readonly phanTram: number;
   readonly daLam: number;
   readonly tong: number;
+  /** Đặt trong mảng `data-nhan-toi`: chữ sáng, rãnh mờ, thanh cam phát sáng nhẹ (GĐ27). */
+  readonly trenNenToi?: boolean;
 }) {
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <span className="text-[13px] font-semibold text-neutral-700 tabular-nums">
+        <span
+          className={
+            trenNenToi
+              ? "text-[13px] font-semibold text-chu-tren-toi tabular-nums"
+              : "text-[13px] font-semibold text-neutral-700 tabular-nums"
+          }
+        >
           Câu {Math.min(daLam + 1, tong)}/{tong}
         </span>
-        <span className="text-[13px] text-neutral-600 tabular-nums">{phanTram}%</span>
+        <span
+          className={
+            trenNenToi
+              ? "text-[13px] text-chu-mo-tren-toi tabular-nums"
+              : "text-[13px] text-neutral-600 tabular-nums"
+          }
+        >
+          {phanTram}%
+        </span>
       </div>
       <div
         role="progressbar"
@@ -99,11 +118,19 @@ export function ThanhTienTrinh({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Tiến độ làm bài"
-        className="mt-1.5 h-2 overflow-hidden rounded-full bg-neutral-200"
+        data-phan-doan={trenNenToi ? "" : undefined}
+        className={
+          trenNenToi
+            ? "mt-1.5 h-2 overflow-hidden rounded-full bg-white/15"
+            : "mt-1.5 h-2 overflow-hidden rounded-full bg-neutral-200"
+        }
       >
         <div
           className="h-full rounded-full transition-[width] duration-300 motion-reduce:transition-none"
-          style={{ width: `${phanTram}%`, backgroundColor: MAU.timCongNghe }}
+          style={{
+            width: `${phanTram}%`,
+            backgroundColor: trenNenToi ? MAU.camNangLuong : MAU.timCongNghe,
+          }}
         />
       </div>
     </div>

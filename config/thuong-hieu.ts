@@ -35,6 +35,15 @@ export const MAU = {
    * nói *"bấm tôi"* — mà đây là nút xoá sạch cả nhà, không lấy lại được.
    */
   doCanhBao: "#B3261E",
+  /**
+   * 🔴 MẢNG NHẤN TỐI (GĐ27, chốt 30/10/2026) — NGOẠI LỆ HẸP của luật "cấm nền tối nặng".
+   * Chỉ dùng cho khối `data-nhan-toi` (đầu màn, thẻ kết quả); thân trang và mọi bản in vẫn
+   * nền sáng. Hai màu chữ bên dưới CHỈ được đặt lên `nenToi`, đo ≥ 4,5:1 trong
+   * `tests/nen-toi.test.ts`. Khớp `@theme` của `app/globals.css`.
+   */
+  nenToi: "#1A0630",
+  chuTrenToi: "#F5EDFF",
+  chuMoTrenToi: "#CDB8E3",
   /** Nền của mục đang mở trên thanh bên (DISC_BA.md §5.1). */
   timRatNhat: "rgba(97, 11, 138, 0.09)",
   muc: "#171717",

@@ -139,16 +139,18 @@ export function LamBai({
   return (
     <section className="max-w-2xl px-5 py-8 md:px-12 md:py-12">
       {/* Máy giáo viên đi qua nhiều gia đình — luôn nói rõ đang làm bài của AI (QĐ7). */}
-      <h1 className="mb-5 text-[13px] font-semibold tracking-widest text-neutral-600 uppercase">
-        {boDe.ten} · {bietDanh}
-      </h1>
+      <div data-nhan-toi className="px-5 py-5 md:px-6">
+        <h1 className="mb-4 text-[13px] font-semibold tracking-widest text-chu-mo-tren-toi uppercase">
+          {boDe.ten} · {bietDanh}
+        </h1>
 
-      <ThanhTienTrinh
-        phanTram={phanTramXong(boDe, traLoi)}
-        daLam={daLam}
-        tong={boDe.cau.length}
-      />
-
+        <ThanhTienTrinh
+          phanTram={phanTramXong(boDe, traLoi)}
+          daLam={daLam}
+          tong={boDe.cau.length}
+          trenNenToi
+        />
+      </div>
       {moLaiNhap && (
         <p role="status" className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
           style={{ backgroundColor: MAU.timRatNhat, color: MAU.timCongNghe }}>

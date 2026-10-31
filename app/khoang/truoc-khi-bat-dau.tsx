@@ -4,6 +4,7 @@ import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { useState } from "react";
 
 import { HopGiaiThich } from "@/app/components/the-doi-tuong";
+import { ChipBonTruc } from "@/app/components/chip-bon-truc";
 import { CHU_CHON, CHU_TRUOC_KHI_BAT_DAU, PHUT_UOC_LUONG } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import type { BoDe } from "@modules/core/bo-de/kieu";
@@ -88,12 +89,16 @@ export function TruocKhiBatDau({
         </div>
       )}
 
-      <p className="mt-6 text-[11px] tracking-widest text-neutral-600 uppercase">
-        {boDe.ten} · {boDe.cau.length} câu
-      </p>
-      <h1 className="mt-2 text-[26px] leading-[1.15] font-extrabold tracking-tight text-neutral-900 md:text-[32px]">
-        {CHU_TRUOC_KHI_BAT_DAU.tieuDe}
-      </h1>
+      <div data-nhan-toi className="mt-6 px-5 py-6 md:px-8 md:py-8">
+        <p className="text-[11px] tracking-widest text-chu-mo-tren-toi uppercase">
+          {boDe.ten} · {boDe.cau.length} câu
+        </p>
+        <h1 className="mt-2 text-[26px] leading-[1.15] font-extrabold tracking-tight text-chu-tren-toi md:text-[32px]">
+          {CHU_TRUOC_KHI_BAT_DAU.tieuDe}
+        </h1>
+        {/* Bốn chip trang trí — màu lấy từ TRUC, không chữ thật nên ẩn khỏi trình đọc màn hình. */}
+        <ChipBonTruc className="mt-5" />
+      </div>
 
       <dl className="mt-8 space-y-4">
         {CHU_TRUOC_KHI_BAT_DAU.danDo.map((d) => (

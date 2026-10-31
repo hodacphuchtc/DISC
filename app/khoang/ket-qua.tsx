@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { BieuDoCot } from "@/app/components/bieu-do-cot";
+import { BieuDoRadar } from "@/app/components/bieu-do-radar";
+import { ChipBonTruc } from "@/app/components/chip-bon-truc";
 import { KhoiMaMoi } from "@/app/components/khoi-ma-moi";
 import { MO_MA_MOI } from "@config/disc-nguong";
 import { CapNhanVat, NhanVat } from "@/app/components/nhan-vat";
@@ -208,7 +210,14 @@ export function ManKetQua({
         motViec={motViecNgay}
       />
 
-      <section aria-label={CHU_M4.nhanBieuDo} className="mt-9">
+      {/* Radar đứng NGOÀI vùng có nhãn: nó chỉ là bản nhìn, ẩn khỏi trình đọc màn hình, và
+          bốn con số thật nằm ở biểu đồ cột ngay dưới. */}
+      <div data-nhan-toi className="mt-9 px-3 py-4">
+        <BieuDoRadar diem={ketQua.diem} noiBat={noiBat} />
+        <ChipBonTruc className="mt-1 justify-center" diem={ketQua.diem} />
+      </div>
+
+      <section aria-label={CHU_M4.nhanBieuDo} className="mt-6">
         <BieuDoCot diem={ketQua.diem} noiBat={noiBat} />
       </section>
 

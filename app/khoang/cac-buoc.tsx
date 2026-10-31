@@ -26,6 +26,7 @@ import { KhoangNhaMinh } from "./nha-minh";
 import { KhoangPhanTich } from "./phan-tich";
 import { useKhoDoi } from "@/app/dung-kho-doi";
 import { MinhHoa } from "@/app/components/nhan-vat";
+import { ChipBonTruc } from "@/app/components/chip-bon-truc";
 import { KhoiGiuDuLieu } from "@/app/components/khoi-giu-du-lieu";
 import { NutQuayLai } from "@/app/components/nut-quay-lai";
 import { NhacSaoLuu, daNhacSaoLuu } from "@/app/components/nhac-sao-luu";
@@ -163,15 +164,19 @@ export function KhoangCacBuoc() {
 
   return (
     <div data-thu="khung-buoc" className={`${KHUNG.trang} ${KHUNG.dem}`}>
-      <p className="text-[11px] tracking-widest text-neutral-600 uppercase">
-        {CHU_BUOC.nhanTren}
-      </p>
-      <h1 className="mt-2 text-[26px] leading-[1.15] font-extrabold tracking-tight text-neutral-900 md:text-[30px]">
-        {CHU_BUOC.tieuDe}
-      </h1>
-      {/* 🔴 Dòng mô tả giữ KHUNG ĐỌC dù khung ngoài đã nới — nó là chữ, và chữ dài
-          hết bề ngang màn 1920px thì mắt lạc dòng. Nới cái cần nới, giữ cái cần giữ. */}
-      <p className={`mt-1.5 text-[15px] text-neutral-600 ${KHUNG.doc}`}>{CHU_BUOC.moTa}</p>
+      {/* GĐ27.2 — mảng nhấn tối: màn đầu tiên khách nhìn thấy. */}
+      <div data-nhan-toi className="px-5 py-6 md:px-8 md:py-8">
+        <p className="text-[11px] tracking-widest text-chu-mo-tren-toi uppercase">
+          {CHU_BUOC.nhanTren}
+        </p>
+        <h1 className="mt-2 text-[26px] leading-[1.15] font-extrabold tracking-tight text-chu-tren-toi md:text-[34px]">
+          {CHU_BUOC.tieuDe}
+        </h1>
+        {/* 🔴 Dòng mô tả giữ KHUNG ĐỌC dù khung ngoài đã nới — nó là chữ, và chữ dài
+            hết bề ngang màn 1920px thì mắt lạc dòng. Nới cái cần nới, giữ cái cần giữ. */}
+        <p className={`mt-1.5 text-[15px] text-chu-mo-tren-toi ${KHUNG.doc}`}>{CHU_BUOC.moTa}</p>
+        <ChipBonTruc className="mt-5" />
+      </div>
 
       {/* 🔴 NHỊP CHÚC MỪNG chỉ hiện khi MỌI người trong sổ đã xong, và nhà có ít nhất
           hai người — một nhà một người thì "cả nhà đã làm xong" là một câu nói dối nhỏ,

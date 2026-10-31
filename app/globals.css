@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-/* Bộ nhận diện SATA ROBO — Brand DNA cấm nền tối nặng, cấm đổi màu logo. */
+/* Bộ nhận diện SATA ROBO — cấm đổi màu logo. Cấm nền tối toàn trang; ngoại lệ hẹp 30/10/2026:
+   mảng nhấn `data-nhan-toi` (xem khối "AURORA" bên dưới). */
 @theme {
   --color-tim-cong-nghe: #610b8a;
   --color-tim-cong-nghe-phu: #6b21a8;
@@ -8,6 +9,11 @@
   --color-logo-sata: #ff6f00;
   --color-logo-robo: #800080;
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+
+  /* Mảng nhấn tối (GĐ27) — khớp MAU.nenToi / chuTrenToi / chuMoTrenToi. */
+  --color-nen-toi: #1a0630;
+  --color-chu-tren-toi: #f5edff;
+  --color-chu-mo-tren-toi: #cdb8e3;
 
   /* ── ĐỘ NỔI (18.5) ─────────────────────────────────────────────────────────
      🔴 XOÁ THANG BÓNG MẶC ĐỊNH TRƯỚC. Bóng của Tailwind là bóng ĐEN trung tính; sản phẩm
@@ -90,6 +96,73 @@
   }
 }
 
+/* ── MẢNG NHẤN TỐI "AURORA" (GĐ27) ────────────────────────────────────────────
+   Hero/thẻ kết quả nền tím đậm + lưới mạch điện + ánh cam. Bọc @layer components vì cùng
+   lý do khối trên: CSS trần thắng cả utilities.
+   🔴 Chỉ để TRANG TRÍ MẢNG NHẤN. Chữ đặt lên đây dùng `text-chu-tren-toi` /
+   `text-chu-mo-tren-toi` (đã đo tương phản). Bản in được trả về nền sáng ở khối in
+   bên dưới — không in nền tối, tốn mực và mất chữ. */
+@layer components {
+  [data-nhan-toi] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    color: var(--color-chu-tren-toi);
+    background:
+      radial-gradient(70% 90% at 10% -15%, rgba(255, 111, 0, 0.3), transparent 60%),
+      radial-gradient(80% 100% at 100% 0%, rgba(160, 60, 220, 0.5), transparent 62%),
+      linear-gradient(160deg, #1a0630, #0f0420);
+  }
+
+  [data-nhan-toi]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(#000, transparent 80%);
+    -webkit-mask-image: linear-gradient(#000, transparent 80%);
+  }
+
+  /* Thanh tiến độ phân đoạn (27.2): mười ô, cắt bằng mặt nạ nên con số phần trăm vẫn liên tục. */
+  [data-phan-doan] {
+    -webkit-mask-image: repeating-linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(10% - 3px),
+      transparent calc(10% - 3px),
+      transparent 10%
+    );
+    mask-image: repeating-linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(10% - 3px),
+      transparent calc(10% - 3px),
+      transparent 10%
+    );
+  }
+
+  /* Chip D/I/S/C kiểu vi mạch — chỉ trang trí (aria-hidden ở chỗ dùng). */
+  [data-chip-disc] {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.65rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(145deg, var(--chip-mau), #2b0a45);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+      0 0 16px color-mix(in srgb, var(--chip-mau) 65%, transparent);
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -115,6 +188,23 @@ body {
   html,
   body {
     background: #fff;
+  }
+
+  /* 🔴 GĐ27 — giấy không có nền tối: trả mảng nhấn về nền sáng, chữ đen, bỏ lưới và chip.
+     Chữ trong mảng dùng màu sáng nên phải ép `inherit`, nếu không in ra chữ trắng trên giấy. */
+  [data-nhan-toi] {
+    background: #fff !important;
+    color: #171717 !important;
+    border: 1px solid #e5e5e5;
+  }
+
+  [data-nhan-toi]::before,
+  [data-chip-disc] {
+    display: none !important;
+  }
+
+  [data-nhan-toi] * {
+    color: inherit !important;
   }
 
   /* Thanh bên và các nút hành động không có nghĩa trên giấy. */
@@ -247,5 +337,52 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ── Chuyển động của mảng nhấn tối (GĐ27) — đặt CUỐI file có chủ đích: tests/do-noi cắt khối in
+   tới lần xuất hiện đầu tiên của `prefers-reduced-motion`, nên khối này không được đứng trước nó. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-nhan-toi]::before {
+    animation: luoi-troi 16s linear infinite;
+  }
+
+  [data-chip-disc] {
+    animation: chip-tho 3.2s ease-in-out infinite;
+  }
+
+  @keyframes luoi-troi {
+    to {
+      background-position:
+        0 28px,
+        28px 0;
+    }
+  }
+
+  @keyframes chip-tho {
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 0 24px color-mix(in srgb, var(--chip-mau) 90%, transparent);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Radar kết quả bung ra từ tâm (GĐ27.3). Toạ độ tâm khớp TAM trong bieu-do-radar.tsx. */
+  [data-radar-da] {
+    transform-origin: 160px 130px;
+    animation: radar-bung 1.1s 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  @keyframes radar-bung {
+    from {
+      transform: scale(0.1);
+      opacity: 0.2;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
   }
 }
