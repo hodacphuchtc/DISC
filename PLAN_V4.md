@@ -4,42 +4,41 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**31/10/2026 — GĐ27 (giao diện Aurora + nội dung gia đình): TOÀN BỘ PHẦN MÁY ĐÃ LÀM, CHƯA AI NHÌN.**
+**31/10/2026 — GĐ27 + GĐ28: TOÀN BỘ PHẦN MÁY ĐÃ LÀM, CHƯA AI BẤM THỬ.**
 
-**1. Vừa xong.** Chủ dự án chọn phương án 2 "Aurora công nghệ" (30/10). Đã có: mảng nhấn tối
-`data-nhan-toi` (token + lưới + chip + in về nền sáng) · hero ở khung "DISC gia đình", màn
-"Trước khi bắt đầu", đầu màn làm bài · nút trả lời đang chọn nổi hẳn · radar + chip điểm ở
-Kết quả · tiêu đề mỗi bản ở Cả nhà · nội dung vợ↔chồng / anh-chị↔em (`config/disc-noi-dung-doi.ts`,
-cờ `MO_NOI_DUNG_DOI`) · hồ sơ ký có thêm A-CẶP, B4, B5. **1.579 test xanh**, build xanh,
-gói chính **294 KB / 300** — 🔴 CHỈ CÒN ~6 KB, hạng mục sau muốn thêm gì phải đo lại.
+**1. Vừa xong.** GĐ27 (giao diện Aurora, đã push `c1d4ede`) và **GĐ28** (CHƯA commit): hạn mức 2 bản
+MỖI LOẠI · sổ bản đã làm trên thẻ · thông báo "đã xong, bản thứ N" · sửa chọn bản · bảng kiểm
+"bộ test đã đủ chưa" (chặn mềm) · giao diện GẬP ("Lời khuyên dành cho {tên}", bấm mới xổ) ·
+đồng hành hằng ngày cho hai góc nhìn về con (128 chuỗi, nạp lười) · khung nhắc test lại 6 tháng
++ tệp lịch .ics. **1.821 test xanh**, build xanh, gói chính **298 KB / 300** — 🔴 CÒN ~2 KB.
 
-**2. Đang dở.** Không còn việc máy ở GĐ27. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu`
-(cổng 3100) ở 320/390 px và cửa sổ rộng, rồi bấm In ở một kết quả. Chưa tick 27.1–27.5.
+**2. Đang dở.** Không còn việc máy ở GĐ27/GĐ28. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu`
+(cổng 3100) với dữ liệu bịa: nhà 4 người (2 lớn, 1 bé lớp 4, 1 bé mầm non). Không ô nào tick.
 
-**3. Chặn ở NGƯỜI / NGOÀI.** Như cũ (`26.1`, `26.2`, hai chữ ký) **cộng**: B5 (nội dung mới
-của 27.5) chưa ai ký; hai hồ sơ ký đã ĐỔI nội dung — nếu đã gửi bản cũ phải gửi lại.
+**2b. Để NGOÀI lần này (cần anh quyết hoặc làm sau):** nút "sang người/bản kế tiếp" ở thông báo đã xong ·
+khối "Hiểu nhau để thương nhau hơn" ở bước 3 (xung đột với luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
+
+**3. Chặn ở NGƯỜI / NGOÀI.** `26.1` Cloudflare + tên miền · `26.2` bảy việc bấm GĐ18 · hai chữ ký.
+🔴 **Hồ sơ ký đổi nội dung 2 lần trong phiên này** (A-CẶP, A-ĐỒNG-HÀNH, B4, B5) — gửi lại nếu đã gửi.
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- Node v26 có `localStorage` thử nghiệm che jsdom ⇒ ~180 test đỏ giả. Đã chặn bằng
-  `execArgv` trong `vitest.config.mts` (chỉ thêm cờ khi Node biết cờ).
-- `semgrep` CHƯA CÀI trên máy này nên bước cuối của `npm run kiem` không chạy được.
-- Xuất ảnh/PDF vẽ từ dữ liệu, KHÔNG đọc DOM ⇒ thẻ tối không ảnh hưởng chúng.
-- `tests/do-noi` cắt khối in tới `prefers-reduced-motion` đầu tiên ⇒ khối animation của mảng
-  tối đặt CUỐI `globals.css` có chủ đích. Đừng dời lên.
-- `ban-tong-hop.test` cấm câu ≥ 60 ký tự dùng chung giữa hai chiều của một cặp ⇒ mọi câu dài
-  của nội dung cặp phải mang `{toi}`/`{nguoiKia}`.
-- Khảo sát ghi sai: `mo-dau.tsx` là ba khối đầu BẢN BÁO CÁO, không phải màn chào.
+- Gói chính: `disc-noi-dung-doi` (nội dung cặp) và `disc-dong-hanh` PHẢI nạp lười (`React.lazy`); đưa
+  về gói nạp ngay là chạm trần. Chunk lười có mặt trong `out/danh-sach-cache.json`, không trong index.html.
+- Hạn mức đếm theo (người, LOẠI): bé có tối đa 4 bản. `loaiCuaBoDe` (core) phải khớp `laBanQuanSat` (test canh).
+- Màn đối chiếu hai góc nhìn vẫn đòi hai bài cách nhau ≤ 60 ngày; thẻ báo đúng điều đó (lấy từ `doiChieu`).
+- Node v26: `execArgv` trong `vitest.config.mts`; `semgrep` chưa cài (CI chạy).
+- Lazy + test đồng bộ: mô-đun đã nạp ở test trước thì test sau render ĐỒNG BỘ ⇒ đừng dùng `<h2>` mới trong
+  khối lười (test M5 đếm h2).
 
-**5. Cạm bẫy** — `docs/so-seo.md`; chưa thêm bài mới ở phiên này (nên thêm: *nội dung cặp phải
-mang tên người; test cắt khối in theo chuỗi*).
+**5. Cạm bẫy** — `docs/so-seo.md` (đã thêm 4 bài mới của GĐ28).
 
-**6. 🔴 CHƯA COMMIT, CHƯA PUSH.** Toàn bộ GĐ27 còn ở cây làm việc (điểm dừng bắt buộc).
+**6. 🔴 GĐ28 CHƯA COMMIT.** (Commit/push chờ chủ dự án duyệt.)
 
 **7. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 1.579 test (semgrep sẽ báo thiếu — bình thường trên máy này)
+npm run kiem      # 1.821 test (semgrep báo thiếu — bình thường trên máy này)
 npm run xem-thu   # cổng 3100
-node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung cặp
+node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung cặp / đồng hành
 ```
 
 ---
@@ -403,6 +402,70 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   - **(d)** 1,5 ngày.
   - **(e) chặn:** NGƯỜI — viết được ngay nhưng **chỉ phát cho khách thật sau khi chuyên
     môn ký Gói B**; trước đó tắt khối này ở bản phát.
+
+---
+
+## 🔴 GIAI ĐOẠN 28 — Bộ test hoàn chỉnh trước, phân tích sau; hai góc nhìn về con; nhắc test lại
+
+> Chốt 31/10/2026 từ lời chủ dự án: làm bài xong phải có thông báo và đếm bản · rõ ai chưa
+> làm, làm mấy bản, loại nào · bé có HAI góc nhìn (con tự làm / bố mẹ làm cho con) phải so
+> được và bố mẹ biết làm gì mỗi ngày · phân tích chỉ nên vào sau khi bộ test đã đủ · nhắc test
+> lại mỗi 6 tháng thật to và rõ · dashboard gọn, chi tiết bấm mới xổ. Quyết định đã hỏi:
+> **chặn MỀM** · **khung nhắc + tệp lịch .ics** · **2 bản MỖI LOẠI** (không còn gộp).
+> 🔴 Không ô nào tick: (b) của mọi ô là *bấm thật trên máy*, chưa ai bấm.
+
+- [ ] **28.0 — Hạn mức 2 bản MỖI LOẠI**
+  - **(a)** `LoaiBai` suy từ bộ đề (`han-muc.ts`), `baiSapMat/donBaiThanhVien` nhận `loai`; hộp
+    thoại nói đúng góc nhìn đang đầy. Không thêm trường, không tăng `PHIEN_BAN_KHO`.
+  - **(b)** Bé lớp 3+ làm đủ 4 bản, làm thêm bản bố mẹ ⇒ chỉ bản bố mẹ cũ nhất bị hỏi xoá.
+  - **(c)** `tests/han-muc-theo-loai.test.tsx` (kể cả fake-indexeddb). **(d)** 0,4 ngày.
+  - **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **28.1 — Sổ bản đã làm trên thẻ + dòng tóm tắt bước 1**
+  - **(a)** `do-day-du-bo-test.ts` (đủ/thiếu LẤY TỪ `doiChieu`, không dựng luật thứ hai) · thẻ hiện
+    "Con tự làm … / Bố mẹ làm cho con …" kèm ngày · bước 1 hiện "3/4 người đủ bản · Còn thiếu: …".
+  - **(c)** `do-day-du-bo-test.test.ts` (có test nhất quán với `doiChieu` mọi tổ hợp), `khung-test-lai.test.tsx`.
+  - **Tiến độ 31/10:** PHẦN MÁY XONG. Đổi chữ "n/2 bài" cũ (sai với bé có 4 bản).
+
+- [ ] **28.2 — Thông báo "đã xong, đây là bản thứ N"**
+  - **(a)** `thong-bao-da-xong.tsx` ở đầu màn kết quả của bài VỪA làm: bản thứ mấy của loại nào,
+    cả nhà còn thiếu ai; lưu hỏng thì báo thật (cờ `luuHong` tách khỏi "đang lưu").
+    🔴 **Chưa làm (kế hoạch có):** nút nhảy thẳng sang người/bản kế tiếp — cần truyền callback từ
+    `disc.tsx` ra khung các bước; hiện người dùng bấm *Quay lại* về thẻ rồi chọn. Đã dọn
+    `module.config.json` (hết trỏ tới `lich-su.tsx` đã mất).
+  - **(c)** `thong-bao-da-xong.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG (trừ nút kế tiếp).
+
+- [ ] **28.3 — Sửa lỗ hổng chọn bản**
+  - **(a)** `chon-ban.ts`: mặc định bản HỢP LỆ MỚI NHẤT bất kể loại (đúng lời chủ dự án); ô chọn ghi
+    loại + "(mới nhất)/(bản cũ)/(không dùng được)"; thẻ thành viên dùng CÙNG bộ chọn. Trước đó bản
+    mới nhất hỏng ⇒ cả người bị loại. ❓ **Câu hỏi mở cho chủ dự án:** với bé có cả hai góc nhìn, phân
+    tích cả nhà nên ưu tiên bản bé TỰ LÀM hơn bản mới nhất không? (Từng làm rồi gỡ vì ngoài kế hoạch.)
+  - **(c)** `chon-ban.test.ts`, `ban-tong-hop.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
+  - 🔴 Đổi hành vi mặc định của phân tích với bé có cả hai loại bài (trước: bản mới nhất bất kể loại).
+
+- [ ] **28.4 — Cổng phân tích MỀM + giao diện gập**
+  - **(a)** `bang-kiem-day-du.tsx` ("Bộ test đã đủ chưa?") đầu bước 3, nhãn "chưa đủ bản" ở cặp
+    thiếu; `khoi-gap.tsx`; tiêu đề đổi thành **"Lời khuyên dành cho {tên}"**; mỗi người và mỗi cặp là
+    MỘT hàng gập có tóm tắt. "Bảy ngày thử" nêu đích danh ai được khuyên.
+  - **(c)** `khoi-gap.test.tsx`, `khung-test-lai.test.tsx`, `ban-tong-hop.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **28.5 — Hai góc nhìn về con: lời khuyên ĐỒNG HÀNH hằng ngày**
+  - **(a)** `config/disc-dong-hanh.ts` (128 chuỗi: 8 ô chung + 16 ô theo bậc TH/THCS + 4 trùng khớp) ·
+    `dong-hanh-voi-con.tsx` NẠP LƯỜI trong `vung-lech.tsx` · kế hoạch tuần 4 việc · hồ sơ Gói A mục A-ĐỒNG-HÀNH.
+  - Bảng hai góc nhìn nay có **câu chữ hướng lệch** ("Con tự thấy cao hơn bố mẹ thấy 22 điểm").
+  - **(c)** `dong-hanh.test.tsx` (24 test: đủ ô, luật ngôn ngữ, lazy). **(e) chặn:** NGƯỜI — bản NHÁP Gói A, chưa ai ký.
+  - **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **28.6 — Nhắc test lại mỗi 6 tháng**
+  - **(a)** `han-test-lai.ts` + `lich-nhac.ts` (.ics theo RFC 5545, KHÔNG chứa tên ai) + `khung-test-lai.tsx`
+    ở đầu bảng gia đình, đầu bước 3 và màn kết quả; đổi cam khi đến hạn; nút "Thêm vào lịch điện thoại".
+  - **(c)** `han-test-lai.test.ts` (31/08+6 tháng = 28/02, quá hạn, gập dòng theo byte UTF-8). **Tiến độ 31/10:** PHẦN MÁY XONG.
+
+- [ ] **28.7 — Sổ + hồ sơ**
+  - **(a)** Hồ sơ ký đổi nội dung LẦN NỮA (thêm A-CẶP, A-ĐỒNG-HÀNH, B4, B5) · nhật ký · sổ sẹo · bàn giao.
+    🔴 **KHÔNG làm, cần chủ dự án quyết:** khối "Hiểu nhau để thương nhau hơn" ở đầu bước 3 — chú thích
+    `CHU_THONG_DIEP` ghi thông điệp nhân văn CHỈ ở bảng gia đình (rải nhiều chỗ thành khẩu hiệu).
+  - **Tiến độ 31/10:** XONG.
 
 ---
 

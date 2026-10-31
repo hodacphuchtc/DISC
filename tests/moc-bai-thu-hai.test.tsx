@@ -49,6 +49,11 @@ async function lamTronBai(bietDanh: string, ma: MaBoDeThu = "TH") {
       await waitFor(async () => {
         expect((await docTatCa()).some((b) => b.maTre === bietDanh)).toBe(true);
       });
+      // 🔴 Mốc được ghi Ở NỀN, SAU khi bài vào kho (`.then` của `luuBai` còn một lượt đọc kho
+      // nữa). Kiểm ngay khi bài vừa xuất hiện là chạy đua với chính việc cần đo — từng xanh
+      // chỉ vì khoang chưa có thêm lượt đọc kho nào xếp hàng trước mốc. Đợi hàng đợi kho
+      // trống rồi mới tháo màn.
+      await new Promise((xong) => setTimeout(xong, 150));
       man.unmount();
       return;
     }

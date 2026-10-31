@@ -279,3 +279,14 @@
   khi hạn trôi qua: luôn lấy ngày hôm nay.
 - **Khảo sát bằng agent có thể gán nhầm tên file (30/10/2026).** Báo cáo ghi `mo-dau.tsx` là màn
   chào; thực ra nó là ba khối đầu BẢN BÁO CÁO. Màn chào thật là `cac-buoc.tsx`. Đọc file trước khi sửa.
+- **Hạn mức bài gộp mọi loại làm mất một góc nhìn (31/10/2026, GĐ28.0).** `GIOI_HAN_BAI_MOI_NGUOI = 2`
+  áp cho cả bản tự làm lẫn bản quan sát của MỘT người. Bé lớp 3+ có hai góc nhìn là đã đầy, và test
+  lại xoá bản cũ nhất — có thể là bản của góc nhìn kia. Phải tính theo (người, loại).
+- **`React.lazy` làm test đồng bộ hành xử khác nhau theo thứ tự chạy (31/10/2026).** Lần render đầu bị
+  treo (Suspense); từ lần sau mô-đun đã nạp nên render ĐỒNG BỘ. Một khối lười thêm `<h2>` mới làm test
+  đếm `h2` của màn Vùng lệch vỡ có điều kiện. Khối lười dùng cấp tiêu đề khác với chỗ đang được đếm.
+- **Cảnh báo "chưa lưu được" phải tách khỏi "đang lưu" (31/10/2026).** `idBai === null` gộp hai trạng
+  thái; dùng nó làm điều kiện cảnh báo thì mọi bài đều nháy cảnh báo sai vài mili-giây. Thêm cờ riêng.
+- **Test mốc nền cần đợi hàng đợi kho trống (31/10/2026).** Mốc `baiThuHai` ghi ở nền SAU khi bài vào
+  kho; kiểm ngay là chạy đua, và chỉ xanh khi chưa có lượt đọc kho nào xếp hàng trước. Thêm một khối
+  đọc kho ở màn kết quả là đủ làm nó đỏ — đợi rồi mới kiểm.

@@ -16,7 +16,7 @@
  * Chạy: `npm run check:goi` (cần `out/` — tức là phải build trước).
  */
 
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 
 /** Mốc đo được ngày 28/08/2026 sau khi thêm jspdf nạp lười: 287 KB gzip. */
@@ -73,6 +73,34 @@ if (kb > TRAN_KB_GZIP) {
       `   và phải nói rõ trong commit vì sao người dùng 3G nên chịu thêm.`,
   );
   hong = true;
+}
+
+/**
+ * 🔴 MỌI CHUNK NẠP LƯỜI PHẢI NẰM TRONG DANH SÁCH CACHE (28.x). Khối đồng hành, nội dung mối
+ * quan hệ và `jspdf` đều nạp bằng `import()`: chúng KHÔNG có trong `index.html` nên cổng trên
+ * không thấy, và nếu service worker không precache thì mất mạng là khối đó biến mất một cách im
+ * lặng. Đối chiếu từng tệp .js của `out/_next/static/chunks` với `out/danh-sach-cache.json`.
+ */
+if (existsSync("out/danh-sach-cache.json")) {
+  const cache = readFileSync("out/danh-sach-cache.json", "utf8");
+  const thieu = [];
+  const quet = (thuMuc) => {
+    for (const ten of readdirSync(thuMuc)) {
+      const day = `${thuMuc}/${ten}`;
+      if (statSync(day).isDirectory()) quet(day);
+      else if (ten.endsWith(".js") && !cache.includes(ten)) thieu.push(day);
+    }
+  };
+  if (existsSync("out/_next/static/chunks")) quet("out/_next/static/chunks");
+  if (thieu.length > 0) {
+    console.error(
+      `❌ ${thieu.length} chunk .js KHÔNG có trong out/danh-sach-cache.json: ${thieu.join(", ")}\n` +
+        `   Mở app khi mất mạng sẽ thiếu các khối này. Xem scripts/sinh-danh-sach-cache.mjs.`,
+    );
+    hong = true;
+  } else {
+    console.log("✅ Mọi chunk nạp lười đều có trong danh sách cache offline.");
+  }
 }
 
 if (hong) process.exit(1);
