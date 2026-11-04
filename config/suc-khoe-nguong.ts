@@ -7,10 +7,10 @@
 
 /**
  * 🔴 CỜ BẬT THẺ SỨC KHOẺ. Nội dung lời khuyên là BẢN NHÁP, chưa có chữ ký Gói C
- * (nhi khoa / dinh dưỡng) ⇒ giữ `false` với người dùng thật. Đặt `false`, dựng lại là thẻ
+ * (nhi khoa / dinh dưỡng) ⇒ BẬT từ 04/11/2026 theo quyết định của chủ dự án (tab trên thanh bên); đổi lại `false` trước khi phát cho người dùng thật nếu Gói C chưa ký. Đặt `false`, dựng lại là thẻ
  * biến mất; dữ liệu đã nhập vẫn còn trong IndexedDB.
  */
-export const MO_SUC_KHOE = false;
+export const MO_SUC_KHOE = true;
 
 /**
  * Địa chỉ `?suc-khoe=1` mở thẻ để XEM THỬ khi cờ còn tắt.

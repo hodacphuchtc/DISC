@@ -5,6 +5,8 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { ThanhBen } from "./components/thanh-ben";
 import { KhoangCacBuoc } from "./khoang/cac-buoc";
 import { KhoangSoLieu } from "./khoang/so-lieu";
+import { KhoangTuSach } from "./khoang/tu-sach";
+import type { MaTab } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import {
   lyDoKhoHong,
@@ -40,6 +42,8 @@ export default function Trang() {
    * `tests/so-suc-khoe.test.ts`) và vào việc chưa ai biết tới nó.
    */
   const [moSucKhoe, datMoSucKhoe] = useState(MO_SUC_KHOE);
+  /** Tab đang mở trên thanh bên (04/11/2026): DISC · Sức khoẻ cả nhà · Tủ sách gia đình. */
+  const [tab, datTab] = useState<MaTab>("disc");
 
   // 🔴 DI TRÚ v1 → v2 (ADR-007). Chạy LƯỜI, một lần, ở transaction thường — cố ý KHÔNG
   // làm trong `onupgradeneeded`. Xem `modules/core/luu-tru/kho-bai.ts` để biết vì sao.
@@ -68,7 +72,7 @@ export default function Trang() {
 
   return (
     <div className="flex min-h-dvh flex-col md:flex-row">
-      <ThanhBen />
+      <ThanhBen tab={tab} onChon={datTab} />
       <main className="min-w-0 flex-1">
         {khoHong && (
           <p
@@ -80,12 +84,14 @@ export default function Trang() {
             {CHU_KHO_HONG[khoHong]}
           </p>
         )}
-        {moSoLieu ? <KhoangSoLieu /> : <KhoangCacBuoc />}
-        {moSucKhoe && !moSoLieu && (
+        {/* Khoang DISC luôn được dựng, chỉ ẩn khi đổi tab — để bài đang làm dở không mất. */}
+        <div hidden={tab !== "disc"}>{moSoLieu ? <KhoangSoLieu /> : <KhoangCacBuoc />}</div>
+        {tab === "suc-khoe" && moSucKhoe && (
           <Suspense fallback={null}>
             <KhoangSucKhoe />
           </Suspense>
         )}
+        {tab === "tu-sach" && <KhoangTuSach />}
       </main>
     </div>
   );

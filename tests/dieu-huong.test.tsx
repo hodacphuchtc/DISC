@@ -1,4 +1,4 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import Trang from "../app/page";
@@ -88,24 +88,38 @@ afterEach(async () => {
 });
 
 describe("thanh bên", () => {
-  it("còn đúng MỘT mục", async () => {
+  it("có BA tab: DISC · Sức khoẻ cả nhà · Tủ sách gia đình, DISC đang mở", async () => {
     await moTrang();
-    expect(document.querySelectorAll('[data-thu="muc-khoang"]')).toHaveLength(1);
-    expect(document.querySelector('[data-thu="muc-khoang"]')).toHaveTextContent(
-      TEN_KHOANG.disc,
-    );
+    const tab = [...document.querySelectorAll('[data-thu="muc-khoang"]')];
+    expect(tab.map((t) => t.getAttribute("data-ma"))).toEqual(["disc", "suc-khoe", "tu-sach"]);
+    expect(tab[0]).toHaveTextContent(TEN_KHOANG.disc);
+    expect(tab[1]).toHaveTextContent(TEN_KHOANG["suc-khoe"]);
+    expect(tab[2]).toHaveTextContent(TEN_KHOANG["tu-sach"]);
+    expect(tab[0]!.getAttribute("aria-current")).toBe("page");
+    expect(tab[1]!.getAttribute("aria-current")).toBeNull();
   });
 
-  it("🔴 mục đó KHÔNG phải nút — một nút không dẫn tới đâu là lời hứa suông", async () => {
+  it("🔴 mỗi tab là NÚT thật, và bấm vào thì hiện đúng khoang", async () => {
     await moTrang();
-    expect(document.querySelector('[data-thu="muc-khoang"]')!.tagName).not.toBe("BUTTON");
+    const nut = (ma: string) =>
+      document.querySelector(`[data-thu="muc-khoang"][data-ma="${ma}"]`) as HTMLButtonElement;
+    expect(nut("tu-sach").tagName).toBe("BUTTON");
+    expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeNull();
 
-    // 🔴 Hỏi TRONG THANH BÊN, không hỏi cả trang. "Nhà mình" nay VẪN là một nút — nhưng
-    // là tấm bước 1 trong khung các bước, đúng chỗ của nó. Hỏi cả trang thì cửa kiểm này
-    // cấm luôn thứ nó lẽ ra phải cho phép.
-    const thanhBen = document.querySelector("aside")!;
-    expect(thanhBen.querySelectorAll("button")).toHaveLength(0);
-    expect(thanhBen.textContent).not.toContain("Số liệu");
+    fireEvent.click(nut("tu-sach"));
+    expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeTruthy();
+    expect(nut("tu-sach").getAttribute("aria-current")).toBe("page");
+    expect(nut("disc").getAttribute("aria-current")).toBeNull();
+
+    fireEvent.click(nut("suc-khoe"));
+    expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeNull();
+    expect(nut("suc-khoe").getAttribute("aria-current")).toBe("page");
+
+    // Quay về DISC: các tấm bước vẫn còn nguyên, không bị dựng lại từ đầu.
+    fireEvent.click(nut("disc"));
+    expect(tam("nha-minh")).toBeTruthy();
+    // Thanh bên không dẫn đi trang khác và không có mục Số liệu.
+    expect(document.querySelector("aside")!.textContent).not.toContain("Số liệu");
   });
 });
 

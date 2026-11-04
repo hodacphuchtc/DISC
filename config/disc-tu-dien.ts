@@ -23,11 +23,21 @@ import { MAU } from "./thuong-hieu";
  * Giá trị `"lich-su"` còn sót trong `localStorage` của máy người dùng cũ **không gây hại**
  * — nay không ai đọc khoá đó nữa, trang luôn mở vào khung ba bước.
  */
-export const TEN_KHOANG = { disc: "DISC" } as const;
+export const TEN_KHOANG = {
+  disc: "DISC",
+  "suc-khoe": "Sức khoẻ cả nhà",
+  "tu-sach": "Tủ sách gia đình",
+} as const;
 
 export const MO_TA_KHOANG = {
   disc: "Cả nhà hiểu nhau hơn qua bốn nhóm hành vi",
+  "suc-khoe": "Theo dõi BMI và gợi ý ăn, vận động, nghỉ cho từng người",
+  "tu-sach": "Sách giáo khoa và vở bài tập lớp 1–12, đọc ngay trong ứng dụng",
 } as const;
+
+/** Ba tab trên thanh bên (04/11/2026): bấm tab nào hiện đúng khoang đó. */
+export const MA_TAB = ["disc", "suc-khoe", "tu-sach"] as const;
+export type MaTab = (typeof MA_TAB)[number];
 
 /**
  * Cửa sau vào màn *Số liệu máy này*: `?so-lieu=1` (V2.1).

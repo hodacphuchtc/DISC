@@ -1,6 +1,14 @@
 "use client";
 
-import { CHU, MA_TRUC, MO_TA_KHOANG, TEN_KHOANG, TRUC } from "@config/disc-tu-dien";
+import {
+  CHU,
+  MA_TAB,
+  MA_TRUC,
+  MO_TA_KHOANG,
+  TEN_KHOANG,
+  TRUC,
+  type MaTab,
+} from "@config/disc-tu-dien";
 import { MAU, MAU_LOGO } from "@config/thuong-hieu";
 
 /* ── Icon ─────────────────────────────────────────────────────────────────── */
@@ -46,6 +54,24 @@ function IconDisc({ dangMo }: { readonly dangMo: boolean }) {
   );
 }
 
+function IconTim() {
+  return (
+    <svg {...CHUNG_ICON} aria-hidden="true">
+      <path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2Z" />
+      <path d="M7.5 12.5h2.2l1.2-2.4 2 4.2 1.3-1.8h2.3" />
+    </svg>
+  );
+}
+
+function IconSach() {
+  return (
+    <svg {...CHUNG_ICON} aria-hidden="true">
+      <path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v12.5H7.5A2.5 2.5 0 0 1 5 17V4.5Z" />
+      <path d="M5 17a2.5 2.5 0 0 1 2.5-2.5H18" />
+    </svg>
+  );
+}
+
 function IconKhien() {
   return (
     <svg
@@ -72,19 +98,27 @@ function IconKhien() {
  * phễu. Một thanh điều hướng còn đúng một đích thì không điều hướng đi đâu cả — nó là
  * nhãn thương hiệu, nên bỏ luôn `onChon` thay vì để một callback không ai gọi.
  */
-export function ThanhBen() {
+interface ThanhBenProps {
+  readonly tab?: MaTab;
+  readonly onChon?: (ma: MaTab) => void;
+}
+
+function IconTab({ ma, dangMo }: { readonly ma: MaTab; readonly dangMo: boolean }) {
+  if (ma === "disc") return <IconDisc dangMo={dangMo} />;
+  return ma === "suc-khoe" ? <IconTim /> : <IconSach />;
+}
+
+/**
+ * 🔴 BA TAB (04/11/2026, thay quyết định V2.1 "một mục, không phải nút"): DISC · Sức khoẻ cả
+ * nhà · Tủ sách gia đình. Bấm tab nào hiện đúng khoang đó. Tab đang mở là `aria-current`.
+ * Trên điện thoại ba tab xếp một hàng cuộn ngang dưới logo; từ `md:` xếp dọc ở cột trái.
+ */
+export function ThanhBen({ tab = "disc", onChon }: ThanhBenProps = {}) {
   return (
     <aside
-      /* 🔴 Bóng CHỈ ở dải hẹp. Trên điện thoại đây là thanh TRÊN CÙNG, bóng đổ xuống đúng
-         hướng và tách nó khỏi nội dung. Trên máy tính nó là cột trái, đã có `md:border-r`
-         nên bóng thành thừa — và một cột cao hết màn mà đổ bóng ngang thì trông lệch. */
       className="w-full shrink-0 border-b border-neutral-200 bg-white shadow-noi-1 md:h-dvh md:w-[264px] md:border-r md:border-b-0 md:shadow-none"
       style={{ borderColor: MAU.vienMo }}
     >
-      {/* 🔴 TRÊN ĐIỆN THOẠI THU THÀNH MỘT DÒNG. Thanh này nay chỉ còn MỘT mục, nhưng ở
-          dải hẹp nó vẫn chiếm một dải ngang đầu màn: logo một dòng, dòng phụ một dòng,
-          rồi tấm mục một dòng nữa. Ba dòng cho một thứ không bấm được đi đâu, trong khi
-          thứ người dùng cần thấy — thẻ của từng người — bị đẩy xuống dưới nếp gấp. */}
       <div className="flex h-full flex-row items-center gap-3 px-4 py-3 md:flex-col md:items-stretch md:gap-0 md:px-3 md:py-6">
         <header className="min-w-0 px-1">
           <p className="text-2xl leading-none font-extrabold tracking-tight">
@@ -96,28 +130,42 @@ export function ThanhBen() {
           </p>
         </header>
 
-        <div className="ml-auto min-w-0 md:mt-7 md:ml-0 md:flex-1">
-          {/* Một mục, đang mở, không bấm được đi đâu — nên là một tấm nhãn, không phải
-              một nút. Nút không dẫn tới đâu là lời hứa suông với ngón tay người dùng. */}
-          <div
-            data-thu="muc-khoang"
-            data-ma="disc"
-            className="flex w-full items-start gap-2.5 rounded-xl px-2.5 py-1.5 font-semibold md:px-3 md:py-2.5"
-            style={{ backgroundColor: MAU.timRatNhat, color: MAU.timCongNghe }}
-          >
-            <span className="mt-px shrink-0">
-              <IconDisc dangMo />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[14px] whitespace-nowrap md:text-[15px]">
-                {TEN_KHOANG.disc}
-              </span>
-              <span className="mt-0.5 hidden text-[11px] leading-snug font-normal text-neutral-600 md:block">
-                {MO_TA_KHOANG.disc}
-              </span>
-            </span>
-          </div>
-        </div>
+        <nav
+          aria-label="Chọn phần ứng dụng"
+          className="ml-auto flex min-w-0 flex-row gap-1.5 overflow-x-auto md:mt-7 md:ml-0 md:flex-1 md:flex-col md:gap-1 md:overflow-visible"
+        >
+          {MA_TAB.map((ma) => {
+            const dangMo = ma === tab;
+            return (
+              <button
+                key={ma}
+                type="button"
+                data-thu="muc-khoang"
+                data-ma={ma}
+                aria-current={dangMo ? "page" : undefined}
+                onClick={() => onChon?.(ma)}
+                className="flex shrink-0 items-start gap-2.5 rounded-xl px-2.5 py-1.5 text-left font-semibold transition-colors motion-reduce:transition-none md:w-full md:px-3 md:py-2.5"
+                style={
+                  dangMo
+                    ? { backgroundColor: MAU.timRatNhat, color: MAU.timCongNghe }
+                    : { color: "#404040" }
+                }
+              >
+                <span className="mt-px shrink-0">
+                  <IconTab ma={ma} dangMo={dangMo} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14px] whitespace-nowrap md:text-[15px]">
+                    {TEN_KHOANG[ma]}
+                  </span>
+                  <span className="mt-0.5 hidden text-[11px] leading-snug font-normal text-neutral-600 md:block">
+                    {MO_TA_KHOANG[ma]}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </nav>
 
         <div className="hidden rounded-xl border border-neutral-200 px-3 py-3 md:block">
           <p className="flex items-start gap-2 text-[12px] leading-snug font-semibold text-neutral-700">
