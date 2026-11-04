@@ -45,7 +45,7 @@ export function KhoangTuSach() {
         <iframe
           data-thu="khung-tu-sach"
           title={TEN_KHOANG["tu-sach"]}
-          src={DUONG_TU_SACH}
+          src={`${DUONG_TU_SACH}index.html`}
           className="mt-5 h-[78dvh] w-full rounded-2xl border bg-white"
           style={{ borderColor: MAU.vienMo }}
         />
