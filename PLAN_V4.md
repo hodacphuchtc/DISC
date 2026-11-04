@@ -4,34 +4,34 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**04/11/2026 — GĐ31 (thanh bên 3 tab): PHẦN MÁY XONG, ĐÃ PUSH (`791a9b2`), CHƯA AI BẤM THỬ.**
+**04/11/2026 — GĐ31 (thanh bên 3 tab + trình đọc Tủ sách): PHẦN MÁY XONG. Đã push `791a9b2`, `f5ff696`; CHƯA push `ee5eaf2`, `6e748f8` (DISC) và `ac28ca2` (KHO_SACH).**
 
-**1. Vừa xong.** GĐ31: cột trái có 3 tab **DISC · Sức khoẻ cả nhà · Tủ sách gia đình** (nút thật). Khoang DISC giữ
-nguyên khi đổi tab. Tab Sức khoẻ: cờ `MO_SUC_KHOE` nay `true` (chủ dự án quyết). Tab Tủ sách: iframe `/tu-sach/` nhúng
-bản dựng KHO_SACH. **2.270 test xanh**, build xanh, gói chính **299 / 300 KB** (chỉ còn 1 KB dư!). GĐ30 (thẻ sức khoẻ)
-đã push `cbd943c` từ phiên trước.
+**1. Vừa xong.** Cột trái 3 tab **DISC · Sức khoẻ cả nhà · Tủ sách gia đình** (`MO_SUC_KHOE=true`, nội dung còn nháp). Tab Tủ sách nhúng KHO_SACH
+bằng iframe, **nạp lười**. Trình đọc (KHO_SACH): vừa khung, toàn màn hình, zoom tự do, **Tải toàn bộ**, hộp không bị che (mục `31.5`).
+**2.270 test xanh** (DISC), 34/34 (KHO_SACH), gói chính **298/300 KB**.
 
-**2. Đang dở / làm tiếp từ đâu.** Không còn việc máy ngoài `30.1`, `31.4`. Chủ dự án BẤM thử trên máy:
-`node scripts/gan-tu-sach.mjs` (một lần; cần `../KHO_SACH/dist` — nếu thiếu: `npm run dung` bên KHO_SACH) rồi `npm run dev`
-→ http://localhost:3000. Mã: `app/components/thanh-ben.tsx` · `app/page.tsx` · `app/khoang/tu-sach.tsx` · `config/disc-tu-dien.ts` (`MA_TAB`).
+**2. Đang dở / làm tiếp từ đâu.** Không còn việc máy ngoài `30.1`, `31.4`. Chủ dự án BẤM thử: máy chủ đang chạy
+http://localhost:3000 (DISC, `npm run dev`) + http://localhost:4310 (KHO_SACH, `npm run tu-sach`; cần `../KHO_SACH/dist`).
+Mã: `app/components/thanh-ben.tsx` · `app/page.tsx` · `app/khoang/tu-sach.tsx` · `scripts/{gan,chay}-tu-sach.mjs` · KHO_SACH `src/app.js`.
 
-**3. Chặn ở NGƯỜI / NGOÀI.** `31.4` (NGOÀI): CSP + cổng `/api/anh` + SW cho `/tu-sach/` khi deploy; cần Cloudflare (`26.1`)
-và NXB đồng ý bằng văn bản. Trong DISC dev, nút "Tải PDF" của Tủ sách chưa chạy (thiếu `/api/anh`); đọc sách vẫn chạy.
-`30.1` bảng WHO · Gói C (chặn việc phát tab Sức khoẻ cho người dùng thật — đặt `MO_SUC_KHOE=false` nếu chưa ký) · `26.1` · `26.2` ·
-Gói A/B · `LICENSE` · `public/brand/` (mascot + logo SATA ROBO trong repo CÔNG KHAI — chờ xác nhận).
+**3. Chặn ở NGƯỜI / NGOÀI.** `31.4` (NGOÀI): CSP + `/api/anh` + SW cho `/tu-sach/` khi deploy (cần Cloudflare `26.1` + NXB đồng ý
+văn bản, `KHO_SACH/docs/PHAP-LY.md`); KHO_SACH `_headers` đang `frame-ancestors none` — phải mở cho gốc DISC khi nhúng thật.
+`30.1` bảng WHO · Gói C (đặt `MO_SUC_KHOE=false` nếu chưa ký trước khi phát) · `26.1` · `26.2` · Gói A/B · `LICENSE` ·
+`public/brand/` (mascot + logo SATA ROBO trong repo CÔNG KHAI — chờ xác nhận). Chưa push: cần chủ dự án duyệt.
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- Gói chính 299/300 KB: thêm `tu-sach.tsx` + 3 icon tốn ~1 KB. Tính năng tiếp theo vào trang chính PHẢI nạp lười.
-- `public/tu-sach/` ~30 MB, đã gitignore — KHÔNG commit (ảnh bìa NXB, repo công khai). Mascot gốc ở `MASTER SATA ROBO/config/brand-assets/`.
-- `semgrep` chưa cài ở máy (CI chạy). Chrome không đổi cỡ viewport nên chưa kiểm màn hẹp.
+- Gói chính 298/300 KB: tab Tủ sách PHẢI nạp lười (không lười thì 299 KB). Tính năng mới vào trang chính cũng vậy.
+- Tải toàn bộ thật: Hóa học 11, 78 trang → 1 file 53 MB, 12 giây. Cuốn 240 trang trên điện thoại cũ chưa thử (có thể thiếu RAM; có tải từng phần).
+- `public/tu-sach/` ~30 MB, gitignore — KHÔNG commit (ảnh bìa NXB, repo công khai). NXB giới hạn tải 281/313 cuốn.
+- `semgrep` chưa cài (CI chạy). Chrome extension không đổi cỡ viewport; kiểm màn hẹp bằng CDP `KHO_SACH/tam/cdp2.mjs`.
 
-**5. Cạm bẫy.** `transition-*` mới BẮT BUỘC kèm `motion-reduce:transition-none` (test `mau-va-chuyen-dong` đỏ nếu quên).
-`sed -i` kiểu GNU hỏng trên macOS — dùng `node -e`. Bài cũ: `docs/so-seo.md` (grep "suc-khoe\|height:auto").
+**5. Cạm bẫy.** Next dev không tự mở `index.html` thư mục → iframe phải trỏ `/tu-sach/index.html`. Chrome thử giữ service worker cũ:
+mỗi lần kiểm dùng hồ sơ `--user-data-dir` MỚI. `transition-*` mới BẮT BUỘC có `motion-reduce:transition-none`. `sed -i` GNU hỏng trên macOS → `node -e`.
 
 **6. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 2.270 test (semgrep báo thiếu — bình thường)
-npm run dev       # sau `node scripts/gan-tu-sach.mjs`; xem 3 tab
+npm run kiem                 # DISC 2.270 test (semgrep báo thiếu — bình thường)
+npm run dev & npm run tu-sach  # xem 3 tab; Tủ sách cần KHO_SACH đã `npm run dung`
 ```
 
 ---
@@ -579,6 +579,12 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   `../KHO_SACH/dist` → `public/tu-sach/` (gitignore: ảnh bìa có bản quyền NXB) · **(c)** test tab ở
   `dieu-huong.test.tsx` · **(d)** 0,5 ngày.
   - (b) chờ anh: NGƯỜI — xem thử trên máy: `npm run dev` → bấm tab Tủ sách.
+- [x] **31.5 — Trình đọc Tủ sách: vừa khung · toàn màn hình · zoom · Tải toàn bộ** · **(a)** (mã ở KHO_SACH
+  `src/app.js`, `src/app.css`, commit `ac28ca2`) xem nguyên trang vừa khung (mặc định), nút Toàn màn hình, zoom 50–400%
+  (nút, Ctrl+lăn, chụm, nhấp đúp), hộp trượt cuộn được + thanh Đóng luôn thấy, nút **Tải toàn bộ** (tải từng phần
+  gập lại); DISC: tab dò máy chủ KHO_SACH :4310 (có `/api/anh`), `npm run tu-sach`, tab nạp lười (`6e748f8`) ·
+  **(c)** KHO_SACH `npm run kiem` 34/34 + Chrome tự động (cdp2/cdp3) đạt; DISC 2.270 test xanh · **(d)** 1 ngày.
+  - (b) chờ anh: NGƯỜI — bấm thử trên điện thoại thật (chụm zoom, toàn màn hình, tải cuốn 240 trang). **Chưa push** hai commit này.
 - [ ] **31.4 — Đưa Tủ sách lên host thật** · **(a)** mở CSP riêng cho `/tu-sach/*` (`img-src` taphuan.nxbgd.vn, `frame-src`)
   trong `scripts/sinh-danh-sach-cache.mjs` · cổng `/api/anh` (Cloudflare Functions) vào DISC · service worker
   không chặn `/tu-sach/` · **(d)** 1 ngày.

@@ -69,7 +69,7 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 
 ### 🟢 ĐÃ XONG
 
-**`PLAN_V4.md`: 38/43 ô ✅ (88%)** — luật tick mới (CEO 29/09): máy xong + test xanh ⇒ tick, ô còn chờ người giữ
+**`PLAN_V4.md`: 39/44 ô ✅ (89%)** — luật tick mới (CEO 29/09): máy xong + test xanh ⇒ tick, ô còn chờ người giữ
 dòng *(b) chờ anh*. Còn mở 4 ô: `26.1` host · `26.2` bấm GĐ18 · `30.1` bảng WHO · `30.6` việc người của thẻ sức khoẻ.
 GĐ23 mã mời (**TẮT**, cờ `MO_MA_MOI`) · GĐ24 CSP theo băm build · GĐ25 dọn context · GĐ27 giao diện "Aurora" + nội
 dung vợ↔chồng · GĐ28 hạn mức 2 bản/loại, sổ bản đã làm, nhắc test lại 6 tháng · GĐ29 phân tích sâu mọi cặp.
