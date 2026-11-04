@@ -4,37 +4,34 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**03/11/2026 — GĐ30 (thẻ "Sức khoẻ gia đình"): PHẦN MÁY XONG, ĐÃ PUSH (`cbd943c`), cờ TẮT, CHƯA AI BẤM THỬ.**
+**04/11/2026 — GĐ31 (thanh bên 3 tab): PHẦN MÁY XONG, ĐÃ PUSH (`791a9b2`), CHƯA AI BẤM THỬ.**
 
-**1. Vừa xong.** GĐ30 / ADR-010: thẻ dưới DISC (ngày sinh, giới tính, cân nặng, chiều cao → BMI, gợi ý ăn uống·vận
-động·nghỉ ngơi, PDF từng người), hạn mức **6 người × 3 bản** (bản thứ 4 thay bản cũ nhất, tự động + báo; người thứ 7
-buộc chọn xoá). Kho IndexedDB **v3** (thêm bảng `suc-khoe`). **2.270 test xanh**, gói chính **298 / 300 KB**.
-Luật tick mới của CEO (29/09): máy xong + test xanh ⇒ TICK, kể cả chờ người — nên GĐ27–30 đã tick (35/39 ô).
+**1. Vừa xong.** GĐ31: cột trái có 3 tab **DISC · Sức khoẻ cả nhà · Tủ sách gia đình** (nút thật). Khoang DISC giữ
+nguyên khi đổi tab. Tab Sức khoẻ: cờ `MO_SUC_KHOE` nay `true` (chủ dự án quyết). Tab Tủ sách: iframe `/tu-sach/` nhúng
+bản dựng KHO_SACH. **2.270 test xanh**, build xanh, gói chính **299 / 300 KB** (chỉ còn 1 KB dư!). GĐ30 (thẻ sức khoẻ)
+đã push `cbd943c` từ phiên trước.
 
-**2. Đang dở / làm tiếp từ đâu.** Không còn việc máy ngoài `30.1`. **Chủ dự án BẤM thử:** `npm run xem-thu` →
-http://localhost:3100/?suc-khoe=1 (điện thoại thật + mở tệp PDF; máy chỉ mới nhìn bản desktop bằng Chrome).
-Mã: `app/khoang/suc-khoe/` (giao diện, nạp lười) · `modules/core/suc-khoe/` (tính toán + hạn mức) ·
-`config/suc-khoe-{nguong,noi-dung,tu-dien}.ts` · `modules/report/noi-dung-suc-khoe.ts` (PDF).
+**2. Đang dở / làm tiếp từ đâu.** Không còn việc máy ngoài `30.1`, `31.4`. Chủ dự án BẤM thử trên máy:
+`node scripts/gan-tu-sach.mjs` (một lần; cần `../KHO_SACH/dist` — nếu thiếu: `npm run dung` bên KHO_SACH) rồi `npm run dev`
+→ http://localhost:3000. Mã: `app/components/thanh-ben.tsx` · `app/page.tsx` · `app/khoang/tu-sach.tsx` · `config/disc-tu-dien.ts` (`MA_TAB`).
 
-**3. Chặn ở NGƯỜI / NGOÀI.** `30.1` bảng WHO 2006/2007 (NGOÀI: xác minh giấy phép; hàm LMS + `TraBang` đã sẵn,
-chưa có bảng thì trẻ chỉ nhận BMI thô + "chưa so được") · **Gói C** `docs/noi-dung-cho-ky-duyet-goi-c.md` (bác sĩ nhi/dinh
-dưỡng ký — *chặn bật `MO_SUC_KHOE`*) · luật sư đọc lời miễn trừ · `26.1` Cloudflare + tên miền · `26.2` bảy việc bấm
-GĐ18 · hai chữ ký Gói A/B. Repo được TẶNG cộng đồng CEO Minh Trí; chưa có `LICENSE` (đề xuất MIT, chờ duyệt tên tác giả).
-🔴 `public/brand/` có mascot + logo SATA ROBO — repo CÔNG KHAI, đã push; cần chủ dự án xác nhận.
+**3. Chặn ở NGƯỜI / NGOÀI.** `31.4` (NGOÀI): CSP + cổng `/api/anh` + SW cho `/tu-sach/` khi deploy; cần Cloudflare (`26.1`)
+và NXB đồng ý bằng văn bản. Trong DISC dev, nút "Tải PDF" của Tủ sách chưa chạy (thiếu `/api/anh`); đọc sách vẫn chạy.
+`30.1` bảng WHO · Gói C (chặn việc phát tab Sức khoẻ cho người dùng thật — đặt `MO_SUC_KHOE=false` nếu chưa ký) · `26.1` · `26.2` ·
+Gói A/B · `LICENSE` · `public/brand/` (mascot + logo SATA ROBO trong repo CÔNG KHAI — chờ xác nhận).
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- Import MỘT hằng số từ file từ điển nặng kéo CẢ từ điển vào gói chính (+6 KB, vượt trần): `THAM_SO_SUC_KHOE` phải
-  ở `suc-khoe-nguong.ts`, thẻ phải nạp lười (`lazy(import())` sau state, KHÔNG nằm trong cây prerender).
-- Mascot gốc có sẵn ở `MASTER SATA ROBO/config/brand-assets/`; `public/brand/` là bản NÉN (JPEG 40 KB, logo 45 KB).
-- `semgrep` chưa cài ở máy (CI chạy). Chrome không đổi được cỡ viewport (không kiểm được màn hẹp bằng extension).
+- Gói chính 299/300 KB: thêm `tu-sach.tsx` + 3 icon tốn ~1 KB. Tính năng tiếp theo vào trang chính PHẢI nạp lười.
+- `public/tu-sach/` ~30 MB, đã gitignore — KHÔNG commit (ảnh bìa NXB, repo công khai). Mascot gốc ở `MASTER SATA ROBO/config/brand-assets/`.
+- `semgrep` chưa cài ở máy (CI chạy). Chrome không đổi cỡ viewport nên chưa kiểm màn hẹp.
 
-**5. Cạm bẫy** — 5 bài mới ở `docs/so-seo.md` (grep "suc-khoe\|height:auto\|KHOA_CAM").
+**5. Cạm bẫy.** `transition-*` mới BẮT BUỘC kèm `motion-reduce:transition-none` (test `mau-va-chuyen-dong` đỏ nếu quên).
+`sed -i` kiểu GNU hỏng trên macOS — dùng `node -e`. Bài cũ: `docs/so-seo.md` (grep "suc-khoe\|height:auto").
 
 **6. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 2.270 test (semgrep báo thiếu — bình thường trên máy này)
-npm run xem-thu   # cổng 3100; thẻ sức khoẻ: thêm ?suc-khoe=1
-node scripts/xuat-noi-dung-ky-duyet-goi-c.mjs   # sau mỗi lần sửa config/suc-khoe-noi-dung.ts
+npm run kiem      # 2.270 test (semgrep báo thiếu — bình thường)
+npm run dev       # sau `node scripts/gan-tu-sach.mjs`; xem 3 tab
 ```
 
 ---
@@ -560,6 +557,32 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   lại lời nhắn miễn trừ · (3) quyết có đưa mascot/logo lên repo công khai không (đã chép vào
   `public/brand/`) · (4) bấm thử trên điện thoại.
   - (e) chặn: NGƯỜI.
+
+---
+
+## 🔴 GIAI ĐOẠN 31 — Thanh bên 3 tab: DISC · Sức khoẻ cả nhà · Tủ sách gia đình
+
+> Chốt 04/11/2026 (chủ dự án yêu cầu): gộp ba tính năng vào MỘT ứng dụng, mỗi tính năng là một tab ở cột trái.
+> Đã push (`791a9b2`). Thay quyết định V2.1 "thanh bên chỉ một mục, không phải nút".
+
+- [x] **31.1 — Thanh bên thành điều hướng 3 tab** · **(a)** `app/components/thanh-ben.tsx` (nút thật,
+  `aria-current`, ngang trên điện thoại / dọc từ `md:`) · `app/page.tsx` giữ khoang DISC luôn được dựng (chỉ
+  `hidden`) để bài dở không mất · `MA_TAB`/`TEN_KHOANG` ở `config/disc-tu-dien.ts` · **(b)** bấm ba tab trên
+  điện thoại thật · **(c)** `tests/dieu-huong.test.tsx` (viết lại), `tests/be-ngang.test.tsx`,
+  `tests/mau-va-chuyen-dong.test.tsx` · **(d)** 0,5 ngày.
+  - (b) chờ anh: NGƯỜI — chưa ai bấm bằng mắt. **Tiến độ 04/11:** PHẦN MÁY XONG, 2.270 test xanh.
+- [x] **31.2 — Tab Sức khoẻ cả nhà** · **(a)** cờ `MO_SUC_KHOE` đổi sang `true` (chủ dự án quyết) · **(c)** bộ
+  test GĐ30 · **(d)** 0,1 ngày.
+  - (b) chờ anh: NGƯỜI — nội dung vẫn BẢN NHÁP chưa ký Gói C; đặt lại `false` trước khi phát người dùng thật.
+- [x] **31.3 — Tab Tủ sách gia đình (nhúng KHO_SACH)** · **(a)** `app/khoang/tu-sach.tsx` (iframe
+  `/tu-sach/`, dò `phien-ban.txt`, chưa gắn thì báo cách gắn) · `scripts/gan-tu-sach.mjs` chép
+  `../KHO_SACH/dist` → `public/tu-sach/` (gitignore: ảnh bìa có bản quyền NXB) · **(c)** test tab ở
+  `dieu-huong.test.tsx` · **(d)** 0,5 ngày.
+  - (b) chờ anh: NGƯỜI — xem thử trên máy: `npm run dev` → bấm tab Tủ sách.
+- [ ] **31.4 — Đưa Tủ sách lên host thật** · **(a)** mở CSP riêng cho `/tu-sach/*` (`img-src` taphuan.nxbgd.vn, `frame-src`)
+  trong `scripts/sinh-danh-sach-cache.mjs` · cổng `/api/anh` (Cloudflare Functions) vào DISC · service worker
+  không chặn `/tu-sach/` · **(d)** 1 ngày.
+  - (e) chặn: NGOÀI — cần tài khoản Cloudflare (`26.1`) và NXB đồng ý bằng văn bản (`KHO_SACH/docs/PHAP-LY.md`).
 
 ---
 

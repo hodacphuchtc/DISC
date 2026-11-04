@@ -62,14 +62,14 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 03/11/2026 — GĐ30 HẾT VIỆC MÁY, chờ bấm thử + chữ ký)
+## TRẠNG THÁI (cập nhật 04/11/2026 — GĐ31 HẾT VIỆC MÁY, chờ bấm thử)
 
 > 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V4.md`** (mục *BÀN GIAO PHIÊN GẦN NHẤT*): làm tiếp từ
 > file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
 ### 🟢 ĐÃ XONG
 
-**`PLAN_V4.md`: 35/39 ô ✅ (90%)** — luật tick mới (CEO 29/09): máy xong + test xanh ⇒ tick, ô còn chờ người giữ
+**`PLAN_V4.md`: 38/43 ô ✅ (88%)** — luật tick mới (CEO 29/09): máy xong + test xanh ⇒ tick, ô còn chờ người giữ
 dòng *(b) chờ anh*. Còn mở 4 ô: `26.1` host · `26.2` bấm GĐ18 · `30.1` bảng WHO · `30.6` việc người của thẻ sức khoẻ.
 GĐ23 mã mời (**TẮT**, cờ `MO_MA_MOI`) · GĐ24 CSP theo băm build · GĐ25 dọn context · GĐ27 giao diện "Aurora" + nội
 dung vợ↔chồng · GĐ28 hạn mức 2 bản/loại, sổ bản đã làm, nhắc test lại 6 tháng · GĐ29 phân tích sâu mọi cặp.
