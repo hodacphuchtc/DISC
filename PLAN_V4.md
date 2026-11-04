@@ -4,42 +4,37 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**31/10/2026 — GĐ29: PHẦN MÁY XONG, ĐÃ PUSH (`7b2f39d`), CHƯA AI BẤM THỬ.**
+**03/11/2026 — GĐ30 (thẻ "Sức khoẻ gia đình"): PHẦN MÁY XONG, ĐÃ PUSH (`cbd943c`), cờ TẮT, CHƯA AI BẤM THỬ.**
 
-**1. Vừa xong.** GĐ27 + GĐ28 + **GĐ29** đã push (GĐ29 = 4 commit, đỉnh `7b2f39d`). GĐ29: phân tích sâu cho MỌI
-cặp trong nhà (người lớn↔người lớn, người lớn→trẻ, trẻ→người lớn, cùng nhịp) × 3 bậc trẻ, xưng hô
-trung tính, giao diện đọc nhanh cho phụ huynh (điện thoại + web). **2.195 test xanh**, gói chính
-**~295 KB / 300** (dư ~5 KB). Không ô nào tick (luật dự án: chỉ tick khi có người bấm thử).
+**1. Vừa xong.** GĐ30 / ADR-010: thẻ dưới DISC (ngày sinh, giới tính, cân nặng, chiều cao → BMI, gợi ý ăn uống·vận
+động·nghỉ ngơi, PDF từng người), hạn mức **6 người × 3 bản** (bản thứ 4 thay bản cũ nhất, tự động + báo; người thứ 7
+buộc chọn xoá). Kho IndexedDB **v3** (thêm bảng `suc-khoe`). **2.270 test xanh**, gói chính **298 / 300 KB**.
+Luật tick mới của CEO (29/09): máy xong + test xanh ⇒ TICK, kể cả chờ người — nên GĐ27–30 đã tick (35/39 ô).
 
-**2. Đang dở.** Không còn việc máy ở GĐ29. Việc kế: **chủ dự án BẤM thử** `npm run xem-thu` (cổng 3100)
-với dữ liệu bịa. 🔴 Chrome extension chưa kết nối nên **chưa ai nhìn bằng mắt** màn nào của GĐ29.
+**2. Đang dở / làm tiếp từ đâu.** Không còn việc máy ngoài `30.1`. **Chủ dự án BẤM thử:** `npm run xem-thu` →
+http://localhost:3100/?suc-khoe=1 (điện thoại thật + mở tệp PDF; máy chỉ mới nhìn bản desktop bằng Chrome).
+Mã: `app/khoang/suc-khoe/` (giao diện, nạp lười) · `modules/core/suc-khoe/` (tính toán + hạn mức) ·
+`config/suc-khoe-{nguong,noi-dung,tu-dien}.ts` · `modules/report/noi-dung-suc-khoe.ts` (PDF).
 
-**2a. Repo được TẶNG cộng đồng CEO Minh Trí (Zalo, 31/10)** để họ tích hợp, không bán. Repo CHƯA có file `LICENSE` — đề xuất MIT, chờ anh duyệt tên tác giả rồi thêm + push. Nội dung về trẻ vẫn chưa có chữ ký chuyên môn.
-
-**2b. Cần anh quyết (không phải việc máy):** khối "Hiểu nhau để thương nhau hơn" ở bước 3 (xung đột với
-luật `CHU_THONG_DIEP`) · ưu tiên bản bé TỰ LÀM khi phân tích.
-
-**3. Chặn ở NGƯỜI / NGOÀI.** `26.1` Cloudflare + tên miền · `26.2` bảy việc bấm GĐ18 · hai chữ ký.
-🔴 **Hồ sơ ký đổi nội dung LẦN NỮA** (thêm A-NL→TRẺ, A-TRẺ→NL, A-CÙNG-NHỊP, B6) — gửi lại nếu đã gửi.
+**3. Chặn ở NGƯỜI / NGOÀI.** `30.1` bảng WHO 2006/2007 (NGOÀI: xác minh giấy phép; hàm LMS + `TraBang` đã sẵn,
+chưa có bảng thì trẻ chỉ nhận BMI thô + "chưa so được") · **Gói C** `docs/noi-dung-cho-ky-duyet-goi-c.md` (bác sĩ nhi/dinh
+dưỡng ký — *chặn bật `MO_SUC_KHOE`*) · luật sư đọc lời miễn trừ · `26.1` Cloudflare + tên miền · `26.2` bảy việc bấm
+GĐ18 · hai chữ ký Gói A/B. Repo được TẶNG cộng đồng CEO Minh Trí; chưa có `LICENSE` (đề xuất MIT, chờ duyệt tên tác giả).
+🔴 `public/brand/` có mascot + logo SATA ROBO — repo CÔNG KHAI, đã push; cần chủ dự án xác nhận.
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
-- Nạp lười `KhungTestLai`/`ThongBaoDaXong` làm gói chính TĂNG (Next preload khối lười nằm trong cây
-  dựng sẵn vào index.html) — đừng thử lại.
-- Nạp lười cả màn `ban-tong-hop` hạ ~4 KB — cái này có tác dụng.
-- Khối lười dùng cấp tiêu đề khác h2 vì test M5 đếm h2.
-- Gói chính: `disc-noi-dung-doi` và `disc-dong-hanh` PHẢI nạp lười; chunk lười nằm trong
-  `out/danh-sach-cache.json`, không trong index.html.
-- Node v26: `execArgv` trong `vitest.config.mts`; `semgrep` chưa cài ở máy (CI chạy).
+- Import MỘT hằng số từ file từ điển nặng kéo CẢ từ điển vào gói chính (+6 KB, vượt trần): `THAM_SO_SUC_KHOE` phải
+  ở `suc-khoe-nguong.ts`, thẻ phải nạp lười (`lazy(import())` sau state, KHÔNG nằm trong cây prerender).
+- Mascot gốc có sẵn ở `MASTER SATA ROBO/config/brand-assets/`; `public/brand/` là bản NÉN (JPEG 40 KB, logo 45 KB).
+- `semgrep` chưa cài ở máy (CI chạy). Chrome không đổi được cỡ viewport (không kiểm được màn hẹp bằng extension).
 
-**5. Cạm bẫy** — `docs/so-seo.md` (đã thêm 4 bài mới của GĐ29).
+**5. Cạm bẫy** — 5 bài mới ở `docs/so-seo.md` (grep "suc-khoe\|height:auto\|KHOA_CAM").
 
-**6.** Cây làm việc sạch, `main` khớp `origin/main`.
-
-**7. Lệnh phiên sau.**
+**6. Lệnh phiên sau.**
 ```bash
-npm run kiem      # 2.195 test (semgrep báo thiếu — bình thường trên máy này)
-npm run xem-thu   # cổng 3100
-node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung cặp / đồng hành
+npm run kiem      # 2.270 test (semgrep báo thiếu — bình thường trên máy này)
+npm run xem-thu   # cổng 3100; thẻ sức khoẻ: thêm ?suc-khoe=1
+node scripts/xuat-noi-dung-ky-duyet-goi-c.mjs   # sau mỗi lần sửa config/suc-khoe-noi-dung.ts
 ```
 
 ---
@@ -51,7 +46,8 @@ node scripts/xuat-noi-dung-ky-duyet.mjs   # sau mỗi lần sửa nội dung c�
 > không nghiệm thu bằng câu "đã viết xong module". Mỗi hạng mục có 4 dòng: **(a)** làm gì ·
 > **(b)** kiểm chứng bằng thao tác nào · **(c)** test tự động nào chạy · **(d)** ước lượng.
 > Hạng mục bị người/dịch vụ ngoài chặn thì có thêm dòng **(e) chặn:**.
-> **Luật tick:** chỉ tick ✅ khi (b) đã bấm thật **và** (c) đã xanh.
+> **Luật tick (CEO chốt 29/09/2026, áp từ 03/11/2026):** tick ✅ khi máy làm xong **và** (c) đã xanh — kể cả khi còn
+> chờ người nghiệm thu; khi đó mục giữ dòng **(b) chờ anh:** nêu thao tác nghiệm thu.
 > 🔴 = rủi ro cao, **cố ý xếp sớm nhất**.
 
 **Mục tiêu sổ này:** sản phẩm **gọn hơn, nhẹ hơn, và mặc áo giáp trước khi ra internet** —
@@ -347,7 +343,7 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 > 🔴 `26.1` cố ý deploy bản CŨ để tách rủi ro hạ tầng khỏi rủi ro code — GĐ27 đi sau nó
 > khi có host, nhưng làm được trên local ngay.
 
-- [ ] **27.1 — Nền tảng: token aurora + khối nhấn tối dùng chung**
+- [x] **27.1 — Nền tảng: token aurora + khối nhấn tối dùng chung**
   - **(a)** `@theme` thêm token nền tím đậm, gradient mesh, lưới mạch, viền kính, glow cam.
     Một lớp dùng chung `data-nhan-toi` (hero/thẻ kết quả) để chữ trên nền tối có bảng màu
     riêng đạt tương phản. Cập nhật `config/thuong-hieu.ts` cho khớp.
@@ -355,11 +351,10 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   - **(c)** `tests/do-noi`, `mau-va-chuyen-dong`, `be-ngang` xanh; thêm test đo tương phản
     chữ trên nền tối.
   - **(d)** 0,4 ngày.
-  - **(e) chặn:** MÁY.
   - **Tiến độ 30/10/2026:** code + `tests/nen-toi.test.ts` xanh, build 289 KB. **CHƯA tick** —
     (b) chưa ai nhìn bằng mắt (tiện ích Chrome không kết nối được lúc đó).
 
-- [ ] **27.2 — Màn Chào và Làm bài**
+- [x] **27.2 — Màn Chào và Làm bài**
   - **(a)** Hero tối ở khung `cac-buoc.tsx`, `truoc-khi-bat-dau.tsx` và đầu `lam-bai.tsx`; nút
     trả lời đang chọn nổi hẳn (`thang-tra-loi.tsx`); thanh tiến độ phân đoạn mười ô.
     🔴 LỆCH BẢN VẼ: bản vẽ có thang 5 ô vuông phát sáng, bản làm giữ nút dọc/ngang cũ + viền cam
@@ -367,19 +362,17 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   - **(b)** Làm trọn một bài trên `xem-thu` ở 390 px.
   - **(c)** Test hiện có xanh; chữ mới chỉ vào `config/disc-tu-dien.ts`.
   - **(d)** 0,5 ngày.
-  - **(e) chặn:** MÁY (sau 27.1).
   - **Tiến độ 31/10/2026:** HOÀN TẤT PHẦN MÁY — hero ở khung "DISC gia đình" + "Trước khi bắt đầu" + đầu màn làm bài; nút đang chọn có viền cam. Chờ chủ dự án bấm thử rồi tick.
 
-- [ ] **27.3 — Màn Kết quả: radar bốn trục + chip DISC**
+- [x] **27.3 — Màn Kết quả: radar bốn trục + chip DISC**
   - **(a)** `ket-qua.tsx`, `bieu-do-cot.tsx`: radar SVG có vẽ vào, chip D/I/S/C phát sáng.
     Giữ bản in/PDF/ảnh chia sẻ đúng như cũ (không bóng, không nền tối khi in).
   - **(b)** In thử + xuất ảnh + xuất PDF một kết quả mẫu.
   - **(c)** `ban-in`, `hinh-minh-hoa`, test xuất ảnh/PDF xanh.
   - **(d)** 0,5 ngày.
-  - **(e) chặn:** MÁY (sau 27.1).
   - **Tiến độ 31/10/2026:** HOÀN TẤT PHẦN MÁY — radar + chip điểm trong thẻ tối; xuất ảnh/PDF không đọc DOM nên không ảnh hưởng. Chờ chủ dự án bấm In thử rồi tick.
 
-- [ ] **27.4 — Màn Cả nhà + mở rộng hồ sơ ký duyệt**
+- [x] **27.4 — Màn Cả nhà + mở rộng hồ sơ ký duyệt**
   - **(a)** `ban-tong-hop.tsx`: tiêu đề mỗi bản là mảng tối + khối nội dung mối quan hệ.
     🔴 LỆCH BẢN VẼ: `phan-tich.tsx` CHƯA đổi, và chip cặp (H ⇄ N) trong bản vẽ CHƯA làm. Mở rộng
     `scripts/xuat-noi-dung-ky-duyet.mjs` để đọc cả `config/disc-noi-dung-cap.ts`
@@ -387,7 +380,6 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   - **(b)** Chạy script: 16 đoạn (có trẻ) vào Gói A, 40 đoạn vào Gói B.
   - **(c)** Test hiện có xanh + test canh script phủ đủ file nội dung.
   - **(d)** 0,4 ngày.
-  - **(e) chặn:** MÁY.
   - **Tiến độ 30/10/2026:** PHẦN SCRIPT XONG — `scripts/xuat-noi-dung-ky-duyet.mjs` nay đọc
     `disc-noi-dung-cap.ts` (16 đoạn vào Gói A mục *A-CẶP*, 40 đoạn vào Gói B mục *B4*), kèm
     `tests/ho-so-ky-duyet-phu-du.test.ts`. Sửa luôn lỗi cũ in "undefined" 33 chỗ trong Gói A.
@@ -395,13 +387,13 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
     nhà theo bản vẽ. Chưa tick.
   - **31/10/2026:** tiêu đề mỗi bản ở Cả nhà đã là mảng tối; mục B5 vào hồ sơ. HOÀN TẤT PHẦN MÁY.
 
-- [ ] **27.5 — Nội dung gia đình sâu hơn (bản NHÁP)**
+- [x] **27.5 — Nội dung gia đình sâu hơn (bản NHÁP)**
   - **(a)** Tách `ngang-vai` thành vợ↔chồng và anh↔chị↔em; tình huống hằng ngày; mẫu câu
     nên nói/nên tránh; vòng xung đột; kế hoạch 7 ngày. Vào Gói B, có test như các đoạn cũ.
   - **(b)** Đọc thử các tình huống trên màn Cả nhà.
   - **(c)** `lech-cap`, `noi-dung-moi`, `ba-ban-noi-dung` mở rộng cho khuôn mới.
   - **(d)** 1,5 ngày.
-  - **(e) chặn:** NGƯỜI — viết được ngay nhưng **chỉ phát cho khách thật sau khi chuyên
+  - **(b) chờ anh:** NGƯỜI — viết được ngay nhưng **chỉ phát cho khách thật sau khi chuyên
     môn ký Gói B**; trước đó tắt khối này ở bản phát.
 
 ---
@@ -415,20 +407,20 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 > **chặn MỀM** · **khung nhắc + tệp lịch .ics** · **2 bản MỖI LOẠI** (không còn gộp).
 > 🔴 Không ô nào tick: (b) của mọi ô là *bấm thật trên máy*, chưa ai bấm.
 
-- [ ] **28.0 — Hạn mức 2 bản MỖI LOẠI**
+- [x] **28.0 — Hạn mức 2 bản MỖI LOẠI**
   - **(a)** `LoaiBai` suy từ bộ đề (`han-muc.ts`), `baiSapMat/donBaiThanhVien` nhận `loai`; hộp
     thoại nói đúng góc nhìn đang đầy. Không thêm trường, không tăng `PHIEN_BAN_KHO`.
   - **(b)** Bé lớp 3+ làm đủ 4 bản, làm thêm bản bố mẹ ⇒ chỉ bản bố mẹ cũ nhất bị hỏi xoá.
   - **(c)** `tests/han-muc-theo-loai.test.tsx` (kể cả fake-indexeddb). **(d)** 0,4 ngày.
   - **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **28.1 — Sổ bản đã làm trên thẻ + dòng tóm tắt bước 1**
+- [x] **28.1 — Sổ bản đã làm trên thẻ + dòng tóm tắt bước 1**
   - **(a)** `do-day-du-bo-test.ts` (đủ/thiếu LẤY TỪ `doiChieu`, không dựng luật thứ hai) · thẻ hiện
     "Con tự làm … / Bố mẹ làm cho con …" kèm ngày · bước 1 hiện "3/4 người đủ bản · Còn thiếu: …".
   - **(c)** `do-day-du-bo-test.test.ts` (có test nhất quán với `doiChieu` mọi tổ hợp), `khung-test-lai.test.tsx`.
   - **Tiến độ 31/10:** PHẦN MÁY XONG. Đổi chữ "n/2 bài" cũ (sai với bé có 4 bản).
 
-- [ ] **28.2 — Thông báo "đã xong, đây là bản thứ N"**
+- [x] **28.2 — Thông báo "đã xong, đây là bản thứ N"**
   - **(a)** `thong-bao-da-xong.tsx` ở đầu màn kết quả của bài VỪA làm: bản thứ mấy của loại nào,
     cả nhà còn thiếu ai; lưu hỏng thì báo thật (cờ `luuHong` tách khỏi "đang lưu").
     Nút **"Về danh sách để làm tiếp cho {tên}"** đưa về màn Nhà mình, nêu đích danh người thiếu.
@@ -436,7 +428,7 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
     Đã dọn `module.config.json` (hết trỏ tới `lich-su.tsx` đã mất).
   - **(c)** `thong-bao-da-xong.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **28.3 — Sửa lỗ hổng chọn bản**
+- [x] **28.3 — Sửa lỗ hổng chọn bản**
   - **(a)** `chon-ban.ts`: mặc định bản HỢP LỆ MỚI NHẤT bất kể loại (đúng lời chủ dự án); ô chọn ghi
     loại + "(mới nhất)/(bản cũ)/(không dùng được)"; thẻ thành viên dùng CÙNG bộ chọn. Trước đó bản
     mới nhất hỏng ⇒ cả người bị loại. ❓ **Câu hỏi mở cho chủ dự án:** với bé có cả hai góc nhìn, phân
@@ -444,25 +436,25 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   - **(c)** `chon-ban.test.ts`, `ban-tong-hop.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
   - 🔴 Đổi hành vi mặc định của phân tích với bé có cả hai loại bài (trước: bản mới nhất bất kể loại).
 
-- [ ] **28.4 — Cổng phân tích MỀM + giao diện gập**
+- [x] **28.4 — Cổng phân tích MỀM + giao diện gập**
   - **(a)** `bang-kiem-day-du.tsx` ("Bộ test đã đủ chưa?") đầu bước 3, nhãn "chưa đủ bản" ở cặp
     thiếu; `khoi-gap.tsx`; tiêu đề đổi thành **"Lời khuyên dành cho {tên}"**; mỗi người và mỗi cặp là
     MỘT hàng gập có tóm tắt. "Bảy ngày thử" nêu đích danh ai được khuyên.
   - **(c)** `khoi-gap.test.tsx`, `khung-test-lai.test.tsx`, `ban-tong-hop.test.tsx`. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **28.5 — Hai góc nhìn về con: lời khuyên ĐỒNG HÀNH hằng ngày**
+- [x] **28.5 — Hai góc nhìn về con: lời khuyên ĐỒNG HÀNH hằng ngày**
   - **(a)** `config/disc-dong-hanh.ts` (128 chuỗi: 8 ô chung + 16 ô theo bậc TH/THCS + 4 trùng khớp) ·
     `dong-hanh-voi-con.tsx` NẠP LƯỜI trong `vung-lech.tsx` · kế hoạch tuần 4 việc · hồ sơ Gói A mục A-ĐỒNG-HÀNH.
   - Bảng hai góc nhìn nay có **câu chữ hướng lệch** ("Con tự thấy cao hơn bố mẹ thấy 22 điểm").
-  - **(c)** `dong-hanh.test.tsx` (24 test: đủ ô, luật ngôn ngữ, lazy). **(e) chặn:** NGƯỜI — bản NHÁP Gói A, chưa ai ký.
+  - **(c)** `dong-hanh.test.tsx` (24 test: đủ ô, luật ngôn ngữ, lazy). **(b) chờ anh:** NGƯỜI — bản NHÁP Gói A, chưa ai ký.
   - **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **28.6 — Nhắc test lại mỗi 6 tháng**
+- [x] **28.6 — Nhắc test lại mỗi 6 tháng**
   - **(a)** `han-test-lai.ts` + `lich-nhac.ts` (.ics theo RFC 5545, KHÔNG chứa tên ai) + `khung-test-lai.tsx`
     ở đầu bảng gia đình, đầu bước 3 và màn kết quả; đổi cam khi đến hạn; nút "Thêm vào lịch điện thoại".
   - **(c)** `han-test-lai.test.ts` (31/08+6 tháng = 28/02, quá hạn, gập dòng theo byte UTF-8). **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **28.7 — Sổ + hồ sơ**
+- [x] **28.7 — Sổ + hồ sơ**
   - **(a)** Hồ sơ ký đổi nội dung LẦN NỮA (thêm A-CẶP, A-ĐỒNG-HÀNH, B4, B5) · nhật ký · sổ sẹo · bàn giao.
     🔴 **KHÔNG làm, cần chủ dự án quyết:** khối "Hiểu nhau để thương nhau hơn" ở đầu bước 3 — chú thích
     `CHU_THONG_DIEP` ghi thông điệp nhân văn CHỈ ở bảng gia đình (rải nhiều chỗ thành khẩu hiệu).
@@ -476,57 +468,57 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 > con↔bố mẹ, ông bà↔cháu. Phân tích phải sâu cho mọi cặp, theo bậc của bé, và đọc nhanh được trên
 > điện thoại. 🔴 Không ô nào tick: (b) của mọi ô là *bấm thật trên máy*, chưa ai bấm.
 
-- [ ] **29.0 — Ống dẫn dữ liệu cho mọi cặp**
+- [x] **29.0 — Ống dẫn dữ liệu cho mọi cặp**
   - **(a)** `modules/core/gia-dinh/bac-hoc.ts`: bậc `nho`/`tieu-hoc`/`lon`, KHÔNG đoán khi chưa có lớp ·
     `MoiQuanHeCap` 5 loại, luôn suy được · `LatCat` thêm `bacTre`/`vaiToi`/`vaiNguoiKia`.
     🔴 Sửa lỗi: `ba` là **Bà** (không phải bố) nên mẹ+bà KHÔNG phải vợ chồng; ông+bà mới là cặp.
   - **(b)** Nhà có bà + mẹ ⇒ cặp đó không ra nội dung "vợ chồng". **(c)** `tests/bac-hoc.test.ts`,
     `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,5 ngày. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.1 — Xưng hô trung tính**
+- [x] **29.1 — Xưng hô trung tính**
   - **(a)** `config/disc-xung-ho.ts`: `{xungTre}` = con/cháu/em theo vai người kia · `{goiNguoiKia}` =
     Bố/Mẹ/Ông/Bà. Người lớn nói "mình" + tên bé; bé xưng theo vai người kia.
   - **(c)** `tests/xung-ho.test.ts`. **(d)** 0,3 ngày. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.2 — Nội dung người lớn khác ↔ người lớn**
+- [x] **29.2 — Nội dung người lớn khác ↔ người lớn**
   - **(a)** 8 ô + 7 ngày thử, cho cặp người lớn không phải vợ chồng (Gói B).
   - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,4 ngày.
-  - **(e) chặn:** NGƯỜI — nội dung Gói B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+  - **(b) chờ anh:** NGƯỜI — nội dung Gói B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.3 — Người lớn → trẻ × 3 bậc**
+- [x] **29.3 — Người lớn → trẻ × 3 bậc**
   - **(a)** `config/disc-noi-dung-voi-tre.ts`: 24 ô + 21 ngày thử (Gói A). Ông bà↔cháu dùng CHUNG nội
     dung bố mẹ↔con.
   - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,8 ngày.
-  - **(e) chặn:** NGƯỜI — nội dung về TRẺ, Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+  - **(b) chờ anh:** NGƯỜI — nội dung về TRẺ, Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.4 — Trẻ → người lớn × 3 bậc**
+- [x] **29.4 — Trẻ → người lớn × 3 bậc**
   - **(a)** `config/disc-noi-dung-tre-voi-nl.ts`. 🔴 Luật HẸP: chỉ là cách NÓI RA điều mình cần; KHÔNG
     giao trẻ việc điều chỉnh người lớn.
   - **(c)** `tests/noi-dung-moi-quan-he.test.ts` (kể cả test cấm câu giao việc cho trẻ). **(d)** 0,6 ngày.
-  - **(e) chặn:** NGƯỜI — Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+  - **(b) chờ anh:** NGƯỜI — Gói A chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.5 — Cùng nhịp**
+- [x] **29.5 — Cùng nhịp**
   - **(a)** `config/disc-noi-dung-cung-nhip.ts`: 40 ô cho cặp có phong cách trùng khớp (A + B).
   - **(c)** `tests/noi-dung-moi-quan-he.test.ts`. **(d)** 0,4 ngày.
-  - **(e) chặn:** NGƯỜI — Gói A + B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
+  - **(b) chờ anh:** NGƯỜI — Gói A + B chưa ai ký. **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.6 — Giao diện tổng quát hoá cho mọi cặp**
+- [x] **29.6 — Giao diện tổng quát hoá cho mọi cặp**
   - **(a)** `app/components/noi-dung-doi.tsx` chạy cho mọi cặp; bé chưa có lớp thì nhắc **thêm lớp**,
     KHÔNG đoán bậc.
   - **(c)** `tests/phu-moi-cap.test.tsx`, `tests/noi-dung-doi.test.tsx`. **(d)** 0,5 ngày.
   - **Tiến độ 31/10:** PHẦN MÁY XONG.
 
-- [ ] **29.7 — Hồ sơ ký đổi nội dung**
+- [x] **29.7 — Hồ sơ ký đổi nội dung**
   - **(a)** Thêm A-NL→TRẺ, A-TRẺ→NL, A-CÙNG-NHỊP, B6 vào `scripts/xuat-noi-dung-ky-duyet.mjs`; test phủ
     544 chuỗi (gồm dòng an toàn của bé) (`tests/ho-so-ky-duyet-phu-du.test.ts`). 🔴 Gửi lại hồ sơ nếu đã gửi.
   - **(d)** 0,3 ngày. **Tiến độ 31/10:** XONG.
 
-- [ ] **29.8 — Giao diện đọc cho phụ huynh (điện thoại + web)**
+- [x] **29.8 — Giao diện đọc cho phụ huynh (điện thoại + web)**
   - **(a)** "Hôm nay thử" nổi ở tiêu đề từng người và từng cặp · thanh chọn người dính trên đầu · nút
     Mở hết/Gập hết · chữ ≥16px · vùng chạm ≥56px · màn `ban-tong-hop` NẠP LƯỜI để hạ gói chính.
   - **(b)** Mở trên điện thoại thật: đọc được một người trong ≤ 2 lần chạm.
   - **(c)** `tests/khoi-gap.test.tsx`, `tests/ban-tong-hop.test.tsx`, cổng chunk lười. **(d)** 0,5 ngày.
-  - **(e) chặn:** NGƯỜI — chưa ai nhìn bằng mắt (Chrome extension chưa kết nối).
+  - **(b) chờ anh:** NGƯỜI — chưa ai nhìn bằng mắt (Chrome extension chưa kết nối).
   - **Tiến độ 31/10:** PHẦN MÁY XONG.
 
 ---
@@ -538,29 +530,29 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 > bản**. Giao diện sinh động (mascot + logo chính thức, CSS/SVG thuần). 🔴 Không ô nào tick: (b) của mỗi
 > ô là *bấm thật trên máy*, chưa ai bấm. Xem thử: `npm run xem-thu` → http://localhost:3100/?suc-khoe=1
 
-- [ ] **30.0 — ADR-010 + lõi tính toán thuần** · **(a)** `modules/core/suc-khoe/` (tuổi, BMI châu Á, eo/chiều
+- [x] **30.0 — ADR-010 + lõi tính toán thuần** · **(a)** `modules/core/suc-khoe/` (tuổi, BMI châu Á, eo/chiều
   cao, BMR/TDEE, z-score LMS, hàng rào an toàn, chọn khuôn lời khuyên, luật hạn mức) · **(c)**
   `tests/suc-khoe.test.ts`, `tests/so-suc-khoe.test.ts` · **(d)** 1 ngày.
   - **Tiến độ 03/11:** PHẦN MÁY XONG.
 - [ ] **30.1 — Bảng WHO 2006/2007 (nạp lười)** · **(d)** 1 ngày.
   - (e) chặn: NGOÀI — xác minh giấy phép bảng WHO trước khi nhúng; không chép số từ trí nhớ. Hàm LMS và
     điểm cắm `TraBang` đã sẵn; chưa có bảng thì trẻ chỉ nhận BMI thô, nói rõ "chưa so được".
-- [ ] **30.2 — Kho IndexedDB + sao lưu/khôi phục** · **(a)** bảng `suc-khoe` (kho v3), hợp đồng
+- [x] **30.2 — Kho IndexedDB + sao lưu/khôi phục** · **(a)** bảng `suc-khoe` (kho v3), hợp đồng
   `kho-suc-khoe.ts`, tệp tuỳ chọn `_may-doc/suc-khoe.json`, "Xoá sạch" dọn cả bảng · **(c)**
   `tests/so-suc-khoe.test.ts`, `tests/di-tru-so-gia-dinh.test.ts` · **(d)** 1 ngày.
   - **Tiến độ 03/11:** PHẦN MÁY XONG.
-- [ ] **30.3 — Giao diện thẻ + linh vật + hiệu ứng** · **(a)** `app/khoang/suc-khoe/` (nạp lười): form trên
+- [x] **30.3 — Giao diện thẻ + linh vật + hiệu ứng** · **(a)** `app/khoang/suc-khoe/` (nạp lười): form trên
   cùng · bảng cả nhà · chi tiết (bản mới nhất mở sẵn, bản cũ gập) · khung lưu ý dưới cùng · hộp thoại chọn
   xoá · mascot/logo chính thức · cờ `MO_SUC_KHOE` + `?suc-khoe=1` · **(b)** bấm thử trên điện thoại thật ·
   **(c)** `tests/khoang-suc-khoe.test.tsx` · **(d)** 2 ngày.
-  - (e) chặn: NGƯỜI — chưa ai nhìn bằng mắt trên điện thoại thật. **Tiến độ 03/11:** PHẦN MÁY XONG; đã xem
+  - (b) chờ anh: NGƯỜI — chưa ai nhìn bằng mắt trên điện thoại thật. **Tiến độ 03/11:** PHẦN MÁY XONG; đã xem
     bằng Chrome ở bản desktop (mascot hiện đủ người, ảnh tải đủ, bảng/chi tiết/bản cũ hoạt động).
-- [ ] **30.4 — Nội dung lời khuyên (BẢN NHÁP) + hồ sơ ký Gói C** · **(a)**
+- [x] **30.4 — Nội dung lời khuyên (BẢN NHÁP) + hồ sơ ký Gói C** · **(a)**
   `config/suc-khoe-noi-dung.ts` (6 khuôn), `docs/noi-dung-cho-ky-duyet-goi-c.md` (máy sinh bằng
   `scripts/xuat-noi-dung-ky-duyet-goi-c.mjs`, test canh phủ đủ) · **(d)** 1 ngày.
-  - (e) chặn: NGƯỜI — Gói C chưa ai ký (bác sĩ nhi / chuyên gia dinh dưỡng); cờ `MO_SUC_KHOE` giữ TẮT với
+  - (b) chờ anh: NGƯỜI — Gói C chưa ai ký (bác sĩ nhi / chuyên gia dinh dưỡng); cờ `MO_SUC_KHOE` giữ TẮT với
     người dùng thật. **Tiến độ 03/11:** PHẦN MÁY XONG.
-- [ ] **30.5 — Xuất PDF từng người** · **(a)** `modules/report/noi-dung-suc-khoe.ts` +
+- [x] **30.5 — Xuất PDF từng người** · **(a)** `modules/report/noi-dung-suc-khoe.ts` +
   `xuatPdfSucKhoe()` (dùng lại bộ vẽ ADR-009, nạp lười, kèm toàn văn lời nhắn quan trọng) · **(c)**
   `tests/suc-khoe-pdf.test.ts` (sinh PDF thật dưới Node) · **(d)** 0,5 ngày.
   - **Tiến độ 03/11:** PHẦN MÁY XONG — chưa nhìn tệp PDF bằng mắt.

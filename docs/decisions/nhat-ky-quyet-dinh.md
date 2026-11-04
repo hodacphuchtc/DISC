@@ -72,3 +72,7 @@
 | 31/10/2026 | **Xưng hô trung tính: người lớn nói "mình" + tên bé, bé xưng theo vai người kia** | Một câu dùng được cho cả bố, mẹ, ông, bà mà không gượng; {xungTre} và {goiNguoiKia} thay theo vai |
 | 31/10/2026 | **Giao diện đọc nhanh: Hôm nay thử + chọn người + Mở hết/Gập hết** | Phụ huynh đọc trên điện thoại, ít thời gian; thứ làm được ngay hôm nay phải nổi lên đầu, chi tiết bấm mới xổ |
 | 31/10/2026 | **Ông bà↔cháu dùng CHUNG nội dung bố mẹ↔con** | Cùng cấu trúc quan hệ người lớn→trẻ; chỉ đổi xưng hô. Khỏi viết và khỏi xin ký thêm một bộ nội dung |
+| 03/11/2026 | **Thẻ sức khoẻ: 6 người × 3 bản; bản thứ 4 tự thay bản cũ nhất, người thứ 7 buộc người dùng chọn xoá** | Chủ dự án muốn không làm nặng bộ nhớ. Xoá một bản là mất ít; xoá cả một người là mất nhiều nên không tự quyết thay họ (ADR-010) |
+| 03/11/2026 | **Sổ sức khoẻ đứng riêng (bảng `suc-khoe`, kho v3), KHÔNG gắn vào `ThanhVien`** | Người ở đây có thể chưa từng làm DISC, và dữ liệu sức khoẻ không được lẫn vào phân tích tính cách; sao lưu dùng tệp tuỳ chọn nên không tăng `phienBanSaoLuu` |
+| 03/11/2026 | **Trẻ chưa có bảng WHO ⇒ chỉ BMI thô + "chưa so được", KHÔNG bịa phân loại; không bao giờ lời khuyên giảm cân cho người < 19 tuổi** | Chép số WHO từ trí nhớ là rủi ro y khoa; nhãn sai gắn lên trẻ nặng hơn việc thiếu nhãn |
+| 03/11/2026 | **Dùng ĐÚNG mascot/logo SATA ROBO chính thức, không vẽ lại** | Brand DNA §15–18 cấm tự thiết kế robot khác hay méo/đổi màu; chỉ nén ảnh và đặt trên khung trắng |

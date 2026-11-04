@@ -18,8 +18,8 @@ Khoang trắc nghiệm DISC nhúng vào app chủ của SATA ROBO, cho **cả gi
 tới lớp 12, và bố mẹ. Hệ thống chấm rồi trả về bản báo cáo đọc được ngay — mỗi người đọc bản
 viết cho đúng mình. Mục tiêu kinh doanh: **giữ chân hơn 1.000 gia đình đang học** (đổi từ mồi
 thu khách, 27/08/2026). Hướng đang mở: **luồng ba bước** — ADR-008.
-Nguồn yêu cầu: `docs/brd/`. 🔴 **Lộ trình đang có hiệu lực: `PLAN_V3.md`** (service worker
-chịu cập nhật + đường ra host thật, chốt 28/08/2026). **Hai sổ cũ chỉ còn để TRA CỨU *vì
+Nguồn yêu cầu: `docs/brd/`. 🔴 **Lộ trình đang có hiệu lực: `PLAN_V4.md`** (gọn + áo giáp + ra host thật;
+GĐ23–GĐ30). **Hai sổ cũ chỉ còn để TRA CỨU *vì
 sao*, đừng tick thêm ô nào ở đó:** `PLAN_V2.md` (GĐ15–GĐ18 + luồng ba bước; hai ô còn mở
 `V0.1`/`V0.2` đã chuyển thành `21.1`/`22.1` của sổ V3) · `PLAN_V1_LUU.md` (tên cũ
 `PLAN.md`, 68 hạng mục GĐ0–GĐ14).
@@ -30,7 +30,7 @@ Kiến trúc module: `core` (nền tảng) · `test` (bộ câu hỏi + luồng 
 (chấm điểm + sinh báo cáo) — ranh giới do `.semgrep/ranh-gioi-module.yml` canh.
 Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router, `output:'export'`)
 + TypeScript + Tailwind + Vitest. **KHÔNG backend, KHÔNG cơ sở dữ liệu, KHÔNG Supabase**
-(ADR-001) — chạy 100% trong trình duyệt. Thư viện ngoài duy nhất: `jszip`.
+(ADR-001) — chạy 100% trong trình duyệt. Thư viện ngoài: `jszip` + `jspdf` (ADR-009, chỉ nạp lười).
 
 ## QUYỀN TỰ CHỦ (đã được cấp)
 
@@ -62,64 +62,41 @@ Quyết định kiến trúc: `docs/decisions/ADR-*`. Stack: Next.js (App Router
 - Chi tiết: `.claude/rules/` (workflow, security, module-boundaries, tech-defaults,
   ngon-ngu-ui).
 
-## TRẠNG THÁI (cập nhật 31/10/2026 — GĐ27–GĐ29 HẾT VIỆC MÁY, chờ bấm thử)
+## TRẠNG THÁI (cập nhật 03/11/2026 — GĐ30 HẾT VIỆC MÁY, chờ bấm thử + chữ ký)
 
-> 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V4.md`** (mục *BÀN GIAO PHIÊN GẦN
-> NHẤT*): làm tiếp từ file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
+> 🔴 **Bàn giao chi tiết cho phiên sau nằm ở ĐẦU `PLAN_V4.md`** (mục *BÀN GIAO PHIÊN GẦN NHẤT*): làm tiếp từ
+> file nào · đã đo gì đừng đo lại · lệnh nên chạy. Đọc chỗ đó trước.
 
 ### 🟢 ĐÃ XONG
 
-**`PLAN_V4.md`: 8/10 ô ✅** — GĐ23 (mã mời) · GĐ24 (bảo mật) · GĐ25 (context + dọn rác).
-🆕 **GĐ27** (5 ô, 31/10/2026): mảng nhấn tối "Aurora" + radar + nội dung vợ↔chồng/anh-chị↔em
-(cờ `MO_NOI_DUNG_DOI`). 🆕 **GĐ28** (8 ô): hạn mức 2 bản MỖI LOẠI · sổ bản đã làm · cổng phân tích mềm ·
-hàng gập "Lời khuyên dành cho {tên}" · đồng hành hằng ngày cho hai góc nhìn về con · nhắc test lại 6 tháng
-+ .ics. **1.821 test xanh**, gói chính 298/300 KB; **chưa tick** vì chưa ai bấm thử.
-🆕 **GĐ29** (9 ô, đã push `7b2f39d`): phân tích sâu cho MỌI cặp (người lớn↔người lớn, người lớn↔trẻ, cùng nhịp) × 3 bậc
-trẻ · xưng hô trung tính · giao diện đọc nhanh ("Hôm nay thử", chọn người, Mở/Gập hết). **2.195 test xanh**,
-gói chính ~295/300 KB; hồ sơ ký đổi nội dung lần nữa. **Chưa tick** — chưa ai nhìn bằng mắt.
-🆕 **GĐ30** (03/11/2026, ADR-010): thẻ **"Sức khoẻ gia đình"** dưới DISC — ngày sinh/giới tính/cân nặng/chiều cao → BMI,
-gợi ý ăn uống·vận động·nghỉ ngơi, PDF; hạn mức **6 người × 3 bản** (bản thứ 4 thay bản cũ nhất; người thứ 7 buộc chọn xoá).
-Nạp lười, cờ `MO_SUC_KHOE` **TẮT** (xem thử: `?suc-khoe=1`). **2.270 test xanh**, gói chính 298/300 KB; chưa tick.
-Hai ô còn lại chặn bởi NGƯỜI/NGOÀI. Ba sổ cũ (`V3` 7/10 · `V2` 25/27 · `V1_LUU` 68/68) đã
-đóng — chỉ để tra *vì sao*, đừng tick thêm.
+**`PLAN_V4.md`: 35/39 ô ✅ (90%)** — luật tick mới (CEO 29/09): máy xong + test xanh ⇒ tick, ô còn chờ người giữ
+dòng *(b) chờ anh*. Còn mở 4 ô: `26.1` host · `26.2` bấm GĐ18 · `30.1` bảng WHO · `30.6` việc người của thẻ sức khoẻ.
+GĐ23 mã mời (**TẮT**, cờ `MO_MA_MOI`) · GĐ24 CSP theo băm build · GĐ25 dọn context · GĐ27 giao diện "Aurora" + nội
+dung vợ↔chồng · GĐ28 hạn mức 2 bản/loại, sổ bản đã làm, nhắc test lại 6 tháng · GĐ29 phân tích sâu mọi cặp.
+🆕 **GĐ30 (03/11, ADR-010, đã push `cbd943c`):** thẻ **"Sức khoẻ gia đình"** dưới DISC — BMI + gợi ý ăn uống·vận
+động·nghỉ ngơi + PDF; **6 người × 3 bản** (bản thứ 4 thay bản cũ nhất; người thứ 7 buộc chọn xoá); kho IndexedDB v3;
+nạp lười; mascot + logo SATA ROBO chính thức. Cờ `MO_SUC_KHOE` **TẮT** (xem thử: `?suc-khoe=1`).
+**2.270 test xanh**, gói chính **298/300 KB** gzip. Ba sổ cũ (`V3`·`V2`·`V1_LUU`) đã đóng — chỉ để tra *vì sao*.
 
-**1.428 test xanh** · `npm run kiem` + `npm run build` xanh · **gói chính 290 KB gzip**
-(trần 300). 🔴 **Chưa push** commit của phiên 29/08.
+### 🔴 VIỆC NGƯỜI ĐANG CHẶN
 
-**Ba thứ vừa đổi:** ① **mã mời TẮT** bằng cờ `MO_MA_MOI` chặn ở ba lớp — nhận lại trần
-*"cả nhà dùng chung một máy"*, đổi lấy việc gỡ blocker quét QR hai điện thoại; dữ liệu của
-ai đã từng nhận hồ sơ qua mã **không mất một mẩu nào**, có cửa canh riêng. ② **bản deploy
-nay có áo giáp** — `out/_headers` sinh CSP theo **băm mỗi bản build**. ③ **dự án nhẹ đi 80%
-phần nạp mỗi lượt** — kho tra cứu tách sang `docs/so-seo.md` + `docs/decisions/nhat-ky-quyet-dinh.md`,
-không xoá một chữ.
-
-### 🔴 VIỆC NGƯỜI ĐANG CHẶN MỐC PHÁT
-
-0. 🔴 **Bấm DEMO CUỐI của GĐ23 và GĐ25** trong `PLAN_V4.md` — máy không tự bấm được.
-1. 🔴 **Tài khoản Cloudflare + một tên miền** (`26.1`) — **blocker cứng của ngày phát, và
-   không code nào cứu được**. Chưa có `infra.json`, chưa ai bấm deploy lần nào.
-   🔴 Sau khi deploy phải mở DevTools ▸ Console kiểm **không một vi phạm CSP nào** — đây là
-   chỗ DUY NHẤT kiểm được `24.1`, vì máy chủ chạy thử không gửi `_headers`.
-2. **Bấm thử GĐ18 bằng mắt** (`26.2`) — 7 việc ở *DEMO CUỐI* 18A/18B/18C trong `PLAN_V2.md`.
-4. **Gửi hai hồ sơ ký duyệt.** 🔴 Gói B nay RỘNG HƠN (`14.3` thêm nội dung vợ ↔ chồng).
-   ⚠️ Chạy lại `scripts/xuat-noi-dung-ky-duyet.mjs` **KHÔNG ĐỦ** — script không import
-   `config/disc-noi-dung-cap.ts`, phải MỞ RỘNG nó trước.
-5. **Gọi đội dev app chủ 30 phút** · **gọi 5 phụ huynh vừa nghỉ** · **duyệt trang A4**
-   (`docs/huong-dan-giao-vien-va-sale.md`).
+0. **Bấm thử bằng mắt:** thẻ sức khoẻ (điện thoại thật + mở PDF) · GĐ27–29 · DEMO CUỐI GĐ23/GĐ25 trong `PLAN_V4.md`.
+1. 🔴 **Tài khoản Cloudflare + một tên miền** (`26.1`) — blocker cứng của ngày phát. Sau deploy mở DevTools ▸
+   Console kiểm **không vi phạm CSP nào** (chỗ DUY NHẤT kiểm được `24.1`).
+2. **Bấm thử GĐ18** (`26.2`) · **gọi đội dev app chủ 30 phút** · **gọi 5 phụ huynh vừa nghỉ** · **duyệt trang A4**.
+3. **Gửi hồ sơ ký duyệt** (sinh bằng `scripts/xuat-noi-dung-ky-duyet.mjs` và `…-goi-c.mjs`). Gói A/B đã đổi nội dung nhiều
+   lần — gửi lại nếu đã gửi.
 
 ### CHỜ NGOÀI (ghi vào đây rồi làm tiếp, đừng dừng)
 
-- 🔴 **Thẻ sức khoẻ (GĐ30):** ① **Gói C** `docs/noi-dung-cho-ky-duyet-goi-c.md` — bác sĩ nhi/dinh dưỡng ký, *chặn bật cờ `MO_SUC_KHOE`* ·
-  ② luật sư đọc lại lời nhắn miễn trừ · ③ **bảng WHO 2006/2007** (30.1) — xác minh giấy phép rồi nhúng; chưa có thì trẻ chỉ nhận
-  BMI thô · ④ `public/brand/` có mascot+logo SATA ROBO — repo CÔNG KHAI, cân nhắc trước khi push.
-
-- 🔴 **HAI chữ ký chuyên môn.** **Gói A** `docs/noi-dung-cho-ky-duyet.md` (nội dung về TRẺ,
-  *chặn ngày ra người dùng thật*). **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (người
-  lớn về chính họ **và bạn đời**; *chỉ chặn phần của nó*, chưa ký vẫn phát được).
-- 🔴 **Đo lý do phụ huynh rời đi** — mục tiêu cả dự án là giữ chân mà **chưa ai đo vì sao
-  họ đi**. *Chặn: cả bốn giai đoạn có nhắm đúng chỗ không.*
-- **Chốt nghi thức mời của trường** · **thu 30–50 phản hồi thật** rồi chạy
-  `node scripts/phan-tich-item.mjs` → Cronbach α (lúc DUY NHẤT được nói về độ tin cậy).
+- 🔴 **Thẻ sức khoẻ (GĐ30):** ① **Gói C** `docs/noi-dung-cho-ky-duyet-goi-c.md` — bác sĩ nhi/dinh dưỡng ký, *chặn bật cờ* ·
+  ② luật sư đọc lời nhắn miễn trừ · ③ **bảng WHO 2006/2007** (`30.1`) — xác minh giấy phép rồi nhúng; chưa có thì trẻ
+  chỉ nhận BMI thô · ④ `public/brand/` có mascot+logo SATA ROBO **đã lên repo công khai** — xác nhận hoặc gỡ.
+- 🔴 **HAI chữ ký chuyên môn.** **Gói A** `docs/noi-dung-cho-ky-duyet.md` (nội dung về TRẺ, *chặn ngày ra người dùng
+  thật*). **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (người lớn, bạn đời; chưa ký vẫn phát được phần khác).
+- 🔴 **Đo lý do phụ huynh rời đi** — mục tiêu cả dự án là giữ chân mà chưa ai đo vì sao họ đi.
+- **Chốt nghi thức mời của trường** · **thu 30–50 phản hồi thật** rồi chạy `node scripts/phan-tich-item.mjs` → Cronbach α.
+- Repo được TẶNG cộng đồng (CEO Minh Trí): chưa có `LICENSE` — đề xuất MIT, chờ duyệt tên tác giả.
 
 ### 🔴 CON SỐ CẦN THEO DÕI SAU KHI PHÁT
 

@@ -64,6 +64,13 @@ im lặng cả tính năng lưu. Thêm trường mới thì PHẢI thêm vào `K
 
 ## 6. Cạm bẫy đã trả giá
 
+### Kho lên v3: thêm bảng `suc-khoe` (30.2, ADR-010)
+
+- Chỉ TẠO bảng mới trong `onupgradeneeded`, không đụng bảng cũ; `tests/di-tru-so-gia-dinh.test.ts` canh bản nâng thật từ v1.
+- Tăng `PHIEN_BAN_KHO` thì PHẢI sinh lại `tests/DATA_TEST/nap-vao-trinh-duyet.js` (`node tests/DATA_TEST/tao-du-lieu-mau.mjs`).
+- Sao lưu: tệp `_may-doc/suc-khoe.json` TUỲ CHỌN, chỉ ghi khi sổ có dữ liệu — KHÔNG tăng `phienBanSaoLuu`.
+- `xoaSachTatCa()` dọn cả bảng này; bản dựng KhoDisc khác (đội dev app chủ) phải tự lo phần sức khoẻ qua `datKhoSucKhoe()`.
+
 ### Tệp sao lưu nay có BA đời, và cả ba phải nạp được (17.5)
 
 | Đời | Bản kê | Bài | Thành viên + phân tích |
