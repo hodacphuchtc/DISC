@@ -4,7 +4,7 @@
 
 > 🔴 **GHI ĐÈ mỗi phiên** — khối mới THAY khối cũ, không xếp chồng. Trần 40 dòng.
 
-**04/11/2026 — GĐ31 (thanh bên 3 tab + trình đọc Tủ sách): PHẦN MÁY XONG. Đã push `791a9b2`, `f5ff696`; CHƯA push `ee5eaf2`, `6e748f8` (DISC) và `ac28ca2` (KHO_SACH).**
+**04/11/2026 — GĐ31 (thanh bên 3 tab + trình đọc Tủ sách): PHẦN MÁY XONG, ĐÃ PUSH (DISC `2c50cf1`, KHO_SACH `ac28ca2`), CHƯA AI BẤM THỬ.**
 
 **1. Vừa xong.** Cột trái 3 tab **DISC · Sức khoẻ cả nhà · Tủ sách gia đình** (`MO_SUC_KHOE=true`, nội dung còn nháp). Tab Tủ sách nhúng KHO_SACH
 bằng iframe, **nạp lười**. Trình đọc (KHO_SACH): vừa khung, toàn màn hình, zoom tự do, **Tải toàn bộ**, hộp không bị che (mục `31.5`).
@@ -17,7 +17,7 @@ Mã: `app/components/thanh-ben.tsx` · `app/page.tsx` · `app/khoang/tu-sach.tsx
 **3. Chặn ở NGƯỜI / NGOÀI.** `31.4` (NGOÀI): CSP + `/api/anh` + SW cho `/tu-sach/` khi deploy (cần Cloudflare `26.1` + NXB đồng ý
 văn bản, `KHO_SACH/docs/PHAP-LY.md`); KHO_SACH `_headers` đang `frame-ancestors none` — phải mở cho gốc DISC khi nhúng thật.
 `30.1` bảng WHO · Gói C (đặt `MO_SUC_KHOE=false` nếu chưa ký trước khi phát) · `26.1` · `26.2` · Gói A/B · `LICENSE` ·
-`public/brand/` (mascot + logo SATA ROBO trong repo CÔNG KHAI — chờ xác nhận). Chưa push: cần chủ dự án duyệt.
+`public/brand/` (mascot + logo SATA ROBO trong repo CÔNG KHAI — chờ xác nhận).
 
 **4. 🔴 ĐÃ ĐO, ĐỪNG ĐO LẠI.**
 - Gói chính 298/300 KB: tab Tủ sách PHẢI nạp lười (không lười thì 299 KB). Tính năng mới vào trang chính cũng vậy.
@@ -584,7 +584,7 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
   (nút, Ctrl+lăn, chụm, nhấp đúp), hộp trượt cuộn được + thanh Đóng luôn thấy, nút **Tải toàn bộ** (tải từng phần
   gập lại); DISC: tab dò máy chủ KHO_SACH :4310 (có `/api/anh`), `npm run tu-sach`, tab nạp lười (`6e748f8`) ·
   **(c)** KHO_SACH `npm run kiem` 34/34 + Chrome tự động (cdp2/cdp3) đạt; DISC 2.270 test xanh · **(d)** 1 ngày.
-  - (b) chờ anh: NGƯỜI — bấm thử trên điện thoại thật (chụm zoom, toàn màn hình, tải cuốn 240 trang). **Chưa push** hai commit này.
+  - (b) chờ anh: NGƯỜI — bấm thử trên điện thoại thật (chụm zoom, toàn màn hình, tải cuốn 240 trang). Đã push.
 - [ ] **31.4 — Đưa Tủ sách lên host thật** · **(a)** mở CSP riêng cho `/tu-sach/*` (`img-src` taphuan.nxbgd.vn, `frame-src`)
   trong `scripts/sinh-danh-sach-cache.mjs` · cổng `/api/anh` (Cloudflare Functions) vào DISC · service worker
   không chặn `/tu-sach/` · **(d)** 1 ngày.
