@@ -15,7 +15,8 @@
     "check:structure": "node scripts/check-structure.mjs",
     "check:sast": "semgrep --config .semgrep --error --quiet .",
     "kiem": "npm run typecheck && npm run lint && npm run test && npm run check:structure && npm run check:sast",
-    "check:goi": "node scripts/kiem-co-goi.mjs"
+    "check:goi": "node scripts/kiem-co-goi.mjs",
+    "tu-sach": "node scripts/chay-tu-sach.mjs"
   },
   "dependencies": {
     "jspdf": "^4.2.1",

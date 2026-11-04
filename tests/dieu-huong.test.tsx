@@ -107,7 +107,10 @@ describe("thanh bên", () => {
     expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeNull();
 
     fireEvent.click(nut("tu-sach"));
-    expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeTruthy();
+    // Tab Tủ sách nạp LƯỜI (chunk riêng) nên phải chờ nó hiện ra.
+    await waitFor(() =>
+      expect(document.querySelector('[data-thu="khoang-tu-sach"]')).toBeTruthy(),
+    );
     expect(nut("tu-sach").getAttribute("aria-current")).toBe("page");
     expect(nut("disc").getAttribute("aria-current")).toBeNull();
 

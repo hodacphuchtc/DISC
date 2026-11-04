@@ -5,7 +5,6 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { ThanhBen } from "./components/thanh-ben";
 import { KhoangCacBuoc } from "./khoang/cac-buoc";
 import { KhoangSoLieu } from "./khoang/so-lieu";
-import { KhoangTuSach } from "./khoang/tu-sach";
 import type { MaTab } from "@config/disc-tu-dien";
 import { MAU } from "@config/thuong-hieu";
 import {
@@ -21,6 +20,11 @@ import { MO_SUC_KHOE, THAM_SO_SUC_KHOE } from "@config/suc-khoe-nguong";
  * 300 KB). Chỉ được nạp khi cờ `MO_SUC_KHOE` bật, hoặc khi xem thử qua `?suc-khoe=1`.
  */
 const KhoangSucKhoe = lazy(() => import("./khoang/suc-khoe/khoang-suc-khoe"));
+
+/** Tab Tủ sách: NẠP LƯỜI — gói chính đang sát trần 300 KB, chỉ tải khi người dùng bấm tab. */
+const KhoangTuSach = lazy(() =>
+  import("./khoang/tu-sach").then((m) => ({ default: m.KhoangTuSach })),
+);
 
 export default function Trang() {
   const [khoHong, datKhoHong] = useState<LyDoKhoHong | null>(null);
@@ -91,7 +95,11 @@ export default function Trang() {
             <KhoangSucKhoe />
           </Suspense>
         )}
-        {tab === "tu-sach" && <KhoangTuSach />}
+        {tab === "tu-sach" && (
+          <Suspense fallback={null}>
+            <KhoangTuSach />
+          </Suspense>
+        )}
       </main>
     </div>
   );
