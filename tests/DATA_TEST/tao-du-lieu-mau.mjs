@@ -46,6 +46,7 @@ const {
   BANG_THANH_VIEN,
   BANG_PHAN_TICH,
   PHIEN_BAN_KHO,
+  BANG_SUC_KHOE,
 } = await import(new URL("modules/core/luu-tru/kho-bai.ts", GOC).href);
 
 const THU_MUC = new URL("tests/DATA_TEST/bai-lam/", GOC);
@@ -316,6 +317,7 @@ const napJs = `/**
   const TEN_BANG = ${JSON.stringify(TEN_BANG)};
   const BANG_THANH_VIEN = ${JSON.stringify(BANG_THANH_VIEN)};
   const BANG_PHAN_TICH = ${JSON.stringify(BANG_PHAN_TICH)};
+  const BANG_SUC_KHOE = ${JSON.stringify(BANG_SUC_KHOE)};
 
   const THANH_VIEN = ${JSON.stringify(thanhVien, null, 2).split("\n").join("\n  ")};
 
@@ -350,6 +352,9 @@ const napJs = `/**
       }
       if (!d.objectStoreNames.contains(BANG_PHAN_TICH)) {
         d.createObjectStore(BANG_PHAN_TICH, { keyPath: "id" });
+      }
+      if (!d.objectStoreNames.contains(BANG_SUC_KHOE)) {
+        d.createObjectStore(BANG_SUC_KHOE, { keyPath: "id" });
       }
     };
     yc.onsuccess = () => ok(yc.result);

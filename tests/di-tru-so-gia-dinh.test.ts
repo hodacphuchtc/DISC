@@ -65,24 +65,26 @@ const bai = (ghiDe: Partial<BaiLamLuu> = {}): BaiLamLuu => {
 async function donSach() {
   await xoaSach();
   await xoaSachThanhVien();
-  for (const t of await docPhanTich()) await donThuMucPhanTich(0, 0).catch(() => void t);
+  for (const t of await docPhanTich())
+    await donThuMucPhanTich(0, 0).catch(() => void t);
   window.localStorage.clear();
 }
 
 beforeEach(donSach);
 afterEach(donSach);
 
-describe("🔴 kho v2 — ba bảng, không mất bảng cũ", () => {
-  it("mở được và có đủ ba bảng", async () => {
+describe("🔴 kho hiện hành (v3) — bốn bảng, không mất bảng cũ", () => {
+  it("mở được và có đủ bốn bảng (v3 thêm `suc-khoe`, ADR-010)", async () => {
     await luuBai(bai());
     const db = await new Promise<IDBDatabase>((ok) => {
       const yc = indexedDB.open(TEN_KHO);
       yc.onsuccess = () => ok(yc.result);
     });
-    expect(db.version).toBe(2);
+    expect(db.version).toBe(3);
     expect([...db.objectStoreNames].sort()).toEqual([
       "bai-lam",
       "phan-tich-gia-dinh",
+      "suc-khoe",
       "thanh-vien",
     ]);
     db.close();
@@ -95,7 +97,11 @@ describe("🔴 kho v2 — ba bảng, không mất bảng cũ", () => {
       yc.onsuccess = () => ok(yc.result);
     });
     const bang = db.transaction(TEN_BANG, "readonly").objectStore(TEN_BANG);
-    expect([...bang.indexNames].sort()).toEqual(["ketThuc", "maThanhVien", "maTre"]);
+    expect([...bang.indexNames].sort()).toEqual([
+      "ketThuc",
+      "maThanhVien",
+      "maTre",
+    ]);
     db.close();
   });
 });
@@ -110,7 +116,11 @@ describe("🔴 nhận nuôi bài cũ — KHÔNG mất một bài nào", () => {
 
     expect(themMoi).toBe(3);
     expect(await docTatCa()).toHaveLength(3);
-    expect((await docThanhVien()).map((t) => t.ten).sort()).toEqual(["Kiki", "Mimi", "Zozo"]);
+    expect((await docThanhVien()).map((t) => t.ten).sort()).toEqual([
+      "Kiki",
+      "Mimi",
+      "Zozo",
+    ]);
   });
 
   it("một tên làm nhiều bài ⇒ MỘT thành viên, mọi bài trỏ về đúng người đó", async () => {
@@ -229,7 +239,10 @@ describe("🔴 xoá thành viên — chế độ BẮT BUỘC nói ra", () => {
 
     expect(await docThanhVien()).toHaveLength(0);
     const ds = await docTatCa();
-    expect(ds, "🔴 xoá người mà mất bài là đường mất dữ liệu nhanh nhất").toHaveLength(1);
+    expect(
+      ds,
+      "🔴 xoá người mà mất bài là đường mất dữ liệu nhanh nhất",
+    ).toHaveLength(1);
     expect(ds[0].maThanhVien).toBeUndefined();
   });
 
@@ -267,7 +280,9 @@ describe("🔴 xoá thành viên — chế độ BẮT BUỘC nói ra", () => {
       const yc = indexedDB.open(TEN_KHO);
       yc.onsuccess = () => ok(yc.result);
     });
-    const bang = db.transaction(BANG_THANH_VIEN, "readonly").objectStore(BANG_THANH_VIEN);
+    const bang = db
+      .transaction(BANG_THANH_VIEN, "readonly")
+      .objectStore(BANG_THANH_VIEN);
     expect([...bang.indexNames]).toContain("thuTu");
     db.close();
   });
@@ -328,7 +343,10 @@ describe("🔴🔴 NÂNG THẬT TỪ v1 LÊN v2 — cửa kiểm đắt nhất c
     // Lời gọi đầu tiên bằng mã v2 chính là thứ kích hoạt onupgradeneeded.
     const sau = await docTatCa();
 
-    expect(sau, "🔴 MẤT BÀI khi nâng kho — dừng lại, đừng phát hành").toHaveLength(3);
+    expect(
+      sau,
+      "🔴 MẤT BÀI khi nâng kho — dừng lại, đừng phát hành",
+    ).toHaveLength(3);
     for (const b of cu) {
       const con = sau.find((x) => x.id === b.id);
       expect(con, `mất bài ${b.id}`).toBeTruthy();
@@ -353,7 +371,10 @@ describe("🔴🔴 NÂNG THẬT TỪ v1 LÊN v2 — cửa kiểm đắt nhất c
     const ds = await docTatCa();
     expect(tv).toHaveLength(2);
     expect(ds).toHaveLength(3);
-    expect(ds.every((b) => b.maThanhVien), "còn bài chưa được xếp về ai").toBeTruthy();
+    expect(
+      ds.every((b) => b.maThanhVien),
+      "còn bài chưa được xếp về ai",
+    ).toBeTruthy();
   });
 
   it("bảng mới rỗng sau khi nâng, không có bản ghi ma", async () => {
@@ -363,7 +384,12 @@ describe("🔴🔴 NÂNG THẬT TỪ v1 LÊN v2 — cửa kiểm đắt nhất c
 });
 
 describe("🔴 14.5 — thi hành hạn mức thư mục trên kho thật", () => {
-  const pt = (id: string, taoLuc: string) => ({ id, maBai: ["b1", "b2"], taoLuc, noiDung: {} });
+  const pt = (id: string, taoLuc: string) => ({
+    id,
+    maBai: ["b1", "b2"],
+    taoLuc,
+    noiDung: {},
+  });
 
   it("chưa đầy thì dọn xong không mất gì", async () => {
     await luuPhanTich(pt("t1", "2026-01-01T00:00:00Z"));
@@ -389,7 +415,10 @@ describe("🔴 14.5 — thi hành hạn mức thư mục trên kho thật", () =
     }
     const sap = await thuMucSapMat(5);
     expect(sap.map((t) => t.id)).toEqual(["t1"]);
-    expect(await docPhanTich(), "thuMucSapMat mà xoá thì nó không còn là 'chỉ đọc'").toHaveLength(5);
+    expect(
+      await docPhanTich(),
+      "thuMucSapMat mà xoá thì nó không còn là 'chỉ đọc'",
+    ).toHaveLength(5);
   });
 
   it("bản phân tích đọc lại được nguyên vẹn — dienGiai lưu MÃ, không lưu chuỗi dựng sẵn", async () => {

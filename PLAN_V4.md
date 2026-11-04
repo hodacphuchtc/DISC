@@ -531,6 +531,46 @@ vá tới nó, và Console sạch không một vi phạm CSP**.
 
 ---
 
+## 🔴 GIAI ĐOẠN 30 — Thẻ "Sức khoẻ gia đình" (ADR-010)
+
+> Chốt 03/11/2026 (chủ dự án duyệt plan và duyệt giao diện): thẻ mới dưới DISC — ngày sinh, giới tính,
+> cân nặng, chiều cao → chỉ số + gợi ý ăn uống / vận động / nghỉ ngơi theo tuổi. Hạn mức **6 người × 3
+> bản**. Giao diện sinh động (mascot + logo chính thức, CSS/SVG thuần). 🔴 Không ô nào tick: (b) của mỗi
+> ô là *bấm thật trên máy*, chưa ai bấm. Xem thử: `npm run xem-thu` → http://localhost:3100/?suc-khoe=1
+
+- [ ] **30.0 — ADR-010 + lõi tính toán thuần** · **(a)** `modules/core/suc-khoe/` (tuổi, BMI châu Á, eo/chiều
+  cao, BMR/TDEE, z-score LMS, hàng rào an toàn, chọn khuôn lời khuyên, luật hạn mức) · **(c)**
+  `tests/suc-khoe.test.ts`, `tests/so-suc-khoe.test.ts` · **(d)** 1 ngày.
+  - **Tiến độ 03/11:** PHẦN MÁY XONG.
+- [ ] **30.1 — Bảng WHO 2006/2007 (nạp lười)** · **(d)** 1 ngày.
+  - (e) chặn: NGOÀI — xác minh giấy phép bảng WHO trước khi nhúng; không chép số từ trí nhớ. Hàm LMS và
+    điểm cắm `TraBang` đã sẵn; chưa có bảng thì trẻ chỉ nhận BMI thô, nói rõ "chưa so được".
+- [ ] **30.2 — Kho IndexedDB + sao lưu/khôi phục** · **(a)** bảng `suc-khoe` (kho v3), hợp đồng
+  `kho-suc-khoe.ts`, tệp tuỳ chọn `_may-doc/suc-khoe.json`, "Xoá sạch" dọn cả bảng · **(c)**
+  `tests/so-suc-khoe.test.ts`, `tests/di-tru-so-gia-dinh.test.ts` · **(d)** 1 ngày.
+  - **Tiến độ 03/11:** PHẦN MÁY XONG.
+- [ ] **30.3 — Giao diện thẻ + linh vật + hiệu ứng** · **(a)** `app/khoang/suc-khoe/` (nạp lười): form trên
+  cùng · bảng cả nhà · chi tiết (bản mới nhất mở sẵn, bản cũ gập) · khung lưu ý dưới cùng · hộp thoại chọn
+  xoá · mascot/logo chính thức · cờ `MO_SUC_KHOE` + `?suc-khoe=1` · **(b)** bấm thử trên điện thoại thật ·
+  **(c)** `tests/khoang-suc-khoe.test.tsx` · **(d)** 2 ngày.
+  - (e) chặn: NGƯỜI — chưa ai nhìn bằng mắt trên điện thoại thật. **Tiến độ 03/11:** PHẦN MÁY XONG; đã xem
+    bằng Chrome ở bản desktop (mascot hiện đủ người, ảnh tải đủ, bảng/chi tiết/bản cũ hoạt động).
+- [ ] **30.4 — Nội dung lời khuyên (BẢN NHÁP) + hồ sơ ký Gói C** · **(a)**
+  `config/suc-khoe-noi-dung.ts` (6 khuôn), `docs/noi-dung-cho-ky-duyet-goi-c.md` (máy sinh bằng
+  `scripts/xuat-noi-dung-ky-duyet-goi-c.mjs`, test canh phủ đủ) · **(d)** 1 ngày.
+  - (e) chặn: NGƯỜI — Gói C chưa ai ký (bác sĩ nhi / chuyên gia dinh dưỡng); cờ `MO_SUC_KHOE` giữ TẮT với
+    người dùng thật. **Tiến độ 03/11:** PHẦN MÁY XONG.
+- [ ] **30.5 — Xuất PDF từng người** · **(a)** `modules/report/noi-dung-suc-khoe.ts` +
+  `xuatPdfSucKhoe()` (dùng lại bộ vẽ ADR-009, nạp lười, kèm toàn văn lời nhắn quan trọng) · **(c)**
+  `tests/suc-khoe-pdf.test.ts` (sinh PDF thật dưới Node) · **(d)** 0,5 ngày.
+  - **Tiến độ 03/11:** PHẦN MÁY XONG — chưa nhìn tệp PDF bằng mắt.
+- [ ] **30.6 — Việc NGƯỜI cần làm trước khi bật cờ** · (1) bác sĩ/chuyên gia ký Gói C · (2) luật sư đọc
+  lại lời nhắn miễn trừ · (3) quyết có đưa mascot/logo lên repo công khai không (đã chép vào
+  `public/brand/`) · (4) bấm thử trên điện thoại.
+  - (e) chặn: NGƯỜI.
+
+---
+
 ## TỔNG ƯỚC LƯỢNG
 
 | Giai đoạn | Máy | Người / Ngoài |

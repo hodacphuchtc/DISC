@@ -34,6 +34,8 @@ export const TEN_KHO = "disc";
 export const TEN_BANG = "bai-lam";
 export const BANG_THANH_VIEN = "thanh-vien";
 export const BANG_PHAN_TICH = "phan-tich-gia-dinh";
+/** 🆕 v3 (ADR-010) — sổ sức khoẻ: mỗi bản ghi là MỘT NGƯỜI kèm tối đa 3 mốc đo. */
+export const BANG_SUC_KHOE = "suc-khoe";
 
 /**
  * 🔴 Tăng số này là một cuộc DI TRÚ. Đọc `moKho()` trước khi đụng vào.
@@ -44,7 +46,7 @@ export const BANG_PHAN_TICH = "phan-tich-gia-dinh";
  * thấy một lỗi đỏ lạ. Một script hỏng mà không ai gọi thì im lặng y như một tính năng
  * hỏng mà không ai mở.
  */
-export const PHIEN_BAN_KHO = 2;
+export const PHIEN_BAN_KHO = 3;
 
 /** Khoá localStorage đánh dấu đã chạy xong việc nhận nuôi bài cũ. */
 const KHOA_DA_NHAN_NUOI = "disc:da-nhan-nuoi-v2";
@@ -71,7 +73,7 @@ export function lyDoKhoHong(): LyDoKhoHong | null {
   return lyDoGanNhat;
 }
 
-function moKho(): Promise<IDBDatabase | null> {
+export function moKho(): Promise<IDBDatabase | null> {
   return new Promise((giaiQuyet) => {
     try {
       if (typeof indexedDB === "undefined") {
@@ -107,6 +109,10 @@ function moKho(): Promise<IDBDatabase | null> {
         if (!db.objectStoreNames.contains(BANG_PHAN_TICH)) {
           db.createObjectStore(BANG_PHAN_TICH, { keyPath: "id" });
         }
+        // v3 (ADR-010): chỉ TẠO bảng mới, không đụng bảng cũ — di trú an toàn nhất có thể.
+        if (!db.objectStoreNames.contains(BANG_SUC_KHOE)) {
+          db.createObjectStore(BANG_SUC_KHOE, { keyPath: "id" });
+        }
       };
 
       yeuCau.onsuccess = () => {
@@ -130,7 +136,7 @@ function moKho(): Promise<IDBDatabase | null> {
 
 // Nhận `IDBRequest` không tham số kiểu: `IDBRequest<A>` không gán được cho
 // `IDBRequest<A | null>` vì `onerror` mang `this` nghịch biến.
-function chayTren<T>(
+export function chayTren<T>(
   bangCanDung: string,
   cheDo: IDBTransactionMode,
   viec: (bang: IDBObjectStore) => IDBRequest,
@@ -430,6 +436,9 @@ async function xoaSachTatCaIdb(): Promise<void> {
     await xoaSachIdb();
     await xoaSachThanhVienIdb();
     await xoaSachPhanTichIdb();
+    // 🔴 Dữ liệu SỨC KHOẺ cũng là dữ liệu cá nhân của trẻ: "Xoá sạch" phải dọn cả nó.
+    await chayTren<undefined>(BANG_SUC_KHOE, "readwrite", (b) => b.clear(), undefined);
+    baoDoi();
   });
 }
 

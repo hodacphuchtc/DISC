@@ -18,9 +18,13 @@ import JSZip from "jszip";
 
 import type { PhanTichGiaDinh, ThanhVien } from "@modules/core/gia-dinh/kieu";
 
+import { daCoKhoSucKhoe, khoSucKhoeDangDung } from "@modules/core/suc-khoe/kho-suc-khoe";
+import type { NguoiSucKhoe } from "@modules/core/suc-khoe/kieu";
+import { laNguoiSucKhoeHopLe } from "@modules/core/suc-khoe/so-suc-khoe";
+
 import { THU_MUC_MAY_DOC } from "./cay-sao-luu";
 import { khoDangDung, type BaiLamLuu } from "./kho-disc";
-import { TEP_PHAN_TICH, TEP_THANH_VIEN } from "./sao-luu";
+import { TEP_PHAN_TICH, TEP_SUC_KHOE, TEP_THANH_VIEN } from "./sao-luu";
 
 /**
  * 🔴 BA ĐỜI TỆP SAO LƯU, VÀ CẢ BA PHẢI NẠP ĐƯỢC (17.5).
@@ -40,6 +44,7 @@ const CHO_TIM = {
   thanhVien: [`${THU_MUC_MAY_DOC}/thanh-vien.json`, "du-lieu/thanh-vien.json"],
   phanTich: [`${THU_MUC_MAY_DOC}/phan-tich.json`, "du-lieu/phan-tich.json"],
   thuMucBai: [`${THU_MUC_MAY_DOC}/bai`, "bai"],
+  sucKhoe: [TEP_SUC_KHOE],
 } as const;
 
 /** Sổ đọc được từ tệp — đã kiểm hình dạng, CHƯA ghi vào kho. */
@@ -47,6 +52,8 @@ export type SoTuTep = {
   readonly bai: readonly BaiLamLuu[];
   readonly thanhVien: readonly ThanhVien[];
   readonly phanTich: readonly PhanTichGiaDinh[];
+  /** 🆕 ADR-010. `undefined` = tệp không có sổ sức khoẻ (đời trước / chưa dùng). */
+  readonly sucKhoe?: readonly NguoiSucKhoe[];
   /** Bản sao lưu đời cũ (v1) không có hai bảng kia — nói ra để giao diện báo cho đúng. */
   readonly banCu: boolean;
 };
@@ -172,6 +179,11 @@ export async function docTuZip(duLieu: ArrayBuffer | Uint8Array): Promise<KetQua
       return { ok: false, loi: "du-lieu-hong", chiTiet: pt?.duong ?? TEP_PHAN_TICH };
     }
 
+    const sk = await docJsonODau(zip, CHO_TIM.sucKhoe);
+    if (sk !== undefined && (!Array.isArray(sk.gia) || !sk.gia.every(laNguoiSucKhoeHopLe))) {
+      return { ok: false, loi: "du-lieu-hong", chiTiet: sk.duong };
+    }
+
     const thanhVien = (thoTv ?? []) as unknown[];
     const phanTich = (thoPt ?? []) as unknown[];
     if (!thanhVien.every(laThanhVienHopLe)) {
@@ -187,6 +199,7 @@ export async function docTuZip(duLieu: ArrayBuffer | Uint8Array): Promise<KetQua
         bai,
         thanhVien: thanhVien as ThanhVien[],
         phanTich: phanTich as PhanTichGiaDinh[],
+        ...(sk ? { sucKhoe: sk.gia as NguoiSucKhoe[] } : {}),
         banCu,
       },
     };
@@ -210,4 +223,7 @@ export async function ghiDeKho(so: SoTuTep): Promise<void> {
   for (const tv of so.thanhVien) await kho.luuThanhVien(tv);
   for (const b of so.bai) await kho.luuBai(b);
   for (const pt of so.phanTich) await kho.luuPhanTich(pt);
+  // `xoaSachTatCa()` đã dọn cả sổ sức khoẻ; tệp có sổ thì ghi lại, không có thì để trống
+  // (đúng nghĩa "trả máy về lúc sao lưu").
+  if (so.sucKhoe && daCoKhoSucKhoe()) await khoSucKhoeDangDung().ghiSo(so.sucKhoe, []);
 }

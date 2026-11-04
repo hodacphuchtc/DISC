@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import { ThanhBen } from "./components/thanh-ben";
 import { KhoangCacBuoc } from "./khoang/cac-buoc";
@@ -12,6 +12,13 @@ import {
   type LyDoKhoHong,
 } from "@modules/core/luu-tru/kho-bai";
 import { CHU_KHO_HONG, THAM_SO_SO_LIEU } from "@config/disc-tu-dien";
+import { MO_SUC_KHOE, THAM_SO_SUC_KHOE } from "@config/suc-khoe-nguong";
+
+/**
+ * 🔴 THẺ SỨC KHOẺ (ADR-010) — NẠP LƯỜI: chunk riêng, gói chính không phình (đang sát trần
+ * 300 KB). Chỉ được nạp khi cờ `MO_SUC_KHOE` bật, hoặc khi xem thử qua `?suc-khoe=1`.
+ */
+const KhoangSucKhoe = lazy(() => import("./khoang/suc-khoe/khoang-suc-khoe"));
 
 export default function Trang() {
   const [khoHong, datKhoHong] = useState<LyDoKhoHong | null>(null);
@@ -26,6 +33,13 @@ export default function Trang() {
    * Nên: bỏ khỏi thanh bên, giữ một cửa sau bằng tham số địa chỉ.
    */
   const [moSoLieu, datMoSoLieu] = useState(false);
+  /**
+   * Thẻ sức khoẻ: bật bằng cờ, hoặc XEM THỬ bằng `?suc-khoe=1` trong lúc nội dung lời khuyên
+   * còn là BẢN NHÁP chờ chữ ký Gói C. 🔴 Tham số địa chỉ KHÔNG phải một hàng rào bảo mật —
+   * ai biết địa chỉ đều thấy; ta dựa vào chỗ nội dung nháp chưa chứa gì nguy hiểm (xem
+   * `tests/so-suc-khoe.test.ts`) và vào việc chưa ai biết tới nó.
+   */
+  const [moSucKhoe, datMoSucKhoe] = useState(MO_SUC_KHOE);
 
   // 🔴 DI TRÚ v1 → v2 (ADR-007). Chạy LƯỜI, một lần, ở transaction thường — cố ý KHÔNG
   // làm trong `onupgradeneeded`. Xem `modules/core/luu-tru/kho-bai.ts` để biết vì sao.
@@ -43,8 +57,10 @@ export default function Trang() {
   // `location` nên lần dựng đầu sẽ khác lần dựng lại và React báo lệch hydration.
   useEffect(() => {
     try {
+      const q = new URLSearchParams(window.location.search);
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      datMoSoLieu(new URLSearchParams(window.location.search).get(THAM_SO_SO_LIEU) === "1");
+      datMoSoLieu(q.get(THAM_SO_SO_LIEU) === "1");
+      if (q.get(THAM_SO_SUC_KHOE) === "1") datMoSucKhoe(true);
     } catch {
       // Không đọc được địa chỉ thì cứ coi như không mở — trang vẫn chạy.
     }
@@ -65,6 +81,11 @@ export default function Trang() {
           </p>
         )}
         {moSoLieu ? <KhoangSoLieu /> : <KhoangCacBuoc />}
+        {moSucKhoe && !moSoLieu && (
+          <Suspense fallback={null}>
+            <KhoangSucKhoe />
+          </Suspense>
+        )}
       </main>
     </div>
   );

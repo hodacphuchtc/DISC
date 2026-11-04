@@ -77,6 +77,9 @@ hàng gập "Lời khuyên dành cho {tên}" · đồng hành hằng ngày cho h
 🆕 **GĐ29** (9 ô, đã push `7b2f39d`): phân tích sâu cho MỌI cặp (người lớn↔người lớn, người lớn↔trẻ, cùng nhịp) × 3 bậc
 trẻ · xưng hô trung tính · giao diện đọc nhanh ("Hôm nay thử", chọn người, Mở/Gập hết). **2.195 test xanh**,
 gói chính ~295/300 KB; hồ sơ ký đổi nội dung lần nữa. **Chưa tick** — chưa ai nhìn bằng mắt.
+🆕 **GĐ30** (03/11/2026, ADR-010): thẻ **"Sức khoẻ gia đình"** dưới DISC — ngày sinh/giới tính/cân nặng/chiều cao → BMI,
+gợi ý ăn uống·vận động·nghỉ ngơi, PDF; hạn mức **6 người × 3 bản** (bản thứ 4 thay bản cũ nhất; người thứ 7 buộc chọn xoá).
+Nạp lười, cờ `MO_SUC_KHOE` **TẮT** (xem thử: `?suc-khoe=1`). **2.270 test xanh**, gói chính 298/300 KB; chưa tick.
 Hai ô còn lại chặn bởi NGƯỜI/NGOÀI. Ba sổ cũ (`V3` 7/10 · `V2` 25/27 · `V1_LUU` 68/68) đã
 đóng — chỉ để tra *vì sao*, đừng tick thêm.
 
@@ -105,6 +108,10 @@ không xoá một chữ.
    (`docs/huong-dan-giao-vien-va-sale.md`).
 
 ### CHỜ NGOÀI (ghi vào đây rồi làm tiếp, đừng dừng)
+
+- 🔴 **Thẻ sức khoẻ (GĐ30):** ① **Gói C** `docs/noi-dung-cho-ky-duyet-goi-c.md` — bác sĩ nhi/dinh dưỡng ký, *chặn bật cờ `MO_SUC_KHOE`* ·
+  ② luật sư đọc lại lời nhắn miễn trừ · ③ **bảng WHO 2006/2007** (30.1) — xác minh giấy phép rồi nhúng; chưa có thì trẻ chỉ nhận
+  BMI thô · ④ `public/brand/` có mascot+logo SATA ROBO — repo CÔNG KHAI, cân nhắc trước khi push.
 
 - 🔴 **HAI chữ ký chuyên môn.** **Gói A** `docs/noi-dung-cho-ky-duyet.md` (nội dung về TRẺ,
   *chặn ngày ra người dùng thật*). **Gói B** `docs/noi-dung-cho-ky-duyet-goi-b.md` (người

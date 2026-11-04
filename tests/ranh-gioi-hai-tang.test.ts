@@ -27,6 +27,8 @@ const THU_MUC_LOI = [
   "modules/core/bo-de",
   "modules/core/tien-ich",
   "modules/core/gia-dinh",
+  /** ADR-010 — tính toán và hợp đồng kho sức khoẻ: hàm thuần, sạch DOM. */
+  "modules/core/suc-khoe",
   "config",
 ] as const;
 
@@ -41,6 +43,8 @@ const FILE_LOI = [
   "modules/report/muc-do.ts",
   "modules/report/doi-chieu-phong-cach.ts",
   "modules/report/hinh-nhan-vat.ts",
+  /** ADR-010 — dòng chữ PDF sức khoẻ: hàm thuần. */
+  "modules/report/noi-dung-suc-khoe.ts",
   /**
    * 🔴 BẢN HỢP ĐỒNG CỦA TẦNG LƯU TRỮ (16.4) — cố ý xếp vào tầng lõi dù nó nằm trong
    * `luu-tru/`, nơi mọi file khác đều đụng IndexedDB. Một bản hợp đồng dính API trình
@@ -68,6 +72,7 @@ const KHONG_THUOC_TANG_LOI = [
   "modules/core/luu-tru/sao-luu.ts", // đọc kho rồi gói .zip
   "modules/core/luu-tru/nhap.ts", // đọc tệp người dùng chọn
   "modules/core/luu-tru/tai-ve.ts", // tạo thẻ <a> để tải xuống
+  "modules/core/luu-tru/kho-suc-khoe-idb.ts", // IndexedDB — bản dựng kho sức khoẻ (ADR-010)
   "modules/core/do-phieu", // đếm phễu, đọc URL
   "modules/core/lien-he", // mở link Zalo
   "modules/report/xuat-anh.ts", // Canvas 2D

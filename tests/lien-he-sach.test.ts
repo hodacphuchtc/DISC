@@ -75,7 +75,14 @@ describe("số điện thoại", () => {
   });
 
   it("từ chối số sai định dạng", () => {
-    for (const rac of ["", "123", "912345678", "09123456789", "abcdefghij", "+84912345678"]) {
+    for (const rac of [
+      "",
+      "123",
+      "912345678",
+      "09123456789",
+      "abcdefghij",
+      "+84912345678",
+    ]) {
       expect(soDienThoaiHopLe(rac), rac).toBe(false);
     }
   });
@@ -114,14 +121,19 @@ describe("🔴 QĐ3 — phiếu liên hệ KHÔNG được chứa dữ liệu c�
         "tuoi",
       ].sort(),
     );
-    expect(timKhoaCam({ a: { b: { c: { diem: 1 } } } })).toEqual(["a.b.c.diem"]);
+    expect(timKhoaCam({ a: { b: { c: { diem: 1 } } } })).toEqual([
+      "a.b.c.diem",
+    ]);
   });
 
   it("🔴 chữ ký taoPhieu KHÔNG có đường nào nhận dữ liệu trẻ", () => {
     // Nhận đúng MỘT tham số là object các trường liên hệ. Không có tham số bài làm.
     expect(taoPhieu).toHaveLength(1);
     // Và dù có cố nhét thêm, phiếu trả về vẫn sạch:
-    const p = taoPhieu({ ...PHIEU, ...(BAI_LAM as unknown as object) } as Parameters<typeof taoPhieu>[0]);
+    const p = taoPhieu({
+      ...PHIEU,
+      ...(BAI_LAM as unknown as object),
+    } as Parameters<typeof taoPhieu>[0]);
     expect(timKhoaCam(p)).toEqual([]);
   });
 
@@ -140,7 +152,35 @@ describe("🔴 QĐ3 — phiếu liên hệ KHÔNG được chứa dữ liệu c�
 
     expect(cuaTre.length).toBeGreaterThan(0);
     for (const k of cuaTre) {
-      expect(KHOA_CAM as readonly string[], `trường "${k}" của BaiLamLuu chưa vào KHOA_CAM`).toContain(k);
+      expect(
+        KHOA_CAM as readonly string[],
+        `trường "${k}" của BaiLamLuu chưa vào KHOA_CAM`,
+      ).toContain(k);
     }
+  });
+});
+
+describe("🔴 dữ liệu SỨC KHOẺ không được lọt vào phiếu liên hệ (ADR-010)", () => {
+  it("KHOA_CAM phủ mọi trường của NguoiSucKhoe / MocDo mang dữ liệu cá nhân", () => {
+    for (const k of [
+      "ngaySinh",
+      "gioiTinh",
+      "canNangKg",
+      "chieuCaoCm",
+      "vongEoCm",
+      "ten",
+    ]) {
+      expect(KHOA_CAM as readonly string[], `thiếu "${k}"`).toContain(k);
+    }
+  });
+  it("timKhoaCam bắt được một người trong sổ sức khoẻ nếu lỡ nhét vào phiếu", () => {
+    const nguoi = {
+      id: "x",
+      ten: "Bé Bịa",
+      ngaySinh: "2017-02-20",
+      gioiTinh: "nu",
+      moc: [{ canNangKg: 28, chieuCaoCm: 132 }],
+    };
+    expect(timKhoaCam({ sucKhoe: nguoi }).length).toBeGreaterThanOrEqual(5);
   });
 });

@@ -13,6 +13,8 @@
 import JSZip from "jszip";
 
 import type { PhanTichGiaDinh, ThanhVien } from "@modules/core/gia-dinh/kieu";
+import { daCoKhoSucKhoe, khoSucKhoeDangDung } from "@modules/core/suc-khoe/kho-suc-khoe";
+import type { NguoiSucKhoe } from "@modules/core/suc-khoe/kieu";
 
 import {
   CHU_DOC_TRUOC,
@@ -21,6 +23,8 @@ import {
 } from "./cay-sao-luu";
 
 import { docPhanTich, docTatCa, docThanhVien, type BaiLamLuu } from "./kho-bai";
+// Nạp để bản dựng IndexedDB của kho sức khoẻ tự đăng ký (ADR-010).
+import "./kho-suc-khoe-idb";
 
 export const TEN_TEP_SAO_LUU = "disc-sao-luu";
 
@@ -36,6 +40,11 @@ export const TEN_TEP_SAO_LUU = "disc-sao-luu";
 export const THU_MUC_DU_LIEU = THU_MUC_MAY_DOC;
 export const TEP_THANH_VIEN = `${THU_MUC_DU_LIEU}/thanh-vien.json`;
 export const TEP_PHAN_TICH = `${THU_MUC_DU_LIEU}/phan-tich.json`;
+/**
+ * 🆕 ADR-010 — sổ sức khoẻ. TUỲ CHỌN: tệp sao lưu đời trước không có nó, và bản đọc cũ bỏ
+ * qua nó (chỉ là một tệp thêm). Vì vậy KHÔNG tăng `phienBanSaoLuu`.
+ */
+export const TEP_SUC_KHOE = `${THU_MUC_DU_LIEU}/suc-khoe.json`;
 
 /**
  * 🔴 PHIÊN BẢN 2 — VÀ ĐÂY LÀ MỘT BẢN VÁ MẤT DỮ LIỆU, KHÔNG PHẢI MỘT TÍNH NĂNG.
@@ -58,6 +67,8 @@ export type BanKe = {
   readonly soThanhVien?: number;
   /** 🆕 v2. */
   readonly soThuMucPhanTich?: number;
+  /** 🆕 ADR-010. Không có ⇒ tệp đời trước, hoặc máy chưa dùng thẻ sức khoẻ. */
+  readonly soNguoiSucKhoe?: number;
 };
 
 /**
@@ -84,6 +95,7 @@ export async function taoNoiDungZip(
   nguoi: readonly ThanhVien[] = [],
   thuMuc: readonly PhanTichGiaDinh[] = [],
   tepKem: readonly TepKem[] = [],
+  sucKhoe?: readonly NguoiSucKhoe[],
 ): Promise<Uint8Array> {
   const zip = new JSZip();
 
@@ -94,6 +106,7 @@ export async function taoNoiDungZip(
     boDe: [...new Set(ds.map((b) => b.boDe))].sort(),
     soThanhVien: nguoi.length,
     soThuMucPhanTich: thuMuc.length,
+    ...(sucKhoe ? { soNguoiSucKhoe: sucKhoe.length } : {}),
     ghiChu:
       "Bản sao lưu DISC: tên từng người, bài đã làm, và các bản phân tích. Tệp này chứa " +
       "dữ liệu cá nhân — giữ trong máy, đừng gửi qua nhóm chat.",
@@ -109,6 +122,8 @@ export async function taoNoiDungZip(
   // khai ai. Gộp hai trạng thái đó là mầm của đúng loại lỗi mà cả repo này đang cảnh báo.
   zip.file(TEP_THANH_VIEN, JSON.stringify(nguoi, null, 2));
   zip.file(TEP_PHAN_TICH, JSON.stringify(thuMuc, null, 2));
+  // 🔴 Dữ liệu SỨC KHOẺ — nhạy cảm, của cả trẻ em. Chỉ ghi khi nơi gọi đưa xuống (kể cả rỗng).
+  if (sucKhoe) zip.file(TEP_SUC_KHOE, JSON.stringify(sucKhoe, null, 2));
 
   // 🔴 PHẦN ĐỌC ĐƯỢC nằm ở GỐC tệp .zip, JSON thì chìm xuống `_may-doc/`. Người mở tệp này
   // thường là một phụ huynh vừa mất máy — thứ họ cần thấy đầu tiên là thư mục mang tên
@@ -146,13 +161,17 @@ export async function saoLuuTatCaKemTep(
   taoLuc: string,
   tepKem: readonly TepKem[],
 ): Promise<{ duLieu: Uint8Array; soBai: number; soThanhVien: number }> {
-  const [ds, nguoi, thuMuc] = await Promise.all([
+  const [ds, nguoi, thuMuc, sucKhoe] = await Promise.all([
     docTatCa(),
     docThanhVien(),
     docPhanTich(),
+    daCoKhoSucKhoe() ? khoSucKhoeDangDung().docSo() : Promise.resolve(undefined),
   ]);
+  // Máy chưa dùng thẻ sức khoẻ ⇒ không thêm tệp nào: tệp sao lưu giữ nguyên hình dạng cũ.
+  // Khôi phục thiếu tệp này cho cùng kết quả với tệp rỗng (kho đã được dọn trước khi ghi).
+  const coSucKhoe = sucKhoe !== undefined && sucKhoe.length > 0 ? sucKhoe : undefined;
   return {
-    duLieu: await taoNoiDungZip(ds, taoLuc, nguoi, thuMuc, tepKem),
+    duLieu: await taoNoiDungZip(ds, taoLuc, nguoi, thuMuc, tepKem, coSucKhoe),
     soBai: ds.length,
     soThanhVien: nguoi.length,
   };

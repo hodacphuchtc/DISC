@@ -10,10 +10,11 @@
  */
 (async () => {
   const TEN_KHO = "disc";
-  const PHIEN_BAN_KHO = 2;
+  const PHIEN_BAN_KHO = 3;
   const TEN_BANG = "bai-lam";
   const BANG_THANH_VIEN = "thanh-vien";
   const BANG_PHAN_TICH = "phan-tich-gia-dinh";
+  const BANG_SUC_KHOE = "suc-khoe";
 
   const THANH_VIEN = [
     {
@@ -526,6 +527,9 @@
       }
       if (!d.objectStoreNames.contains(BANG_PHAN_TICH)) {
         d.createObjectStore(BANG_PHAN_TICH, { keyPath: "id" });
+      }
+      if (!d.objectStoreNames.contains(BANG_SUC_KHOE)) {
+        d.createObjectStore(BANG_SUC_KHOE, { keyPath: "id" });
       }
     };
     yc.onsuccess = () => ok(yc.result);

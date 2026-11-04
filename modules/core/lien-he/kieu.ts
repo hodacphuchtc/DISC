@@ -88,6 +88,15 @@ export const KHOA_CAM = [
   "ten",
   "ghiChu",
   "vaiTro",
+  // 🆕 Sổ SỨC KHOẺ (ADR-010) — ngày sinh, giới tính, cân nặng, chiều cao của cả trẻ em.
+  // Dữ liệu sức khoẻ là dữ liệu NHẠY CẢM (NĐ 13/2023): tuyệt đối không rời máy.
+  "ngaySinh",
+  "gioiTinh",
+  "canNangKg",
+  "chieuCaoCm",
+  "vongEoCm",
+  // 🔴 KHÔNG thêm "moc": `BanGhiMoc` của phễu đã có trường tên "moc", và các khoá bên trong
+  // mốc đo (canNangKg…) đã bị cấm ở trên nên một mốc đo lọt vào vẫn bị bắt.
 ] as const;
 
 /** Soát một object bất kỳ xem có khoá cấm ở BẤT KỲ độ sâu nào. Trả về danh sách vi phạm. */

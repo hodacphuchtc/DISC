@@ -27,6 +27,8 @@ Supabase thì tài liệu đó lỗi thời.
 | `bo-de/nap.ts` | Cửa DUY NHẤT lấy bộ đề — ghép nội dung câu với thứ tự đã chốt cứng | ✅ |
 | `bo-de/bam.ts` | Băm ngân hàng câu, khoá nội dung vào `PHIEN_BAN_BO_DE` | ✅ |
 | `tien-ich/ngay.ts` | ISO ↔ dd/mm/yyyy, đếm ngày. Chặn bẫy `new Date("01/08/2026")` | ✅ |
+| `suc-khoe/*` | 🆕 30.0–30.2 (ADR-010) — tuổi từ ngày sinh, BMI châu Á, BMR/TDEE, z-score LMS, `phanTichSucKhoe()` có hàng rào an toàn (dưới 19 tuổi không gợi ý giảm cân), `so-suc-khoe.ts` (hạn mức 6 người × 3 bản), `chon-khuon.ts`, `tom-tat.ts`, hợp đồng kho `kho-suc-khoe.ts`. Bảng WHO tiêm qua `TraBang`, chưa nhúng | ✅ |
+| `luu-tru/kho-suc-khoe-idb.ts` | 🆕 30.2 — bản dựng IndexedDB của kho sức khoẻ (bảng `suc-khoe`, kho v3); `ghiSo()` lưu+xoá nguyên tử | ❌ |
 | `lien-he/kieu.ts` | Kiểu phiếu liên hệ + hàng rào QĐ3 (`timKhoaCam`) | ✅ |
 | `luu-tru/nhap.ts` | Nháp bài đang làm (localStorage), gắn theo bộ đề **và** biệt danh | ❌ |
 | `luu-tru/kho-bai.ts` | Bản dựng IndexedDB + **mặt tiền** đi qua sổ đăng ký `KhoDisc` (16.4) | ❌ |

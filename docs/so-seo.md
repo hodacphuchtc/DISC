@@ -300,3 +300,8 @@
   vào index.html nên gói chính tăng thay vì giảm. Chỉ nạp lười cả màn (như `ban-tong-hop`, hạ ~4 KB) mới có tác dụng.
 - **Test so toàn câu sau khi thay xưng hô dễ gãy với nội dung nhiều chỗ giữ chỗ (31/10/2026).** Câu có
   nhiều `{xungTre}`/`{goiNguoiKia}` thì so toàn câu phải dựng kỳ vọng bằng cùng hàm thay thế, đừng gõ tay.
+- **Import một hằng số từ file từ điển nặng kéo CẢ từ điển vào gói chính (03/11/2026).** `app/page.tsx` import `THAM_SO_SUC_KHOE` từ `config/suc-khoe-tu-dien.ts` làm gói chính +6 KB gzip (vượt trần 300) dù thẻ nạp lười. Hằng số mà gói chính dùng phải nằm ở file nhỏ (`config/suc-khoe-nguong.ts`), từ điển chữ chỉ được import trong chunk lười.
+- **`<img width height>` + CSS `width:104%` mà thiếu `height:auto` ⇒ ảnh bị kéo dài (03/11/2026).** Mascot chỉ hiện đôi chân vì thuộc tính `height="768"` thắng tỉ lệ. Luật: `.sk img { height: auto }`.
+- **Khoá cấm `KHOA_CAM` không được trùng tên trường hợp lệ khác (03/11/2026).** Thêm `"moc"` làm đỏ `do-phieu.test` vì `BanGhiMoc` của phễu có trường `moc`. Cấm theo tên trường LÁ (`canNangKg`, `ngaySinh`…), đừng cấm tên cấu trúc chung.
+- **Test giao diện với IndexedDB: chờ nút Lưu mở lại rồi mới nhập tiếp (03/11/2026).** `await act(click)` trả về khi kho còn đang ghi; lần bấm kế tiếp rơi vào lúc nút còn khoá và bị bỏ qua, test trông như "chỉ lưu được một bản".
+- **Sinh lại `tests/DATA_TEST/nap-vao-trinh-duyet.js` mỗi khi tăng `PHIEN_BAN_KHO` (03/11/2026).** Nó gõ cứng số phiên bản; kho lên v3 mà bộ nạp còn v2 là `VersionError` im lặng. `node tests/DATA_TEST/tao-du-lieu-mau.mjs`.

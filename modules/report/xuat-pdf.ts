@@ -16,10 +16,19 @@
  * KHÔNG thuộc tầng lõi (ADR-004): `fetch` + một thư viện chỉ chạy trong trình duyệt.
  */
 
-import { dongChoBan, tenTepBan, type DongBan } from "@modules/report/noi-dung-ban";
+import {
+  dongChoBan,
+  tenTepBan,
+  type DongBan,
+} from "@modules/report/noi-dung-ban";
 import { dongChoBai, type BaiDeDoc } from "@modules/report/noi-dung-ket-qua";
 import type { BanPhanTich } from "@modules/report/phan-tich-gia-dinh";
 import { hienNgayGio } from "@modules/core/tien-ich/ngay";
+import type { NguoiSucKhoe } from "@modules/core/suc-khoe/kieu";
+import {
+  dongChoSucKhoe,
+  tenTepSucKhoe,
+} from "@modules/report/noi-dung-suc-khoe";
 
 /** Font Việt SIL OFL 1.1 — giấy phép kèm theo ở `public/fonts/OFL.txt`. */
 export const DUONG_FONT = "/fonts/BeVietnamPro-Regular.ttf";
@@ -128,7 +137,10 @@ async function veTepPdf(dongCanVe: readonly DongBan[]): Promise<Uint8Array> {
   return new Uint8Array(tep.output("arraybuffer"));
 }
 
-export async function xuatPdfMotBan(ban: BanPhanTich, luc: Date): Promise<TepPdf> {
+export async function xuatPdfMotBan(
+  ban: BanPhanTich,
+  luc: Date,
+): Promise<TepPdf> {
   return {
     ten: tenTepBan(ban.tenLuc, luc),
     duLieu: await veTepPdf(dongChoBan(ban)),
@@ -146,6 +158,20 @@ export async function xuatPdfMotBai(bai: BaiDeDoc): Promise<TepPdf> {
   return {
     ten: tenTepBan(`${bai.ten}-${bai.boDe}`, luc),
     duLieu: await veTepPdf(dongChoBai(bai, hienNgayGio)),
+  };
+}
+
+/**
+ * Sinh MỘT tệp PDF sức khoẻ cho MỘT người (30.5, ADR-010). Cùng bộ vẽ với các bản khác.
+ * 🔴 Nhận đúng một `NguoiSucKhoe` — luật "mỗi người một tờ".
+ */
+export async function xuatPdfSucKhoe(
+  nguoi: NguoiSucKhoe,
+  luc: Date,
+): Promise<TepPdf> {
+  return {
+    ten: tenTepBan(tenTepSucKhoe(nguoi), luc),
+    duLieu: await veTepPdf(dongChoSucKhoe(nguoi)),
   };
 }
 

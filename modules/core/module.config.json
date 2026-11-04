@@ -12,6 +12,7 @@
     { "ten": "Nhap", "noiO": "luu-tru/nhap.ts", "moTa": "Bài đang làm dở (localStorage)" },
     { "ten": "BaiLamLuu", "noiO": "luu-tru/kho-bai.ts", "moTa": "Bài đã xong (IndexedDB)" },
     { "ten": "PhieuLienHe", "noiO": "lien-he/kieu.ts", "moTa": "Chỉ thông tin liên hệ — KHÔNG kèm dữ liệu trẻ (QĐ3)" },
+    { "ten": "NguoiSucKhoe", "noiO": "suc-khoe/kieu.ts", "moTa": "Một người trong sổ sức khoẻ: tối đa 3 mốc đo mới nhất (ADR-010)" },
     { "ten": "BanGhiMoc", "noiO": "do-phieu/index.ts", "moTa": "Một mốc phễu: mốc, nguồn, thời điểm" }
   ],
   "dependencies": [],
